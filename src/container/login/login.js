@@ -7,21 +7,20 @@ import NormalLoginForm from './components/form'
 import './login.scss'
 
 export default class Login extends React.Component {
-  constructor(props){
-    super(props);
-    this.state={
-      loginLoding:false,
-    }
-    this.onSubmit=this.onSubmit.bind(this);
+
+  state={
+    loginLoding:false,
   }
+
   componentDidMount(){
     document.querySelector('body').style.overflow='hidden';
   }
+
   componentWillUnmount(){
     document.querySelector('body').style.overflow='auto'
   }
 
-  onSubmit(json){
+  onSubmit=(json)=>{
     this.setState({loginLoding:true})
     request({
       method:'post',
@@ -35,6 +34,7 @@ export default class Login extends React.Component {
        this.setState({loginLoding:false})
     })
   }
+
   render() {
     const { loginLoding }=this.state;
     return (
