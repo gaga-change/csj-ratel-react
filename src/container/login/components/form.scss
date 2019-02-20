@@ -1,0 +1,43 @@
+.formContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 26px;
+  h3{
+    font-size:1rem;
+    font-weight:bold;
+    color:rgba(53,53,53,1);
+    margin-bottom: 1rem;
+  }
+  .login-form{
+    font-size: 12px;
+    .login-form-button{
+      height:20px;
+      background:rgba(88,104,217,1);
+      border:1px solid rgba(217,217,217,1);
+      border-radius:3px;
+      font-size: 12px;
+    }
+
+  input::-webkit-input-placeholder {
+    color: #aab2bd;
+      font-size: 12px;
+    }
+  }
+  .ant-form-explain{
+    font-size: 12px;
+    display: block;
+    width: 100%;
+  }
+  .loginBtn{
+    text-align: center;
+    height:30px;
+    line-height: 30px;
+    background:rgba(88,104,217,1);
+    border:1px solid rgba(217,217,217,1);
+    border-radius:3px;
+    font-size:12px;
+    color: #fff;
+    cursor: pointer;
+  }
+}

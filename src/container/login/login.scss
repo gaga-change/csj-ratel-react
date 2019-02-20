@@ -1,0 +1,102 @@
+.Login{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 40px;
+  .LoginContaner{
+    height: 100%;
+    main{
+      width: 100%;
+      height: 100%;
+      position: relative;
+      img{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 110px;
+      }
+      .loginArert{
+        width: 36rem;
+        height: 20rem;
+        bottom: 16rem;
+        right:10rem;
+        position: absolute;
+        @media screen and (min-width: 1600px) {
+          bottom: 25rem;
+        }
+        @media screen and (max-width: 1600px) and (min-width: 1400px){
+          bottom: 16rem;
+        }
+        @media screen and (max-width: 1400px) {
+          bottom: 14rem;
+        }
+        
+        .loginArertContaner{
+           display: flex;
+           width: 100%;
+           height: 100%;
+          .loginArert_left{
+            width: 40%;
+            height: 100%;
+            position: relative;
+            .opcity_loginArert_left,.content_loginArert_left{
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              left: 0;
+              top: 0;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              h3{
+                color: #fff;
+                &:first-child{
+                  margin-bottom: 1rem;
+                  @media screen and (min-width: 1600px) {
+                    margin-bottom: 2rem;
+                  }
+                  @media screen and (max-width: 1600px) and (min-width: 1400px){
+                    margin-bottom: 1rem;
+                  }
+                  @media screen and (max-width: 1400px) {
+                    margin-bottom: 1rem;
+                  }
+                }
+
+              }
+            }
+            .opcity_loginArert_left{
+              background:rgba(255,255,255,1);
+              opacity:0.2;
+              
+            }
+
+          }
+          .loginArert_right{
+            width: 60%;
+            height: 100%;
+            background:rgba(255,255,255,1);
+            opacity:0.9;
+          }
+        }
+
+
+         
+      }
+    }
+    footer{
+      position: absolute;
+      width: 100%;
+      left: 0;
+      bottom: 0;
+      height:110px;
+      background:rgba(255,255,255,1);
+      border:1px solid rgba(217,217,217,1);
+    }
+  }
+}
+
