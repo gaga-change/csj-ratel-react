@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { message} from 'antd';
+import  moment from 'moment'
 import {stringify} from 'qs';
 // 创建axios实例
 const service = axios.create({
@@ -41,8 +42,9 @@ function request({ url, method='get',data}){
   let json={method,url};
   if(method==='get'||method==='GET'){
   let stringifyData=stringify(data);
-  json['url']=`${url}?${stringifyData}`;
+  json['url']=`${url}?${stringifyData}&fetchTime=${moment().valueOf()}`;
   } else{
+    json['url']=`${url}?fetchTime=${moment().valueOf()}`;
     json['data']=data;
   }
   return service(json)
