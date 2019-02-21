@@ -1,7 +1,11 @@
 import React from 'react';
-import { Form, Input,Button,Row,Col  } from 'antd';
+import { Form, Input,InputNumber } from 'antd';
 import './addform.scss'
+
+const { TextArea } = Input;
+
 class AddForm extends React.Component {
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -15,53 +19,96 @@ class AddForm extends React.Component {
     this.props.form.resetFields();
   }
 
+  componentDidMount(){
+    this.props.onRef(this)
+  }
+
+
   render() {
     const { getFieldDecorator } = this.props.form;
-
+    const formItemLayout = {
+      labelCol: {
+        span:6
+      },
+      wrapperCol: {
+        span:10
+      },
+    };
     return (
-      <div className="AddForm">
-          <Form onSubmit={this.handleSubmit}  layout="inline">
-            <Row gutter={24}>
-              <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
-                <Form.Item label="商品名称">
-                  { getFieldDecorator('username', {
+       <div className="AddForm">
+          <Form 
+            onSubmit={this.handleSubmit} >
+                <Form.Item label="商品名称" {...formItemLayout}>
+                  { getFieldDecorator('商品名称', {
                     initialValue:'',
-                    rules: [{ required: false, message: '' }],
+                    rules: [{ required: true, message: '请输入商品名称' }],
                   })(
-                    <Input   autoComplete='off' placeholder="请输入商品名称" />
+                    <Input  autoComplete='off' placeholder="请输入商品名称" />
                   )}
                 </Form.Item>
-              </Col>
 
-              <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
-                <Form.Item label="商品编码">
-                  { getFieldDecorator('password', {
+                <Form.Item label="商品编码" {...formItemLayout}>
+                  { getFieldDecorator('商品编码', {
                     initialValue:'',
-                    rules: [{ required: false, message: '' }],
+                    rules: [{ required: true, message: '请输入商品编码' }],
                   })(
                     <Input  autoComplete='off' placeholder="请输入商品编码" />
                   )}
                 </Form.Item>
-              </Col>
 
-              <Col span={24}>
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    style={{marginRight:'12px'}}
-                    htmlType="submit">
-                    查询
-                  </Button>
-                  <Button
-                    type="primary"
-                    onClick={this.handleRest}
-                    htmlType="submit">
-                    重置
-                  </Button>
+                 <Form.Item label="品牌" {...formItemLayout}>
+                  { getFieldDecorator('品牌', {
+                    initialValue:'',
+                    rules: [{ required: true, message: '请输入品牌' }],
+                  })(
+                    <Input  autoComplete='off' placeholder="请输入品牌" />
+                  )}
                 </Form.Item>
-              </Col>
 
-            </Row>
+                <Form.Item label="单位" {...formItemLayout}>
+                  { getFieldDecorator('单位', {
+                    initialValue:'',
+                    rules: [{ required: true, message: '请输入单位' }],
+                  })(
+                    <Input  autoComplete='off' placeholder="请输入单位" />
+                  )}
+                </Form.Item>
+
+                <Form.Item label="规格型号" {...formItemLayout}>
+                  { getFieldDecorator('规格型号', {
+                    initialValue:'',
+                    rules: [{ required: false }],
+                  })(
+                    <Input  autoComplete='off' placeholder="请输入规格型号" />
+                  )}
+                </Form.Item>
+
+                <Form.Item label="成本价" {...formItemLayout}>
+                  { getFieldDecorator('成本价', {
+                    initialValue:'',
+                    rules: [{ required: true,type:'number',message:'请输入正数阿拉伯数字' }],
+                  })(
+                    <InputNumber  style={{minWidth:'200px'}}  placeholder="请输入成本价" />
+                  )}
+                </Form.Item>
+
+                 <Form.Item label="售价" {...formItemLayout}>
+                  { getFieldDecorator('售价', {
+                    initialValue:'',
+                    rules: [{ required: true, type:'number', message:'请输入正数阿拉伯数字' }],
+                  })(
+                    <InputNumber  style={{minWidth:'200px'}}  placeholder="请输入售价" />
+                  )}
+                </Form.Item>
+
+                <Form.Item label="商品描述" {...formItemLayout}>
+                  { getFieldDecorator('商品描述', {
+                    initialValue:'',
+                    rules: [{ required: false }],
+                  })(
+                    <TextArea rows={4} placeholder="请输入商品描述" />
+                  )}
+                </Form.Item>
           </Form> 
       </div>);
   }
