@@ -45,7 +45,7 @@ export  const indexTableColumnsConfig=[
     dataIndex: ''
   },
   {
-    title:'最后操作者',
+    title:'操作',
     dataIndex: '',
     render:''
   },
