@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button,Modal,Menu,Dropdown,Icon } from 'antd';
+import { Button,Modal } from 'antd';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import { indexTableColumnsConfig } from './component/config'
@@ -30,25 +30,8 @@ export default class Commodity extends React.Component {
        if(v.render!==undefined){
           v.render=(ext, record, index)=>{
              return <span className="Dropdown_Menu_box">
-               <span>查看</span> 
-               <Dropdown overlay={
-                  <Menu className="Dropdown_Menu">
-                    <Menu.Item>
-                      <span>查看</span>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <span>删除</span>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <span>调价</span>
-                    </Menu.Item>
-                  </Menu>
-                }>
-                <span className="Dropdown_base">
-                    <span>更多操作</span> 
-                    <Icon type="down" />
-                </span>
-                </Dropdown>
+               <span>删除</span> 
+               <span>调价</span> 
              </span>
           }
        }
