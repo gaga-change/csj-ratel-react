@@ -2,6 +2,8 @@ import React from 'react';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import { indexTableColumnsConfig } from './component/config'
+import CommodityForm from './component/form'
+
 import'./commodity.scss'
 export default class Commodity extends React.Component {
   state={
@@ -44,6 +46,7 @@ export default class Commodity extends React.Component {
     return (
       <div className="Commodity">
           <Sider history={this.props.history} /> 
+          <CommodityForm/>
           <FetchTable 
             dataSource={dataSource} 
             columns={columns}

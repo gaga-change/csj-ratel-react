@@ -1,5 +1,6 @@
 import React from 'react';
 import { Spin } from 'antd';
+import {parse} from 'qs';
 import request from '../../lib/request'
 import imgSouce from '../../imgSouce/imgSouce'
 import Sider from '../../component/sider/sider'
@@ -21,6 +22,8 @@ export default class Login extends React.Component {
   }
 
   onSubmit=(json)=>{
+    const {before}=parse(this.props.history.location.search.slice(1));
+
     this.setState({loginLoding:true})
     request({
       method:'post',
@@ -30,7 +33,7 @@ export default class Login extends React.Component {
        this.setState({
          loginLoding:false,
        })
-       this.props.history.push('/')
+       this.props.history.push(before||'/')
     }).catch(err=>{
        this.setState({loginLoding:false})
     })

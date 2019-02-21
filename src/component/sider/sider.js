@@ -18,7 +18,7 @@ import './sider.scss'
 export default class Sider extends React.Component {
   
   state={
-    isLoginPage:this.props.history&&this.props.history.location&&this.props.history.location.pathname==='/login'
+    isLoginPage:this.props.history.location.pathname==='/login'
   }
 
   componentDidMount(){
@@ -41,6 +41,7 @@ export default class Sider extends React.Component {
 
   getInfo = ()=>{
     const {isLoginPage}=this.state
+    const {search,pathname}=this.props.history.location;
     request({
       url:'/webApi/base/user/info',
       method:'get',
@@ -49,7 +50,7 @@ export default class Sider extends React.Component {
        this.props.setMenus(deepExistMenu(res.menus.children,routerConfig))
     }).catch(err=>{
       if(!isLoginPage){
-        this.props.history.push('/login')
+        this.props.history.push(`/login?before=${pathname+search}`)
       }
     })
   }
@@ -60,13 +61,11 @@ export default class Sider extends React.Component {
       url:'/login_out',
       method:'get',
     }).then(res=>{
-
+       
     }).catch(err=>{
       
     })
   }
-
-
 
   render() {
     let activePath=this.props.history&&this.props.history.location&&this.props.history.location.pathname;
