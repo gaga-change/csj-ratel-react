@@ -12,22 +12,29 @@ service.interceptors.response.use(
   response => {
     if(response.status===200){
        if(response.data&&response.data.success){
-         return Promise.resolve(response.data)
+         selectMessage('success','数据请求成功！')
+         return Promise.resolve(response.data&&response.data.data)
        } else{
-         console.log(response.data.errorMsg)
-         message.error((response.data&&response.data.errorMsg)||'请求异常！',2)
+         selectMessage('error','请求异常！')
          return Promise.reject(response.data)
        }
     } else {
-      message.error('请求异常！',2)
+      selectMessage('error','请求异常！')
       return Promise.reject(response.data)
     } 
   },
   error => {
-    message.error('请求异常！',2)
+    selectMessage('error','请求异常！')
     return Promise.reject(error)
   }
 )
+
+function selectMessage(type,tip){
+  let dom=document.querySelector('.ant-message span span');
+  if(!dom||!dom.innerHTML===tip){
+    message[type](tip,2)
+  }
+}
 
 
 function request({ url, method='get',data}){

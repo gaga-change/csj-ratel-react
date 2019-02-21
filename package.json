@@ -37,6 +37,7 @@
     "jest": "23.6.0",
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
+    "lodash": "^4.17.11",
     "mini-css-extract-plugin": "0.4.3",
     "node-sass": "^4.11.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
@@ -124,7 +125,7 @@
       "node"
     ]
   },
-  "proxy": "http://192.168.2.167:8686",
+  "proxy": "http://192.168.2.167:8686/",
   "babel": {
     "presets": [
       "react-app"

@@ -1,21 +1,72 @@
 import React from 'react';
 import  { Link }  from  'react-router-dom';
+import { Menu, Dropdown, Icon } from 'antd';
 import {connect} from 'react-redux';
-import { setInfo } from "../../redux/info.redux";
+import request from '../../lib/request'
+import { deepExistMenu } from '../../lib/lib'
+import { setInfo,removeInfo } from "../../redux/info.redux";
+import { setMenus } from "../../redux/menus.redux";
 import { routerConfig } from '../../router/config'
 import imgSouce from '../../imgSouce/imgSouce'
 import './sider.scss'
 
 @connect(
-  state=>state.info,
-  { setInfo }
+  state=>state,
+  { setInfo,setMenus,removeInfo }
 )
 
 export default class Sider extends React.Component {
+  
+  state={
+    isLoginPage:this.props.history&&this.props.history.location&&this.props.history.location.pathname==='/login'
+  }
 
   componentDidMount(){
-    document.querySelector('.SiderNav').style.minHeight=document.body.clientWidth+'px'
+    this.spin()
   }
+
+  componentDidUpdate(){
+    this.spin()
+  }
+
+  spin = ()=>{
+    const {isLoginPage}=this.state
+    document.querySelector('.SiderNav').style.minHeight=document.body.clientWidth+'px';
+    if(this.props.info.info.id===undefined){
+      this.getInfo()
+    } else if(isLoginPage){
+      this.props.history.push('/')
+    } 
+  }
+
+  getInfo = ()=>{
+    const {isLoginPage}=this.state
+    request({
+      url:'/webApi/base/user/info',
+      method:'get',
+    }).then(res=>{
+       this.props.setInfo(res)
+       this.props.setMenus(deepExistMenu(res.menus.children,routerConfig))
+    }).catch(err=>{
+      if(!isLoginPage){
+        this.props.history.push('/login')
+      }
+    })
+  }
+
+  logOut = ()=>{
+    this.props.removeInfo();
+    request({
+      url:'/login_out',
+      method:'get',
+    }).then(res=>{
+
+    }).catch(err=>{
+      
+    })
+  }
+
+
 
   render() {
     let activePath=this.props.history&&this.props.history.location&&this.props.history.location.pathname;
@@ -23,9 +74,18 @@ export default class Sider extends React.Component {
     if(arr.length>2){
       activePath=`/${arr[1]}`
     }
-    const config=routerConfig.filter(v=>!v.hidden);
+    const config=this.props.menus&&this.props.menus.menus&&Array.isArray(this.props.menus.menus)&&this.props.menus.menus.filter(v=>!v.hidden).sort((a,b)=>a.sort-b.sort);
     const uesHover=this.props.uesHover!==undefined?this.props.uesHover:true;
-    let isLoginPage=this.props.history&&this.props.history.location&&this.props.history.location.pathname==='/login'
+    const {isLoginPage}=this.state;
+
+    const menu = (
+      <Menu>
+        <Menu.Item>
+           <span className="siderNav_header_Nav" onClick={this.logOut}>退出登录</span>
+        </Menu.Item>
+      </Menu>
+    );
+
     return (
       <div className="siderNav">
         <div className="SiderNav" style={{minHeight:this.props.minHeight?this.props.minHeight:'800px',display:isLoginPage?'none':'block'}}>
@@ -42,7 +102,7 @@ export default class Sider extends React.Component {
                   <div className="li_hover">
                      <ul>
                        {
-                         v.children.map(item=>
+                         v.children.sort((a,b)=>a.sort-b.sort).map(item=>
                           <li key={item.id||item.path}>
                             <Link to={item.path}  replace>
                                {item.name}
@@ -74,9 +134,17 @@ export default class Sider extends React.Component {
                       </div>
                     }
                   </div>
-                  <div className="header-set">
-
-                  </div>
+                  {
+                    !isLoginPage&&
+                    <div className="header-set">
+                         <Dropdown overlay={menu}>
+                         <span className="ant-dropdown-link header_set_content" >
+                             <span>Hover me</span>
+                             <Icon type="down" />
+                         </span>
+                          </Dropdown>,  
+                    </div>
+                  }
               </header>
         </div>
       </div>

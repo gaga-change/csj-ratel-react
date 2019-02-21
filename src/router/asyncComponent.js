@@ -8,14 +8,24 @@ export default function asyncComponent(importComponent) {
                 component: null
             };
         }
+
+        async importComponent(){
+          const { default: component } = await importComponent();
+          this.setState({
+            component: component
+          }); 
+        }
         
-        async componentDidMount() {
-            const { default: component } = await importComponent();
-            this.setState({
-                component: component
-            });
+        componentDidMount() {
+          this.lodingComponent=setTimeout(()=>{
+            this.importComponent()
+          },1) 
         }
 
+        componentWillUnmount(){
+          clearTimeout(this.lodingComponent)
+        }
+        
         render() {
             const Component = this.state.component;
             return Component ? <Component {...this.props} /> : null;

@@ -20,13 +20,14 @@
           ul{
             height: auto;
             li{
-              a{
+              >a{
                 background:rgba(32,40,82,1);
-                padding:6px 20px;
-                height: 20px;
+                padding:0 20px;
+                height: 30px;
+                min-width:100px;
                 display: block;
                 font-size: 12px;
-                line-height: 20px;
+                line-height: 30px;
                 text-align: center;
                 color: #fff;
                 &:hover{
@@ -108,8 +109,25 @@
           }
          
         }
+      } 
+      .header-set{
+        padding-right: 12px;
+        .header_set_content{
+          height: 100%;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          span{
+            padding: 0 12px;
+          }
+        }
       }
     }
   }
-  
+}
+
+.siderNav_header_Nav{
+  display: block;
+  text-align: center;
+  font-size: 12px;
 }

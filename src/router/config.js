@@ -5,6 +5,8 @@ export  const routerConfig=[
     hidden: false,
     component:'/home/home',
     icon:'home',
+    sort:1,
+    must:true
   },
   { 
     name:'登录页',
@@ -12,13 +14,17 @@ export  const routerConfig=[
     hidden: true,
     component:'/login/login',
     icon:'',
+    sort:2,
+    must:true
   },
   { 
     name:'入库',
     path:'/warehousing',
     hidden: false,
     component:'/warehousing/warehousing',
-    icon:'warehousing'
+    icon:'warehousing',
+    sort:3,
+    children:[],
   },
   { 
     name:'出库',
@@ -26,6 +32,7 @@ export  const routerConfig=[
     hidden: false,
     component:'/outgoing/outgoing',
     icon:'outgoing',
+    sort:4
   },
   { 
     name:'商品',
@@ -33,6 +40,7 @@ export  const routerConfig=[
     hidden: false,
     component:'/commodity/commodity',
     icon:'commodity',
+    sort:5
   },
   { 
     name:'库存',
@@ -40,6 +48,7 @@ export  const routerConfig=[
     hidden: false,
     component:'/stock/stock',
     icon:'stock',
+    sort:6
   },
   { 
     name:'客户',
@@ -47,6 +56,7 @@ export  const routerConfig=[
     hidden: false,
     component:'/customer/customer',
     icon:'customer',
+    sort:7
   },
   { 
     name:'系统',
@@ -56,6 +66,7 @@ export  const routerConfig=[
     icon:'system',
     children:[
     
-    ]
-  },
+    ],
+    sort:8
+  }
 ]

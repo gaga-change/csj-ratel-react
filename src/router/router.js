@@ -1,11 +1,14 @@
 import React from 'react';
 import  { Route,Switch,HashRouter,Redirect }  from  'react-router-dom';
+import {connect} from 'react-redux';
 import asyncComponent from './asyncComponent'
 import { depthForEach } from '../lib/lib'
-import { routerConfig } from './config'
+@connect(
+ state=>state.menus,
+)
 class Router extends React.Component {
      render() {
-         let config=depthForEach(routerConfig);
+         let config=depthForEach(this.props.menus);
          return (
              <div>
                     <HashRouter basename="/" history={this.props.history}>
@@ -13,7 +16,7 @@ class Router extends React.Component {
                             {
                               config.map(v=><Route exact={v.path==='/'||v.path==='/system'}   path={v.path} key={v.path} component={asyncComponent(()=>import(`../container${v.component}`))}/>)
                             }
-                            <Redirect to='/'></Redirect>
+                            <Redirect to='/login'></Redirect>
                         </Switch>
                     </HashRouter>
              </div>

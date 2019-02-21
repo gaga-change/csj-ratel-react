@@ -30,6 +30,7 @@ export default class Login extends React.Component {
        this.setState({
          loginLoding:false,
        })
+       this.props.history.push('/')
     }).catch(err=>{
        this.setState({loginLoding:false})
     })
