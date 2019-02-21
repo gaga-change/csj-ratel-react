@@ -22,6 +22,7 @@ export default class Sider extends React.Component {
   }
 
   componentDidMount(){
+    document.documentElement.scrollTop=0;
     this.spin()
   }
 

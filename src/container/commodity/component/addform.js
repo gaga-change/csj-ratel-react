@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input,Button,Row,Col  } from 'antd';
-import './form.scss'
-class CommodityForm extends React.Component {
+import './addform.scss'
+class AddForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -19,7 +19,7 @@ class CommodityForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <div className="CommodityForm">
+      <div className="AddForm">
           <Form onSubmit={this.handleSubmit}  layout="inline">
             <Row gutter={24}>
               <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
@@ -67,4 +67,4 @@ class CommodityForm extends React.Component {
   }
 }
 
-export default Form.create({ name: 'CommodityForm' })(CommodityForm);
+export default Form.create({ name: 'AddForm' })(AddForm);

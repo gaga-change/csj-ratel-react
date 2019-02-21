@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
+import { LocaleProvider  } from 'antd';
 import { createStore,applyMiddleware,compose } from 'redux';
 import {Provider} from 'react-redux'
 import thunk from 'redux-thunk';
@@ -15,5 +17,7 @@ const store=createStore(reducers,compose(
 
 ReactDOM.render( 
 <Provider  store={store}>
-  <SussLayout/> 
+  <LocaleProvider locale={zhCN}>
+    <SussLayout/> 
+  </LocaleProvider>
 </Provider>, document.getElementById('root'));
