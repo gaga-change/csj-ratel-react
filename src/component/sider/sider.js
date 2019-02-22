@@ -86,6 +86,9 @@ export default class Sider extends React.Component {
         <Menu.Item>
            <span className="siderNav_header_Nav" onClick={this.logOut}>退出登录</span>
         </Menu.Item>
+        <Menu.Item>
+           <span className="siderNav_header_Nav" onClick={this.logOut}>修改密码</span>
+        </Menu.Item>
       </Menu>
     );
 
