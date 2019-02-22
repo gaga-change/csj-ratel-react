@@ -11,6 +11,7 @@ const service = axios.create({
 
 service.interceptors.response.use(
   response => {
+    console.log(response)
     if(response.status===200){
        if(response.data&&response.data.success){
          selectMessage('success','数据请求成功！')
