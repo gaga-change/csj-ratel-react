@@ -12,7 +12,7 @@ export default class Commodity extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      dataSource:[{id:1}],
+      dataSource:[{id:1},{id:2}],
       columns:indexTableColumnsConfig,
       pagination: {
    
