@@ -1,6 +1,5 @@
 import React from 'react';
 import { Spin } from 'antd';
-import {parse} from 'qs';
 import request from '../../lib/request'
 import imgSouce from '../../imgSouce/imgSouce'
 import Sider from '../../component/sider/sider'
