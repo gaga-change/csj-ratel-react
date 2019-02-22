@@ -115,8 +115,8 @@ export default class Home extends React.Component {
             <Row>
               {
                 this.state.quickEntry.map((item, index) => (
-                  <Col xs={24} md={6}>
-                    <div className="quick-item" key={index}>
+                  <Col xs={24} md={6} key={index}>
+                    <div className="quick-item">
                       <img className="quick-logo" src={item.icon} alt={item.hint} />
                       <p className="hint-area">
                         {item.hint}

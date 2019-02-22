@@ -1,7 +1,7 @@
 const LOGIN='LOGIN';
 const LOGOUT='LOGOUT';
 
-export function info(state={info:(sessionStorage.getItem('info')&&JSON.parse(sessionStorage.getItem('info')))||{}},action) {
+export function info(state={info:(sessionStorage.getItem('info')!=='undefined'&&JSON.parse(sessionStorage.getItem('info')))||{}},action) {
     switch (action.type){
         case LOGIN:
             return {info:action.info};

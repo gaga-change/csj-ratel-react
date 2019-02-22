@@ -50,9 +50,12 @@ export default class Commodity extends React.Component {
   }
 
   onSubmit = (type,value)=>{
-    console.log(type,value)
     this.setState({visible:false})
-    this.child.handleRest()
+    if(type==='add'){
+      this.child.handleRest()
+    }
+    console.log(type,value)
+   
   }
 
   addCommodity = ()=>{
@@ -77,7 +80,7 @@ export default class Commodity extends React.Component {
         <div className="Commodity"  >
             <Sider history={this.props.history} /> 
             <CommodityForm onSubmit={this.onSubmit.bind(this,'select')}/>
-            <div className="Commodity_addBtn">
+            <div className="alert_Btn">
               <Button type="primary" onClick={this.addCommodity}>创建商品</Button>
             </div>
             <FetchTable 

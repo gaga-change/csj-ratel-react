@@ -1,49 +1,44 @@
 import React from 'react';
-import { Menu, Dropdown, Icon } from 'antd';
+import { Menu, Dropdown, Icon,Button,Modal } from 'antd';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
 import { indexTableColumns_Config,indexTableColumns_ChildConfig } from './component/config'
+import AddForm from './component/addform'
 import './warehousing.scss'
-
-
-
 
 export default class Warehousing extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      dataSource:[
-      {
-        id:1,
-        childData:[
-          {id:3},
-          {id:4},
-        ]
+      loading:false,
+      visible:false,
+      pagination: {
+      
       },
-      {
-        id:2,
-        key:2,
-        childData:[
-          {id:5},
-          {id:6},
-        ]
-      },
-      {
-        id:3,
-        key:3,
-        childData:[
-          {id:7},
-          {id:8},
-        ]
-      }
-    ],
+      dataSource:[{id:1,childData:[{id:3},]},{id:2,childData:[{id:4},]}],
       columns:indexTableColumns_Config
     }
   }
 
   onSubmit = (type,value)=>{
     console.log(type,value)
+    if(type!=='select'){
+      this.child.handleRest()
+      this.setState({visible:false})
+    }
+  }
+
+  handleTableChange = (pagination, filters, sorter) => {
+    console.log(pagination)
+  }
+
+  add = ()=>{
+    this.setState({visible:true})
+  }
+
+  fetch = ()=>{
+    
   }
 
   componentDidMount(){
@@ -75,10 +70,19 @@ export default class Warehousing extends React.Component {
        return v
     })
     this.setState({columns})
+    this.fetch()
+  }
+
+  handleCancel = ()=>{
+    this.setState({visible:false})
+  }
+
+  ref = (res)=>{
+    this.child=res
   }
 
   render() {
-    const { dataSource,columns} =this.state;
+    const { dataSource,columns,visible} =this.state;
     const childTable=(record)=>{
       return <FetchTable 
                columns={indexTableColumns_ChildConfig}  
@@ -89,12 +93,28 @@ export default class Warehousing extends React.Component {
     return (
       <div className="Warehousing">
           <Sider history={this.props.history} />
-          <SelestForm onSubmit={this.onSubmit.bind(this,'add')}/>
+          <SelestForm onSubmit={this.onSubmit.bind(this,'select')}/>
+          <div className="alert_Btn">
+              <Button type="primary" onClick={this.add}>创建入库业务单</Button>
+           </div>
           <FetchTable  
             columns={columns}
+            loading={this.state.loading}
+            pagination={this.state.pagination}
+            onChange={this.handleTableChange}
             rowKey='id'
             expandedRowRender={childTable}
             dataSource={dataSource}/>
+            <Modal
+              title="创建入库业务单"
+              centered={true}
+              visible={visible}
+              footer={null}
+              onCancel={this.handleCancel}>
+               <AddForm
+                 onRef={this.ref} 
+                 onSubmit={this.onSubmit}/>
+            </Modal>
       </div>
     );
   }
