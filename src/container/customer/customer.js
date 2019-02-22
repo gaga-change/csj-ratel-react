@@ -4,12 +4,9 @@ import './customer.scss'
 
 export default class Customer extends React.Component {
   render() {
-    return (
-      <div className="Customer">
-         <Sider history={this.props.history} />
-          客户业务页面正在开发...
-      </div>
-    );
+    return (<div className="Customer">
+      <Sider history={this.props.history}/>
+      客户业务页面正在开发...
+    </div>);
   }
 }
-
