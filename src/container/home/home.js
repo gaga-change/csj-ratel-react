@@ -1,6 +1,7 @@
 import React from 'react';
 import Sider from '../../component/sider/sider'
 import imgSouce from '../../imgSouce/imgSouce'
+import { Row, Col } from 'antd';
 
 import './home.scss';
 export default class Home extends React.Component {
@@ -111,14 +112,20 @@ export default class Home extends React.Component {
             快捷入口
           </h4>
           <div className="quick-items">
-            {
-              this.state.quickEntry.map((item, index) => (
-                <div className="quick-item" key={index}>
-                  <img src={item.icon} alt={item.hint} />
-                  {item.hint}
-                </div>
-              ))
-            }
+            <Row>
+              {
+                this.state.quickEntry.map((item, index) => (
+                  <Col xs={24} md={6}>
+                    <div className="quick-item" key={index}>
+                      <img className="quick-logo" src={item.icon} alt={item.hint} />
+                      <p className="hint-area">
+                        {item.hint}
+                      </p>
+                    </div>
+                  </Col>
+                ))
+              }
+            </Row>
           </div>
         </div>
       </div>

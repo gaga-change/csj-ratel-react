@@ -1,3 +1,5 @@
+$blue: #5868D9;
+
 .Home {
     .data-items {
         display: flex;
@@ -15,6 +17,7 @@
         font-size: 14px;
         cursor: pointer;
         transition: all .3s;
+
         &:hover {
             box-shadow: #d9d9d9 4px 4px 12px 0px;
         }
@@ -27,7 +30,7 @@
 
         .num {
             font-size: 28px;
-            color: #5868D9;
+            color: $blue;
         }
 
         .right-area {
@@ -42,6 +45,60 @@
             }
 
             .hint-area {}
+        }
+    }
+
+    .quick-area {
+        margin: 12px;
+        overflow: hidden;
+        background: #fff;
+        padding-bottom: 150px;
+    }
+
+    .quick-title {
+        position: relative;
+        margin: 25px;
+        padding-left: 20px;
+        color: $blue;
+        font-size: 16px;
+
+        &:after {
+            content: '';
+            position: absolute;
+            background-color: $blue;
+            left: 0;
+            bottom: 0;
+            width: 6px;
+            height: 25px;
+        }
+    }
+
+    .quick-items {
+        margin-top: 30px;
+    }
+
+    .quick-item {
+        border: 1px solid rgba(229, 229, 229, 1);
+        opacity: 0.8;
+        border-radius: 5px;
+        text-align: center;
+        margin: 35px;
+        cursor: pointer;
+
+        &:hover {
+            box-shadow: #d9d9d9 4px 4px 12px 0px;
+        }
+
+        .quick-logo {
+            margin-top: 19px;
+            max-width: 100%;
+        }
+
+        .hint-area {
+            margin: 28px 0 42px 0;
+            font-size: 22px;
+            font-weight: 400;
+            color: rgba(53, 53, 53, 1);
         }
     }
 }
