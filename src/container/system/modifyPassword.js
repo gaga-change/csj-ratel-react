@@ -1,15 +1,23 @@
 import React from 'react';
-import { Modal, Button } from 'antd';
+import { Modal } from 'antd';
 import './modifyPassword.scss'
+import ModifyPasswordForm from './components/modifyPasswordForm.js'
 
 export default class System extends React.Component {
   state = {
-    ModalText: 'Content of the modal',
     visible: false,
     confirmLoading: false,
+    goSubmit: false, // 是否点击确定
+  }
+  componentDidMount () {
+    if (this.props.show) {
+      this.showModal()
+    }
   }
   componentWillReceiveProps (prevProps) {
-    this.showModal()
+    if (prevProps.show) {
+      this.showModal()
+    }
   }
   showModal = () => {
     this.setState({
@@ -19,18 +27,28 @@ export default class System extends React.Component {
 
   handleOk = () => {
     this.setState({
-      ModalText: 'The modal will be closed after two seconds',
       confirmLoading: true,
-    });
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false,
-      });
-      this.props.onClose && this.props.onClose()
-    }, 2000);
+    })
+    // 通知表单 进行 数据提交
+    this.setState({ goSubmit: true })
   }
-
+  handleFormSubmited = (err, value) => {
+    if (!err) { // 数据校验正常
+      console.log('form data:', value)
+      setTimeout(() => {
+        this.setState({
+          visible: false,
+          confirmLoading: false,
+        });
+        this.props.onClose()
+      }, 1000)
+    } else {
+      this.setState({
+        confirmLoading: false,
+      })
+    }
+    this.setState({ goSubmit: false })
+  }
   handleCancel = () => {
     this.setState({
       visible: false,
@@ -38,7 +56,7 @@ export default class System extends React.Component {
     this.props.onClose && this.props.onClose()
   }
   render () {
-    const { visible, confirmLoading, ModalText } = this.state;
+    const { visible, confirmLoading } = this.state;
     if (!this.props.show) {
       return null
     }
@@ -51,7 +69,7 @@ export default class System extends React.Component {
           confirmLoading={confirmLoading}
           onCancel={this.handleCancel}
         >
-          <p>{ModalText}</p>
+          <ModifyPasswordForm goSubmit={this.state.goSubmit} onSubmited={this.handleFormSubmited}></ModifyPasswordForm>
         </Modal>
       </div>
     )
