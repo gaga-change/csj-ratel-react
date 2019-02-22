@@ -7,6 +7,7 @@ import { deepExistMenu } from '../../lib/lib'
 import { setInfo,removeInfo } from "../../redux/info.redux";
 import { setMenus } from "../../redux/menus.redux";
 import { routerConfig } from '../../router/config'
+import ModifyPassword from '@container/system/modifyPassword'
 import imgSouce from '../../imgSouce/imgSouce'
 import './sider.scss'
 
@@ -20,7 +21,8 @@ export default class Sider extends React.Component {
   constructor(props){
     super(props)
     this.state={
-      isLoginPage:this.props.history.location.pathname==='/login'
+      isLoginPage:this.props.history.location.pathname==='/login',
+      showModifyPasswordModal: false, // 是否显示修改密码弹窗
     }
 
     this.setTimeGetInfo=null;
@@ -69,6 +71,12 @@ export default class Sider extends React.Component {
     })
   }
 
+  changeShowModifyPasswordModal = () => {
+    this.setState(state => ({
+      showModifyPasswordModal: !state.showModifyPasswordModal
+    }))
+  }
+
   render() {
     let activePath=this.props.history&&this.props.history.location&&this.props.history.location.pathname;
     let arr=activePath&&activePath.split('/');
@@ -85,13 +93,14 @@ export default class Sider extends React.Component {
            <span className="siderNav_header_Nav" onClick={this.logOut}>退出登录</span>
         </Menu.Item>
         <Menu.Item>
-           <span className="siderNav_header_Nav" onClick={this.logOut}>修改密码</span>
+           <span className="siderNav_header_Nav" onClick={this.changeShowModifyPasswordModal}>修改密码</span>
         </Menu.Item>
       </Menu>
     );
 
     return (
       <div className="siderNav">
+        <ModifyPassword show={this.state.showModifyPasswordModal} onClose={this.changeShowModifyPasswordModal}/>
         <div className="SiderNav" style={{minHeight:this.props.minHeight?this.props.minHeight:'800px',display:isLoginPage?'none':'block'}}>
           <ul>
             {
