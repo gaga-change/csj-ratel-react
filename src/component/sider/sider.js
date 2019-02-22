@@ -29,7 +29,7 @@ export default class Sider extends React.Component {
   // delayedGetInfo = ()=>{
   //   this.setTimeGetInfo = setInterval(this.getInfo,1000)
   // }
-  
+
   componentDidMount(){
     document.documentElement.scrollTop=0;
     this.spin()
@@ -46,7 +46,7 @@ export default class Sider extends React.Component {
       this.getInfo()
     } else if(isLoginPage){
       this.props.history.push('/')
-    } 
+    }
   }
 
   // componentWillUnmount(){
@@ -77,7 +77,7 @@ export default class Sider extends React.Component {
        this.props.removeInfo();
       //  this.delayedGetInfo()
     }).catch(err=>{
-      
+
     })
   }
 
@@ -110,7 +110,7 @@ export default class Sider extends React.Component {
                   <img src={activePath===v.path?imgSouce[`${v.icon}_click`]:imgSouce[v.icon]} alt=""/>
                   <span>{v.name}</span>
                 </Link>
-                { 
+                {
                   v.children&&uesHover&&
                   <div className="li_hover">
                      <ul>
@@ -139,7 +139,7 @@ export default class Sider extends React.Component {
                       !isLoginPage&&
                       <span>川山甲 SAASERP</span>
                     }
-                    { 
+                    {
                       isLoginPage&&
                       <div className="logo_text">
                         <h3>川山甲 SAASERP</h3>
@@ -155,7 +155,7 @@ export default class Sider extends React.Component {
                              <span>Hover me</span>
                              <Icon type="down" />
                          </span>
-                          </Dropdown>,  
+                          </Dropdown>,
                     </div>
                   }
               </header>
@@ -164,4 +164,3 @@ export default class Sider extends React.Component {
     );
   }
 }
-
