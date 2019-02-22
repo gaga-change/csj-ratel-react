@@ -26,10 +26,6 @@ export default class Sider extends React.Component {
     this.setTimeGetInfo=null;
   }
 
-  // delayedGetInfo = ()=>{
-  //   this.setTimeGetInfo = setInterval(this.getInfo,1000)
-  // }
-  
   componentDidMount(){
     document.documentElement.scrollTop=0;
     this.spin()
@@ -49,13 +45,8 @@ export default class Sider extends React.Component {
     } 
   }
 
-  // componentWillUnmount(){
-  //   this.setTimeGetInfo=null;
-  // }
-
   getInfo = ()=>{
     const {isLoginPage}=this.state
-    const {search,pathname}=this.props.history.location;
     request({
       url:'/webApi/base/user/info',
       method:'get',
@@ -64,7 +55,7 @@ export default class Sider extends React.Component {
        this.props.setMenus(deepExistMenu(res.menus.children,routerConfig))
     }).catch(err=>{
       if(!isLoginPage){
-        this.props.history.push(`/login?before=${pathname+search}`)
+        this.props.history.push(`/login`)
       }
     })
   }
@@ -75,7 +66,6 @@ export default class Sider extends React.Component {
       method:'get',
     }).then(res=>{
        this.props.removeInfo();
-      //  this.delayedGetInfo()
     }).catch(err=>{
       
     })

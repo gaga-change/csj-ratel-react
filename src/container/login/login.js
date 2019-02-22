@@ -22,8 +22,6 @@ export default class Login extends React.Component {
   }
 
   onSubmit=(json)=>{
-    const {before}=parse(this.props.history.location.search.slice(1));
-
     this.setState({loginLoding:true})
     request({
       method:'post',
@@ -33,7 +31,7 @@ export default class Login extends React.Component {
        this.setState({
          loginLoding:false,
        })
-       this.props.history.push(before||'/')
+       this.props.history.push('/')
     }).catch(err=>{
        this.setState({loginLoding:false})
     })
