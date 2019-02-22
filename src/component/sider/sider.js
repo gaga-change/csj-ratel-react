@@ -68,7 +68,7 @@ export default class Sider extends React.Component {
        this.props.removeInfo();
        this.getInfo()
     }).catch(err=>{
-      
+
     })
   }
 
@@ -111,7 +111,7 @@ export default class Sider extends React.Component {
                   <img src={activePath===v.path?imgSouce[`${v.icon}_click`]:imgSouce[v.icon]} alt=""/>
                   <span>{v.name}</span>
                 </Link>
-                { 
+                {
                   v.children&&uesHover&&
                   <div className="li_hover">
                      <ul>
@@ -140,7 +140,7 @@ export default class Sider extends React.Component {
                       !isLoginPage&&
                       <span>川山甲 SAASERP</span>
                     }
-                    { 
+                    {
                       isLoginPage&&
                       <div className="logo_text">
                         <h3>川山甲 SAASERP</h3>
@@ -159,7 +159,7 @@ export default class Sider extends React.Component {
                           </p>
                           <Icon type="down" />
                          </span>
-                          </Dropdown>,  
+                          </Dropdown>,
                     </div>
                   }
               </header>
@@ -168,4 +168,3 @@ export default class Sider extends React.Component {
     );
   }
 }
-
