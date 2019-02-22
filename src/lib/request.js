@@ -11,12 +11,18 @@ const service = axios.create({
 
 service.interceptors.response.use(
   response => {
-    console.log(response)
     if(response.status===200){
        if(response.data&&response.data.success){
          selectMessage('success','数据请求成功！')
          return Promise.resolve(response.data&&response.data.data)
-       } else{
+       } else if(response.data&&response.data.code==='ratel-512'){
+         if(!window.location.hash.includes('login')){
+           selectMessage('error','用户未登陆或登录失效 !')
+           window.location.href=`${window.location.href}/#/login`
+           sessionStorage.clear()
+         }
+
+       } else {
          selectMessage('error','请求异常！')
          return Promise.reject(response.data)
        }

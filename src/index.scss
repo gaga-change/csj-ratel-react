@@ -38,9 +38,21 @@ code {
   
 }
 
-.ant-table-small{
-  font-size: 12px !important;
+.Dropdown_Menu_child{
+  li{
+    text-align: center;
+    span{
+      font-size: 12px;
+    }
+  }
 }
+
+.alert_Btn{
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 6px;
+} 
+
 
 
 

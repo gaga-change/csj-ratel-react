@@ -32,17 +32,14 @@ export default class Sider extends React.Component {
   }
 
   componentDidUpdate(){
-    this.spin()
+    document.querySelector('.SiderNav').style.minHeight=document.body.clientWidth+'px';
   }
 
   spin = ()=>{
     const {isLoginPage}=this.state
-    document.querySelector('.SiderNav').style.minHeight=document.body.clientWidth+'px';
-    if(this.props.info.info.id===undefined){
+    if((!this.props.info||!this.props.info.info||this.props.info.info.id===undefined)&&!isLoginPage){
       this.getInfo()
-    } else if(isLoginPage){
-      this.props.history.push('/')
-    } 
+    }
   }
 
   getInfo = ()=>{
@@ -66,6 +63,7 @@ export default class Sider extends React.Component {
       method:'get',
     }).then(res=>{
        this.props.removeInfo();
+       this.getInfo()
     }).catch(err=>{
       
     })
