@@ -15,6 +15,17 @@ import customer from './souce/customer.png';
 import customer_click from './souce/customer_click.png';
 import system from './souce/system.png';
 import system_click from './souce/system_click.png';
+import home_in from './souce/home_in.png';
+import home_out from './souce/home_out.png';
+import home_repo from './souce/home_repo.png';
+import client_list from './souce/client_list.png';
+import warehousing_business from './souce/warehousing_business.png';
+import outbound_business from './souce/outbound_business.png';
+import user_management from './souce/user_management.png';
+import change_password from './souce/change_password.png';
+import stock_search from './souce/stock_search.png';
+import commodity_management from './souce/commodity_management.png';
+import role_management from './souce/role_management.png';
 
 const imgSouce={};
 //挂载资源
@@ -34,5 +45,16 @@ imgSouce['customer']=customer;
 imgSouce['customer_click']=customer_click;
 imgSouce['system']=system;
 imgSouce['system_click']=system_click;
+imgSouce['home_in']=home_in;
+imgSouce['home_out']=home_out;
+imgSouce['home_repo']=home_repo;
+imgSouce['client_list']=client_list;
+imgSouce['warehousing_business']=warehousing_business;
+imgSouce['outbound_business']=outbound_business;
+imgSouce['user_management']=user_management;
+imgSouce['change_password']=change_password;
+imgSouce['stock_search']=stock_search;
+imgSouce['commodity_management']=commodity_management;
+imgSouce['role_management']=role_management;
 //导出资源库
 export default imgSouce;
