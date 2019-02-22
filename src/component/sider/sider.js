@@ -16,11 +16,20 @@ import './sider.scss'
 )
 
 export default class Sider extends React.Component {
-  
-  state={
-    isLoginPage:this.props.history.location.pathname==='/login'
+
+  constructor(props){
+    super(props)
+    this.state={
+      isLoginPage:this.props.history.location.pathname==='/login'
+    }
+
+    this.setTimeGetInfo=null;
   }
 
+  // delayedGetInfo = ()=>{
+  //   this.setTimeGetInfo = setInterval(this.getInfo,1000)
+  // }
+  
   componentDidMount(){
     document.documentElement.scrollTop=0;
     this.spin()
@@ -40,6 +49,10 @@ export default class Sider extends React.Component {
     } 
   }
 
+  // componentWillUnmount(){
+  //   this.setTimeGetInfo=null;
+  // }
+
   getInfo = ()=>{
     const {isLoginPage}=this.state
     const {search,pathname}=this.props.history.location;
@@ -57,12 +70,12 @@ export default class Sider extends React.Component {
   }
 
   logOut = ()=>{
-    this.props.removeInfo();
     request({
       url:'/login_out',
       method:'get',
     }).then(res=>{
-       
+       this.props.removeInfo();
+      //  this.delayedGetInfo()
     }).catch(err=>{
       
     })

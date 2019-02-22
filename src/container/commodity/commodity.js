@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button,Modal} from 'antd';
+import { Button,Modal } from 'antd';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import { indexTableColumnsConfig } from './component/config'
@@ -12,7 +12,7 @@ export default class Commodity extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      dataSource:[],
+      dataSource:[{id:1}],
       columns:indexTableColumnsConfig,
       pagination: {
    
@@ -29,11 +29,10 @@ export default class Commodity extends React.Component {
     columns.map(v=>{
        if(v.render!==undefined){
           v.render=(ext, record, index)=>{
-             return <div className="operationBtn">
-               <span>查看</span>
-               <span>删除</span>
-               <span>调价</span>
-             </div>
+             return <span className="Dropdown_Menu_box">
+               <span>删除</span> 
+               <span>调价</span> 
+             </span>
           }
        }
        return v
