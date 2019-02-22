@@ -30,6 +30,7 @@ export default class Sider extends React.Component {
 
   componentDidMount(){
     document.documentElement.scrollTop=0;
+    document.querySelector('.SiderNav').style.minHeight=document.body.clientWidth+'px';
     this.spin()
   }
 
