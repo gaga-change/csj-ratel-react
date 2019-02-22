@@ -14,7 +14,8 @@ $blue: #5868D9;
         background-color: #fff;
         border-radius: 5px;
         font-weight: 600;
-        font-size: 14px;
+        font-size: 16px;
+        color: #666;
         cursor: pointer;
         transition: all .3s;
 
@@ -29,7 +30,7 @@ $blue: #5868D9;
         }
 
         .num {
-            font-size: 28px;
+            font-size: 32px;
             color: $blue;
         }
 
@@ -44,7 +45,9 @@ $blue: #5868D9;
                 margin-right: 24px;
             }
 
-            // .hint-area {}
+            .hint-area {
+                font-size: 14px;
+            }
         }
     }
 
