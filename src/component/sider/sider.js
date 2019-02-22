@@ -142,8 +142,11 @@ export default class Sider extends React.Component {
                     <div className="header-set">
                          <Dropdown overlay={menu}>
                          <span className="ant-dropdown-link header_set_content" >
-                             <span>Hover me</span>
-                             <Icon type="down" />
+                          <p className="user-area">
+                            <span className="user-name">李芷逸</span>
+                            <span className="company-name">李氏集团</span>
+                          </p>
+                          <Icon type="down" />
                          </span>
                           </Dropdown>,  
                     </div>
