@@ -3,7 +3,7 @@ import { Table } from 'antd';
 import './fetchTable.scss'
 export default class FetchTable extends React.Component {
   render() {
-    let { dataSource=[], columns=[],size='small',rowKey='id',locale={emptyText:'暂无数据' }, bordered=true,...rest } = this.props;
+    let { dataSource=[], columns=[],size='small',locale={emptyText:'暂无数据' }, bordered=true,...rest } = this.props;
     columns=columns.map((v,i)=>{
       v.key=i+1;
       return v;
@@ -16,7 +16,6 @@ export default class FetchTable extends React.Component {
              columns={columns}
              bordered={bordered}
              locale={locale}
-             rowKey={rowKey}
              size={size}/>
       </div>
     );

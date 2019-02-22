@@ -26,7 +26,7 @@ export default class Commodity extends React.Component {
 
   componentDidMount(){
     let {columns}=this.state;
-    columns.map(v=>{
+    columns=columns.map(v=>{
        if(v.render!==undefined){
           v.render=(ext, record, index)=>{
              return <span className="Dropdown_Menu_box">
@@ -84,6 +84,7 @@ export default class Commodity extends React.Component {
               <Button type="primary" onClick={this.addCommodity}>创建商品</Button>
             </div>
             <FetchTable 
+              rowKey='id'
               dataSource={dataSource} 
               columns={columns}
               loading={this.state.loading}

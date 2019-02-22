@@ -12,7 +12,7 @@ export default class Warehousing extends React.Component {
     super(props);
     this.state={
       loading:false,
-      visible:false,
+      visible:true,
       pagination: {
       
       },
@@ -24,8 +24,8 @@ export default class Warehousing extends React.Component {
   onSubmit = (type,value)=>{
     console.log(type,value)
     if(type!=='select'){
-      this.child.handleRest()
       this.setState({visible:false})
+      this.child.handleRest()
     }
   }
 
@@ -43,7 +43,7 @@ export default class Warehousing extends React.Component {
 
   componentDidMount(){
     let {columns}=this.state;
-    columns.map(v=>{
+    columns=columns.map(v=>{
        if(v.render!==undefined){
           v.render=(ext, record, index)=>{
              return <span className="Dropdown_Menu_box">
@@ -108,6 +108,7 @@ export default class Warehousing extends React.Component {
             <Modal
               title="创建入库业务单"
               centered={true}
+              width={800}
               visible={visible}
               footer={null}
               onCancel={this.handleCancel}>
