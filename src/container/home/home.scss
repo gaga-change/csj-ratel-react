@@ -1,4 +1,47 @@
+.Home {
+    .data-items {
+        display: flex;
+    }
 
-.Home{
-  
+    .data-item {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        margin: 12px;
+        padding: 1.5% 3.2%;
+        background-color: #fff;
+        border-radius: 5px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all .3s;
+        &:hover {
+            box-shadow: #d9d9d9 4px 4px 12px 0px;
+        }
+
+        img.logo {
+            width: 70px;
+            height: 70px;
+            margin-right: 25px;
+        }
+
+        .num {
+            font-size: 28px;
+            color: #5868D9;
+        }
+
+        .right-area {
+            &>p {
+                margin: 5px;
+            }
+
+            .num-area {}
+
+            .num-item {
+                margin-right: 24px;
+            }
+
+            .hint-area {}
+        }
+    }
 }
