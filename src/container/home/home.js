@@ -1,9 +1,16 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import  { Link }  from  'react-router-dom';
+import { depthForEachIndex } from '@lib/lib'
 import Sider from '../../component/sider/sider'
 import imgSouce from '../../imgSouce/imgSouce'
 import { Row, Col } from 'antd';
 
 import './home.scss';
+
+@connect(
+  state=>state.menus
+)
 export default class Home extends React.Component {
   constructor(props) {
     super(props)
@@ -28,54 +35,12 @@ export default class Home extends React.Component {
           unitNum: '',
           pieceNum: '3000'
         }
-      ],
-      // 快捷入口
-      quickEntry: [
-        {
-          icon: imgSouce.client_list,
-          hint: '客户列表',
-          url: ''
-        },
-        {
-          icon: imgSouce.warehousing_business,
-          hint: '入库业务',
-          url: ''
-        },
-        {
-          icon: imgSouce.outbound_business,
-          hint: '出库业务',
-          url: ''
-        },
-        {
-          icon: imgSouce.user_management,
-          hint: '用户管理',
-          url: ''
-        },
-        {
-          icon: imgSouce.change_password,
-          hint: '修改密码',
-          url: ''
-        },
-        {
-          icon: imgSouce.stock_search,
-          hint: '库存查询',
-          url: ''
-        },
-        {
-          icon: imgSouce.commodity_management,
-          hint: '商品管理',
-          url: ''
-        },
-        {
-          icon: imgSouce.role_management,
-          hint: '角色管理',
-          url: ''
-        },
       ]
     }
   }
 
   render () {
+    const menu=depthForEachIndex(this.props.menus);
     return (
       <div className="Home">
         <Sider history={this.props.history} />
@@ -114,14 +79,16 @@ export default class Home extends React.Component {
           <div className="quick-items">
             <Row>
               {
-                this.state.quickEntry.map((item, index) => (
+                menu.map((item, index) => (
                   <Col xs={24} md={6} key={index}>
-                    <div className="quick-item">
-                      <img className="quick-logo" src={item.icon} alt={item.hint} />
-                      <p className="hint-area">
-                        {item.hint}
-                      </p>
-                    </div>
+                   <Link to={item.path} replace >
+                      <div className="quick-item">
+                          <img className="quick-logo" src={imgSouce[item.icon]} alt={item.name} />
+                          <p className="hint-area">
+                            {item.name}
+                          </p>
+                      </div>
+                    </Link>
                   </Col>
                 ))
               }

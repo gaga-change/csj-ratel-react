@@ -45,3 +45,21 @@ export function deepExistMenu(menu,deepExist){
     return arr
 }
 
+
+export function depthForEachIndex(arr,resultArr=[]){
+  arr.forEach(item=>{
+    if(item.indexName){
+      resultArr.push({
+        name:item.indexName,
+        path:item.path,
+        icon:item.indexIcon
+      })
+    }
+    if(item.children&&item.children.some(v=>v.indexName)){
+      depthForEachIndex(item.children,resultArr)
+    }
+  })
+
+  return resultArr
+}
+
