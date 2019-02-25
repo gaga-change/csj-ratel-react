@@ -1,19 +1,19 @@
 export  const priceChange_config=[
   {
-    title: '本周入库',
-    orderNumber_dataIndex: '',//单数的索引
-    orderPiece_dataIndex: '',//件数的索引 没有该字段则不展示该字段
-    icon:''//icon的索引
+    name: '本周入库',
+    orderNumber_dataIndex: '本周入库单数',//单数的索引
+    orderPiece_dataIndex: '本周入库件数',//件数的索引 没有该字段则不展示该字段
+    icon:'home_in'//icon的索引
   },
   {
-    title: '本周出库',
-    orderNumber_dataIndex: '',
-    orderPiece_dataIndex: '',
-    icon:''
+    name: '本周出库',
+    orderNumber_dataIndex: '本周出库单数',
+    orderPiece_dataIndex: '本周出库件数',
+    icon:'home_out'
   },
   {
-    title: '商品库存',
-    orderNumber_dataIndex: '',
-    icon:''
+    name: '商品库存',
+    orderNumber_dataIndex: '商品库存数',
+    icon:'home_repo'
   },
 ]
