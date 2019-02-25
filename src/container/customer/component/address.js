@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Cascader, Button } from 'antd'
+import { Form, Input, Cascader, Button, Checkbox } from 'antd'
 import { Area } from '@lib/area'
 import { addressTableColumnsConfig } from './config'
 import FetchTable from '@component/fetchTable/fetchTable'
@@ -11,10 +11,10 @@ class AddressForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-        loading: false,
-        pagination: {},
-        columns: addressTableColumnsConfig,
-        dataSource: [{ id: 1 }]
+      loading: false,
+      pagination: {},
+      columns: addressTableColumnsConfig,
+      dataSource: [{ id: 1 }]
     }
   }
   handleSubmit = e => {
@@ -39,15 +39,15 @@ class AddressForm extends React.Component {
     const phoneError = isFieldTouched('phone') && getFieldError('phone')
     const formItemLayout = {
       labelCol: {
-        span: 2
+        span: 6
       },
       wrapperCol: {
-        span: 8
+        span: 10
       }
     }
     return (
       <div className="AddForm">
-        <Form onSubmit={this.handleSubmit} layout="inline">
+        <Form onSubmit={this.handleSubmit}>
           <Form.Item label="地址信息" {...formItemLayout}>
             {getFieldDecorator('area', {
               initialValue: '',
@@ -74,7 +74,6 @@ class AddressForm extends React.Component {
               rules: [{ required: false }]
             })(<Input autoComplete="off" placeholder="请输入邮政编码" />)}
           </Form.Item>
-
           <Form.Item label="品牌" {...formItemLayout}>
             {getFieldDecorator('品牌', {
               initialValue: '',
@@ -85,10 +84,12 @@ class AddressForm extends React.Component {
           <Form.Item label="收货人姓名" {...formItemLayout}>
             {getFieldDecorator('name', {
               initialValue: '',
-              rules: [{ required: true, message: '收货人姓名' },{ min: 2, max:25, message: '2-25字符范围内' }]
+              rules: [
+                { required: true, message: '收货人姓名' },
+                { min: 2, max: 25, message: '2-25字符范围内' }
+              ]
             })(<Input autoComplete="off" placeholder="请输入收货人姓名" />)}
           </Form.Item>
-
           <Form.Item
             label="手机"
             {...formItemLayout}
@@ -96,14 +97,29 @@ class AddressForm extends React.Component {
             help={phoneError || ''}
           >
             {getFieldDecorator('phone', {
-              rules: [{message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/}]
+              rules: [
+                {
+                  message: '请输入正确格式的手机号',
+                  pattern: /^1[34578]\d{9}$/
+                }
+              ]
             })(<Input placeholder="请输入手机" />)}
           </Form.Item>
-          <Form.Item style={{ textAlign: 'right' }}>
+          <Form.Item
+            style={{
+              paddingLeft: '25%'
+            }}
+          >
+            {getFieldDecorator('setDefault', {
+              valuePropName: 'checked',
+              initialValue: true
+            })(<Checkbox>设为默认</Checkbox>)}
+          </Form.Item>
+          <Form.Item>
             <Button
               type="primary"
               style={{
-                marginRight: '12px'
+                marginLeft: '25%'
               }}
               htmlType="submit"
             >
