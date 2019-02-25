@@ -73,10 +73,13 @@ code {
     }
   }
 } 
-
-
-
-
-
-
-
+// 公共样式
+.b-1 {
+  border: 1px solid #e8e8e8;
+}
+.mb-12 {
+  margin-bottom: 12px;
+}
+.p-12 {
+  padding: 12px;
+}
