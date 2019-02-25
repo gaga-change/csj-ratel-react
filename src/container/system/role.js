@@ -1,13 +1,13 @@
 import React from 'react';
 import Sider from '../../component/sider/sider'
-import './system.scss'
+import './role.scss'
 
-export default class System extends React.Component {
+export default class Role extends React.Component {
   render() {
     return (
-      <div className="System">
+      <div className="Role">
           <Sider history={this.props.history}/>
-          系统业务页面正在开发...
+          角色管理页面正在开发...
       </div>
     );
   }
