@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu, Dropdown, Icon,Button,Modal } from 'antd';
+import _  from 'lodash';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
@@ -20,7 +21,6 @@ export default class Warehousing extends React.Component {
       
       },
       dataSource:[{id:1,ceshi:123,childData:[{id:3,ceshi:123},]},{id:2,childData:[{id:4},]}],
-      columns:indexTableColumns_Config,
       warehousingDetail_dataSource:[{},{}],
       BaseCard_dataSource:{orderId:123232323,time:1551002063632}
     }
@@ -61,41 +61,40 @@ export default class Warehousing extends React.Component {
   }
 
   componentDidMount(){
-    let {columns}=this.state;
-    columns=columns.map(v=>{
-       if(v.render===''){
-          v.render=(ext, record, index)=>{
-             return <span className="Dropdown_Menu_box">
-               <span onClick={this.showDetail}>查看</span> 
-               <Dropdown overlay={
-                   <Menu className="Dropdown_Menu_child">
-                      <Menu.Item>
-                        <span>删除</span>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <span>提交</span>
-                      </Menu.Item>
-                      <Menu.Item>
-                    </Menu.Item>
-                 </Menu>
-               }>
-                 <span className="ant-dropdown-link">
-                    更多操作 <Icon type="down" />
-                 </span>
-               </Dropdown>
-             </span>
-          }
-       }
-       return v
-    })
-    this.setState({columns})
     this.fetch()
   }
 
 
   render() {
-    const { dataSource,columns,visible,detailVisible,warehousingDetail_dataSource,BaseCard_dataSource} =this.state;
+    const { dataSource,visible,detailVisible,warehousingDetail_dataSource,BaseCard_dataSource} =this.state;
    
+    const columns=_.cloneDeep(indexTableColumns_Config).map(v=>{
+      if(v.render===''){
+         v.render=(ext, record, index)=>{
+            return <span className="Dropdown_Menu_box">
+              <span onClick={this.showDetail}>查看</span> 
+              <Dropdown overlay={
+                  <Menu className="Dropdown_Menu_child">
+                     <Menu.Item>
+                       <span>删除</span>
+                     </Menu.Item>
+                     <Menu.Item>
+                       <span>提交</span>
+                     </Menu.Item>
+                     <Menu.Item>
+                   </Menu.Item>
+                </Menu>
+              }>
+                <span className="ant-dropdown-link">
+                   更多操作 <Icon type="down" />
+                </span>
+              </Dropdown>
+            </span>
+         }
+      }
+      return v
+    })
+
     const childTable=(record)=>{
       return <FetchTable 
                columns={indexTableColumns_ChildConfig}  

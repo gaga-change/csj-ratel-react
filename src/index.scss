@@ -57,6 +57,21 @@ code {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 6px;
+  align-items: flex-end;
+  .Total{
+    .Total_list{
+      font-size: 12px;
+      span{
+        &:first-child{
+          font-size: 12px;
+          font-weight: 600;
+        }
+        &:last-child{
+          padding-right: 16px;
+        } 
+      }
+    }
+  }
 } 
 
 
