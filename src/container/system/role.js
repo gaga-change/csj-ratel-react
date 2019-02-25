@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import RoleForm from './components/roleForm'
@@ -10,35 +10,34 @@ export default class Role extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      dataSource:[{id:1},{id:2}],
+      dataSource: [{ id: 1 }, { id: 2 }],
       columns: roleConfig.columns,
       pagination: {
-   
+
       },
-      loading:false,
-      visible:false
+      loading: false
     }
   }
 
-  componentDidMount(){
-    let {columns}=this.state;
-    columns=columns.map(v=>{
-       if(v.render===''){
-          v.render=(ext, record, index)=>{
-             return <span className="Dropdown_Menu_box">
-               <span>删除</span> 
-               <span>操作权限</span> 
-             </span>
-          }
-       }
-       return v
+  componentDidMount () {
+    let { columns } = this.state;
+    columns = columns.map(v => {
+      if (v.render === '') {
+        v.render = (ext, record, index) => {
+          return <span className="Dropdown_Menu_box">
+            <span>删除</span>
+            <span>操作权限</span>
+          </span>
+        }
+      }
+      return v
     })
-    this.setState({columns})
+    this.setState({ columns })
     this.fetch()
   }
 
-  fetch = ()=>{
-    
+  fetch = () => {
+
   }
 
   /**
@@ -60,7 +59,7 @@ export default class Role extends React.Component {
   }
 
   render () {
-    const { dataSource,columns,visible }=this.state;
+    const { dataSource, columns } = this.state;
     console.log(columns)
     return (
       <div className="Role">
@@ -76,7 +75,7 @@ export default class Role extends React.Component {
           pagination={this.state.pagination}
           onChange={this.handleTableChange} />
       </div>
-    );
+    )
   }
 }
 
