@@ -159,7 +159,7 @@ export default class Sider extends React.Component {
                           </p>
                           <Icon type="down" />
                          </span>
-                          </Dropdown>,
+                          </Dropdown>
                     </div>
                   }
               </header>
