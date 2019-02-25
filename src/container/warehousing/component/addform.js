@@ -85,13 +85,50 @@ class AddForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     let { dataSource,visible,goodsInStorage_dataSource,selectedRowKeys} = this.state;
-    const formItemLayout = {
+
+    const formItemLayout_left = {
       labelCol: {
-        span:4
+        span:9
       },
       wrapperCol: {
-        span:12
+        span:15
       },
+      style:{
+        width:300,
+        height:60
+      }
+    };
+
+    const formItemLayout_right = {
+      labelCol: {
+        span:8
+      },
+      wrapperCol: {
+        span:16
+      },
+      style:{
+        width:400,
+      }
+    };
+
+    const formItemLayout_table = {
+      labelCol: {
+        span:0
+      },
+      wrapperCol: {
+        span:24
+      },
+      style:{
+        width:'100%',
+        marginBottom:12
+      }
+    };
+
+    const formItemLayout_button = {
+      style:{
+        display:'flex',
+        justifyContent: 'flex-end'
+      }
     };
 
     const columns=_.cloneDeep(formTable_config).map(v=>{
@@ -108,9 +145,10 @@ class AddForm extends React.Component {
     return (
        <div className="AddForm">
           <Form 
+            layout="inline"
             onSubmit={this.handleSubmit} >
 
-                <Form.Item label="计划入库仓库" {...formItemLayout}>
+                <Form.Item label="计划入库仓库" {...formItemLayout_left}>
                   { getFieldDecorator('计划入库仓库', {
                     rules: [{ required: true, message: '请选择计划入库仓库' }],
                   })(
@@ -123,7 +161,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
  
-                 <Form.Item label="计划入库日期"  {...formItemLayout}>
+                 <Form.Item label="计划入库日期"  {...formItemLayout_right}>
                   { getFieldDecorator('计划入库日期', {
                      rules: [{ type: 'array', required: true,message: '请选择计划入库日期' }],
                   })(
@@ -131,7 +169,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item label="备注" {...formItemLayout}>
+                <Form.Item label="备注" {...formItemLayout_left} style={{width:300,minHeight:110}}>
                   { getFieldDecorator('备注', {
                     initialValue:'',
                     rules: [{ required: false }],
@@ -140,7 +178,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item >
+                <Form.Item  {...formItemLayout_table}>
                   { getFieldDecorator('dataSource', {
                     initialValue:dataSource,
                     rules: [{ required: true }],
@@ -160,7 +198,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item  style={{ textAlign: 'right' }}>
+                <Form.Item {...formItemLayout_button}>
                   <Button
                       type="primary"
                       style={{marginRight:'12px'}}

@@ -124,7 +124,7 @@ export default class Outgoing extends React.Component {
               title="创建入库业务单"
               centered={true}
               destroyOnClose={true}
-              width={800}
+              width={1000}
               visible={visible}
               footer={null}
               onCancel={this.handleCancel}>

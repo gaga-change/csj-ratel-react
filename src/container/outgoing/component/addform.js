@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input,Button,DatePicker,Select,Modal } from 'antd';
+import { Form, Input,Button,DatePicker,Select,Modal} from 'antd';
 import _  from 'lodash';
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
@@ -85,13 +85,49 @@ class AddForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     let { dataSource,visible,goodsInStorage_dataSource,selectedRowKeys} = this.state;
-    const formItemLayout = {
+    const formItemLayout_left = {
       labelCol: {
-        span:4
+        span:7
       },
       wrapperCol: {
-        span:12
+        span:17
       },
+      style:{
+        width:300,
+        height:60
+      }
+    };
+
+    const formItemLayout_right = {
+      labelCol: {
+        span:8
+      },
+      wrapperCol: {
+        span:16
+      },
+      style:{
+        width:400,
+      }
+    };
+
+    const formItemLayout_table = {
+      labelCol: {
+        span:0
+      },
+      wrapperCol: {
+        span:24
+      },
+      style:{
+        width:'100%',
+        marginBottom:12
+      }
+    };
+
+    const formItemLayout_button = {
+      style:{
+        display:'flex',
+        justifyContent: 'flex-end'
+      }
     };
 
     const columns=_.cloneDeep(formTable_config).map(v=>{
@@ -108,105 +144,107 @@ class AddForm extends React.Component {
     return (
        <div className="AddForm">
           <Form 
+            layout="inline"
             onSubmit={this.handleSubmit} >
 
-                <Form.Item label="客户名称" {...formItemLayout}>
-                  { getFieldDecorator('客户名称', {
-                    rules: [{ required: true, message: '请选择客户' }],
-                  })(
-                    <Select  style={{width:180}} placeholder="请选择客户">
-                      <Option value="jack">Jack</Option>
-                      <Option value="lucy">Lucy</Option>
-                      <Option value="disabled" disabled>Disabled</Option>
-                      <Option value="Yiminghe">yiminghe</Option>
-                    </Select>
-                  )}
-                </Form.Item>
- 
-                 <Form.Item label="计划出库日期"  {...formItemLayout}>
-                  { getFieldDecorator('计划出库日期', {
-                     rules: [{ type: 'array', required: true,message: '请选择计划出库日期' }],
-                  })(
-                     <RangePicker />
-                  )}
-                </Form.Item>
+            <Form.Item label="客户名称"  {...formItemLayout_left} >
+              { getFieldDecorator('客户名称', {
+                rules: [{ required: true, message: '请选择客户' }],
+              })(
+                <Select  style={{width:180}} placeholder="请选择客户">
+                  <Option value="jack">Jack</Option>
+                  <Option value="lucy">Lucy</Option>
+                  <Option value="disabled" disabled>Disabled</Option>
+                  <Option value="Yiminghe">yiminghe</Option>
+                </Select>
+              )}
+            </Form.Item>
 
-                <Form.Item label="收货地址" {...formItemLayout}>
-                  { getFieldDecorator('收货地址', {
-                    rules: [{ required: true, message: '请选择收货地址'}],
-                  })(
-                    <Select  style={{width:180}} placeholder="请选择收货地址">
-                      <Option value="jack">Jack</Option>
-                      <Option value="lucy">Lucy</Option>
-                      <Option value="disabled" disabled>Disabled</Option>
-                      <Option value="Yiminghe">yiminghe</Option>
-                    </Select>
-                  )}
-                </Form.Item>
+            <Form.Item label="计划出库日期"  {...formItemLayout_right} style={{width:400}}>
+              { getFieldDecorator('计划出库日期', {
+                rules: [{ type: 'array', required: true,message: '请选择计划出库日期' }],
+              })(
+                <RangePicker style={{width:300}} />
+              )}
+            </Form.Item>
 
-                <Form.Item label="备注" {...formItemLayout}>
-                  { getFieldDecorator('备注', {
-                    initialValue:'',
-                    rules: [{ required: false }],
-                  })(
-                    <TextArea rows={4} placeholder="请输入备注信息" />
-                  )}
-                </Form.Item>
+            <Form.Item label="收货地址" {...formItemLayout_left}>
+              { getFieldDecorator('收货地址', {
+                rules: [{ required: true, message: '请选择收货地址'}],
+              })(
+                <Select  style={{width:180}} placeholder="请选择收货地址">
+                  <Option value="jack">Jack</Option>
+                  <Option value="lucy">Lucy</Option>
+                  <Option value="disabled" disabled>Disabled</Option>
+                  <Option value="Yiminghe">yiminghe</Option>
+                </Select>
+              )}
+            </Form.Item>
 
-                <Form.Item label="收货人" {...formItemLayout}>
-                    { getFieldDecorator('收货人', {
-                      initialValue:'',
-                      rules: [{ required: false, message: '' }],
-                    })(
-                      <Input autoComplete='off' placeholder="请输入收货人" />
-                    )}
-                </Form.Item>
-
+            <Form.Item label="收货人" {...formItemLayout_right}>
+                { getFieldDecorator('收货人', {
+                  initialValue:'',
+                  rules: [{ required: false, message: '' }],
+                })(
+                  <Input autoComplete='off' placeholder="请输入收货人" />
+                )}
+            </Form.Item>
                 
-                <Form.Item label="手机" {...formItemLayout}>
-                    { getFieldDecorator('手机', {
-                      initialValue:'',
-                      rules: [{ required: false, message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/ }],
-                    })(
-                      <Input autoComplete='off' placeholder="请输入手机" />
-                    )}
-                </Form.Item>
+            <Form.Item label="手机" {...formItemLayout_left} >
+                { getFieldDecorator('手机', {
+                  initialValue:'',
+                  rules: [{ required: false, message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/ }],
+                })(
+                  <Input autoComplete='off' placeholder="请输入手机" />
+                )}
+            </Form.Item>
 
-                <Form.Item >
-                  { getFieldDecorator('dataSource', {
-                    initialValue:dataSource,
-                    rules: [{ required: true }],
-                  })(
-                     <div className="form_item_table">
-                        <div className="alert_Btn">
-                          <Button type="primary"  onClick={this.selectCommoddity}>选择出库商品</Button>
-                         </div>
-                        <EditableTable 
-                          pagination={false}
-                          useIndex={true}
-                          onChange={this.editableTableChange}
-                          rowClassName={() => 'editable-row'}
-                          columns={columns} 
-                          dataSource={dataSource} />
-                     </div>
-                  )}
-                </Form.Item>
+            <Form.Item label="备注" {...formItemLayout_right}  style={{width:400,minHeight:110}}>
+              { getFieldDecorator('备注', {
+                initialValue:'',
+                rules: [{ required: false }],
+              })(
+                <TextArea rows={4}  placeholder="请输入备注信息" />
+              )}
+            </Form.Item>
 
-                <Form.Item  style={{ textAlign: 'right' }}>
+            <Form.Item  {...formItemLayout_table}>
+              { getFieldDecorator('dataSource', {
+                initialValue:dataSource,
+                rules: [{ required: true }],
+              })(
+                  <div className="form_item_table" style={{width:'100%'}}>
+                    <div className="alert_Btn">
+                      <Button type="primary"  onClick={this.selectCommoddity}>选择出库商品</Button>
+                    </div>
+                    <EditableTable 
+                      pagination={false}
+                      useIndex={true}
+                      onChange={this.editableTableChange}
+                      rowClassName={() => 'editable-row'}
+                      columns={columns} 
+                      dataSource={dataSource} />
+                  </div>
+              )}
+            </Form.Item> 
+
+            
+              <Form.Item {...formItemLayout_button} >
+                <Button
+                    type="primary"
+                    style={{marginRight:'12px'}}
+                    onClick={this.handleSubmit.bind(this,'save')}>
+                      保存
+                  </Button>
                   <Button
-                      type="primary"
-                      style={{marginRight:'12px'}}
-                      onClick={this.handleSubmit.bind(this,'save')}>
-                       保存
-                    </Button>
-                    <Button
-                      type="primary"
-                      onClick={this.handleSubmit.bind(this,'submit')}
-                      htmlType="submit">
-                       提交
-                    </Button>
-                </Form.Item>
+                    type="primary"
+                    onClick={this.handleSubmit.bind(this,'submit')}
+                    htmlType="submit">
+                      提交
+                  </Button>
+              </Form.Item>
           </Form> 
+
           <Modal
             title="选择出库商品"
             centered={true}
