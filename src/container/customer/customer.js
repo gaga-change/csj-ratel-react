@@ -55,6 +55,9 @@ export default class Customer extends React.Component {
   handleCancel = () => {
     this.setState({ visible: false })
   }
+  addressCancel = () => {
+    this.setState({ addressVisible: false })
+  }
   handleOk = () => {}
   ref = res => {
     this.child = res
@@ -93,9 +96,11 @@ export default class Customer extends React.Component {
         </Modal>
         <Modal
           title="维护地址"
-          width="80%"
+          width="60%"
           centered={true}
           bodyStyle={{ paddingBottom: 0 }}
+          footer={null}
+          onCancel={this.addressCancel}
           visible={addressVisible}
         >
           <AddressForm
