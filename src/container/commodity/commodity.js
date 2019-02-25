@@ -1,43 +1,35 @@
 import React from 'react';
-import { Button,Modal } from 'antd';
+import { Button,Modal,Tabs  } from 'antd';
+import _  from 'lodash';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
-import { indexTableColumnsConfig } from './component/config'
+import { indexTableColumnsConfig,costPriceChange_config,priceChange_config} from './component/config'
 import CommodityForm from './component/form'
 import AddForm from './component/addform'
-
 import'./commodity.scss'
+
+const TabPane = Tabs.TabPane;
 export default class Commodity extends React.Component {
 
   constructor(props){
     super(props);
     this.state={
       dataSource:[{id:1},{id:2}],
-      columns:indexTableColumnsConfig,
       pagination: {
    
       },
       loading:false,
-      visible:true
+      visible:false,
+      modifypriceVisible:false,
+      costPriceChange_dataSource:[],
+      priceChange_dataSource:[],
+      modifyprice_loding:false
     }
 
   }
 
 
   componentDidMount(){
-    let {columns}=this.state;
-    columns=columns.map(v=>{
-       if(v.render===''){
-          v.render=(ext, record, index)=>{
-             return <span className="Dropdown_Menu_box">
-               <span>删除</span> 
-               <span>调价</span> 
-             </span>
-          }
-       }
-       return v
-    })
-    this.setState({columns})
     this.fetch()
   }
 
@@ -63,7 +55,7 @@ export default class Commodity extends React.Component {
   }
 
   handleCancel = ()=>{
-     this.setState({visible:false})
+     this.setState({visible:false,modifypriceVisible:false})
   }
 
   handleOk = (e)=>{
@@ -74,12 +66,32 @@ export default class Commodity extends React.Component {
     this.child=res
   }
 
+  modifyprice = ()=>{
+    console.log('这是调价调用')
+    this.setState({modifypriceVisible:true})
+  }
+
+
   render() {
-    const { dataSource,columns,visible }=this.state;
+    const { dataSource,visible,modifypriceVisible,costPriceChange_dataSource,modifyprice_loding,priceChange_dataSource}=this.state;
+    const columns=_.cloneDeep(indexTableColumnsConfig).map(v=>{
+      if(v.render===''){
+         v.render=(ext, record, index)=>{
+            return <span className="Dropdown_Menu_box">
+              <span>删除</span> 
+              <span onClick={this.modifyprice}>调价</span> 
+            </span>
+         }
+      }
+      return v
+   })
+
     return (
         <div className="Commodity"  >
             <Sider history={this.props.history} /> 
-            <CommodityForm onSubmit={this.onSubmit.bind(this,'select')}/>
+            <CommodityForm 
+              selectWordsArr={['商品名称','商品编码']}
+              onSubmit={this.onSubmit.bind(this,'select')}/>
             <div className="alert_Btn">
               <Button type="primary" onClick={this.addCommodity}>创建商品</Button>
             </div>
@@ -103,6 +115,38 @@ export default class Commodity extends React.Component {
                   onRef={this.ref}
                   onSubmit={this.onSubmit.bind(this,'add')}/>
             </Modal>
+
+            <Modal
+              title="调价"
+              footer={false}
+              width={800}
+              bodyStyle={{paddingTop:16}}
+              visible={modifypriceVisible}
+              onCancel={this.handleCancel}>
+                <div className="modifyprice_alert">
+                <CommodityForm 
+                 selectWordsArr={['成本价','售价']}
+                 submitTex="提交"
+                 resetText="取消"
+                 onSubmit={this.onSubmit.bind(this,'modifyprice')}/>
+                  <Tabs type="card">
+                      <TabPane tab='成本价变动记录' key='1'>
+                          <FetchTable 
+                            dataSource={costPriceChange_dataSource} 
+                            columns={costPriceChange_config}
+                            loading={modifyprice_loding}
+                            pagination={false}/>
+                      </TabPane>
+                      <TabPane tab='售价变动记录' key='2'>
+                          <FetchTable 
+                            dataSource={priceChange_dataSource} 
+                            columns={priceChange_config}
+                            loading={modifyprice_loding}
+                            pagination={false}/>
+                      </TabPane>
+                    </Tabs>
+                </div>
+              </Modal>
         </div>
     );
   }
