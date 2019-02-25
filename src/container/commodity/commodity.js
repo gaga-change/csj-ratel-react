@@ -18,7 +18,7 @@ export default class Commodity extends React.Component {
    
       },
       loading:false,
-      visible:false
+      visible:true
     }
 
   }
@@ -93,8 +93,9 @@ export default class Commodity extends React.Component {
             <Modal
               title="创建商品"
               okText="保存"
+              width={800}
               centered={true}
-              bodyStyle={{paddingBottom:0}}
+              bodyStyle={{paddingBottom:16}}
               visible={visible}
               onCancel={this.handleCancel}
               onOk={this.handleOk}>

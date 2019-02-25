@@ -62,10 +62,21 @@ export  const routerConfig=[
     name:'系统',
     path:'/system',
     hidden: false,
-    component:'/system/system',
+    component:'/system/user',
     icon:'system',
     children:[
-    
+      { 
+        name:'角色管理',
+        path:'/system/role',
+        component:'/system/role',
+        sort:1
+      },  
+      { 
+        name:'用户管理',
+        path:'/system/user',
+        component:'/system/user',
+        sort:2
+      }, 
     ],
     sort:8
   }
