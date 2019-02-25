@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input,Button,DatePicker,Select,Modal } from 'antd';
+import _  from 'lodash';
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import { formTable_config,goodsInStorage_config } from './config'
@@ -16,7 +17,6 @@ class AddForm extends React.Component {
     super(props);
     this.state = {
       dataSource:[{num:2},{num:3}],
-      columns:formTable_config,
       visible:false,
       goodsInStorage_dataSource:[{id:1},{id:2}],
       selectedRowKeys:[]
@@ -79,24 +79,12 @@ class AddForm extends React.Component {
   }
 
   componentDidMount(){
-    let {columns}=this.state;
-    columns=columns.map(v=>{
-       if(v.render === ''){
-          v.render=(ext, record, index)=>{
-             return <span className="Dropdown_Menu_box">
-               <span onClick={this.handleDelete.bind(this,index)}>删除</span> 
-             </span>
-          }
-       }
-       return v
-    })
-    this.setState({columns})
     this.props.onRef(this)
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    let { dataSource,columns,visible,goodsInStorage_dataSource,selectedRowKeys} = this.state;
+    let { dataSource,visible,goodsInStorage_dataSource,selectedRowKeys} = this.state;
     const formItemLayout = {
       labelCol: {
         span:4
@@ -105,6 +93,17 @@ class AddForm extends React.Component {
         span:12
       },
     };
+
+    const columns=_.cloneDeep(formTable_config).map(v=>{
+      if(v.render === ''){
+         v.render=(ext, record, index)=>{
+            return <span className="Dropdown_Menu_box">
+              <span onClick={this.handleDelete.bind(this,index)}>删除</span> 
+            </span>
+         }
+      }
+      return v
+   })
 
     return (
        <div className="AddForm">
