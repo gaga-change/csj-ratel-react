@@ -4,7 +4,12 @@ import {
 } from 'antd';
 import '../style/modifyPasswordForm.scss';
 
-
+/**
+ * props:
+ *  goSubmit<Boolean> 是否进行表单提交操作。如果 false->true 则会提交表单
+ *  onSubmited<Function> 表单提交结束。通知父组件将goSubmit修改为 false
+ *      @returns err,values
+ */
 class DataForm extends React.Component {
     state = {
         confirmDirty: false,
