@@ -30,7 +30,9 @@ export default class Warehousing extends React.Component {
     console.log('这是提交的调用',type,value)
     if(type!=='select'){
       this.setState({visible:false})
-      this.child.handleRest()
+      if(this.child){
+        this.child.handleRest()
+      }
     }
   }
 

@@ -23,11 +23,16 @@ export  const indexTableColumnsConfig=[
   {
     title:'操作',
     dataIndex: '',
-    render:''
+    render:'',
+    width:150
   },
 ]
 
 export  const addressTableColumnsConfig=[
+  {
+    title: '序号',
+    dataIndex: 'index'
+  },
   {
     title: '收货人',
     dataIndex: ''
@@ -51,11 +56,15 @@ export  const addressTableColumnsConfig=[
   {
     title:'操作',
     dataIndex: '',
-    render:''
+    render:'',
+    renderType:'operation',
+    width:120
   },
   {
     title:'',
     dataIndex: '',
-    render:''
+    render:'',
+    renderType:'tag',
+    width:100
   },
 ]

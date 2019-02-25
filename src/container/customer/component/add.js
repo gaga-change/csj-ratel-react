@@ -55,16 +55,7 @@ class AddForm extends React.Component {
             help={phoneError || ''}
           >
             {getFieldDecorator('phone', {
-              rules: [
-                {
-                  validator: (rule, value, callback) => {
-                    if (value && !/^1[34578]\d{9}$/.test(value)) {
-                      callback('手机号输入有误')
-                    }
-                    callback()
-                  }
-                }
-              ]
+              rules: [{ required: false, message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/ }],
             })(<Input placeholder="请输入手机" />)}{' '}
           </Form.Item>
         </Form>

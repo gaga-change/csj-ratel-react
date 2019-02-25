@@ -26,15 +26,6 @@ class AddForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: {
-        span:6
-      },
-      wrapperCol: {
-        span:10
-      },
-    };
-
     const formItemLayout_left = {
       labelCol: {
         span:7
