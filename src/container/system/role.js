@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Popconfirm } from 'antd';
+import _  from 'lodash';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import RoleSearchForm from './components/roleSearchForm'
@@ -13,7 +14,6 @@ export default class Role extends React.Component {
     super(props)
     this.state = {
       dataSource: [{ id: 1 }, { id: 2 }],
-      columns: roleConfig.columns,
       pagination: {
 
       },
@@ -25,25 +25,6 @@ export default class Role extends React.Component {
 
 
   componentWillMount () {
-    console.log('componentWillMount')
-    let { columns } = this.state;
-    columns = columns.map(v => {
-      if (v.render === '') {
-        v.render = (text, record) => {
-          return (columns.length >= 1
-            ? (
-              <span className="Dropdown_Menu_box">
-                <Popconfirm title="确定要删除该角色吗?" onConfirm={() => this.handleDelete(record)}>
-                  <span>删除</span>
-                </Popconfirm>
-                <span onClick={() => this.handleRoleJurisdictionModalShowChange(true)}>操作权限</span>
-              </span>
-            ) : null)
-        }
-      }
-      return v
-    })
-    this.setState({ columns })
     this.fetch()
   }
 
@@ -95,7 +76,23 @@ export default class Role extends React.Component {
   }
 
   render () {
-    const { dataSource, columns } = this.state;
+    const { dataSource } = this.state;
+    const columns=_.cloneDeep(roleConfig.columns).map(v => {
+      if (v.render === '') {
+        v.render = (text, record) => {
+          return (columns.length >= 1
+            ? (
+              <span className="Dropdown_Menu_box">
+                <Popconfirm title="确定要删除该角色吗?" onConfirm={() => this.handleDelete(record)}>
+                  <span>删除</span>
+                </Popconfirm>
+                <span onClick={() => this.handleRoleJurisdictionModalShowChange(true)}>操作权限</span>
+              </span>
+            ) : null)
+        }
+      }
+      return v
+    })
     return (
       <div className="Role">
         <Sider history={this.props.history} />
