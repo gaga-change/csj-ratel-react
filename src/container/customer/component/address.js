@@ -1,22 +1,20 @@
 import React from 'react'
 import { Form, Input, Cascader, Button, Checkbox } from 'antd'
 import { Area } from '@lib/area'
-import { addressTableColumnsConfig } from './config'
-import FetchTable from '@component/fetchTable/fetchTable'
 import './add.scss'
 
 const { TextArea } = Input
-
 class AddressForm extends React.Component {
+
   constructor(props) {
     super(props)
     this.state = {
       loading: false,
       pagination: {},
-      columns: addressTableColumnsConfig,
       dataSource: [{ id: 1 }]
     }
   }
+
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
@@ -30,58 +28,88 @@ class AddressForm extends React.Component {
     this.props.form.resetFields()
   }
 
-  componentDidMount() {
-    this.props.onRef(this)
-  }
-
   render() {
     const { getFieldDecorator, isFieldTouched, getFieldError } = this.props.form
     const phoneError = isFieldTouched('phone') && getFieldError('phone')
-    const formItemLayout = {
+    
+    const formItemLayout_left = {
       labelCol: {
-        span: 6
+        span:9
       },
       wrapperCol: {
-        span: 10
+        span:15
+      },
+      style:{
+        width:400,
+        height:60
       }
-    }
+    };
+
+    const formItemLayout_right = {
+      labelCol: {
+        span:8
+      },
+      wrapperCol: {
+        span:16
+      },
+      style:{
+        width:400,
+      }
+    };
+
+    const formItemLayout_Checkbox = {
+      style:{
+        paddingLeft:150
+      }
+    };
+
+    const formItemLayout_button = {
+      style:{
+        display:'flex',
+        justifyContent: 'flex-end',
+      }
+    };
+
     return (
-      <div className="AddForm">
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Item label="地址信息" {...formItemLayout}>
-            {getFieldDecorator('area', {
+      <div className="AddressForm">
+
+        <Form 
+          layout="inline"
+          onSubmit={this.handleSubmit}>
+          <Form.Item label="地址信息" {...formItemLayout_left}>
+            {
+              getFieldDecorator('area', {
               initialValue: '',
               rules: [{ required: true, message: '请选择地址信息' }]
             })(
               <Cascader
                 placeholder="请选择地区"
-                options={Area}
-                onChange={function onChange(value) {
-                  console.log(value)
-                }}
-              />
+                options={Area}/>
             )}
           </Form.Item>
-          <Form.Item label="详细地址" {...formItemLayout}>
+
+          <Form.Item label="详细地址" {...formItemLayout_right} style={{width:400,minHeight:110}}>
             {getFieldDecorator('exactaddress', {
               initialValue: '',
               rules: [{ required: true, message: '请输入详细地址' }]
             })(<TextArea rows={3} placeholder="请输入详细地址" />)}
           </Form.Item>
-          <Form.Item label="邮政编码" {...formItemLayout}>
+
+          <Form.Item label="邮政编码" {...formItemLayout_left}>
             {getFieldDecorator('mailcode', {
               initialValue: '',
               rules: [{ required: false }]
             })(<Input autoComplete="off" placeholder="请输入邮政编码" />)}
           </Form.Item>
-          <Form.Item label="品牌" {...formItemLayout}>
+
+          <Form.Item label="品牌" {...formItemLayout_right}>
             {getFieldDecorator('品牌', {
               initialValue: '',
               rules: [{ required: true, message: '请输入品牌' }]
             })(<Input autoComplete="off" placeholder="请输入品牌" />)}
           </Form.Item>
 
-          <Form.Item label="收货人姓名" {...formItemLayout}>
+          <Form.Item label="收货人姓名" {...formItemLayout_left}>
             {getFieldDecorator('name', {
               initialValue: '',
               rules: [
@@ -90,49 +118,38 @@ class AddressForm extends React.Component {
               ]
             })(<Input autoComplete="off" placeholder="请输入收货人姓名" />)}
           </Form.Item>
+
+
           <Form.Item
             label="手机"
-            {...formItemLayout}
+            {...formItemLayout_right}
             validateStatus={phoneError ? 'error' : ''}
-            help={phoneError || ''}
-          >
-            {getFieldDecorator('phone', {
-              rules: [
-                {
-                  message: '请输入正确格式的手机号',
-                  pattern: /^1[34578]\d{9}$/
-                }
-              ]
-            })(<Input placeholder="请输入手机" />)}
+            help={phoneError || ''}>
+              {getFieldDecorator('phone', {
+                rules: [
+                  {
+                    message: '请输入正确格式的手机号',
+                    pattern: /^1[34578]\d{9}$/
+                  }
+                ]
+              })(<Input placeholder="请输入手机" />)}
           </Form.Item>
-          <Form.Item
-            style={{
-              paddingLeft: '25%'
-            }}
-          >
-            {getFieldDecorator('setDefault', {
-              valuePropName: 'checked',
-              initialValue: true
-            })(<Checkbox>设为默认</Checkbox>)}
+
+          <Form.Item {...formItemLayout_Checkbox}>
+              {getFieldDecorator('setDefault', {
+                valuePropName: 'checked',
+                initialValue: true
+              })(<Checkbox>设为默认</Checkbox>)}
           </Form.Item>
-          <Form.Item>
+
+          <Form.Item {...formItemLayout_button}>
             <Button
               type="primary"
-              style={{
-                marginLeft: '25%'
-              }}
-              htmlType="submit"
-            >
-              保存
+              htmlType="submit">
+                保存
             </Button>
           </Form.Item>
         </Form>
-        <FetchTable
-          dataSource={this.state.dataSource}
-          columns={this.state.columns}
-          loading={this.state.loading}
-          pagination={this.state.pagination}
-        />
       </div>
     )
   }

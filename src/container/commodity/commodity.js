@@ -47,7 +47,6 @@ export default class Commodity extends React.Component {
       this.child.handleRest()
     }
     console.log(type,value)
-   
   }
 
   addCommodity = ()=>{
