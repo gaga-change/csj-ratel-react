@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Form, Input
 } from 'antd';
-import './modifyPasswordForm.scss';
+import '../style/modifyPasswordForm.scss';
 
 
 class DataForm extends React.Component {

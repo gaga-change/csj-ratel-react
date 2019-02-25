@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'antd';
-import './modifyPassword.scss'
+import './style/modifyPassword.scss'
 import ModifyPasswordForm from './components/modifyPasswordForm.js'
 
 export default class System extends React.Component {

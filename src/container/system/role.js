@@ -1,6 +1,6 @@
 import React from 'react';
 import Sider from '../../component/sider/sider'
-import './role.scss'
+import './style/role.scss'
 
 export default class Role extends React.Component {
   render() {

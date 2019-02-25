@@ -1,6 +1,6 @@
 import React from 'react';
 import Sider from '../../component/sider/sider'
-import './user.scss'
+import './style/user.scss'
 
 export default class User extends React.Component {
   render() {
