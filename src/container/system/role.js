@@ -2,8 +2,9 @@ import React from 'react';
 import { Button } from 'antd';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
-import RoleForm from './components/roleForm'
+import RoleSearchForm from './components/roleSearchForm'
 import roleConfig from './config/roleConfig'
+import RoleAddModal from './components/roleAddModal'
 import './style/role.scss'
 
 export default class Role extends React.Component {
@@ -15,6 +16,7 @@ export default class Role extends React.Component {
       pagination: {
 
       },
+      roleAddFormShow: false,
       loading: false
     }
   }
@@ -51,20 +53,28 @@ export default class Role extends React.Component {
    * 添加对象按钮
    */
   handleAdd = () => {
-
+    this.handleRoleAddFormShowChange(true)
   }
 
   handleTableChange = (pagination, filters, sorter) => {
     console.log(pagination)
   }
 
+  /**
+   * 添加角色表单弹窗 状态改变
+   */
+  handleRoleAddFormShowChange = (show) => {
+    this.setState((state) => ({
+      roleAddFormShow: show
+    }))
+  }
+
   render () {
     const { dataSource, columns } = this.state;
-    console.log(columns)
     return (
       <div className="Role">
         <Sider history={this.props.history} />
-        <RoleForm onSubmit={this.handleFormSubmit}></RoleForm>
+        <RoleSearchForm onSubmit={this.handleFormSubmit}></RoleSearchForm>
         <div className="alert_Btn">
           <Button type="primary" onClick={this.handleAdd}>创建角色</Button>
         </div>
@@ -74,6 +84,7 @@ export default class Role extends React.Component {
           loading={this.state.loading}
           pagination={this.state.pagination}
           onChange={this.handleTableChange} />
+        <RoleAddModal show={this.state.roleAddFormShow} onClose={this.handleRoleAddFormShowChange}></RoleAddModal>
       </div>
     )
   }
