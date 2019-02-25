@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Popconfirm } from 'antd';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import RoleSearchForm from './components/roleSearchForm'
+import RoleJurisdictionModal from './components/roleJurisdictionModal'
 import roleConfig from './config/roleConfig'
 import RoleAddModal from './components/roleAddModal'
 import './style/role.scss'
@@ -17,19 +18,27 @@ export default class Role extends React.Component {
 
       },
       roleAddFormShow: false,
+      roleJurisdictionModalShow: false,
       loading: false
     }
   }
 
-  componentDidMount () {
+
+  componentWillMount () {
+    console.log('componentWillMount')
     let { columns } = this.state;
     columns = columns.map(v => {
       if (v.render === '') {
-        v.render = (ext, record, index) => {
-          return <span className="Dropdown_Menu_box">
-            <span>删除</span>
-            <span>操作权限</span>
-          </span>
+        v.render = (text, record) => {
+          return (columns.length >= 1
+            ? (
+              <span className="Dropdown_Menu_box">
+                <Popconfirm title="确定要删除该角色吗?" onConfirm={() => this.handleDelete(record)}>
+                  <span>删除</span>
+                </Popconfirm>
+                <span onClick={() => this.handleRoleJurisdictionModalShowChange(true)}>操作权限</span>
+              </span>
+            ) : null)
         }
       }
       return v
@@ -40,6 +49,13 @@ export default class Role extends React.Component {
 
   fetch = () => {
 
+  }
+
+  /**
+   * 删除
+   */
+  handleDelete = (item) => {
+    console.log(item)
   }
 
   /**
@@ -69,6 +85,15 @@ export default class Role extends React.Component {
     }))
   }
 
+  /**
+   * 操作权限表单弹窗 状态改变
+   */
+  handleRoleJurisdictionModalShowChange = (show) => {
+    this.setState((state) => ({
+      roleJurisdictionModalShow: show
+    }))
+  }
+
   render () {
     const { dataSource, columns } = this.state;
     return (
@@ -85,6 +110,7 @@ export default class Role extends React.Component {
           pagination={this.state.pagination}
           onChange={this.handleTableChange} />
         <RoleAddModal show={this.state.roleAddFormShow} onClose={this.handleRoleAddFormShowChange}></RoleAddModal>
+        <RoleJurisdictionModal show={this.state.roleJurisdictionModalShow} onClose={this.handleRoleJurisdictionModalShowChange}></RoleJurisdictionModal>
       </div>
     )
   }
