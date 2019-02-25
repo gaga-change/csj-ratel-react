@@ -4,6 +4,7 @@ import  { Link }  from  'react-router-dom';
 import { depthForEachIndex } from '@lib/lib'
 import Sider from '../../component/sider/sider'
 import imgSouce from '../../imgSouce/imgSouce'
+import { priceChange_config } from './components/config'
 import { Row, Col } from 'antd';
 
 import './home.scss';
@@ -11,6 +12,7 @@ import './home.scss';
 @connect(
   state=>state.menus
 )
+
 export default class Home extends React.Component {
   constructor(props) {
     super(props)
