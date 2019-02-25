@@ -25,10 +25,10 @@ class AddForm extends React.Component {
     const phoneError = isFieldTouched('phone') && getFieldError('phone')
     const formItemLayout = {
       labelCol: {
-        span: 6
+        span: 4
       },
       wrapperCol: {
-        span: 10
+        span: 12
       }
     }
     return (

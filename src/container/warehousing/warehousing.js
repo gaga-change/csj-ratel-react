@@ -3,8 +3,10 @@ import { Menu, Dropdown, Icon,Button,Modal } from 'antd';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
-import { indexTableColumns_Config,indexTableColumns_ChildConfig } from './component/config'
+import { indexTableColumns_Config,indexTableColumns_ChildConfig ,warehousingDetail_Config,BaseCard_Config} from './component/config'
 import AddForm from './component/addform'
+import BaseCard from '@component/baseCard/baseCard'
+import BaseTitle from '@component/baseTitle/baseTitle'
 import './warehousing.scss'
 
 export default class Warehousing extends React.Component {
@@ -12,17 +14,20 @@ export default class Warehousing extends React.Component {
     super(props);
     this.state={
       loading:false,
-      visible:true,
+      visible:false,
+      detailVisible:false,
       pagination: {
       
       },
-      dataSource:[{id:1,childData:[{id:3},]},{id:2,childData:[{id:4},]}],
-      columns:indexTableColumns_Config
+      dataSource:[{id:1,ceshi:123,childData:[{id:3,ceshi:123},]},{id:2,childData:[{id:4},]}],
+      columns:indexTableColumns_Config,
+      warehousingDetail_dataSource:[{},{}],
+      BaseCard_dataSource:{orderId:123232323,time:1551002063632}
     }
   }
 
   onSubmit = (type,value)=>{
-    console.log(type,value)
+    console.log('这是提交的调用',type,value)
     if(type!=='select'){
       this.setState({visible:false})
       this.child.handleRest()
@@ -30,24 +35,38 @@ export default class Warehousing extends React.Component {
   }
 
   handleTableChange = (pagination, filters, sorter) => {
-    console.log(pagination)
+    console.log('这是分页的调用',pagination)
   }
 
   add = ()=>{
+    console.log('这是出现创建入库单弹窗调用')
     this.setState({visible:true})
   }
 
   fetch = ()=>{
-    
+    console.log('这是请求数据的调用')
+  }
+
+  showDetail = () =>{
+    this.setState({detailVisible:true})
+  }
+
+  handleCancel = ()=>{
+    console.log('这是取消创建入库单的调用')
+    this.setState({visible:false,detailVisible:false})
+  }
+
+  ref = (res)=>{
+    this.child=res
   }
 
   componentDidMount(){
     let {columns}=this.state;
     columns=columns.map(v=>{
-       if(v.render!==undefined){
+       if(v.render===''){
           v.render=(ext, record, index)=>{
              return <span className="Dropdown_Menu_box">
-               <span>查看</span> 
+               <span onClick={this.showDetail}>查看</span> 
                <Dropdown overlay={
                    <Menu className="Dropdown_Menu_child">
                       <Menu.Item>
@@ -73,48 +92,65 @@ export default class Warehousing extends React.Component {
     this.fetch()
   }
 
-  handleCancel = ()=>{
-    this.setState({visible:false})
-  }
-
-  ref = (res)=>{
-    this.child=res
-  }
 
   render() {
-    const { dataSource,columns,visible} =this.state;
+    const { dataSource,columns,visible,detailVisible,warehousingDetail_dataSource,BaseCard_dataSource} =this.state;
+   
     const childTable=(record)=>{
       return <FetchTable 
                columns={indexTableColumns_ChildConfig}  
                dataSource={record.childData} 
-               rowKey='id' 
                pagination={false}/>
     }
+    
     return (
       <div className="Warehousing">
           <Sider history={this.props.history} />
-          <SelestForm onSubmit={this.onSubmit.bind(this,'select')}/>
+
+          <SelestForm 
+            onSubmit={this.onSubmit.bind(this,'select')} 
+            selectWordsArr={['商品名称','状态','创建日期','查询重置']}/>
           <div className="alert_Btn">
               <Button type="primary" onClick={this.add}>创建入库业务单</Button>
            </div>
+
           <FetchTable  
             columns={columns}
             loading={this.state.loading}
             pagination={this.state.pagination}
             onChange={this.handleTableChange}
-            rowKey='id'
             expandedRowRender={childTable}
             dataSource={dataSource}/>
             <Modal
               title="创建入库业务单"
               centered={true}
+              destroyOnClose={true}
               width={800}
               visible={visible}
               footer={null}
               onCancel={this.handleCancel}>
-               <AddForm
-                 onRef={this.ref} 
-                 onSubmit={this.onSubmit}/>
+              <AddForm
+                onRef={this.ref} 
+                onSubmit={this.onSubmit}/>
+            </Modal>
+ 
+            <Modal
+              title="入库业务单详情"
+              className="warehousing_detail_modal"
+              visible={detailVisible}
+              destroyOnClose={true}
+              width={1000}
+              footer={false}
+              onCancel={this.handleCancel}>
+                <div className="warehousing_detail">
+                   <BaseTitle title="基本信息"/>
+                   <BaseCard  columns={BaseCard_Config} dataSource={BaseCard_dataSource}/>
+                   <BaseTitle title="相关明细"/>
+                   <FetchTable 
+                     useIndex={true}
+                     columns={warehousingDetail_Config}
+                     dataSource={warehousingDetail_dataSource} />
+                </div>
             </Modal>
       </div>
     );

@@ -139,7 +139,7 @@ export default class EditableTable extends React.Component {
       },
     };
 
-    let { columns=[],dataSource=[],size='small',locale={emptyText:'暂无数据' },components=componentsDefaul,bordered=true,...rest } = this.props;
+    let { columns=[],dataSource=[],useIndex=false,size='small',locale={emptyText:'暂无数据' },components=componentsDefaul,bordered=true,...rest } = this.props;
 
     columns = columns.map((col,i) => {
       if (!col.editable) {
@@ -159,6 +159,17 @@ export default class EditableTable extends React.Component {
         }),
       };
     });
+
+    if(!this.props.rowKey){
+      dataSource=dataSource.map((v,i)=>{
+        v.key=i+1;
+        if(useIndex){
+          v.index=i+1;
+        }
+        return v;
+      }) 
+    }
+    
     return (
       <div className="EditableTable">
         <Table

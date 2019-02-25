@@ -1,0 +1,12 @@
+.BaseCard{
+  margin-bottom: 16px;
+  border: 1px solid #e8e8e8;
+  padding: 12px;
+  .BaseCard-row-box{
+    font-size: 12px;
+    .BaseCard-row-title{
+      font-weight: 600;
+    }
+  }
+}
+

@@ -39,15 +39,15 @@ class AddressForm extends React.Component {
     const phoneError = isFieldTouched('phone') && getFieldError('phone')
     const formItemLayout = {
       labelCol: {
-        span: 6
+        span: 2
       },
       wrapperCol: {
-        span: 10
+        span: 8
       }
     }
     return (
       <div className="AddForm">
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} layout="inline">
           <Form.Item label="地址信息" {...formItemLayout}>
             {getFieldDecorator('area', {
               initialValue: '',
@@ -96,19 +96,10 @@ class AddressForm extends React.Component {
             help={phoneError || ''}
           >
             {getFieldDecorator('phone', {
-              rules: [
-                {
-                  validator: (rule, value, callback) => {
-                    if (value && !/^1[34578]\d{9}$/.test(value)) {
-                      callback('手机号输入有误')
-                    }
-                    callback()
-                  }
-                }
-              ]
+              rules: [{message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/}]
             })(<Input placeholder="请输入手机" />)}
           </Form.Item>
-          <Form.Item {...formItemLayout}>
+          <Form.Item style={{ textAlign: 'right' }}>
             <Button
               type="primary"
               style={{

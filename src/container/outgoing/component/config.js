@@ -5,19 +5,19 @@ export  const indexTableColumns_Config=[
     dataIndex: 'ceshi',
   },
   {
-    title:'计划入库时间',
+    title:'计划出库时间',
     dataIndex: '',
   },
   {
-    title:'计划入库仓库',
+    title:'计划出库仓库',
     dataIndex: '',
   },
   {
-    title:'计划入库总量',
+    title:'计划出库总量',
     dataIndex: '',
   },
   {
-    title:'已入库数量',
+    title:'已出库数量',
     dataIndex: '',
   },
   {
@@ -43,11 +43,11 @@ export  const indexTableColumns_ChildConfig=[
     dataIndex: '',
   },
   {
-    title:'计划入库数量',
+    title:'计划出库数量',
     dataIndex: '',
   },
   {
-    title:'已入库总量',
+    title:'已出库总量',
     dataIndex: '',
   },
   
@@ -83,7 +83,11 @@ export  const formTable_config=[
     dataIndex: '',
   },
   {
-    title:'入库数量',
+    title:'仓库',
+    dataIndex: '',
+  },
+  {
+    title:'出库数量',
     dataIndex: 'num',
     editable:true,
     inputType:'InputNumber',
@@ -124,7 +128,15 @@ export  const goodsInStorage_config=[
   {
     title:'单价（成本）',
     dataIndex: '',
-  }
+  },
+  {
+    title:'仓库',
+    dataIndex: '',
+  },
+  {
+    title:'可用库存',
+    dataIndex: '',
+  },
 ]
 
 
@@ -154,15 +166,15 @@ export  const warehousingDetail_Config=[
     dataIndex: '',
   },
   {
-    title:'单价(成本)',
+    title:'单价(销售价)',
     dataIndex: '',
   },
   {
-    title:'计划入库量',
+    title:'计划出库量',
     dataIndex: '',
   },
   {
-    title:'已入库量',
+    title:'已出库量',
     dataIndex: '',
   }
 ]
@@ -174,16 +186,16 @@ export  const BaseCard_Config=[
     dataIndex: 'orderId',
   },
   {
-    title:'计划入库日期',
+    title:'计划出库日期',
     dataIndex: 'time',
     render:(v)=>moment(v).format('YYYY-MM-DD')
   },
   {
-    title:'入库仓库',
+    title:'出库仓库',
     dataIndex: '',
   },
   {
-    title:'计划入库总量',
+    title:'计划出库总量',
     dataIndex: '',
   },
   {

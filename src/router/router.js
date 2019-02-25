@@ -1,7 +1,8 @@
 import React from 'react';
 import  { Route,Switch,HashRouter,Redirect }  from  'react-router-dom';
 import {connect} from 'react-redux';
-import asyncComponent from './asyncComponent'
+import Loadable from 'react-loadable';
+import MyLoadingComponent from './MyloadingComponent'
 import { depthForEach } from '../lib/lib'
 @connect(
  state=>state.menus,
@@ -14,7 +15,18 @@ class Router extends React.Component {
                     <HashRouter basename="/" history={this.props.history}>
                         <Switch>
                             {
-                              config.map(v=><Route exact={v.path==='/'||v.path==='/system'}   path={v.path} key={v.path} component={asyncComponent(()=>import(`../container${v.component}`))}/>)
+                              config.map(v=>{
+
+                                let  BasicLayout = Loadable({
+                                    loader: () => import(`../container${v.component}`),
+                                    loading: MyLoadingComponent
+                                });
+
+                                return <Route 
+                                  exact={v.path==='/'||v.path==='/system'}   
+                                  path={v.path} key={v.path} 
+                                  component={BasicLayout}/>
+                              })
                             }
                             <Redirect to='/login'></Redirect>
                         </Switch>

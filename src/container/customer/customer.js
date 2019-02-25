@@ -29,8 +29,8 @@ export default class Customer extends React.Component {
   }
   componentDidMount() {
     let { columns } = this.state
-    columns.map(v => {
-      if (v.render !== undefined) {
+    columns=columns.map(v => {
+      if (v.render === '') {
         v.render = (ext, record, index) => {
           return (
             <span className="Dropdown_Menu_box">

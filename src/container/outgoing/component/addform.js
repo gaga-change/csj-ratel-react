@@ -111,11 +111,11 @@ class AddForm extends React.Component {
           <Form 
             onSubmit={this.handleSubmit} >
 
-                <Form.Item label="计划入库仓库" {...formItemLayout}>
-                  { getFieldDecorator('计划入库仓库', {
-                    rules: [{ required: true, message: '请选择计划入库仓库' }],
+                <Form.Item label="客户名称" {...formItemLayout}>
+                  { getFieldDecorator('客户名称', {
+                    rules: [{ required: true, message: '请选择客户' }],
                   })(
-                    <Select  style={{width:180}} placeholder="请选择计划入库仓库">
+                    <Select  style={{width:180}} placeholder="请选择客户">
                       <Option value="jack">Jack</Option>
                       <Option value="lucy">Lucy</Option>
                       <Option value="disabled" disabled>Disabled</Option>
@@ -124,11 +124,24 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
  
-                 <Form.Item label="计划入库日期"  {...formItemLayout}>
-                  { getFieldDecorator('计划入库日期', {
-                     rules: [{ type: 'array', required: true,message: '请选择计划入库日期' }],
+                 <Form.Item label="计划出库日期"  {...formItemLayout}>
+                  { getFieldDecorator('计划出库日期', {
+                     rules: [{ type: 'array', required: true,message: '请选择计划出库日期' }],
                   })(
                      <RangePicker />
+                  )}
+                </Form.Item>
+
+                <Form.Item label="收货地址" {...formItemLayout}>
+                  { getFieldDecorator('收货地址', {
+                    rules: [{ required: true, message: '请选择收货地址'}],
+                  })(
+                    <Select  style={{width:180}} placeholder="请选择收货地址">
+                      <Option value="jack">Jack</Option>
+                      <Option value="lucy">Lucy</Option>
+                      <Option value="disabled" disabled>Disabled</Option>
+                      <Option value="Yiminghe">yiminghe</Option>
+                    </Select>
                   )}
                 </Form.Item>
 
@@ -141,6 +154,25 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
+                <Form.Item label="收货人" {...formItemLayout}>
+                    { getFieldDecorator('收货人', {
+                      initialValue:'',
+                      rules: [{ required: false, message: '' }],
+                    })(
+                      <Input autoComplete='off' placeholder="请输入收货人" />
+                    )}
+                </Form.Item>
+
+                
+                <Form.Item label="手机" {...formItemLayout}>
+                    { getFieldDecorator('手机', {
+                      initialValue:'',
+                      rules: [{ required: false, message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/ }],
+                    })(
+                      <Input autoComplete='off' placeholder="请输入手机" />
+                    )}
+                </Form.Item>
+
                 <Form.Item >
                   { getFieldDecorator('dataSource', {
                     initialValue:dataSource,
@@ -148,7 +180,7 @@ class AddForm extends React.Component {
                   })(
                      <div className="form_item_table">
                         <div className="alert_Btn">
-                          <Button type="primary"  onClick={this.selectCommoddity}>选择入库商品</Button>
+                          <Button type="primary"  onClick={this.selectCommoddity}>选择出库商品</Button>
                          </div>
                         <EditableTable 
                           pagination={false}
@@ -177,18 +209,18 @@ class AddForm extends React.Component {
                 </Form.Item>
           </Form> 
           <Modal
-            title="选择入库商品"
+            title="选择出库商品"
             centered={true}
+            destroyOnClose={true}
             width={760}
             visible={visible}
-            destroyOnClose={true}
             onOk={this.handleOk}
             onCancel={this.handleCancel}>
               <div className="selectCommodityModal">
                 <SelestForm 
                   className='CommodityFormArert'
                   onSubmit={this.onSelect} 
-                  selectWordsArr={['商品名称','查询']}/>
+                  selectWordsArr={['商品名称','仓库','查询']}/>
                 <SelectionTable
                   rowKey="id"
                   selectedRowKeys={selectedRowKeys}
