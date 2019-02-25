@@ -14,7 +14,7 @@ $blue: #5868D9;
         background-color: #fff;
         border-radius: 5px;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 14px;
         color: #666;
         cursor: pointer;
         transition: all .3s;
@@ -30,7 +30,7 @@ $blue: #5868D9;
         }
 
         .num {
-            font-size: 32px;
+            font-size: 24px;
             color: $blue;
         }
 
@@ -38,9 +38,6 @@ $blue: #5868D9;
             &>p {
                 margin: 5px;
             }
-
-            // .num-area {}
-
             .num-item {
                 margin-right: 24px;
             }
@@ -99,8 +96,8 @@ $blue: #5868D9;
 
         .hint-area {
             margin: 28px 0 42px 0;
-            font-size: 22px;
-            font-weight: 400;
+            font-size: 16px;
+            font-weight: 600;
             color: rgba(53, 53, 53, 1);
         }
     }
