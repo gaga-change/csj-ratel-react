@@ -6,7 +6,7 @@ class CommodityForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.onSubmit(values)
+        this.props.onSubmit({...values,skuId:this.props.modifypriceActiveRow.id})
       }
     });
   }
@@ -16,8 +16,8 @@ class CommodityForm extends React.Component {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const { selectWordsArr=[],submitTex="查询",resetText="重置"} = this.props;
+    const { getFieldDecorator} = this.props.form;
+    const { selectWordsArr=[],submitTex="查询",resetText="重置",modifypriceActiveRow} = this.props;
 
     return (
       <div className="CommodityForm">
@@ -27,7 +27,7 @@ class CommodityForm extends React.Component {
                 selectWordsArr.includes('商品名称')&&
                 <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
                   <Form.Item label="商品名称">
-                    { getFieldDecorator('username', {
+                    { getFieldDecorator('skuName', {
                       initialValue:'',
                       rules: [{ required: false, message: '' }],
                     })(
@@ -40,7 +40,7 @@ class CommodityForm extends React.Component {
                  selectWordsArr.includes('商品编码')&&
                  <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
                   <Form.Item label="商品编码">
-                    { getFieldDecorator('password', {
+                    { getFieldDecorator('skuCode', {
                       initialValue:'',
                       rules: [{ required: false, message: '' }],
                     })(
@@ -54,8 +54,8 @@ class CommodityForm extends React.Component {
                   selectWordsArr.includes('成本价')&&
                   <Col span={6} style={{width:'300px',marginBottom:'12px'}}>
                     <Form.Item label="成本价">
-                      { getFieldDecorator('成本价', {
-                        initialValue:'',
+                      { getFieldDecorator('costPrice', {
+                        initialValue:modifypriceActiveRow.costPrice,
                         rules: [{ required: false, message: '' }],
                       })(
                         <InputNumber  style={{width:200}}  placeholder="请输入成本价" />
@@ -67,8 +67,8 @@ class CommodityForm extends React.Component {
                   selectWordsArr.includes('售价')&&
                   <Col span={6} style={{width:'300px',marginBottom:'12px'}}>
                     <Form.Item label="售价">
-                      { getFieldDecorator('售价', {
-                        initialValue:'',
+                      { getFieldDecorator('salePrice', {
+                        initialValue:modifypriceActiveRow.salePrice,
                         rules: [{ required: false, message: '' }],
                       })(
                         <InputNumber  style={{width:200}}  placeholder="请输入售价" />

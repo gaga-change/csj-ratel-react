@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { message} from 'antd';
-import  moment from 'moment'
 import {stringify} from 'qs';
 // 创建axios实例
 const service = axios.create({
@@ -23,7 +22,7 @@ service.interceptors.response.use(
          }
 
        } else {
-         selectMessage('error','请求异常！')
+         selectMessage('error',`${response.data.errorMsg||'请求异常！'}`)
          return Promise.reject(response.data)
        }
     } else {
@@ -45,13 +44,17 @@ function selectMessage(type,tip){
 }
 
 
-function request({ url, method='get',data}){
+function request({ url, method='get',data,useStringify=true}){
   let json={method,url};
   if(method==='get'||method==='GET'){
-  let stringifyData=stringify(data);
-  json['url']=`${url}?${stringifyData}&fetchTime=${moment().valueOf()}`;
+    let stringifyData=stringify(data);
+    if(useStringify){
+      json['url']=`${url}?${stringifyData}`;
+    } else{
+      json['url']=`${url}/${data}`;
+    }
   } else{
-    json['url']=`${url}?fetchTime=${moment().valueOf()}`;
+    json['url']=url;
     json['data']=data;
   }
   return service(json)

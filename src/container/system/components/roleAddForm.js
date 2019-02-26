@@ -1,6 +1,5 @@
 import React from 'react';
 import {Form, Input} from 'antd';
-import './modifyPasswordForm.scss';
 const { TextArea } = Input;
 /**
  * props:
