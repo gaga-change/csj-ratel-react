@@ -6,7 +6,13 @@ import AddressForm from './component/address'
 import FetchTable from '@component/fetchTable/fetchTable'
 import { indexTableColumnsConfig } from './component/config'
 import { Button, Modal } from 'antd'
+import fetchData from '@lib/request'
+import {connect} from 'react-redux';
 import './customer.scss'
+
+@connect(
+  state=>state
+)
 
 export default class Customer extends React.Component {
   constructor(props) {
@@ -21,7 +27,6 @@ export default class Customer extends React.Component {
     }
   }
   onSubmit = (type, value) => {
-    console.log(value)
     this.setState({ visible: false })
   }
   handleTableChange = (pagination, filters, sorter) => {
@@ -45,7 +50,24 @@ export default class Customer extends React.Component {
     this.setState({ columns })
     this.fetch()
   }
-  fetch = () => {}
+  fetch = () => {
+    const { info } = this.props.info
+    fetchData({
+      url: '/webApi/customer/list',
+      method: 'post',
+      data: {
+        pageSize: 10,
+        pageNum: 1,
+        ownerCode: info.ownerCode
+      }
+    }).then(res => {
+      console.log(res);
+      res.list.forEach((item, index) => item.index = index + 1)
+      this.setState({ dataSource: res.list })
+    }).catch(err => {
+      console.log(err);
+    })
+  }
   addCustomer = () => {
     this.setState({ visible: true })
   }
