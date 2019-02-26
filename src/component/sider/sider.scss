@@ -4,18 +4,18 @@ $blue: #5868D9;
     position: fixed;
     left: 0;
     top:0;
-    width: 50px;
+    width: 60px;
     padding-top: 30px;
     background:rgba(32,40,82,1);
     z-index: 100;
     >ul{
       >li{
         width: 100%;
-        height: 55px;
+        height: 60px;
         position: relative;
         .li_hover{
           position: absolute;
-          left: 52px;
+          left: 62px;
           top: 0;
           display: none;
           ul{
@@ -49,18 +49,18 @@ $blue: #5868D9;
         }
         a{
           width: 100%;
-          height: 55px;
+          height: 60px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
         }
         img{
-          width: 18px;
-          height:18px;
+          width: 21px;
+          height:21px;
         }
         span{
-          font-size: 12px;
+          font-size: 14px;
           color: #fff;
         }
       }
@@ -72,12 +72,13 @@ $blue: #5868D9;
     left: 0;
     top:0;
     width: 100%;
-    height: 40px;
+    height: 50px;
     background: #fff;
     z-index: 50;
+    box-shadow: rgba(88, 104, 217, 0.21) 0px 1px 10px 0px;
     header{
       width: 100%;
-      height: 40px;
+      height: 100%;
       background: #fff;
       display: flex;
       justify-content: space-between;
@@ -118,9 +119,6 @@ $blue: #5868D9;
           display: flex;
           align-items: center;
           cursor: pointer;
-          // span{
-          //   padding: 0 12px;
-          // }
           .user-area {
             padding: 0 12px;
             margin: 0;

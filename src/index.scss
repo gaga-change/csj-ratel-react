@@ -12,7 +12,7 @@ body {
    -moz-osx-font-smoothing: grayscale;
    background-color: transparent;
    position: relative;
-   background: #f8f8f8 !important;
+   background: #F0F3F7 !important;
 }
 
 code {
@@ -56,12 +56,33 @@ code {
 .alert_Btn{
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 6px;
+  margin-bottom: 12px;
+  align-items: flex-end;
+  .Total{
+    .Total_list{
+      font-size: 12px;
+      span{
+        &:first-child{
+          font-size: 12px;
+          font-weight: 600;
+        }
+        &:last-child{
+          padding-right: 16px;
+        } 
+      }
+    }
+  }
 } 
-
-
-
-
-
-
-
+// 公共样式
+.b-1 {
+  border: 1px solid #e8e8e8;
+}
+.mb-12 {
+  margin-bottom: 12px;
+}
+.mb-20 {
+  margin-bottom: 20px;
+}
+.p-12 {
+  padding: 12px;
+}

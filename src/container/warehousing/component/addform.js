@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input,Button,DatePicker,Select,Modal } from 'antd';
+import _  from 'lodash';
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import { formTable_config,goodsInStorage_config } from './config'
@@ -16,7 +17,6 @@ class AddForm extends React.Component {
     super(props);
     this.state = {
       dataSource:[{num:2},{num:3}],
-      columns:formTable_config,
       visible:false,
       goodsInStorage_dataSource:[{id:1},{id:2}],
       selectedRowKeys:[]
@@ -79,39 +79,76 @@ class AddForm extends React.Component {
   }
 
   componentDidMount(){
-    let {columns}=this.state;
-    columns=columns.map(v=>{
-       if(v.render === ''){
-          v.render=(ext, record, index)=>{
-             return <span className="Dropdown_Menu_box">
-               <span onClick={this.handleDelete.bind(this,index)}>删除</span> 
-             </span>
-          }
-       }
-       return v
-    })
-    this.setState({columns})
     this.props.onRef(this)
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    let { dataSource,columns,visible,goodsInStorage_dataSource,selectedRowKeys} = this.state;
-    const formItemLayout = {
+    let { dataSource,visible,goodsInStorage_dataSource,selectedRowKeys} = this.state;
+
+    const formItemLayout_left = {
       labelCol: {
-        span:4
+        span:9
       },
       wrapperCol: {
-        span:12
+        span:15
       },
+      style:{
+        width:300,
+        height:60
+      }
     };
+
+    const formItemLayout_right = {
+      labelCol: {
+        span:8
+      },
+      wrapperCol: {
+        span:16
+      },
+      style:{
+        width:400,
+      }
+    };
+
+    const formItemLayout_table = {
+      labelCol: {
+        span:0
+      },
+      wrapperCol: {
+        span:24
+      },
+      style:{
+        width:'100%',
+        marginBottom:12
+      }
+    };
+
+    const formItemLayout_button = {
+      style:{
+        display:'flex',
+        justifyContent: 'flex-end'
+      }
+    };
+
+    const columns=_.cloneDeep(formTable_config).map(v=>{
+      if(v.render === ''){
+         v.render=(ext, record, index)=>{
+            return <span className="Dropdown_Menu_box">
+              <span onClick={this.handleDelete.bind(this,index)}>删除</span> 
+            </span>
+         }
+      }
+      return v
+   })
 
     return (
        <div className="AddForm">
           <Form 
+            layout="inline"
             onSubmit={this.handleSubmit} >
 
-                <Form.Item label="计划入库仓库" {...formItemLayout}>
+                <Form.Item label="计划入库仓库" {...formItemLayout_left}>
                   { getFieldDecorator('计划入库仓库', {
                     rules: [{ required: true, message: '请选择计划入库仓库' }],
                   })(
@@ -124,7 +161,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
  
-                 <Form.Item label="计划入库日期"  {...formItemLayout}>
+                 <Form.Item label="计划入库日期"  {...formItemLayout_right}>
                   { getFieldDecorator('计划入库日期', {
                      rules: [{ type: 'array', required: true,message: '请选择计划入库日期' }],
                   })(
@@ -132,7 +169,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item label="备注" {...formItemLayout}>
+                <Form.Item label="备注" {...formItemLayout_left} style={{width:300,minHeight:110}}>
                   { getFieldDecorator('备注', {
                     initialValue:'',
                     rules: [{ required: false }],
@@ -141,7 +178,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item >
+                <Form.Item  {...formItemLayout_table}>
                   { getFieldDecorator('dataSource', {
                     initialValue:dataSource,
                     rules: [{ required: true }],
@@ -161,7 +198,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item  style={{ textAlign: 'right' }}>
+                <Form.Item {...formItemLayout_button}>
                   <Button
                       type="primary"
                       style={{marginRight:'12px'}}

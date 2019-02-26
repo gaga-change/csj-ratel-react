@@ -1,8 +1,13 @@
 import React from 'react';
 import { Modal } from 'antd';
-import './modifyPassword.scss'
+import './style/modifyPassword.scss'
 import ModifyPasswordForm from './components/modifyPasswordForm.js'
 
+/**
+ * props:
+ *  show<Boolean> 是否显示弹窗。true为显示，false为关闭
+ *  onClose<Function> 弹窗中关闭事件。通知父组件修改show为false。
+ */
 export default class System extends React.Component {
   state = {
     visible: false,

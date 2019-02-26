@@ -51,3 +51,33 @@ export  const indexTableColumnsConfig=[
     width:100
   },
 ]
+
+export  const costPriceChange_config=[
+  {
+    title: '成本价',
+    dataIndex: ''
+  },
+  {
+    title:'变动日期',
+    dataIndex: ''
+  },
+  {
+    title:'操作人',
+    dataIndex: ''
+  },
+]
+
+export  const priceChange_config=[
+  {
+    title: '售价',
+    dataIndex: ''
+  },
+  {
+    title:'变动日期',
+    dataIndex: ''
+  },
+  {
+    title:'操作人',
+    dataIndex: ''
+  },
+]

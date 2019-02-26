@@ -26,19 +26,37 @@ class AddForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
+    const formItemLayout_left = {
       labelCol: {
-        span:6
+        span:7
       },
       wrapperCol: {
-        span:10
+        span:17
       },
+      style:{
+        width:300,
+        height:60
+      }
     };
+
+    const formItemLayout_right = {
+      labelCol: {
+        span:8
+      },
+      wrapperCol: {
+        span:16
+      },
+      style:{
+        width:400,
+      }
+    };
+
     return (
        <div className="AddForm">
           <Form 
+            layout="inline"
             onSubmit={this.handleSubmit} >
-                <Form.Item label="商品名称" {...formItemLayout}>
+                <Form.Item label="商品名称" {...formItemLayout_left}>
                   { getFieldDecorator('商品名称', {
                     initialValue:'',
                     rules: [{ required: true, message: '请输入商品名称' }],
@@ -47,7 +65,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item label="商品编码" {...formItemLayout}>
+                <Form.Item label="商品编码" {...formItemLayout_right}>
                   { getFieldDecorator('商品编码', {
                     initialValue:'',
                     rules: [{ required: true, message: '请输入商品编码' }],
@@ -56,7 +74,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                 <Form.Item label="品牌" {...formItemLayout}>
+                 <Form.Item label="品牌" {...formItemLayout_left}>
                   { getFieldDecorator('品牌', {
                     initialValue:'',
                     rules: [{ required: true, message: '请输入品牌' }],
@@ -65,7 +83,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item label="单位" {...formItemLayout}>
+                <Form.Item label="单位" {...formItemLayout_right}>
                   { getFieldDecorator('单位', {
                     initialValue:'',
                     rules: [{ required: true, message: '请输入单位' }],
@@ -74,7 +92,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item label="规格型号" {...formItemLayout}>
+                <Form.Item label="规格型号" {...formItemLayout_left}>
                   { getFieldDecorator('规格型号', {
                     initialValue:'',
                     rules: [{ required: false }],
@@ -83,7 +101,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item label="成本价" {...formItemLayout}>
+                <Form.Item label="成本价" {...formItemLayout_right}>
                   { getFieldDecorator('成本价', {
                     initialValue:'',
                     rules: [{ required: true,type:'number',message:'请输入正数阿拉伯数字' }],
@@ -92,7 +110,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                 <Form.Item label="售价" {...formItemLayout}>
+                 <Form.Item label="售价" {...formItemLayout_left}>
                   { getFieldDecorator('售价', {
                     initialValue:'',
                     rules: [{ required: true, type:'number', message:'请输入正数阿拉伯数字' }],
@@ -101,7 +119,7 @@ class AddForm extends React.Component {
                   )}
                 </Form.Item>
 
-                <Form.Item label="商品描述" {...formItemLayout}>
+                <Form.Item label="商品描述" {...formItemLayout_right}>
                   { getFieldDecorator('商品描述', {
                     initialValue:'',
                     rules: [{ required: false }],
