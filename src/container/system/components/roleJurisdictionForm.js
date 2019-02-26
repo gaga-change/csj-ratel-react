@@ -1,11 +1,10 @@
 import React from 'react';
-import {
-  Checkbox
-} from 'antd';
-import '../style/modifyPasswordForm.scss';
-import jurisdictionList from '../config/jurisdiction.js'
+import {Checkbox} from 'antd';
+import './modifyPasswordForm.scss';
+import {jurisdiction_config} from './config'
 
-jurisdictionList.forEach(item => {
+
+jurisdiction_config.forEach(item => {
   item.options = []
   item.checkedList = []
   item.indeterminate = false
@@ -26,7 +25,7 @@ const CheckboxGroup = Checkbox.Group;
 class DataForm extends React.Component {
 
   state = {
-    jurisdictionList: jurisdictionList,
+    jurisdictionList: jurisdiction_config,
   }
 
   componentWillReceiveProps (prevProps) {
@@ -68,7 +67,8 @@ class DataForm extends React.Component {
   render () {
     return (
       <div>
-        {jurisdictionList.map((item, index) => {
+        {
+          jurisdiction_config.map((item, index) => {
           return (
             <div key={index} className="mb-20">
               <div style={{ borderBottom: '1px solid #E9E9E9' }}>

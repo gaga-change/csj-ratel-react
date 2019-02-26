@@ -5,7 +5,7 @@ import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import RoleSearchForm from './components/roleSearchForm'
 import RoleJurisdictionModal from './components/roleJurisdictionModal'
-import roleConfig from './config/roleConfig'
+import {roleConfig_config} from './components/config'
 import RoleAddModal from './components/roleAddModal'
 import './style/role.scss'
 
@@ -77,7 +77,7 @@ export default class Role extends React.Component {
 
   render () {
     const { dataSource } = this.state;
-    const columns=_.cloneDeep(roleConfig.columns).map(v => {
+    const columns=_.cloneDeep(roleConfig_config).map(v => {
       if (v.render === '') {
         v.render = (text, record) => {
           return (columns.length >= 1

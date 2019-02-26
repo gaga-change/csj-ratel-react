@@ -1,8 +1,6 @@
 import React from 'react';
-import {
-  Form, Input
-} from 'antd';
-import '../style/modifyPasswordForm.scss';
+import {Form, Input} from 'antd';
+import './modifyPasswordForm.scss';
 
 /**
  * props:
@@ -112,5 +110,4 @@ class DataForm extends React.Component {
 }
 
 const ModifyPasswordForm = Form.create({ name: 'register' })(DataForm);
-
 export default ModifyPasswordForm

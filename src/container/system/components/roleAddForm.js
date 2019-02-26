@@ -1,10 +1,7 @@
 import React from 'react';
-import {
-  Form, Input
-} from 'antd';
-import '../style/modifyPasswordForm.scss';
+import {Form, Input} from 'antd';
+import './modifyPasswordForm.scss';
 const { TextArea } = Input;
-
 /**
  * props:
  *  goSubmit<Boolean> 是否进行表单提交操作。如果 false->true 则会提交表单
@@ -72,5 +69,4 @@ class DataForm extends React.Component {
 }
 
 const RoleAddForm = Form.create({ name: 'role_add_form' })(DataForm);
-
 export default RoleAddForm
