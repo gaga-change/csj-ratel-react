@@ -44,13 +44,15 @@ function selectMessage(type,tip){
 }
 
 
-function request({ url, method='get',data,useStringify=true}){
+function request({ url, method='get',data}){
   let json={method,url};
   if(method==='get'||method==='GET'){
     let stringifyData=stringify(data);
-    if(useStringify){
+    if(typeof data === 'object'){
       json['url']=`${url}?${stringifyData}`;
-    } else{
+    } else if(typeof data === 'undefined'){
+      json['url']=url;
+    } else {
       json['url']=`${url}/${data}`;
     }
   } else{

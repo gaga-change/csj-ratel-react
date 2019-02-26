@@ -2,11 +2,20 @@ import React from 'react';
 import { Form, Input,Button,Row,Col,InputNumber } from 'antd';
 import './form.scss'
 class CommodityForm extends React.Component {
+  state={
+
+  }
+
   handleSubmit = (e) => {
+    let {modifypriceActiveRow}=this.props;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.onSubmit({...values,skuId:this.props.modifypriceActiveRow.id})
+        let json=values;
+        if(modifypriceActiveRow){
+          json.skuId=modifypriceActiveRow.id
+        }
+        this.props.onSubmit(json)
       }
     });
   }
@@ -15,9 +24,15 @@ class CommodityForm extends React.Component {
     this.props.form.resetFields();
   }
 
+  componentDidMount(){
+    if(this.props.onRef){
+      this.props.onRef(this)
+    }
+  }
+
   render() {
     const { getFieldDecorator} = this.props.form;
-    const { selectWordsArr=[],submitTex="查询",resetText="重置",modifypriceActiveRow} = this.props;
+    const { selectWordsArr=[],submitTex="查询",resetText="重置",modifypriceActiveRow,loading=false} = this.props;
 
     return (
       <div className="CommodityForm">
@@ -80,6 +95,7 @@ class CommodityForm extends React.Component {
                 <Col span={24}>
                   <Form.Item>
                     <Button
+                      loading={loading}
                       type="primary"
                       style={{marginRight:'12px'}}
                       htmlType="submit">
