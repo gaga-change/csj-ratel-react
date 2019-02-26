@@ -34,7 +34,7 @@ export default class Commodity extends React.Component {
 
   fetch = (json={})=>{
     this.setState({loading:true})
-    let { dataSource,pagination,loading} =this.state;
+    let { dataSource,pagination} =this.state;
     let data={
       ...json,
       pageNum:pagination.current||1,

@@ -1,12 +1,7 @@
 import React from 'react';
-import {Form, Input,Row,Col,Button} from 'antd';
+import {Form, Input,Button} from 'antd';
+import './setPassForm.scss'
 
-/**
- * props:
- *  goSubmit<Boolean> 是否进行表单提交操作。如果 false->true 则会提交表单
- *  onSubmited<Function> 表单提交结束。通知父组件将goSubmit修改为 false
- *      @returns err,values
- */
 class SetPassForm extends React.Component {
 
   handleSubmit = (e) => {
@@ -26,18 +21,22 @@ class SetPassForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 6 },
+        span:8
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
+        span:16
       },
     };
+    const formItemLayout_button = {
+      style:{
+        display: 'flex',
+        justifyContent:'flex-end'
+      }
+    };
+
     return (
-      <div className="CommodityForm">
+      <div className="SetPassForm" >
           <Form onSubmit={this.handleSubmit} >
-            <Row gutter={24}>
               <Form.Item
                 {...formItemLayout}
                 label="原密码">
@@ -48,7 +47,7 @@ class SetPassForm extends React.Component {
                       message: '请输入原密码！',
                     }],
                   })(
-                    <Input type="password" />
+                    <Input type="text" autoComplete='off' placeholder="请输入原密码" />
                   )}
               </Form.Item>
 
@@ -61,7 +60,7 @@ class SetPassForm extends React.Component {
                       required: true, message: '请输入新密码！',
                     }]
                   })(
-                    <Input type="password" />
+                    <Input type="text" autoComplete='off' placeholder="请输入新密码" />
                   )}
               </Form.Item>
 
@@ -74,20 +73,23 @@ class SetPassForm extends React.Component {
                       required: true, message: '请确认您的新密码！',
                     }]
                   })(
-                    <Input type="password" onBlur={this.handleConfirmBlur} />
+                    <Input type="text" autoComplete='off'  placeholder="请确认您的新密码"  />
                   )}
               </Form.Item>
 
-              <Col span={24}>
-                <Form.Item>
+                <Form.Item {...formItemLayout_button}>
                   <Button
+                    style={{marginRight:16}}
                     type="primary"
                     htmlType="submit">
-                     确定
+                     提交
+                  </Button>
+                  <Button
+                    type="primary"
+                    onClick={this.handleRest}>
+                     重新输入
                   </Button>
                 </Form.Item>
-              </Col>
-            </Row>
           </Form> 
       </div>);
   }
