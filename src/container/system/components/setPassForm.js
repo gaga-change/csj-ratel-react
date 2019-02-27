@@ -1,5 +1,5 @@
-import React from 'react';
-import { Form, Input, Button } from 'antd';
+import React from 'react'
+import { Form, Input, Button } from 'antd'
 import './setPassForm.scss'
 
 class SetPassForm extends React.Component {
@@ -16,7 +16,7 @@ class SetPassForm extends React.Component {
   }
 
   handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.onSubmit(values)
@@ -25,15 +25,15 @@ class SetPassForm extends React.Component {
   }
 
   handleRest = () => {
-    this.props.form.resetFields();
+    this.props.form.resetFields()
   }
 
   /**
    * 确认密码框失去焦点
    */
   handleConfirmBlur = (e) => {
-    const value = e.target.value;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+    const value = e.target.value
+    this.setState({ confirmDirty: this.state.confirmDirty || !!value })
   }
 
   /**
@@ -52,11 +52,11 @@ class SetPassForm extends React.Component {
    * 校验两次密码是否一致
    */
   compareToFirstPassword = (rule, value, callback) => {
-    const form = this.props.form;
+    const form = this.props.form
     if (value && value !== form.getFieldValue('newPassword')) {
-      callback('输入的两个密码不一致!');
+      callback('输入的两个密码不一致!')
     } else {
-      callback();
+      callback()
     }
   }
 
@@ -64,15 +64,15 @@ class SetPassForm extends React.Component {
    * 更新原密码内容，触发确认密码的校验
    */
   validateToNextPassword = (rule, value, callback) => {
-    const form = this.props.form;
+    const form = this.props.form
     if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], { force: true });
+      form.validateFields(['confirm'], { force: true })
     }
-    callback();
+    callback()
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this.props.form
     const formItemLayout = {
       labelCol: {
         span: 4
@@ -80,13 +80,13 @@ class SetPassForm extends React.Component {
       wrapperCol: {
         span: 20
       },
-    };
+    }
     const formItemLayout_button = {
       style: {
         display: 'flex',
         justifyContent: 'flex-end'
       }
-    };
+    }
 
     return (
       <div className="SetPassForm" >
@@ -152,9 +152,9 @@ class SetPassForm extends React.Component {
                   </Button>
           </Form.Item>
         </Form>
-      </div>);
+      </div>)
   }
 }
 
-export default Form.create({ name: 'SetPassForm' })(SetPassForm);
+export default Form.create({ name: 'SetPassForm' })(SetPassForm)
 

@@ -1,6 +1,7 @@
-import React from 'react';
-import { Modal } from 'antd';
+import React from 'react'
+import { Modal } from 'antd'
 import RoleAddForm from './roleAddForm.js'
+import request from '@lib/request'
 
 /**
  * props:
@@ -12,13 +13,16 @@ class RoleAddModal extends React.Component {
     super(props)
     this.state = {
       visible: false,
-      confirmLoading: false,
+      loading: false,
       goSubmit: false,
     }
   }
+
   componentWillReceiveProps (prevProps) {
     this.init(prevProps)
   }
+
+  ref = (child) => this.child = child
 
   /**
    * 初始化，控制窗口显示还是隐藏
@@ -56,18 +60,28 @@ class RoleAddModal extends React.Component {
     this.setState({ goSubmit: false })
     if (!err) {
       this.setState({
-        confirmLoading: true,
+        loading: true,
       })
-      setTimeout(() => {
+      request({
+        url: '/webApi/base/role/add',
+        method: 'post',
+        data: value
+      }).then(res => {
+        this.child.handleRest()
         this.setState({
-          confirmLoading: false,
+          loading: false,
         })
         this.props.onClose(false)
-      }, 1000)
+      }).catch(err => {
+        this.setState({
+          loading: false
+        })
+      })
+
     }
   }
   render () {
-    const { visible, confirmLoading, goSubmit } = this.state
+    const { visible, loading, goSubmit } = this.state
     if (!this.props.show) {
       return null
     } else
@@ -77,10 +91,10 @@ class RoleAddModal extends React.Component {
             title="添加角色"
             visible={visible}
             onOk={this.handleOk}
-            confirmLoading={confirmLoading}
+            confirmLoading={loading}
             onCancel={this.handleCancel}
           >
-            <RoleAddForm goSubmit={goSubmit} onSubmited={this.handleSubmited}></RoleAddForm>
+            <RoleAddForm goSubmit={goSubmit} onSubmited={this.handleSubmited} onRef={this.ref}></RoleAddForm>
           </Modal>
         </div>
       )

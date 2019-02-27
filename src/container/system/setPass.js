@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card } from 'antd';
+import React from 'react'
+import { Card } from 'antd'
 import Sider from '../../component/sider/sider'
 import SetPassForm from './components/setPassForm'
 import request from '../../lib/request'
@@ -31,7 +31,6 @@ export default class SetPass extends React.Component {
         submitLoding: false
       })
     })
-
   }
 
   ref = (child) => {
@@ -46,7 +45,7 @@ export default class SetPass extends React.Component {
           <SetPassForm onSubmit={this.onSubmit} onRef={this.ref} loading={this.state.submitLoding} />
         </Card>
       </div>
-    );
+    )
   }
 }
 
