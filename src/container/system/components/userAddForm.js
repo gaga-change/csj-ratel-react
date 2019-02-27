@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form, Input, Select, Tooltip, Icon } from 'antd';
-import './modifyPasswordForm.scss';
 const { Option } = Select;
 const { TextArea } = Input;
 /**
