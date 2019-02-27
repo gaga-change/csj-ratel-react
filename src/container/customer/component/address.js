@@ -5,16 +5,7 @@ import './add.scss'
 
 const { TextArea } = Input
 class AddressForm extends React.Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      loading: false,
-      pagination: {},
-      dataSource: [{ id: 1 }]
-    }
-  }
-
+  
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input,Button,DatePicker,Select,Modal } from 'antd';
 import _  from 'lodash';
+import request from '@lib/request'
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import { formTable_config,goodsInStorage_config } from './config'
@@ -71,11 +72,24 @@ class AddForm extends React.Component {
   selectCommoddity = ()=>{
     console.log('这是出现选择入库商品弹窗的调用')
     this.setState({visible:true})
+    this.getCommodity()
+    
   }
 
   onSelect = (value) =>{
     console.log('回车搜索',value)
     this.setState({selectedRowKeys:[]})
+  }
+
+  getCommodity = ()=>{
+    request({
+      url: '/webApi/sku/info/select',
+      method: 'get',
+    }).then(res => {
+       console.log(res)
+    }).catch(err => {
+       console.log(err)
+    })
   }
 
   componentDidMount(){

@@ -63,3 +63,23 @@ export function depthForEachIndex(arr,resultArr=[]){
   return resultArr
 }
 
+
+
+export function depthForEachCascader(deepExist){
+  let arr =[]
+  if(!Array.isArray(deepExist)){
+      return arr
+  }
+  for(let i = 0;i<deepExist.length;i++){
+    arr[i]={};
+    arr[i].value=deepExist[i].currentCode;
+    arr[i].label=deepExist[i].text;
+    if(deepExist[i].children&&deepExist[i].children.length>0){
+      arr[i].children=depthForEachCascader(deepExist[i].children)
+    }
+  }
+  return arr;
+}
+
+
+

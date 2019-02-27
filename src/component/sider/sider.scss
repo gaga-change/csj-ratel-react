@@ -1,5 +1,5 @@
 $blue: #5868D9;
-.siderNav{
+.siderNav_box{
   .SiderNav{
     position: fixed;
     left: 0;
@@ -15,8 +15,9 @@ $blue: #5868D9;
         position: relative;
         .li_hover{
           position: absolute;
-          left: 62px;
+          left: 60px;
           top: 0;
+          padding-left: 2px;
           display: none;
           ul{
             height: auto;

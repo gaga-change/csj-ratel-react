@@ -91,6 +91,15 @@ export  const routerConfig=[
         indexIcon:'user_management',
         sort:2
       }, 
+      { 
+        name:'修改密码',
+        indexName:'修改密码',
+        path:'/system/setPass',
+        component:'/system/setPass',
+        indexIcon:'change_password',
+        sort:3,
+        must:true
+      },
     ],
     sort:8
   }
