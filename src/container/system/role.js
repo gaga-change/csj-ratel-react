@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Popconfirm } from 'antd';
+import { Button } from 'antd';
 import _ from 'lodash';
 import Sider from '../../component/sider/sider'
 import request from '@lib/request'
@@ -66,7 +66,7 @@ export default class Role extends React.Component {
    * 搜索表单提交
    */
   handleFormSubmit = (val) => {
-    console.log(val)
+    this.fetch(val)
   }
 
   /**
@@ -106,9 +106,10 @@ export default class Role extends React.Component {
           return (columns.length >= 1
             ? (
               <span className="Dropdown_Menu_box">
-                <Popconfirm title="确定要删除该角色吗?" onConfirm={() => this.handleDelete(record)}>
-                  <span>删除</span>
-                </Popconfirm>
+                {/* <Popconfirm title="确定要删除该角色吗?" onConfirm={() => this.handleDelete(record)}>
+                  <span></span>
+                </Popconfirm> */}
+                <span>编辑</span>
                 <span onClick={() => this.handleRoleJurisdictionModalShowChange(true)}>操作权限</span>
               </span>
             ) : null)
@@ -126,6 +127,7 @@ export default class Role extends React.Component {
         <FetchTable
           dataSource={dataSource}
           columns={columns}
+          useIndex={true}
           loading={this.state.loading}
           pagination={this.state.pagination}
           onChange={this.handleTableChange} />
