@@ -1,48 +1,48 @@
 
 export  const indexTableColumnsConfig=[
   {
-    title: '商品编码',
-    dataIndex: ''
+    title:'商品编码',
+    dataIndex:'skuCode'
   },
   {
     title:'商品名称',
-    dataIndex: ''
+    dataIndex:'skuName'
   },
   {
     title:'品牌',
-    dataIndex: ''
+    dataIndex:'brandName'
   },
   {
     title:'规格型号',
-    dataIndex: ''
+    dataIndex:'skuFormat'
   },
   {
     title:'单位',
-    dataIndex: ''
+    dataIndex:'skuUnitName'
   },
   {
     title:'成本价(最新)',
-    dataIndex: ''
+    dataIndex:'costPrice'
   },
   {
     title:'售价(最新)',
-    dataIndex: ''
+    dataIndex:'salePrice'
   },
   {
     title:'创建日期',
-    dataIndex: ''
+    dataIndex:'gmtCreate'
   },
   {
     title:'创建者',
-    dataIndex: ''
+    dataIndex:'createrName'
   },
   {
     title:'最后操作日期',
-    dataIndex: ''
+    dataIndex:'gmtModify'
   },
   {
     title:'最后操作者',
-    dataIndex: ''
+    dataIndex:'modifierName'
   },
   {
     title:'操作',
@@ -55,29 +55,29 @@ export  const indexTableColumnsConfig=[
 export  const costPriceChange_config=[
   {
     title: '成本价',
-    dataIndex: ''
+    dataIndex:'costPrice'
   },
   {
     title:'变动日期',
-    dataIndex: ''
+    dataIndex:'gmtCreate'
   },
   {
     title:'操作人',
-    dataIndex: ''
+    dataIndex:'createrName'
   },
 ]
 
 export  const priceChange_config=[
   {
     title: '售价',
-    dataIndex: ''
+    dataIndex:'salePrice'
   },
   {
     title:'变动日期',
-    dataIndex: ''
+    dataIndex:'gmtCreate'
   },
   {
     title:'操作人',
-    dataIndex: ''
+    dataIndex:'createrName'
   },
 ]

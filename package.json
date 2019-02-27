@@ -126,7 +126,7 @@
       "node"
     ]
   },
-  "proxy": "http://192.168.2.167:8686/",
+  "proxy": "http://172.16.81.219:8686/",
   "babel": {
     "presets": [
       "react-app"

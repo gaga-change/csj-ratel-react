@@ -1,6 +1,5 @@
 import React from 'react';
 import {Checkbox} from 'antd';
-import './modifyPasswordForm.scss';
 import {jurisdiction_config} from './config'
 
 

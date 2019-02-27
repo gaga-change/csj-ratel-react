@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button,Modal,Tabs  } from 'antd';
+import { Button,Modal,Tabs,Popconfirm } from 'antd';
 import _  from 'lodash';
+import request from '@lib/request'
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import { indexTableColumnsConfig,costPriceChange_config,priceChange_config} from './component/config'
@@ -14,46 +15,116 @@ export default class Commodity extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      dataSource:[{id:1},{id:2}],
-      pagination: {
-   
-      },
+      dataSource:[],
+      pagination: {},
+      submitLoding:false,
       loading:false,
       visible:false,
       modifypriceVisible:false,
       costPriceChange_dataSource:[],
       priceChange_dataSource:[],
-      modifyprice_loding:false
+      modifyprice_loding:false,
+      modifypriceActiveRow:{}
     }
-
   }
-
 
   componentDidMount(){
     this.fetch()
   }
 
-  fetch = ()=>{
-    
+  fetch = (json={})=>{
+    this.setState({loading:true})
+    let { dataSource,pagination} =this.state;
+    let data={
+      ...json,
+      pageNum:pagination.current||1,
+      pageSize:pagination.pageSize||10
+    }
+    request({
+      url: '/webApi/sku/info/list',
+      method: 'get',
+      data:data
+    }).then(res => {
+       if(res.list&&Array.isArray(res.list)){
+        dataSource=res.list
+        pagination.total=res.total
+       }
+       this.setState({
+        dataSource,
+        pagination,
+        loading:false,
+       })
+    }).catch(err => {
+      this.setState({
+        loading:false,
+       })
+    })
   }
 
   handleTableChange = (pagination, filters, sorter) => {
-    console.log(pagination)
+    this.setState({
+      pagination
+    },()=>{
+      this.fetch()
+    })
   }
 
   onSubmit = (type,value)=>{
-    this.setState({visible:false})
     if(type==='add'){
-      this.child.handleRest()
+      this.setState({submitLoding:true})
+      request({
+        url: '/webApi/sku/info/add',
+        method: 'post',
+        data:value
+      }).then(res=>{
+        this.child.handleRest()
+        this.setState({
+          visible:false,
+          submitLoding:false
+        })
+        this.fetch()
+      }).catch(err=>{
+        console.log(err)
+        this.setState({
+          submitLoding:false
+        })
+      })
+    } else if(type==="select"){
+      this.fetch(value)
+    } else if(type==='modifyprice'){
+      this.setState({
+        submitLoding:true
+      })
+      request({
+        url: '/webApi/sku/price/change',
+        method: 'post',
+        data:value
+      }).then(res=>{
+        this.setState({
+          submitLoding:false,
+          modifypriceVisible:false
+        })
+        this.modifyprice_child.handleRest()
+        this.fetch()
+      }).catch(err=>{
+        console.log(err)
+        this.setState({
+          submitLoding:false
+        })
+      })
     }
-    console.log(type,value)
   }
+
 
   addCommodity = ()=>{
     this.setState({visible:true})
   }
 
+
   handleCancel = ()=>{
+    if( this.modifyprice_child){
+      this.modifyprice_child.handleRest()
+    }
      this.setState({visible:false,modifypriceVisible:false})
   }
 
@@ -65,20 +136,82 @@ export default class Commodity extends React.Component {
     this.child=res
   }
 
-  modifyprice = ()=>{
-    console.log('这是调价调用')
-    this.setState({modifypriceVisible:true})
+  modifyprice_ref = (res)=>{
+    this.modifyprice_child=res
   }
 
+  modifyprice = (value)=>{
+    let { modifypriceActiveRow } = this.state;
+    this.setState({
+      modifypriceVisible:true,
+      modifypriceActiveRow:value,
+      modifyprice_loding:true
+    })
+
+    if(modifypriceActiveRow.id===value.id){
+      return ''
+    }
+    //查询商品成本价格变动记录
+    request({
+      url: `/webApi/sku/price/queryCostPriceRecord`,
+      method: 'get',
+      data:value.id,
+      useStringify:false
+    }).then(res => {
+       this.setState({
+        costPriceChange_dataSource:res||[],
+        modifyprice_loding:false
+       })
+    }).catch(err => {
+       console.log(err)
+       this.setState({
+        modifyprice_loding:false
+       })
+    })
+    
+    //查询商品成本售价变动记录
+    request({
+      url: `/webApi/sku/price/querySalePriceRecord`,
+      method: 'get',
+      data:value.id,
+      useStringify:false
+    }).then(res => {
+       this.setState({
+        priceChange_dataSource:res||[],
+        modifyprice_loding:false
+       })
+    }).catch(err => {
+       console.log(err)
+       this.setState({
+        modifypriceVisible:false
+      })
+    })
+  }
+
+  deleteCommodity = (value)=>{
+    request({
+      url: `/webApi/sku/info/delete/${value.id}`,
+      method: 'delete',
+    }).then(res => {
+      this.fetch()
+    }).catch(err => {
+       console.log(err)
+       this.setState({
+        modifypriceVisible:false
+      })
+    })
+  }
 
   render() {
-    const { dataSource,visible,modifypriceVisible,costPriceChange_dataSource,modifyprice_loding,priceChange_dataSource}=this.state;
+    const { dataSource,submitLoding,visible,modifypriceVisible,costPriceChange_dataSource,modifyprice_loding,priceChange_dataSource,modifypriceActiveRow,loading,pagination}=this.state;
     const columns=_.cloneDeep(indexTableColumnsConfig).map(v=>{
       if(v.render===''){
          v.render=(ext, record, index)=>{
             return <span className="Dropdown_Menu_box">
-              <span>删除</span> 
-              <span onClick={this.modifyprice}>调价</span> 
+                <Popconfirm title="确定要删除吗?" onConfirm={this.deleteCommodity.bind(this,record)}>
+                  <span>删除</span> 
+                </Popconfirm>
+              <span onClick={this.modifyprice.bind(this,record)}>调价</span> 
             </span>
          }
       }
@@ -97,15 +230,15 @@ export default class Commodity extends React.Component {
             <FetchTable 
               dataSource={dataSource} 
               columns={columns}
-              loading={this.state.loading}
-              pagination={this.state.pagination}
+              loading={loading}
+              pagination={pagination}
               onChange={this.handleTableChange}/>
-
             <Modal
               title="创建商品"
               okText="保存"
               width={800}
               centered={true}
+              confirmLoading={submitLoding}
               bodyStyle={{paddingBottom:16}}
               visible={visible}
               onCancel={this.handleCancel}
@@ -118,12 +251,16 @@ export default class Commodity extends React.Component {
             <Modal
               title="调价"
               footer={false}
+              centered={true}
               width={800}
               bodyStyle={{paddingTop:16}}
               visible={modifypriceVisible}
               onCancel={this.handleCancel}>
                 <div className="modifyprice_alert">
                 <CommodityForm 
+                 loading={submitLoding}
+                 onRef={this.modifyprice_ref}
+                 modifypriceActiveRow={modifypriceActiveRow}
                  selectWordsArr={['成本价','售价']}
                  submitTex="提交"
                  resetText="取消"
