@@ -35,23 +35,24 @@ export  const addressTableColumnsConfig=[
   },
   {
     title: '收货人',
-    dataIndex: ''
+    dataIndex: 'receiverName'
   },
   {
     title:'所在地区',
-    dataIndex: ''
+    dataIndex: 'area'
   },
   {
     title:'详细地址',
-    dataIndex: ''
+    dataIndex: 'customerAddress',
+    width:220
   },
   {
     title:'邮编',
-    dataIndex: ''
+    dataIndex: 'postalCode'
   },
   {
     title:'手机',
-    dataIndex: ''
+    dataIndex: 'receiverTel'
   },
   {
     title:'操作',

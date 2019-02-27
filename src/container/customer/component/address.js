@@ -30,8 +30,9 @@ class AddressForm extends React.Component {
 
   render() {
     const { getFieldDecorator, isFieldTouched, getFieldError } = this.props.form
+    const {addressDetail} = this.props
     const phoneError = isFieldTouched('phone') && getFieldError('phone')
-    
+
     const formItemLayout_left = {
       labelCol: {
         span:9
@@ -73,13 +74,13 @@ class AddressForm extends React.Component {
     return (
       <div className="AddressForm">
 
-        <Form 
+        <Form
           layout="inline"
           onSubmit={this.handleSubmit}>
           <Form.Item label="地址信息" {...formItemLayout_left}>
             {
               getFieldDecorator('area', {
-              initialValue: '',
+              initialValue: [addressDetail.customerProvince, addressDetail.customerCity, addressDetail.customerArea],
               rules: [{ required: true, message: '请选择地址信息' }]
             })(
               <Cascader
@@ -89,29 +90,23 @@ class AddressForm extends React.Component {
           </Form.Item>
 
           <Form.Item label="详细地址" {...formItemLayout_right} style={{width:400,minHeight:110}}>
-            {getFieldDecorator('exactaddress', {
-              initialValue: '',
+            {getFieldDecorator('customerAddress', {
+              initialValue: addressDetail.customerAddress,
               rules: [{ required: true, message: '请输入详细地址' }]
             })(<TextArea rows={3} placeholder="请输入详细地址" />)}
           </Form.Item>
 
           <Form.Item label="邮政编码" {...formItemLayout_left}>
-            {getFieldDecorator('mailcode', {
-              initialValue: '',
+            {getFieldDecorator('postalCode', {
+              initialValue: addressDetail.postalCode,
               rules: [{ required: false }]
             })(<Input autoComplete="off" placeholder="请输入邮政编码" />)}
           </Form.Item>
 
-          <Form.Item label="品牌" {...formItemLayout_right}>
-            {getFieldDecorator('品牌', {
-              initialValue: '',
-              rules: [{ required: true, message: '请输入品牌' }]
-            })(<Input autoComplete="off" placeholder="请输入品牌" />)}
-          </Form.Item>
 
-          <Form.Item label="收货人姓名" {...formItemLayout_left}>
-            {getFieldDecorator('name', {
-              initialValue: '',
+          <Form.Item label="收货人姓名" {...formItemLayout_right}>
+            {getFieldDecorator('receiverName', {
+              initialValue: addressDetail.receiverName,
               rules: [
                 { required: true, message: '收货人姓名' },
                 { min: 2, max: 25, message: '2-25字符范围内' }
@@ -122,10 +117,11 @@ class AddressForm extends React.Component {
 
           <Form.Item
             label="手机"
-            {...formItemLayout_right}
+            {...formItemLayout_left}
             validateStatus={phoneError ? 'error' : ''}
             help={phoneError || ''}>
-              {getFieldDecorator('phone', {
+              {getFieldDecorator('receiverTel', {
+                initialValue: addressDetail.receiverTel,
                 rules: [
                   {
                     message: '请输入正确格式的手机号',
@@ -136,9 +132,9 @@ class AddressForm extends React.Component {
           </Form.Item>
 
           <Form.Item {...formItemLayout_Checkbox}>
-              {getFieldDecorator('setDefault', {
+              {getFieldDecorator('isDefault', {
                 valuePropName: 'checked',
-                initialValue: true
+                initialValue: Boolean(addressDetail.isDefault)
               })(<Checkbox>设为默认</Checkbox>)}
           </Form.Item>
 

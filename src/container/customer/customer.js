@@ -6,7 +6,7 @@ import AddForm from './component/add'
 import AddressForm from './component/address'
 import FetchTable from '@component/fetchTable/fetchTable'
 import { indexTableColumnsConfig,addressTableColumnsConfig } from './component/config'
-import { Button, Modal,Tag } from 'antd'
+import { Button, Modal,Tag, Spin } from 'antd'
 import fetchData from '@lib/request'
 import {connect} from 'react-redux';
 import './customer.scss'
@@ -28,13 +28,35 @@ export default class Customer extends React.Component {
       visible_operation:false,
       dataSource: [{ id: 1 }],
       activeOperation:'新增地址',
-      address_dataSource:[{},{}]
+      address_dataSource:[{},{}],
+      address_loading: false,
+      spinning: false,
+      customerspinning:false,
+      basicCustomerInfoId: null,
+      addressDetail: {isDefault:1}
     }
   }
 
   onSubmit = (type, value) => {
     console.log(type, value)
-    this.setState({ visible_addCustomer: false })
+    const { info } = this.props.info
+    this.setState({customerspinning: true})
+    fetchData({
+      url: '/webApi/customer/save',
+      method: 'post',
+      data: {
+        ...value,
+        ownerCode: info.ownerCode
+      }
+    }).then(res => {
+      console.log(res);
+      this.setState({customerspinning: false})
+      this.fetch()
+    }).catch(err => {
+      console.log(err);
+      this.setState({customerspinning: false})
+    })
+
   }
 
   handleTableChange = (pagination, filters, sorter) => {
@@ -68,8 +90,28 @@ export default class Customer extends React.Component {
     this.setState({ visible_addCustomer: true })
   }
 
-  showAddress = () => {
-    this.setState({ visible_address: true })
+  showAddress = (record) => {
+    this.setState({ visible_address: true, address_loading:true })
+    fetchData({
+      url: '/webApi/customer/addr/list',
+      method: 'post',
+      data: {
+        pageSize: 10,
+        pageNum: 1,
+        basicCustomerInfoId: record.id
+      }
+    }).then(res => {
+      console.log(res);
+      this.setState({address_loading:false})
+      res.list.forEach((item, index) =>{
+         item.index = index + 1
+         item.area = `${item.customerProvince}/${item.customerCity}/${item.customerArea}`
+      })
+      this.setState({ address_dataSource: res.list, basicCustomerInfoId: record.id})
+    }).catch(err => {
+      console.log(err);
+      this.setState({address_loading:false})
+    })
   }
 
   handleCancel = (type) => {
@@ -87,20 +129,68 @@ export default class Customer extends React.Component {
   ref = res => {
     this.child = res
   }
+  addAddress = (type,value)=>{
+    console.log('这是新增地址的回调',type,value)
 
+    this.setState({visible_operation:true, addressDetail:{isDefault:1}})
+  }
+  deleteAddress = (type,value)=>{
+    console.log('这是删除地址的回调',type,value)
+    this.handleOperationAddress(type,value)
+  }
   operationAddress = (type,value)=>{
-    console.log('这是新增地址或者修改地址的回调',type,value)
-    this.setState({visible_operation:true})
+    console.log('这是修改地址的回调',type,value)
+
+    this.setState({visible_operation:true, addressDetail:value})
+  }
+  handleOperationAddress = (type,value) => {
+    const {area, ...rest} = value
+    let url = '/webApi/customer/addr/save'
+    let data = {
+      ...rest,
+      isDefault: value.isDefault ? 1 : 0,
+      customerProvince: area[0],
+      customerCity: area[1],
+      customerArea: area[2],
+      basicCustomerInfoId: this.state.basicCustomerInfoId
+    }
+    if (Object.keys(this.state.addressDetail).length>1) {
+      // 如果是修改
+      url = '/webApi/customer/addr/update'
+      data.id = this.state.addressDetail.id
+    } else if (type === 'delete') {
+      url = '/webApi/customer/addr/del'
+      data = {
+        id:value.id,
+        basicCustomerInfoId:value.basicCustomerInfoId
+      }
+    }
+    if (type !== 'delete') {
+      this.setState({visible_operation:true})
+    }
+    this.setState({spinning:true})
+    fetchData({
+      url,
+      method: 'post',
+      data
+    }).then(res => {
+      console.log(res);
+      this.setState({spinning:false,visible_operation:false})
+      this.showAddress({id:this.state.basicCustomerInfoId})
+    }).catch(err => {
+      console.log(err);
+      this.setState({spinning:false})
+    })
   }
 
   render() {
-    const { dataSource, visible_addCustomer, visible_address,activeOperation,visible_operation,address_dataSource} = this.state
+    const { dataSource, visible_addCustomer, visible_address,activeOperation,visible_operation,address_dataSource,address_loading} = this.state
     const columns=_.cloneDeep(indexTableColumnsConfig).map(v => {
       if (v.render === '') {
         v.render = (ext, record, index) => {
           return (
             <span className="Dropdown_Menu_box">
-              <span onClick={this.showAddress}>维护地址</span>
+              <span onClick={()=>{this.showAddress(record)}}>维护地址</span>
               <span>删除</span>
             </span>
           )
@@ -118,10 +208,10 @@ export default class Customer extends React.Component {
                 v.renderType==='operation'&&
                 <span className="Dropdown_Menu_box">
                   <span onClick={this.operationAddress.bind(this,'update',record)}>修改</span>
-                  <span>删除</span>
+                  <span onClick={this.deleteAddress.bind(this,'delete',record)}>删除</span>
                </span>
               }
-              {
+              {record.isDefault===1&&
                  v.renderType==='tag'&&
                  <span className="Dropdown_Menu_box">
                    {/* <span>设为默认</span> */}
@@ -163,9 +253,11 @@ export default class Customer extends React.Component {
           visible={visible_addCustomer}
           onCancel={this.handleCancel}
           onOk={this.handleOk}>
-          <AddForm
-            onRef={this.ref}
-            onSubmit={this.onSubmit.bind(this, 'add')}/>
+          <Spin tip="Loading..." spinning={this.state.customerspinning}>
+            <AddForm
+              onRef={this.ref}
+              onSubmit={this.onSubmit.bind(this, 'add')}/>
+          </Spin>
         </Modal>
 
         <Modal
@@ -177,13 +269,13 @@ export default class Customer extends React.Component {
           onCancel={this.handleCancel}
           visible={visible_address}>
             <div className="alert_Btn">
-              <Button type="primary" onClick={this.operationAddress.bind(this,'add')}>新增地址</Button>
+              <Button type="primary" onClick={this.addAddress.bind(this,'add')}>新增地址</Button>
             </div>
             <FetchTable
               dataSource={address_dataSource}
               useIndex={true}
               columns={address_columns}
-              loading={false}
+              loading={address_loading}
               pagination={false}/>
         </Modal>
 
@@ -196,8 +288,11 @@ export default class Customer extends React.Component {
           footer={null}
           onCancel={this.handleCancel.bind(this,'visible_operation')}
           visible={visible_operation}>
-          <AddressForm
-            onSubmit={this.onSubmit.bind(this, 'address')}/>
+          <Spin tip="Loading..." spinning={this.state.spinning}>
+            <AddressForm
+              addressDetail={this.state.addressDetail}
+              onSubmit={this.handleOperationAddress.bind(this, 'address')}/>
+          </Spin>
         </Modal>
       </div>
     )
