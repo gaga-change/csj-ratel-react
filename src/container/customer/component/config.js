@@ -2,23 +2,23 @@
 export  const indexTableColumnsConfig=[
   {
     title: '序号',
-    dataIndex: ''
+    dataIndex: 'index'
   },
   {
     title:'客户编码',
-    dataIndex: ''
+    dataIndex: 'customerCode'
   },
   {
     title:'客户名称',
-    dataIndex: ''
+    dataIndex: 'customerName'
   },
   {
     title:'负责人',
-    dataIndex: ''
+    dataIndex: 'customerLinkUser'
   },
   {
     title:'手机',
-    dataIndex: ''
+    dataIndex: 'customerLinkuserTel'
   },
   {
     title:'操作',
@@ -35,23 +35,24 @@ export  const addressTableColumnsConfig=[
   },
   {
     title: '收货人',
-    dataIndex: ''
+    dataIndex: 'receiverName'
   },
   {
     title:'所在地区',
-    dataIndex: ''
+    dataIndex: 'area'
   },
   {
     title:'详细地址',
-    dataIndex: ''
+    dataIndex: 'customerAddress',
+    width:220
   },
   {
     title:'邮编',
-    dataIndex: ''
+    dataIndex: 'postalCode'
   },
   {
     title:'手机',
-    dataIndex: ''
+    dataIndex: 'receiverTel'
   },
   {
     title:'操作',

@@ -5,14 +5,14 @@ export function depthForEach(arr,resultArr=[]){
           resultArr.push({
             path:item.path,
             component:item.component,
-          }) 
+          })
         }
         depthForEach(item.children,resultArr)
       } else if(item.component){
         resultArr.push({
           path:item.path,
           component:item.component,
-        }) 
+        })
       }
   })
 
@@ -39,7 +39,7 @@ export function deepExistMenu(menu,deepExist){
                     }
                     index++
                 }
-                
+
             }
     }
     return arr
@@ -81,5 +81,11 @@ export function depthForEachCascader(deepExist){
   return arr;
 }
 
-
-
+export function transFnc(data) {
+  let ret = ''
+  for (const it in data) {
+    ret += it + '=' + data[it] + '&'
+  }
+  ret = ret.substring(0, ret.lastIndexOf('&'))
+  return ret
+}

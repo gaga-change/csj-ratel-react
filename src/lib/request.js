@@ -3,8 +3,8 @@ import { message} from 'antd';
 import {stringify} from 'qs';
 // 创建axios实例
 const service = axios.create({
-  baseURL: '', 
-  timeout: 60000 
+  baseURL: '',
+  timeout: 60000
 })
 
 
@@ -30,7 +30,7 @@ service.interceptors.response.use(
     } else {
       selectMessage('error','请求异常！')
       return Promise.reject(response.data)
-    } 
+    }
   },
   error => {
     selectMessage('error','请求异常！')
