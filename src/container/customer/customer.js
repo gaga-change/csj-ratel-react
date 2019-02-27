@@ -11,7 +11,6 @@ import {
 } from './component/config'
 import { Button, Modal, Tag, Spin } from 'antd'
 import fetchData from '@lib/request'
-import { transFnc } from '@lib/lib'
 import { connect } from 'react-redux'
 import './customer.scss'
 
@@ -155,7 +154,6 @@ export default class Customer extends React.Component {
   }
   deleteAddress = (type, value) => {
     console.log('这是删除地址的回调', type, value)
-    const { area, ...rest } = value
     let url = '/webApi/customer/addr/del'
     let data = {
       id: value.id
