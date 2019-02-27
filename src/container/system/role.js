@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Popconfirm } from 'antd';
-import _  from 'lodash';
+import _ from 'lodash';
 import Sider from '../../component/sider/sider'
+import request from '@lib/request'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import RoleSearchForm from './components/roleSearchForm'
 import RoleJurisdictionModal from './components/roleJurisdictionModal'
-import {roleConfig_config} from './components/config'
+import { roleConfig_config } from './components/config'
 import RoleAddModal from './components/roleAddModal'
 import './style/role.scss'
 
@@ -13,10 +14,8 @@ export default class Role extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      dataSource: [{ id: 1 }, { id: 2 }],
-      pagination: {
-
-      },
+      dataSource: [],
+      pagination: {},
       roleAddFormShow: false,
       roleJurisdictionModalShow: false,
       loading: false
@@ -24,12 +23,36 @@ export default class Role extends React.Component {
   }
 
 
-  componentWillMount () {
+  componentWillMount() {
     this.fetch()
   }
 
-  fetch = () => {
-
+  fetch = (json = {}) => {
+    this.setState({ loading: true })
+    let { dataSource, pagination } = this.state;
+    let data = {
+      roleName: '',
+      ...json,
+      // pageNum: pagination.current || 1,
+      // pageSize: pagination.pageSize || 10
+    }
+    request({
+      url: '/webApi/base/role/list',
+      method: 'get',
+      data: data
+    }).then(res => {
+      dataSource = res
+      pagination.total = res.length
+      this.setState({
+        dataSource,
+        pagination,
+        loading: false,
+      })
+    }).catch(err => {
+      this.setState({
+        loading: false,
+      })
+    })
   }
 
   /**
@@ -75,9 +98,9 @@ export default class Role extends React.Component {
     }))
   }
 
-  render () {
+  render() {
     const { dataSource } = this.state;
-    const columns=_.cloneDeep(roleConfig_config).map(v => {
+    const columns = _.cloneDeep(roleConfig_config).map(v => {
       if (v.render === '') {
         v.render = (text, record) => {
           return (columns.length >= 1
