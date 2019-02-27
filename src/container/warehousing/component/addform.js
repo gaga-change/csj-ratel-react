@@ -9,7 +9,6 @@ import SelestForm from './form'
 import './addform.scss'
 
 const { TextArea } = Input;
-const { RangePicker } = DatePicker;
 const Option = Select.Option;
 
 class AddForm extends React.Component {
@@ -17,10 +16,12 @@ class AddForm extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      dataSource:[{num:2},{num:3}],
+      items:[],
       visible:false,
-      goodsInStorage_dataSource:[{id:1},{id:2}],
-      selectedRowKeys:[]
+      goodsInStorage_dataSource:[],
+      selectedRowKeys:[],
+      selectionTableLoding:false,
+      warehouse:{}
     };
   }
 
@@ -29,32 +30,40 @@ class AddForm extends React.Component {
     this.setState({ selectedRowKeys });
   }
 
-  handleDelete = (index) => {
-    console.log('这是删除的调用')
-    let { dataSource} = this.state;
-    dataSource = [...dataSource]
-    dataSource.splice(index,1);
-    this.setState({dataSource:dataSource})
+  handleDelete = (record) => {
+    let {selectedRowKeys} = this.state;
+    let items=this.props.form.getFieldValue('items');
+    let selectedRowKeys_index=selectedRowKeys.findIndex(v=>v===record.id);
+    let items_index=items.findIndex(v=>v.id===record.id);
+    if(selectedRowKeys_index>=0){
+      selectedRowKeys.splice(selectedRowKeys_index,1)
+    }
+    if(items_index>=0){
+      items.splice(items_index,1)
+    }
+    this.setState({selectedRowKeys,items});
+    this.props.form.setFieldsValue({items});
   }
 
   handleSubmit = (type,e) => {
+    let { warehouse } = this.state;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.onSubmit(type,values)
+        this.props.onSubmit(type,{...values,...warehouse})
       }
     });
   }
 
   handleRest = ()=>{
     this.props.form.resetFields();
-    this.setState({dataSource:[]})
+    this.setState({items:[],selectedRowKeys:[]})
   }
 
   editableTableChange = (data)=>{
     console.log('这是可编辑表格触发后的调用')
-    this.setState({dataSource:data})
-    this.props.form.setFieldsValue({dataSource:data});
+    this.setState({items:data})
+    this.props.form.setFieldsValue({items:data});
   }
 
   handleCancel = ()=>{
@@ -63,34 +72,66 @@ class AddForm extends React.Component {
   }
 
   handleOk = ()=>{
-    console.log('这是点击选择入库商品弹框确认按钮的调用')
-    let {selectedRowKeys} = this.state;
-    console.log(selectedRowKeys)
-    this.setState({visible:false})
+    let {selectedRowKeys,goodsInStorage_dataSource} = this.state;
+    let selectedItems=this.props.form.getFieldValue('items')
+    let newItems=[];
+    goodsInStorage_dataSource.forEach(item=>{
+      if(selectedRowKeys.includes(item.id)){
+        let index=selectedItems.findIndex(v=>v.id===item.id);
+        if(index>=0){
+          newItems.push(selectedItems[index]) 
+        } else{
+          newItems.push(item)
+        }
+      }
+    })
+    this.setState({visible:false,items:newItems})
+    this.props.form.setFieldsValue({items:newItems});
   }
 
   selectCommoddity = ()=>{
-    console.log('这是出现选择入库商品弹窗的调用')
+    let {goodsInStorage_dataSource}=this.state;
     this.setState({visible:true})
-    this.getCommodity()
-    
+    if(!goodsInStorage_dataSource.length){
+      this.getCommodity()
+    }
   }
 
   onSelect = (value) =>{
     console.log('回车搜索',value)
+    this.getCommodity(value)
     this.setState({selectedRowKeys:[]})
   }
 
-  getCommodity = ()=>{
-    request({
+  getCommodity = (value)=>{
+    this.setState({selectionTableLoding:true})
+    let json={
       url: '/webApi/sku/info/select',
-      method: 'get',
-    }).then(res => {
+      method: 'get'
+    }
+    if(value){
+      json.data=value
+    }
+    request(json).then(res => {
        console.log(res)
+       this.setState({selectionTableLoding:false,goodsInStorage_dataSource:res||[]})
     }).catch(err => {
        console.log(err)
+       this.setState({selectionTableLoding:false})
     })
   }
+
+  onSelectOptionChange = (value,option)=>{
+    let { warehouse } = this.state;
+    // let options=option.props;
+    // warehouse.warehouseCode=options.value;
+    // warehouse.warehouseName=options.children;
+    warehouse.warehouseCode='csj001';
+    warehouse.warehouseName='SHARK工厂库-test';
+    this.setState({warehouse})
+  }
+
+
 
   componentDidMount(){
     this.props.onRef(this)
@@ -98,7 +139,7 @@ class AddForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    let { dataSource,visible,goodsInStorage_dataSource,selectedRowKeys} = this.state;
+    let { items,visible,goodsInStorage_dataSource,selectedRowKeys,selectionTableLoding} = this.state;
 
     const formItemLayout_left = {
       labelCol: {
@@ -149,7 +190,7 @@ class AddForm extends React.Component {
       if(v.render === ''){
          v.render=(ext, record, index)=>{
             return <span className="Dropdown_Menu_box">
-              <span onClick={this.handleDelete.bind(this,index)}>删除</span> 
+              <span onClick={this.handleDelete.bind(this,record)}>删除</span> 
             </span>
          }
       }
@@ -163,28 +204,28 @@ class AddForm extends React.Component {
             onSubmit={this.handleSubmit} >
 
                 <Form.Item label="计划入库仓库" {...formItemLayout_left}>
-                  { getFieldDecorator('计划入库仓库', {
+                  { getFieldDecorator('warehouseCode', {
                     rules: [{ required: true, message: '请选择计划入库仓库' }],
                   })(
-                    <Select  style={{width:180}} placeholder="请选择计划入库仓库">
-                      <Option value="jack">Jack</Option>
-                      <Option value="lucy">Lucy</Option>
-                      <Option value="disabled" disabled>Disabled</Option>
-                      <Option value="Yiminghe">yiminghe</Option>
+                    <Select  style={{width:180}} placeholder="请选择计划入库仓库" onChange={this.onSelectOptionChange}>
+                      <Option value="1">Jack</Option>
+                      <Option value="2">Lucy</Option>
+                      <Option value="3" >Disabled</Option>
+                      <Option value="4">yiminghe</Option>
                     </Select>
                   )}
                 </Form.Item>
  
                  <Form.Item label="计划入库日期"  {...formItemLayout_right}>
-                  { getFieldDecorator('计划入库日期', {
-                     rules: [{ type: 'array', required: true,message: '请选择计划入库日期' }],
+                  { getFieldDecorator('planInTime', {
+                     rules: [{ required: true,message: '请选择计划入库日期' }],
                   })(
-                     <RangePicker />
+                    <DatePicker/>
                   )}
                 </Form.Item>
 
                 <Form.Item label="备注" {...formItemLayout_left} style={{width:300,minHeight:110}}>
-                  { getFieldDecorator('备注', {
+                  { getFieldDecorator('remarkInfo', {
                     initialValue:'',
                     rules: [{ required: false }],
                   })(
@@ -193,8 +234,8 @@ class AddForm extends React.Component {
                 </Form.Item>
 
                 <Form.Item  {...formItemLayout_table}>
-                  { getFieldDecorator('dataSource', {
-                    initialValue:dataSource,
+                  { getFieldDecorator('items', {
+                    initialValue:items,
                     rules: [{ required: true }],
                   })(
                      <div className="form_item_table">
@@ -207,7 +248,7 @@ class AddForm extends React.Component {
                           onChange={this.editableTableChange}
                           rowClassName={() => 'editable-row'}
                           columns={columns} 
-                          dataSource={dataSource} />
+                          dataSource={items} />
                      </div>
                   )}
                 </Form.Item>
@@ -216,12 +257,12 @@ class AddForm extends React.Component {
                   <Button
                       type="primary"
                       style={{marginRight:'12px'}}
-                      onClick={this.handleSubmit.bind(this,'save')}>
+                      onClick={this.handleSubmit.bind(this,'saveSubmit')}>
                        保存
                     </Button>
                     <Button
                       type="primary"
-                      onClick={this.handleSubmit.bind(this,'submit')}
+                      onClick={this.handleSubmit.bind(this,'addSubmit')}
                       htmlType="submit">
                        提交
                     </Button>
@@ -230,9 +271,8 @@ class AddForm extends React.Component {
           <Modal
             title="选择入库商品"
             centered={true}
-            width={760}
+            width={900}
             visible={visible}
-            destroyOnClose={true}
             onOk={this.handleOk}
             onCancel={this.handleCancel}>
               <div className="selectCommodityModal">
@@ -242,6 +282,7 @@ class AddForm extends React.Component {
                   selectWordsArr={['商品名称','查询']}/>
                 <SelectionTable
                   rowKey="id"
+                  loading={selectionTableLoding}
                   selectedRowKeys={selectedRowKeys}
                   onSelectChange={this.onSelectChange}
                   dataSource={goodsInStorage_dataSource}

@@ -2,40 +2,34 @@
 export  const indexTableColumnsConfig=[
   {
     title: '商品编码',
-    dataIndex: ''
+    dataIndex:'skuCode'
   },
   {
     title:'商品名称',
-    dataIndex: ''
+    dataIndex:'skuName'
   },
   {
     title:'品牌',
-    dataIndex: ''
+    dataIndex:'brandName'
   },
   {
     title:'规格型号',
-    dataIndex: ''
+    dataIndex:'skuFormat'
   },
   {
     title:'单位',
-    dataIndex: ''
+    dataIndex:'skuUnitName'
   },
   {
     title:'所属仓库',
-    dataIndex: ''
+    dataIndex:'warehouseName'
   },
   {
-    title:'可用仓库',
-    dataIndex: ''
+    title:'可用库存',
+    dataIndex:'skuQty'
   },
   {
     title:'锁定库存',
-    dataIndex: ''
-  },
-  {
-    title:'操作',
-    dataIndex: '',
-    render:'',
-    width:100
-  },
+    dataIndex:'lockQty'
+  }
 ]

@@ -31,10 +31,24 @@ class SelestForm extends React.Component {
           <Form onSubmit={this.handleSubmit}  layout="inline">
             <Row gutter={24}>
               {
+               selectWordsArr.includes('业务单号')&&
+               <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+                  <Form.Item label="业务单号">
+                    { getFieldDecorator('planCode', {
+                      initialValue:'',
+                      rules: [{ required: false, message: '' }],
+                    })(
+                      <Input autoComplete='off' placeholder="请输入业务单号" />
+                    )}
+                  </Form.Item>
+                </Col>
+              }
+
+              {
                selectWordsArr.includes('商品名称')&&
                <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
                   <Form.Item label="商品名称">
-                    { getFieldDecorator('商品名称', {
+                    { getFieldDecorator('skuName', {
                       initialValue:'',
                       rules: [{ required: false, message: '' }],
                     })(
@@ -48,7 +62,7 @@ class SelestForm extends React.Component {
                  selectWordsArr.includes('状态')&&
                  <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
                   <Form.Item label="状态">
-                    { getFieldDecorator('状态', {
+                    { getFieldDecorator('planState', {
                       rules: [{ required: false, message: '' }],
                     })(
                       <Select  style={{width:180}} placeholder="请选择状态">
@@ -66,7 +80,7 @@ class SelestForm extends React.Component {
                 selectWordsArr.includes('创建日期')&&
                 <Col span={8} style={{width:'442px',marginBottom:'12px'}}>
                   <Form.Item label="创建日期">
-                    { getFieldDecorator('创建日期', {
+                    { getFieldDecorator('createTime', {
                       rules: [{ type: 'array', required: false }],
                     })(
                       <RangePicker />
@@ -93,7 +107,7 @@ class SelestForm extends React.Component {
                selectWordsArr.includes('联系人电话')&&
                <Col span={6} style={{width:'300px',marginBottom:'12px'}}>
                   <Form.Item label="联系人电话">
-                    { getFieldDecorator('联系人电话', {
+                    { getFieldDecorator('arrivalLinkTel', {
                       rules: [{ required: false, message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/ }],
                     })(
                       <Input autoComplete='off' placeholder="请输入联系人电话" />

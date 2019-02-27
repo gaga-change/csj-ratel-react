@@ -2,53 +2,57 @@ import moment from 'moment'
 export  const indexTableColumns_Config=[
   {
     title: '业务单编号',
-    dataIndex: 'ceshi',
+    dataIndex:'planCode',
   },
   {
     title:'计划入库时间',
-    dataIndex: '',
+    dataIndex:'planTime',
   },
   {
     title:'计划入库仓库',
-    dataIndex: '',
+    dataIndex:'planWarehouseName',
   },
   {
     title:'计划入库总量',
-    dataIndex: '',
+    dataIndex:'inPlanQty',
   },
   {
     title:'已入库数量',
-    dataIndex: '',
+    dataIndex:'inQty',
   },
   {
     title:'单据状态',
-    dataIndex: '',
+    dataIndex:'planState',
   },
   {
     title:'操作',
     dataIndex: '',
     render:'',
-    width:150,
+    width:130,
   },
 ]
 
 
 export  const indexTableColumns_ChildConfig=[
   {
-    title: '商品信息',
-    dataIndex: 'id',
+    title:'商品编码',
+    dataIndex:'skuCode',
+  },
+  {
+    title:'商品名称',
+    dataIndex:'skuName',
   },
   {
     title:'单价',
-    dataIndex: '',
+    dataIndex:'inPrice',
   },
   {
     title:'计划入库数量',
-    dataIndex: '',
+    dataIndex:'planInQty',
   },
   {
     title:'已入库总量',
-    dataIndex: '',
+    dataIndex:'realInQty',
   },
   
 ]
@@ -60,31 +64,31 @@ export  const formTable_config=[
   },
   {
     title:'商品编号',
-    dataIndex: '',
+    dataIndex:'skuCode',
   },
   {
     title:'商品名称',
-    dataIndex: '',
+    dataIndex:'skuName',
   },
   {
     title:'品牌',
-    dataIndex: '',
+    dataIndex:'brandName',
   },
   {
     title:'规格型号',
-    dataIndex: '',
+    dataIndex:'skuFormat',
   },
   {
     title:'单位',
-    dataIndex: '',
+    dataIndex:'skuUnitName',
   },
   {
     title:'单价（成本）',
-    dataIndex: '',
+    dataIndex:'salePrice',
   },
   {
     title:'入库数量',
-    dataIndex: 'num',
+    dataIndex:'planInQty',
     editable:true,
     inputType:'InputNumber',
     width:120,
@@ -103,27 +107,27 @@ export  const goodsInStorage_config=[
 
   {
     title:'商品编号',
-    dataIndex: 'id',
+    dataIndex:'skuCode',
   },
   {
     title:'商品名称',
-    dataIndex: '',
+    dataIndex:'skuName',
   },
   {
     title:'品牌',
-    dataIndex: '',
+    dataIndex:'brandName',
   },
   {
     title:'规格型号',
-    dataIndex: '',
+    dataIndex:'skuFormat',
   },
   {
     title:'单位',
-    dataIndex: '',
+    dataIndex:'skuUnitName',
   },
   {
     title:'单价（成本）',
-    dataIndex: '',
+    dataIndex:'costPrice',
   }
 ]
 
@@ -135,35 +139,35 @@ export  const warehousingDetail_Config=[
   },
   {
     title:'商品编码',
-    dataIndex: '',
+    dataIndex:'skuCode',
   },
   {
     title:'商品名称',
-    dataIndex: '',
+    dataIndex:'skuName',
   },
   {
     title:'品牌',
-    dataIndex: '',
+    dataIndex:'skuBrandCode',
   },
   {
     title:'规格型号',
-    dataIndex: '',
+    dataIndex:'skuFormat',
   },
   {
     title:'单位',
-    dataIndex: '',
+    dataIndex:'skuUnitCode',
   },
   {
     title:'单价(成本)',
-    dataIndex: '',
+    dataIndex:'inPrice',
   },
   {
     title:'计划入库量',
-    dataIndex: '',
+    dataIndex:'planInQty',
   },
   {
     title:'已入库量',
-    dataIndex: '',
+    dataIndex:'realInQty',
   }
 ]
 
@@ -171,32 +175,32 @@ export  const warehousingDetail_Config=[
 export  const BaseCard_Config=[
   {
     title: '业务单编号',
-    dataIndex: 'orderId',
+    dataIndex:'planCode',
   },
   {
     title:'计划入库日期',
-    dataIndex: 'time',
+    dataIndex:'planTime',
     render:(v)=>moment(v).format('YYYY-MM-DD')
   },
   {
     title:'入库仓库',
-    dataIndex: '',
+    dataIndex:'planWarehouseName',
   },
   {
     title:'计划入库总量',
-    dataIndex: '',
+    dataIndex:'inPlanQty',
   },
   {
     title:'创建人',
-    dataIndex: '',
+    dataIndex:'createrName',
   },
   {
     title:'创建日期',
-    dataIndex: '',
+    dataIndex:'gmtCreate',
   },
   {
     title:'状态',
-    dataIndex: '',
+    dataIndex:'planState',
   },
 
 ]

@@ -15,6 +15,8 @@ service.interceptors.response.use(
          selectMessage('success','数据请求成功！')
          return Promise.resolve(response.data&&response.data.data)
        } else if(response.data&&response.data.code==='ratel-512'){
+         console.log(response.data.code)
+         debugger
          if(!window.location.hash.includes('login')){
            selectMessage('error','用户未登陆或登录失效 !')
            window.location.href=`${window.location.href}/#/login`
@@ -44,8 +46,8 @@ function selectMessage(type,tip){
 }
 
 
-function request({ url, method='get',data}){
-  let json={method,url};
+function request({ url, method='get',data,...rest}={}){
+  let json={method,url,...rest};
   if(method==='get'||method==='GET'){
     let stringifyData=stringify(data);
     if(typeof data === 'object'){

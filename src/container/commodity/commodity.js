@@ -155,8 +155,7 @@ export default class Commodity extends React.Component {
     request({
       url: `/webApi/sku/price/queryCostPriceRecord`,
       method: 'get',
-      data:value.id,
-      useStringify:false
+      data:value.id
     }).then(res => {
        this.setState({
         costPriceChange_dataSource:res||[],
@@ -174,7 +173,6 @@ export default class Commodity extends React.Component {
       url: `/webApi/sku/price/querySalePriceRecord`,
       method: 'get',
       data:value.id,
-      useStringify:false
     }).then(res => {
        this.setState({
         priceChange_dataSource:res||[],

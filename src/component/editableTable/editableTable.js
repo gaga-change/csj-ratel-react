@@ -160,7 +160,7 @@ export default class EditableTable extends React.Component {
       };
     });
 
-    if(!this.props.rowKey){
+    if(!this.props.rowKey&&Array.isArray(dataSource)){
       dataSource=dataSource.map((v,i)=>{
         v.key=i+1;
         if(useIndex){

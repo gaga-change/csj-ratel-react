@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button } from 'antd';
 import _  from 'lodash';
+import {stringify,parse} from 'qs';
+import request from '@lib/request'
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import { indexTableColumnsConfig } from './component/config'
@@ -12,67 +14,123 @@ export default class Stock extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      dataSource:[{id:1},{id:2}],
+      dataSource:[],
       pagination: {
    
       },
       loading:false,
-      name:1
+      count:{},
+      exportLoding:false
     }
   }
 
 
   componentDidMount(){
-    this.fetch()
+    let { pagination } = this.state;
+    let {search} = this.props.history.location
+    let { pageNum,pageSize,...rest} = parse(search.slice(1))
+    pagination.current=Number(pageNum)||1;
+    pagination.pageSize=Number(pageSize)||10;
+    this.setState({pagination})
+    this.fetch(rest)
   }
 
-  fetch = ()=>{
-    
+  fetch = (json={})=>{
+    this.setState({loading:true})
+    let { dataSource,pagination} =this.state;
+    let data={
+      ...json,
+      pageNum:pagination.current||1,
+      pageSize:pagination.pageSize||10
+    }
+    this.props.history.replace(`/stock?${stringify(data)}`)
+    request({
+      url: '/webApi/stock/page',
+      method: 'post',
+      data:data
+    }).then(res => {
+       if(res.list&&Array.isArray(res.list)){
+        dataSource=res.list
+        pagination.total=res.total
+       }
+       this.setState({
+        dataSource,
+        pagination,
+        loading:false,
+       })
+    }).catch(err => {
+      console.log(err)
+      this.setState({
+        loading:false,
+       })
+    })
+
+    request({
+      url:'/webApi/stock/count',
+      method: 'post',
+      data:data
+    }).then(res => {
+      this.setState({count:res})
+    }).catch(err => {
+       console.log(err)
+    })
   }
 
-  handleDelete = ()=>{
-
-  }
 
   handleTableChange = (pagination, filters, sorter) => {
-    console.log(pagination)
+    this.setState({
+      pagination
+    },()=>{
+      this.fetch()
+    })
+  }
+ 
+  onSubmit = (type,value)=>{
+    if(type==="select"){
+      this.fetch(value)
+    }
   }
 
-  onSubmit = (type,value)=>{
-    console.log(type,value)
+  export = ()=>{
+    let { search } = this.props.history.location;
+    this.setState({exportLoding:true})
+    request({
+      url: '/webApi/stock/export',
+      method:'get',
+      data:parse(search.slice(1))
+    }).then(res => {
+      this.setState({exportLoding:false})
+    }).catch(err=>{
+      this.setState({exportLoding:false})
+    })
   }
 
   render() {
-
-    const { dataSource }=this.state;
-    const columns=_.cloneDeep(indexTableColumnsConfig).map(v=>{
-      if(v.render===''){
-         v.render=(ext, record, index)=>{
-            return <span className="Dropdown_Menu_box">
-              <span onClick={this.handleDelete}>删除</span> 
-              <span>调价</span> 
-            </span>
-         }
-      }
-      return v
-    })
-
+    const { dataSource,count}=this.state;
+    const columns=_.cloneDeep(indexTableColumnsConfig)
     return (
         <div className="Stock"  >
             <Sider history={this.props.history} /> 
             <CommodityForm onSubmit={this.onSubmit.bind(this,'select')}/>
             <div className="alert_Btn">
                <div className="Total">
-                  <span className="Total_list">
-                     <span>可用库存合计 ：</span> 
-                     <span></span> 
-                  </span>
-                  <span className="Total_list">
-                     <span>锁定库存合计 ：</span> 
-                     <span></span> 
-                  </span>
+                   {
+                     count.totalInventoryTotal!==undefined&&
+                    <span className="Total_list">
+                      <span>可用库存合计 ：{count.totalInventoryTotal}</span> 
+                      <span></span> 
+                    </span>
+                   }
+
+                   {
+                     count.totalInventoryLockQuantity!==undefined&&
+                     <span className="Total_list">
+                        <span>锁定库存合计 ：{count.totalInventoryLockQuantity}</span> 
+                        <span></span> 
+                     </span>
+                   }
                </div>
-              <Button type="primary" onClick={this.addCommodity}>库存导出</Button>
+              <Button type="primary" onClick={this.export}>库存导出</Button>
             </div>
             <FetchTable 
               dataSource={dataSource} 

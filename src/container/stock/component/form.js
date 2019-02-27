@@ -1,6 +1,8 @@
 import React from 'react';
-import { Form, Input,Button,Row,Col  } from 'antd';
+import { Form, Input,Button,Row,Col,Select  } from 'antd';
 import './form.scss'
+
+const Option = Select.Option;
 class CommodityForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
@@ -25,18 +27,20 @@ class CommodityForm extends React.Component {
 
               <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
                 <Form.Item label="仓库名称">
-                  { getFieldDecorator('仓库名称', {
-                    initialValue:'',
+                  { getFieldDecorator('warehouseCode', {
                     rules: [{ required: false, message: '' }],
                   })(
-                    <Input   autoComplete='off' placeholder="请输入仓库名称" />
+                    <Select  style={{width:180}} placeholder="请选择仓库">
+                      <Option value="5">Jack</Option>
+                      <Option value="0">Lucy</Option>
+                    </Select>
                   )}
                 </Form.Item>
               </Col>
 
               <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
                 <Form.Item label="商品名称">
-                  { getFieldDecorator('username', {
+                  { getFieldDecorator('skuName', {
                     initialValue:'',
                     rules: [{ required: false, message: '' }],
                   })(
@@ -47,7 +51,7 @@ class CommodityForm extends React.Component {
 
               <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
                 <Form.Item label="商品编码">
-                  { getFieldDecorator('password', {
+                  { getFieldDecorator('skuCode', {
                     initialValue:'',
                     rules: [{ required: false, message: '' }],
                   })(
