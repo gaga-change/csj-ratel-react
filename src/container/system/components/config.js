@@ -1,66 +1,4 @@
-export  const jurisdiction_config= [
-  {
-      name: '用户管理',
-      list: [
-          { name: '新增' },
-          { name: '查看' },
-          { name: '修改' },
-          { name: '删除' },
-      ]
-  },
-  {
-      name: '商品管理',
-      list: [
-          { name: '新增' },
-          { name: '查看' },
-          { name: '修改' },
-          { name: '删除' },
-      ]
-  },
-  {
-      name: '入库业务单',
-      list: [
-          { name: '新增' },
-          { name: '查看' },
-          { name: '修改' },
-          { name: '删除' },
-      ]
-  },
-  {
-      name: '出库业务单',
-      list: [
-          { name: '新增' },
-          { name: '查看' },
-          { name: '修改' },
-          { name: '删除' },
-      ]
-  },
-  {
-      name: '客户管理',
-      list: [
-          { name: '新增' },
-          { name: '查看' },
-          { name: '修改' },
-          { name: '删除' },
-      ]
-  },
-  {
-      name: '角色管理',
-      list: [
-          { name: '新增' },
-          { name: '查看' },
-          { name: '修改' },
-          { name: '删除' },
-      ]
-  },
-]
-
-
 export  const roleConfig_config= [
-    {
-        title: '序号',
-        dataIndex: 'index'
-    },
   {
       title: '角色ID',
       dataIndex: 'id'
@@ -84,35 +22,35 @@ export  const roleConfig_config= [
 export  const userConfig_config= [
     {
         title: '用户名',
-        dataIndex: ''
+        dataIndex: 'userName'
     },
     {
         title: '手机',
-        dataIndex: ''
+        dataIndex: 'linkTel'
     },
     {
         title: '用户角色',
-        dataIndex: ''
+        dataIndex: 'roleName'
     },
     {
         title: '启用状态',
-        dataIndex: ''
+        dataIndex: 'statusName'
     },
     {
         title: '创建日期',
-        dataIndex: ''
+        dataIndex: 'gmtCreate'
     },
     {
         title: '创建者',
-        dataIndex: ''
+        dataIndex: 'createrName'
     },
     {
         title: '最后操作日期',
-        dataIndex: ''
+        dataIndex: 'gmtModify'
     },
     {
         title: '最后操作者',
-        dataIndex: ''
+        dataIndex: 'modifierName'
     },
     {
         title: '操作',

@@ -11,7 +11,8 @@ class RoleForm extends React.Component {
   }
 
   handleRest = () => {
-    this.props.form.resetFields();
+    this.props.form.resetFields()
+    this.props.onSubmit({})
   }
 
   render () {

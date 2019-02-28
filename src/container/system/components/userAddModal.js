@@ -1,39 +1,53 @@
 import React from 'react';
 import { Modal } from 'antd';
 import UserAddForm from './userAddForm.js'
+import request from '@lib/request'
 
 /**
  * props:
- *  show<Boolean> 是否显示添加角色弹窗。
- *  onClose<Boolean> 通知父组件关闭当前弹窗。
+ *  onClose<Function> 弹窗关闭事件。
+ *  onRef<Function> 回传当前组件对象
+ * child:
+ *  open<Function> 打开窗口
+ *     (obj) 如果传递一个数据对象则为编辑
  */
 class UserAddModal extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      visible: false,
-      confirmLoading: false,
-      goSubmit: false,
-    }
+  state = {
+    visible: false,
+    confirmLoading: false,
+    goSubmit: false,
+    obj: null
   }
-  componentWillReceiveProps (prevProps) {
-    this.init(prevProps)
+
+  componentDidMount() {
+    this.props.onRef(this)
   }
+
+  ref = (child) => this.child = child
+  open = (obj) => this.init(obj)
 
   /**
    * 初始化，控制窗口显示还是隐藏
    * @param {*} props 
    */
-  init (props) {
-    if (props.show) {
+  init(obj) {
+    this.setState({ obj })
+    let { visible } = this.state
+    if (!visible) {
       this.setState({
         visible: true,
       })
-    } else {
-      this.setState({
-        visible: false,
-      })
     }
+  }
+
+  /**
+  * 窗口关闭
+  */
+  close = (type, obj) => {
+    this.setState({
+      visible: false
+    })
+    this.props.onClose && this.props.onClose(type, obj)
   }
 
   /**
@@ -44,46 +58,61 @@ class UserAddModal extends React.Component {
   }
 
   /**
-   * 窗口点击“取消”按钮
-   */
-  handleCancel = () => {
-    this.props.onClose(false)
-  }
-  /**
    * 表单提交
    */
   handleSubmited = (err, value) => {
+    console.log(value)
+    let info = sessionStorage.getItem('info')
+    info = info ? JSON.parse(info) : {}
     this.setState({ goSubmit: false })
     if (!err) {
       this.setState({
         confirmLoading: true,
       })
-      setTimeout(() => {
+      let { obj } = this.state
+      if (obj) {
+        value.userId = obj.id
+      }
+      request({
+        url: '/webApi/base/user/add',
+        method: 'post',
+        data: {
+          ...value,
+          isAdmin: 0,
+          userStatus: 0,
+          ownerCode: info.ownerCode,
+          ownerName: info.ownerName
+        }
+      }).then(res => {
+        this.child.handleRest()
+        this.close(null, { ...obj, ...value })
+      }).catch(err => {
+        console.error(err)
+      }).then(() => {
         this.setState({
           confirmLoading: false,
         })
-        this.props.onClose(false)
-      }, 1000)
+      })
+
+
     }
   }
-  render () {
+  render() {
     const { visible, confirmLoading, goSubmit } = this.state
-    if (!this.props.show) {
-      return null
-    } else
-      return (
-        <div>
-          <Modal
-            title="添加用户"
-            visible={visible}
-            onOk={this.handleOk}
-            confirmLoading={confirmLoading}
-            onCancel={this.handleCancel}
-          >
-            <UserAddForm goSubmit={goSubmit} onSubmited={this.handleSubmited}></UserAddForm>
-          </Modal>
-        </div>
-      )
+
+    return (
+      <div>
+        <Modal
+          title="添加用户"
+          visible={visible}
+          onOk={this.handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={() => this.close('cancel')}
+        >
+          <UserAddForm goSubmit={goSubmit} onSubmited={this.handleSubmited} onRef={this.ref} roles={this.props.roles} obj={this.state.obj}></UserAddForm>
+        </Modal>
+      </div>
+    )
   }
 }
 

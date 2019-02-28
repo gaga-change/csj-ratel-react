@@ -1,22 +1,12 @@
 import React from 'react';
-import {Checkbox} from 'antd';
-import {jurisdiction_config} from './config'
-
-
-jurisdiction_config.forEach(item => {
-  item.options = []
-  item.checkedList = []
-  item.indeterminate = false
-  item.checkAll = false
-  item.list.forEach(son => {
-    item.options.push(son.name)
-  })
-})
+import { Checkbox } from 'antd';
+import request from '@lib/request'
 
 const CheckboxGroup = Checkbox.Group;
 
 /**
  * props:
+ *  checkedList<Array(int)> 已拥有权限
  *  goSubmit<Boolean> 是否进行表单提交操作。如果 false->true 则会提交表单
  *  onSubmited<Function> 表单提交结束。通知父组件将goSubmit修改为 false
  *      @returns err,values
@@ -24,13 +14,81 @@ const CheckboxGroup = Checkbox.Group;
 class DataForm extends React.Component {
 
   state = {
-    jurisdictionList: jurisdiction_config,
+    jurisdictionList: [],
   }
 
-  componentWillReceiveProps (prevProps) {
+  componentDidMount() {
+    this.initDicts()
+  }
+
+  componentWillReceiveProps(prevProps) {
     if (prevProps.goSubmit && !this.props.goSubmit) {
       this.handleSubmit()
     }
+    if (this.props.checkedList !== prevProps.checkedList) {
+      this.setDefault(prevProps.checkedList)
+    }
+  }
+
+  /**
+   * 配置默认值
+   */
+  setDefault = (menus) => {
+    let { jurisdictionList } = this.state
+    let ids = menus.join(',') + ','
+    jurisdictionList.forEach(item => {
+      item.checkedList = []
+      item.indeterminate = false
+      item.checkAll = false
+      if (!ids) return
+      item.options.forEach(son => {
+        if (~ids.indexOf(son.value)) {
+          item.checkedList.push(son.value)
+        }
+      })
+      if (item.checkedList.length) {
+        if (item.checkedList.length === item.options.length) {
+          item.checkAll = true
+        } else {
+          item.indeterminate = true
+        }
+      } else if (~ids.indexOf(item.id)) {
+        item.checkAll = true
+      }
+    })
+    this.setState({ jurisdictionList })
+  }
+
+  /**
+  * 初始化获取权限列表
+  */
+  initDicts = () => {
+    request({
+      url: '/webApi/base/menu/selectAllMenu',
+      method: 'get'
+    }).then(res => {
+      let dicts = res.children
+      dicts = dicts.map((item, index) => {
+        let obj = {
+          options: item.children.map(son => {
+            return {
+              label: son.text,
+              value: son.id
+            }
+          }),
+          text: item.text,
+          id: item.id,
+          checkedList: [],
+          indeterminate: false,
+          checkAll: false,
+        }
+        return obj
+      })
+      this.setState({ jurisdictionList: dicts })
+      this.setDefault(this.props.checkedList)
+    }).catch(err => {
+      console.error(err)
+    })
   }
 
   handleSubmit = () => {
@@ -51,38 +109,34 @@ class DataForm extends React.Component {
   }
 
   onCheckAllChange = (e, index) => {
-    this.setState(state => {
-      let list = state.jurisdictionList
-      let item = list[index]
-      item.checkedList = e.target.checked ? item.options : []
-      item.indeterminate = false
-      item.checkAll = e.target.checked
-      return {
-        jurisdictionList: list
-      }
-    })
+    let { jurisdictionList } = this.state
+    let item = jurisdictionList[index]
+    item.checkedList = e.target.checked ? item.options.map(v => v.value) : []
+    item.indeterminate = false
+    item.checkAll = e.target.checked
+    this.setState({ jurisdictionList })
   }
 
-  render () {
+  render() {
+    let { jurisdictionList } = this.state
     return (
       <div>
         {
-          jurisdiction_config.map((item, index) => {
-          return (
-            <div key={index} className="mb-20">
-              <div style={{ borderBottom: '1px solid #E9E9E9' }}>
-                <Checkbox
-                  indeterminate={item.indeterminate}
-                  onChange={(e) => this.onCheckAllChange(e, index)}
-                  checked={item.checkAll}
-                >{item.name}</Checkbox>
+          jurisdictionList.map((item, index) => {
+            return (
+              <div className="role-jurisdiction-item" key={index}>
+                <div className="item-title">
+                  <Checkbox
+                    indeterminate={item.indeterminate}
+                    onChange={(e) => this.onCheckAllChange(e, index)}
+                    checked={item.checkAll}
+                  >{item.text}</Checkbox>
+                </div>
+                <br />
+                {!!item.options.length && <CheckboxGroup options={item.options} value={item.checkedList} onChange={(checkedList) => this.onChange(checkedList, index)} />}
               </div>
-              <br />
-              <CheckboxGroup options={item.options} value={item.checkedList} onChange={(checkedList) => this.onChange(checkedList, index)} />
-            </div>
-          )
-        })}
-
+            )
+          })}
       </div>
     )
   }

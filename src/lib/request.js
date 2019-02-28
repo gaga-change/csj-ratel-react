@@ -24,7 +24,6 @@ service.interceptors.response.use(
            window.event.returnValue=false; 
            sessionStorage.clear()
          }
-
        } else {
          selectMessage('error',`${response.data.errorMsg||'请求异常！'}`)
          return Promise.reject(response.data)

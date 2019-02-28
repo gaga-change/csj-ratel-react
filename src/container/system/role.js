@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Popconfirm, message } from 'antd';
 import _ from 'lodash';
 import Sider from '../../component/sider/sider'
 import request from '@lib/request'
-import FetchTable from '../../component/fetchTable/fetchTable'
+import SelectingTable from '../../component/selectionTable/selectionTable'
 import RoleSearchForm from './components/roleSearchForm'
 import RoleJurisdictionModal from './components/roleJurisdictionModal'
 import { roleConfig_config } from './components/config'
@@ -11,30 +11,34 @@ import RoleAddModal from './components/roleAddModal'
 import './style/role.scss'
 
 export default class Role extends React.Component {
+
   constructor(props) {
     super(props)
     this.state = {
       dataSource: [],
+      selectedRowKeys: [],
       pagination: {},
-      roleAddFormShow: false,
-      roleJurisdictionModalShow: false,
-      loading: false
+      loading: false,
+      delLoading: false
     }
   }
 
+  seachVal = {} // 搜索内容
 
   componentWillMount() {
     this.fetch()
   }
 
+  /**
+   * 列表数据请求
+   */
   fetch = (json = {}) => {
     this.setState({ loading: true })
     let { dataSource, pagination } = this.state;
     let data = {
       roleName: '',
       ...json,
-      // pageNum: pagination.current || 1,
-      // pageSize: pagination.pageSize || 10
+      ...this.seachVal,
     }
     request({
       url: '/webApi/base/role/list',
@@ -66,37 +70,90 @@ export default class Role extends React.Component {
    * 搜索表单提交
    */
   handleFormSubmit = (val) => {
-    this.fetch(val)
+    this.seachVal = val
+    this.fetch()
   }
 
   /**
-   * 添加对象按钮
+   * 添加/编辑 对象按钮
    */
-  handleAdd = () => {
-    this.handleRoleAddFormShowChange(true)
-  }
-
-  handleTableChange = (pagination, filters, sorter) => {
-    console.log(pagination)
+  openRoleFormMoadl = (item) => {
+    this.roleAddModal.open(item)
   }
 
   /**
-   * 添加角色表单弹窗 状态改变
+   * 打开 权限操作 弹窗
    */
-  handleRoleAddFormShowChange = (show) => {
-    this.setState((state) => ({
-      roleAddFormShow: show
-    }))
+  openRoleJurisdictionModal = (...val) => {
+    this.roleJurisdictionModal.open(...val)
+  }
+
+  /** 
+   * 关闭 添加/修改 角色弹窗
+   */
+  handleRoleAddModalClose = (cancel, obj) => {
+    if (obj && obj.id) { // 编辑
+      console.log('编辑')
+      console.log(obj)
+      let { dataSource } = this.state
+      dataSource.forEach((item, index) => {
+        if (item.id === obj.id) {
+          dataSource[index] = obj
+        }
+        this.setState({
+          dataSource
+        })
+      })
+
+      return
+    }
+    if (!cancel) {
+      this.fetch()
+    }
   }
 
   /**
-   * 操作权限表单弹窗 状态改变
+   * 批量删除
    */
-  handleRoleJurisdictionModalShowChange = (show) => {
-    this.setState((state) => ({
-      roleJurisdictionModalShow: show
-    }))
+  handleDel = () => {
+    console.log(this.state.selectedRowKeys)
+    if (!this.state.selectedRowKeys.length) {
+      message.info('请先勾选角色！');
+      return
+    }
+    this.setState({
+      delLoading: true,
+    })
+    request({
+      url: '/webApi/base/role/delete',
+      method: 'post',
+      data: this.state.selectedRowKeys
+    }).then(res => {
+      let ids = this.state.selectedRowKeys.join(',') + ','
+      let { dataSource } = this.state
+      dataSource = dataSource.filter(item => !~ids.indexOf(item.id + ','))
+      this.setState({
+        dataSource,
+        selectedRowKeys: [],
+        delLoading: false,
+      })
+    }).catch(err => {
+      this.setState({
+        delLoading: false,
+      })
+    })
   }
+
+  /**
+   * 表格选择
+   */
+  onSelectChange = (selectedRowKeys, other) => {
+    console.log('当前选择的key值 ', selectedRowKeys, other);
+    this.setState({ selectedRowKeys });
+  }
+
+  onRoleAddModalRef = (child) => this.roleAddModal = child
+  onRoleJurisdictionModalRef = (child) => this.roleJurisdictionModal = child
 
   render() {
     const { dataSource } = this.state;
@@ -106,11 +163,8 @@ export default class Role extends React.Component {
           return (columns.length >= 1
             ? (
               <span className="Dropdown_Menu_box">
-                {/* <Popconfirm title="确定要删除该角色吗?" onConfirm={() => this.handleDelete(record)}>
-                  <span></span>
-                </Popconfirm> */}
-                <span>编辑</span>
-                <span onClick={() => this.handleRoleJurisdictionModalShowChange(true)}>操作权限</span>
+                <span onClick={() => this.openRoleFormMoadl(record)}>编辑</span>
+                <span onClick={() => this.openRoleJurisdictionModal(record)}>操作权限</span>
               </span>
             ) : null)
         }
@@ -121,18 +175,24 @@ export default class Role extends React.Component {
       <div className="Role">
         <Sider history={this.props.history} />
         <RoleSearchForm onSubmit={this.handleFormSubmit}></RoleSearchForm>
-        <div className="alert_Btn">
-          <Button type="primary" onClick={this.handleAdd}>创建角色</Button>
+        <div>
+          <Popconfirm title="你确定要删除角色吗?" onConfirm={this.handleDel} okText="确定" cancelText="取消">
+            <Button className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
+          </Popconfirm>
         </div>
-        <FetchTable
+        <div className="alert_Btn">
+          <Button type="primary" onClick={() => this.openRoleFormMoadl()}>创建角色</Button>
+        </div>
+        <SelectingTable
+          selectedRowKeys={this.state.selectedRowKeys}
           dataSource={dataSource}
           columns={columns}
-          useIndex={true}
+          rowKey={"id"}
+          onSelectChange={this.onSelectChange}
           loading={this.state.loading}
-          pagination={this.state.pagination}
-          onChange={this.handleTableChange} />
-        <RoleAddModal show={this.state.roleAddFormShow} onClose={this.handleRoleAddFormShowChange}></RoleAddModal>
-        <RoleJurisdictionModal show={this.state.roleJurisdictionModalShow} onClose={this.handleRoleJurisdictionModalShowChange}></RoleJurisdictionModal>
+          pagination={this.state.pagination} />
+        <RoleAddModal onRef={this.onRoleAddModalRef} onClose={this.handleRoleAddModalClose}></RoleAddModal>
+        <RoleJurisdictionModal onRef={this.onRoleJurisdictionModalRef}></RoleJurisdictionModal>
       </div>
     )
   }

@@ -21,7 +21,8 @@ class UserForm extends React.Component {
   }
 
   handleRest = () => {
-    this.props.form.resetFields();
+    this.props.form.resetFields()
+    this.props.onSubmit({})
   }
 
   render() {
@@ -43,7 +44,7 @@ class UserForm extends React.Component {
             </Col>
             <Col span={6} style={{ width: '290px', marginBottom: '12px' }}>
               <Form.Item label="手机">
-                {getFieldDecorator('phone', {
+                {getFieldDecorator('linkTel', {
                   initialValue: '',
                   rules: [{ required: false, message: '' }],
                 })(
@@ -53,28 +54,31 @@ class UserForm extends React.Component {
             </Col>
             <Col span={6} style={{ width: '290px', marginBottom: '12px' }}>
               <Form.Item label="状态" >
-                {getFieldDecorator('status', {
+                {getFieldDecorator('userStatus', {
                   rules: [{ required: false, message: '' }],
                 })(
                   <Select
                     style={{ width: 180 }} placeholder="请选择状态"
                   >
-                    <Option value="1">启用</Option>
-                    <Option value="0">禁用</Option>
+                    <Option value="0">启用</Option>
+                    <Option value="1">禁用</Option>
                   </Select>
                 )}
               </Form.Item>
             </Col>
             <Col span={6} style={{ width: '290px', marginBottom: '12px' }}>
               <Form.Item label="角色">
-                {getFieldDecorator('role', {
+                {getFieldDecorator('roleId', {
                   rules: [{ required: false, message: '' }],
                 })(
                   <Select
                     style={{ width: 180 }} placeholder="请选择角色"
                   >
-                    <Option value="销售">销售</Option>
-                    <Option value="采购">采购</Option>
+                    {
+                      this.props.roles.map(role => {
+                        return (<Option value={role.id} key={role.id}>{role.roleName}</Option>)
+                      })
+                    }
                   </Select>
                 )}
               </Form.Item>
