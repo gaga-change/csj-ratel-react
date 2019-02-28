@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from 'antd';
 import RoleJurisdictionForm from './roleJurisdictionForm.js'
+import './roleJurisdiction.scss'
 
 /**
  * props:
@@ -19,7 +20,7 @@ class RoleJurisdictionModal extends React.Component {
   componentDidMount() {
     this.props.onRef(this)
   }
-  
+
   open = () => this.init()
 
   /**
@@ -56,6 +57,7 @@ class RoleJurisdictionModal extends React.Component {
    * 表单提交
    */
   handleSubmited = (err, value) => {
+    console.log(value)
     this.setState({ goSubmit: false })
     if (!err) {
       this.setState({
@@ -72,22 +74,19 @@ class RoleJurisdictionModal extends React.Component {
 
   render() {
     const { visible, confirmLoading, goSubmit } = this.state
-    if (!visible) {
-      return null
-    } else
-      return (
-        <div>
-          <Modal
-            title="权限配置"
-            visible={visible}
-            onOk={this.handleOk}
-            confirmLoading={confirmLoading}
-            onCancel={() => this.close('cancel')}
-          >
-            <RoleJurisdictionForm goSubmit={goSubmit} onSubmited={this.handleSubmited}></RoleJurisdictionForm>
-          </Modal>
-        </div>
-      )
+    return (
+      <div className="RoleJurisdiction">
+        <Modal
+          title="权限配置"
+          visible={visible}
+          onOk={this.handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={() => this.close('cancel')}
+        >
+          <RoleJurisdictionForm goSubmit={goSubmit} onSubmited={this.handleSubmited}></RoleJurisdictionForm>
+        </Modal>
+      </div>
+    )
   }
 }
 
