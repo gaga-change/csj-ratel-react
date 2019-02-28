@@ -1,41 +1,44 @@
 import React from 'react'
-import { Modal } from 'antd'
+import {
+  Modal
+} from 'antd'
 import RoleAddForm from './roleAddForm.js'
 import request from '@lib/request'
 
 /**
  * props:
- *  show<Boolean> 是否显示添加角色弹窗。
- *  onClose<Boolean> 通知父组件关闭当前弹窗。
+ *  onClose<Function> 通知父组件关闭当前弹窗。
+ * child:
+ *  open<Function> 打开窗口
  */
 class RoleAddModal extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      visible: false,
-      loading: false,
-      goSubmit: false,
-    }
+  state = {
+    visible: false,
+    loading: false,
+    goSubmit: false,
   }
 
-  componentWillReceiveProps (prevProps) {
-    this.init(prevProps)
+  componentDidMount() {
+    this.props.onRef(this)
   }
 
   ref = (child) => this.child = child
 
+  open = (id) => {
+    this.init(id)
+  }
+
   /**
-   * 初始化，控制窗口显示还是隐藏
+   * 初始化，打开窗口
    * @param {*} props 
    */
-  init (props) {
-    if (props.show) {
+  init() {
+    let {
+      visible
+    } = this.state
+    if (!visible) {
       this.setState({
         visible: true,
-      })
-    } else {
-      this.setState({
-        visible: false,
       })
     }
   }
@@ -44,20 +47,28 @@ class RoleAddModal extends React.Component {
    * 窗口点击“确认”按钮
    */
   handleOk = () => {
-    this.setState({ goSubmit: true })
+    this.setState({
+      goSubmit: true
+    })
   }
 
   /**
-   * 窗口点击“取消”按钮
+   * 窗口关闭
    */
-  handleCancel = () => {
-    this.props.onClose(false)
+  close = (type) => {
+    this.setState({
+      visible: false
+    })
+    this.props.onClose && this.props.onClose(type)
   }
+
   /**
    * 表单提交
    */
   handleSubmited = (err, value) => {
-    this.setState({ goSubmit: false })
+    this.setState({
+      goSubmit: false
+    })
     if (!err) {
       this.setState({
         loading: true,
@@ -68,11 +79,10 @@ class RoleAddModal extends React.Component {
         data: value
       }).then(res => {
         this.child.handleRest()
-        this.setState({
-          loading: false,
-        })
-        this.props.onClose(false)
+        this.close()
       }).catch(err => {
+        console.error(err)
+      }).then(() => {
         this.setState({
           loading: false
         })
@@ -80,23 +90,43 @@ class RoleAddModal extends React.Component {
 
     }
   }
-  render () {
-    const { visible, loading, goSubmit } = this.state
-    if (!this.props.show) {
+  render() {
+    const {
+      visible,
+      loading,
+      goSubmit
+    } = this.state
+    if (!visible) {
       return null
     } else
-      return (
-        <div>
-          <Modal
-            title="添加角色"
-            visible={visible}
-            onOk={this.handleOk}
-            confirmLoading={loading}
-            onCancel={this.handleCancel}
-          >
-            <RoleAddForm goSubmit={goSubmit} onSubmited={this.handleSubmited} onRef={this.ref}></RoleAddForm>
-          </Modal>
-        </div>
+      return ( <
+        div >
+        <
+        Modal title = "添加角色"
+        visible = {
+          visible
+        }
+        onOk = {
+          this.handleOk
+        }
+        confirmLoading = {
+          loading
+        }
+        onCancel = {
+          () => this.close('cancel')
+        } >
+        <
+        RoleAddForm goSubmit = {
+          goSubmit
+        }
+        onSubmited = {
+          this.handleSubmited
+        }
+        onRef = {
+          this.ref
+        } > < /RoleAddForm> <
+        /Modal> <
+        /div>
       )
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Popconfirm, message} from 'antd';
+import { Button, Popconfirm, message } from 'antd';
 import _ from 'lodash';
 import Sider from '../../component/sider/sider'
 import request from '@lib/request'
@@ -11,30 +11,35 @@ import RoleAddModal from './components/roleAddModal'
 import './style/role.scss'
 
 export default class Role extends React.Component {
+
   constructor(props) {
     super(props)
     this.state = {
       dataSource: [],
       selectedRowKeys: [],
       pagination: {},
-      roleAddFormShow: false,
       roleJurisdictionModalShow: false,
       loading: false,
       delLoading: false
     }
   }
 
+  seachVal = {} // 搜索内容
 
   componentWillMount() {
     this.fetch()
   }
 
+  /**
+   * 列表数据请求
+   */
   fetch = (json = {}) => {
     this.setState({ loading: true })
     let { dataSource, pagination } = this.state;
     let data = {
       roleName: '',
       ...json,
+      ...this.seachVal,
     }
     request({
       url: '/webApi/base/role/list',
@@ -66,27 +71,22 @@ export default class Role extends React.Component {
    * 搜索表单提交
    */
   handleFormSubmit = (val) => {
-    this.fetch(val)
+    this.seachVal = val
+    this.fetch()
   }
 
   /**
    * 添加对象按钮
    */
   handleAdd = () => {
-    this.handleRoleAddFormShowChange(true)
-  }
-
-  handleTableChange = (pagination, filters, sorter) => {
-    console.log(pagination)
+    this.roleAddModal.open()
   }
 
   /**
-   * 添加角色表单弹窗 状态改变
+   * 编辑对象
    */
-  handleRoleAddFormShowChange = (show) => {
-    this.setState((state) => ({
-      roleAddFormShow: show
-    }))
+  handleEditor = () => {
+
   }
 
   /**
@@ -98,6 +98,14 @@ export default class Role extends React.Component {
     }))
   }
 
+  /** 
+   * 关闭 添加/修改 角色弹窗
+   */
+  handleRoleAddModalClose = (cancel) => {
+    if (!cancel) {
+      this.fetch()
+    }
+  }
 
   /**
    * 批量删除
@@ -117,8 +125,8 @@ export default class Role extends React.Component {
       data: this.state.selectedRowKeys
     }).then(res => {
       let ids = this.state.selectedRowKeys.join(',') + ','
-      let {dataSource} = this.state
-      dataSource =  dataSource.filter(item => !~ids.indexOf(item.id+','))
+      let { dataSource } = this.state
+      dataSource = dataSource.filter(item => !~ids.indexOf(item.id + ','))
       this.setState({
         dataSource,
         selectedRowKeys: [],
@@ -139,6 +147,8 @@ export default class Role extends React.Component {
     this.setState({ selectedRowKeys });
   }
 
+  onRoleAddModalRef = (child) => this.roleAddModal = child
+
   render() {
     const { dataSource } = this.state;
     const columns = _.cloneDeep(roleConfig_config).map(v => {
@@ -147,10 +157,7 @@ export default class Role extends React.Component {
           return (columns.length >= 1
             ? (
               <span className="Dropdown_Menu_box">
-                {/* <Popconfirm title="确定要删除该角色吗?" onConfirm={() => this.handleDelete(record)}>
-                  <span></span>
-                </Popconfirm> */}
-                <span>编辑</span>
+                <span onClick={this.handleEditor}>编辑</span>
                 <span onClick={() => this.handleRoleJurisdictionModalShowChange(true)}>操作权限</span>
               </span>
             ) : null)
@@ -163,9 +170,9 @@ export default class Role extends React.Component {
         <Sider history={this.props.history} />
         <RoleSearchForm onSubmit={this.handleFormSubmit}></RoleSearchForm>
         <div>
-        <Popconfirm title="你确定要删除角色吗?" onConfirm={this.handleDel} okText="确定" cancelText="取消">
-          <Button className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
-        </Popconfirm>
+          <Popconfirm title="你确定要删除角色吗?" onConfirm={this.handleDel} okText="确定" cancelText="取消">
+            <Button className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
+          </Popconfirm>
         </div>
         <div className="alert_Btn">
           <Button type="primary" onClick={this.handleAdd}>创建角色</Button>
@@ -177,9 +184,8 @@ export default class Role extends React.Component {
           rowKey={"id"}
           onSelectChange={this.onSelectChange}
           loading={this.state.loading}
-          pagination={this.state.pagination}
-          onChange={this.handleTableChange} />
-        <RoleAddModal show={this.state.roleAddFormShow} onClose={this.handleRoleAddFormShowChange}></RoleAddModal>
+          pagination={this.state.pagination} />
+        <RoleAddModal onRef={this.onRoleAddModalRef} onClose={this.handleRoleAddModalClose}></RoleAddModal>
         <RoleJurisdictionModal show={this.state.roleJurisdictionModalShow} onClose={this.handleRoleJurisdictionModalShowChange}></RoleJurisdictionModal>
       </div>
     )
