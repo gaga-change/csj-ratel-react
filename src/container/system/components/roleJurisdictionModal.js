@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal } from 'antd';
 import RoleJurisdictionForm from './roleJurisdictionForm.js'
 import './roleJurisdiction.scss'
+import request from '@lib/request'
 
 /**
  * props:
@@ -16,18 +17,19 @@ class RoleJurisdictionModal extends React.Component {
     confirmLoading: false,
     goSubmit: false,
   }
-
+  obj = null
   componentDidMount() {
     this.props.onRef(this)
   }
 
-  open = () => this.init()
+  open = (obj) => this.init(obj)
 
   /**
    * 初始化，控制窗口显示还是隐藏
    * @param {*} props 
    */
-  init = () => {
+  init = (obj) => {
+    this.obj = obj
     let { visible } = this.state
     if (!visible) {
       this.setState({
@@ -57,19 +59,36 @@ class RoleJurisdictionModal extends React.Component {
    * 表单提交
    */
   handleSubmited = (err, value) => {
-    console.log(value)
     this.setState({ goSubmit: false })
-    if (!err) {
+    if (err) return
+    this.setState({
+      confirmLoading: true,
+    })
+    let menuList = []
+    value.forEach(item => {
+      if (item.checkAll || item.indeterminate) {
+        menuList.push(item.id)
+      }
+      if (item.checkedList.length) {
+        menuList.push( ...item.checkedList)
+      }
+    })
+    request({
+      url: '/webApi/base/role/addMenu',
+      method: 'post',
+      data: {
+        roleId: this.obj.id,
+        menuList
+      }
+    }).then(res => {
+      this.close()
+    }).catch(err => {
+      console.error(err)
+    }).then(() => {
       this.setState({
-        confirmLoading: true,
+        confirmLoading: false,
       })
-      setTimeout(() => {
-        this.setState({
-          confirmLoading: false,
-        })
-        this.close()
-      }, 1000)
-    }
+    })
   }
 
   render() {

@@ -17,7 +17,6 @@ class DataForm extends React.Component {
   }
 
   componentDidMount() {
-    console.log('init')
     this.initDicts()
   }
 
@@ -35,7 +34,6 @@ class DataForm extends React.Component {
       url: '/webApi/base/menu/selectAllMenu',
       method: 'get'
     }).then(res => {
-      console.log(res)
       let dicts = res.children
       dicts = dicts.map((item, index) => {
         let obj = {
@@ -53,7 +51,6 @@ class DataForm extends React.Component {
         }
         return obj
       })
-      console.log(dicts)
       this.setState({ jurisdictionList: dicts })
     }).catch(err => {
       console.error(err)
