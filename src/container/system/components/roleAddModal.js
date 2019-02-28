@@ -6,6 +6,7 @@ import request from '@lib/request'
 /**
  * props:
  *  onClose<Function> 通知父组件关闭当前弹窗。
+ *  onRef<Function> 回传当前组件对象
  * child:
  *  open<Function> 打开窗口
  *     (obj) 如果传递一个数据对象则为编辑
@@ -23,19 +24,14 @@ class RoleAddModal extends React.Component {
   }
 
   ref = (child) => this.child = child
-
-  open = (obj) => {
-    this.init(obj)
-  }
+  open = (obj) => this.init(obj)
 
   /**
    * 初始化，打开窗口
    * @param {*} props 
    */
-  init(obj) {
-    let {
-      visible
-    } = this.state
+  init = (obj) => {
+    let { visible } = this.state
     if (!visible) {
       this.setState({
         visible: true,
@@ -84,7 +80,7 @@ class RoleAddModal extends React.Component {
         data: value
       }).then(res => {
         this.child.handleRest()
-        this.close(null, {...obj, ...value})
+        this.close(null, { ...obj, ...value })
       }).catch(err => {
         console.error(err)
       }).then(() => {
@@ -95,11 +91,7 @@ class RoleAddModal extends React.Component {
     }
   }
   render() {
-    const {
-      visible,
-      loading,
-      goSubmit
-    } = this.state
+    const { visible, loading, goSubmit } = this.state
     if (!visible) {
       return null
     } else

@@ -18,7 +18,6 @@ export default class Role extends React.Component {
       dataSource: [],
       selectedRowKeys: [],
       pagination: {},
-      roleJurisdictionModalShow: false,
       loading: false,
       delLoading: false
     }
@@ -83,12 +82,10 @@ export default class Role extends React.Component {
   }
 
   /**
-   * 操作权限表单弹窗 状态改变
+   * 打开 权限操作 弹窗
    */
-  handleRoleJurisdictionModalShowChange = (show) => {
-    this.setState((state) => ({
-      roleJurisdictionModalShow: show
-    }))
+  openRoleJurisdictionModal = (...val) => {
+    this.roleJurisdictionModal.open(...val)
   }
 
   /** 
@@ -156,6 +153,7 @@ export default class Role extends React.Component {
   }
 
   onRoleAddModalRef = (child) => this.roleAddModal = child
+  onRoleJurisdictionModalRef = (child) => this.roleJurisdictionModal = child
 
   render() {
     const { dataSource } = this.state;
@@ -166,7 +164,7 @@ export default class Role extends React.Component {
             ? (
               <span className="Dropdown_Menu_box">
                 <span onClick={() => this.openRoleFormMoadl(record)}>编辑</span>
-                <span onClick={() => this.handleRoleJurisdictionModalShowChange(true)}>操作权限</span>
+                <span onClick={() => this.openRoleJurisdictionModal()}>操作权限</span>
               </span>
             ) : null)
         }
@@ -194,7 +192,7 @@ export default class Role extends React.Component {
           loading={this.state.loading}
           pagination={this.state.pagination} />
         <RoleAddModal onRef={this.onRoleAddModalRef} onClose={this.handleRoleAddModalClose}></RoleAddModal>
-        <RoleJurisdictionModal show={this.state.roleJurisdictionModalShow} onClose={this.handleRoleJurisdictionModalShowChange}></RoleJurisdictionModal>
+        <RoleJurisdictionModal onRef={this.onRoleJurisdictionModalRef}></RoleJurisdictionModal>
       </div>
     )
   }
