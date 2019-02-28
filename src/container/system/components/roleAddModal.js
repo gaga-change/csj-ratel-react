@@ -5,7 +5,7 @@ import request from '@lib/request'
 
 /**
  * props:
- *  onClose<Function> 通知父组件关闭当前弹窗。
+ *  onClose<Function> 弹窗关闭事件。
  *  onRef<Function> 回传当前组件对象
  * child:
  *  open<Function> 打开窗口

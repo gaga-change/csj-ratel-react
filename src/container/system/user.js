@@ -16,7 +16,6 @@ export default class User extends React.Component {
       pagination: {
 
       },
-      userAddFormShow: false,
       userJurisdictionModalShow: false,
       loading: false
     }
@@ -49,7 +48,7 @@ export default class User extends React.Component {
    * 添加对象按钮
    */
   handleAdd = () => {
-    this.handleUserAddFormShowChange(true)
+    this.userAddModal.open()
   }
 
   handleTableChange = (pagination, filters, sorter) => {
@@ -57,13 +56,13 @@ export default class User extends React.Component {
   }
 
   /**
-   * 添加角色表单弹窗 状态改变
+   * 添加角色表单弹窗 关闭
    */
-  handleUserAddFormShowChange = (show) => {
-    this.setState((state) => ({
-      userAddFormShow: show
-    }))
+  handleUserAddModalClose = (type, obj) => {
+    
   }
+
+  handleUserAddModalRef = child => this.userAddModal = child
 
   render() {
     const { dataSource } = this.state;
@@ -97,7 +96,7 @@ export default class User extends React.Component {
           loading={this.state.loading}
           pagination={this.state.pagination}
           onChange={this.handleTableChange} />
-        <UserAddModal show={this.state.userAddFormShow} onClose={this.handleUserAddFormShowChange}></UserAddModal>
+        <UserAddModal onClose={this.handleUserAddModalClose} onRef={this.handleUserAddModalRef}></UserAddModal>
       </div>
     )
   }
