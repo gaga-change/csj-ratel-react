@@ -10,19 +10,17 @@ import UserAddModal from './components/userAddModal'
 import './style/user.scss'
 
 export default class User extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      dataSource: [],
-      pagination: {},
-      userJurisdictionModalShow: false,
-      loading: false
-    }
+  state = {
+    dataSource: [],
+    pagination: {},
+    userJurisdictionModalShow: false,
+    loading: false,
+    roles: [], // 角色列表
   }
-
-
+  seachVal = {} // 搜索内容
   componentWillMount() {
     this.fetch()
+    this.initRole()
   }
 
   fetch = (json = {}) => {
@@ -31,7 +29,8 @@ export default class User extends React.Component {
     let data = {
       ...json,
       pageNum: pagination.current || 1,
-      pageSize: pagination.pageSize || 10
+      pageSize: pagination.pageSize || 10,
+      ...this.seachVal
     }
     request({
       url: '/webApi/base/user/selectByCondition',
@@ -59,6 +58,21 @@ export default class User extends React.Component {
   }
 
   /**
+   * 初始化角色列表
+   */
+  initRole = () => {
+    request({
+      url: '/webApi/base/role/list',
+      method: 'get',
+      data: { roleName: '' }
+    }).then(res => {
+      this.setState({ roles: res })
+    }).catch(err => {
+
+    })
+  }
+
+  /**
    * 删除
    */
   handleDelete = (obj) => {
@@ -72,8 +86,8 @@ export default class User extends React.Component {
         userId: obj.id,
       }
     }).then(res => {
-      dataSource = dataSource.filter(v => v.id != obj.id)
-      this.setState({dataSource})
+      dataSource = dataSource.filter(v => v.id !== obj.id)
+      this.setState({ dataSource })
     }).catch(err => {
 
     })
@@ -83,7 +97,8 @@ export default class User extends React.Component {
    * 搜索表单提交
    */
   handleFormSubmit = (val) => {
-    console.log(val)
+    this.seachVal = val
+    this.fetch()
   }
 
   /**
@@ -96,7 +111,7 @@ export default class User extends React.Component {
   handleTableChange = (pagination, filters, sorter) => {
     this.setState({
       pagination
-    },()=>{
+    }, () => {
       this.fetch()
     })
   }
@@ -109,7 +124,7 @@ export default class User extends React.Component {
   }
 
   handleDisableUser = (obj) => {
-    let {dataSource} = this.state
+    let { dataSource } = this.state
     console.log(obj)
     obj.userStatus = obj.userStatus === 0 ? 1 : 0
     request({
@@ -120,7 +135,7 @@ export default class User extends React.Component {
         userStatus: obj.userStatus === 0 ? 1 : 0
       }
     }).then(res => {
-      this.setState({dataSource})
+      this.setState({ dataSource })
     }).catch(err => {
 
     })
@@ -165,7 +180,7 @@ export default class User extends React.Component {
     return (
       <div className="User">
         <Sider history={this.props.history} />
-        <UserSearchForm onSubmit={this.handleFormSubmit}></UserSearchForm>
+        <UserSearchForm onSubmit={this.handleFormSubmit} roles={this.state.roles}></UserSearchForm>
         <div className="alert_Btn">
           <Button type="primary" onClick={this.handleAdd}>创建角色</Button>
         </div>
@@ -175,7 +190,7 @@ export default class User extends React.Component {
           loading={this.state.loading}
           pagination={this.state.pagination}
           onChange={this.handleTableChange} />
-        <UserAddModal onClose={this.handleUserAddModalClose} onRef={this.handleUserAddModalRef}></UserAddModal>
+        <UserAddModal onClose={this.handleUserAddModalClose} onRef={this.handleUserAddModalRef} roles={this.state.roles}></UserAddModal>
       </div>
     )
   }

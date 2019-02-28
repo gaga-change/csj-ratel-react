@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form, Input, Select, Tooltip, Icon } from 'antd';
-import request from '@lib/request'
 const { Option } = Select;
 const { TextArea } = Input;
 /**
@@ -16,28 +15,12 @@ class DataForm extends React.Component {
 
   componentDidMount() {
     this.props.onRef(this)
-    this.initRole()
   }
 
   componentWillReceiveProps(prevProps) {
     if (prevProps.goSubmit && !this.props.goSubmit) {
       this.handleSubmit()
     }
-  }
-
-  /**
-   * 初始化角色列表
-   */
-  initRole = () => {
-    request({
-      url: '/webApi/base/role/list',
-      method: 'get',
-      data: { roleName: '' }
-    }).then(res => {
-      this.setState({ roles: res })
-    }).catch(err => {
-
-    })
   }
 
   handleRest = () => {
@@ -79,7 +62,7 @@ class DataForm extends React.Component {
               placeholder="请选择用户角色"
             >
               {
-                this.state.roles.map(role => {
+                this.props.roles.map(role => {
                   return (<Option value={role.id} key={role.id}>{role.roleName}</Option>)
                 })
               }

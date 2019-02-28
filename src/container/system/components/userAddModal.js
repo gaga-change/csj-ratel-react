@@ -109,7 +109,7 @@ class UserAddModal extends React.Component {
           confirmLoading={confirmLoading}
           onCancel={() => this.close('cancel')}
         >
-          <UserAddForm goSubmit={goSubmit} onSubmited={this.handleSubmited} onRef={this.ref}></UserAddForm>
+          <UserAddForm goSubmit={goSubmit} onSubmited={this.handleSubmited} onRef={this.ref} roles={this.props.roles}></UserAddForm>
         </Modal>
       </div>
     )
