@@ -6,6 +6,7 @@ const CheckboxGroup = Checkbox.Group;
 
 /**
  * props:
+ *  checkedList<Array(int)> 已拥有权限
  *  goSubmit<Boolean> 是否进行表单提交操作。如果 false->true 则会提交表单
  *  onSubmited<Function> 表单提交结束。通知父组件将goSubmit修改为 false
  *      @returns err,values
@@ -24,6 +25,38 @@ class DataForm extends React.Component {
     if (prevProps.goSubmit && !this.props.goSubmit) {
       this.handleSubmit()
     }
+    if (this.props.checkedList !== prevProps.checkedList) {
+      this.setDefault(prevProps.checkedList)
+    }
+  }
+
+  /**
+   * 配置默认值
+   */
+  setDefault = (menus) => {
+    let { jurisdictionList } = this.state
+    let ids = menus.join(',') + ','
+    jurisdictionList.forEach(item => {
+      item.checkedList = []
+      item.indeterminate = false
+      item.checkAll = false
+      if (!ids) return
+      item.options.forEach(son => {
+        if (~ids.indexOf(son.value)) {
+          item.checkedList.push(son.value)
+        }
+      })
+      if (item.checkedList.length) {
+        if (item.checkedList.length === item.options.length) {
+          item.checkAll = true
+        } else {
+          item.indeterminate = true
+        }
+      } else if (~ids.indexOf(item.id)) {
+        item.checkAll = true
+      }
+    })
+    this.setState({ jurisdictionList })
   }
 
   /**
@@ -52,6 +85,7 @@ class DataForm extends React.Component {
         return obj
       })
       this.setState({ jurisdictionList: dicts })
+      this.setDefault(this.props.checkedList)
     }).catch(err => {
       console.error(err)
     })

@@ -16,6 +16,7 @@ class RoleJurisdictionModal extends React.Component {
     visible: false,
     confirmLoading: false,
     goSubmit: false,
+    menus: [] // 已拥有角色
   }
   obj = null
   componentDidMount() {
@@ -30,6 +31,19 @@ class RoleJurisdictionModal extends React.Component {
    */
   init = (obj) => {
     this.obj = obj
+
+    request({
+      url: '/webApi/base/role/selectMenus',
+      method: 'get',
+      data: {
+        roleId: this.obj.id,
+      }
+    }).then(res => {
+      this.setState({menus: res})
+    }).catch(err => {
+      console.error(err)
+    })
+
     let { visible } = this.state
     if (!visible) {
       this.setState({
@@ -49,6 +63,7 @@ class RoleJurisdictionModal extends React.Component {
    * 窗口关闭
    */
   close = (type, obj) => {
+    this.setState({menus: []})
     this.setState({
       visible: false
     })
@@ -102,7 +117,7 @@ class RoleJurisdictionModal extends React.Component {
           confirmLoading={confirmLoading}
           onCancel={() => this.close('cancel')}
         >
-          <RoleJurisdictionForm goSubmit={goSubmit} onSubmited={this.handleSubmited}></RoleJurisdictionForm>
+          <RoleJurisdictionForm goSubmit={goSubmit} onSubmited={this.handleSubmited} checkedList={this.state.menus}></RoleJurisdictionForm>
         </Modal>
       </div>
     )
