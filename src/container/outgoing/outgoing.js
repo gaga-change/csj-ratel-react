@@ -44,12 +44,14 @@ export default class Outgoing extends React.Component {
       }
       this.fetch(value)
     }
+
     if(type!=='select'){
       this.setState({visible:false})
       if(this.child){
         this.child.handleRest()
       }
     }
+    
   }
 
   handleTableChange = (pagination, filters, sorter) => {

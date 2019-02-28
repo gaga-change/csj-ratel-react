@@ -23,6 +23,7 @@ class Router extends React.Component {
                                 });
 
                                 return <Route 
+                                  strict={true}
                                   exact={v.path==='/'||v.path==='/system'}   
                                   path={v.path} key={v.path} 
                                   component={BasicLayout}/>

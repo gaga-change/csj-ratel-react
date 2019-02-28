@@ -64,31 +64,31 @@ export  const formTable_config=[
   },
   {
     title:'商品编号',
-    dataIndex: '',
+    dataIndex:'skuCode',
   },
   {
     title:'商品名称',
-    dataIndex: '',
+    dataIndex:'skuName',
   },
   {
     title:'品牌',
-    dataIndex: '',
+    dataIndex:'brandName',
   },
   {
     title:'规格型号',
-    dataIndex: '',
+    dataIndex: 'skuFormat',
   },
   {
     title:'单位',
-    dataIndex: '',
+    dataIndex: 'skuUnitName',
   },
   {
     title:'单价（成本）',
-    dataIndex: '',
+    dataIndex: 'costPrice',
   },
   {
     title:'仓库',
-    dataIndex: '',
+    dataIndex: 'warehouseName',
   },
   {
     title:'出库数量',
@@ -135,11 +135,13 @@ export  const goodsInStorage_config=[
   },
   {
     title:'仓库',
-    dataIndex: '',
+    dataIndex:'warehouseName',
   },
   {
     title:'可用库存',
-    dataIndex: '',
+    dataIndex:'skuQty',
+    render:(v,record)=>record.skuQty-record.lockQty
+
   },
 ]
 

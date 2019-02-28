@@ -2,7 +2,8 @@
 export  const indexTableColumnsConfig=[
   {
     title: '序号',
-    dataIndex: 'index'
+    dataIndex: 'index',
+    width:50
   },
   {
     title:'客户编码',

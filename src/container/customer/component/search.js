@@ -27,7 +27,7 @@ class CommodityForm extends React.Component {
                 selectWordsArr.includes('客户名称')&&
                 <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
                   <Form.Item label="客户名称">
-                    { getFieldDecorator('username', {
+                    { getFieldDecorator('customerName', {
                       initialValue:'',
                       rules: [{ required: false, message: '' }],
                     })(
@@ -40,7 +40,7 @@ class CommodityForm extends React.Component {
                  selectWordsArr.includes('负责人')&&
                  <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
                   <Form.Item label="负责人">
-                    { getFieldDecorator('password', {
+                    { getFieldDecorator('customerLinkUser', {
                       initialValue:'',
                       rules: [{ required: false, message: '' }],
                     })(
@@ -54,8 +54,8 @@ class CommodityForm extends React.Component {
                selectWordsArr.includes('手机')&&
                <Col span={6} style={{width:'300px',marginBottom:'12px'}}>
                   <Form.Item label="手机">
-                    { getFieldDecorator('手机', {
-                      rules: [{ required: false, message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/ }],
+                    { getFieldDecorator('customerLinkuserTel', {
+                      rules: [{ required: false}],
                     })(
                       <Input autoComplete='off' placeholder="请输入手机号" />
                     )}

@@ -46,7 +46,7 @@ export default class Stock extends React.Component {
     this.props.history.replace(`/stock?${stringify(data)}`)
     request({
       url: '/webApi/stock/page',
-      method: 'post',
+      method: 'get',
       data:data
     }).then(res => {
        if(res.list&&Array.isArray(res.list)){
@@ -67,7 +67,7 @@ export default class Stock extends React.Component {
 
     request({
       url:'/webApi/stock/count',
-      method: 'post',
+      method: 'get',
       data:data
     }).then(res => {
       this.setState({count:res})
@@ -93,15 +93,14 @@ export default class Stock extends React.Component {
 
   export = ()=>{
     let { search } = this.props.history.location;
-    this.setState({exportLoding:true})
     request({
-      url: '/webApi/stock/export',
-      method:'get',
+      url:'/webApi/stock/export',
+      method: 'get',
       data:parse(search.slice(1))
-    }).then(res => {
-      this.setState({exportLoding:false})
+    }).then(data => {
+      console.log(data)
     }).catch(err=>{
-      this.setState({exportLoding:false})
+      console.log(err)
     })
   }
 
@@ -130,7 +129,7 @@ export default class Stock extends React.Component {
                      </span>
                    }
                </div>
-              <Button type="primary" onClick={this.export}>库存导出</Button>
+               <Button type="primary"  onClick={this.export} >库存导出</Button>
             </div>
             <FetchTable 
               dataSource={dataSource} 
@@ -142,4 +141,6 @@ export default class Stock extends React.Component {
     );
   }
 }
+
+
 

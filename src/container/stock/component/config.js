@@ -26,7 +26,8 @@ export  const indexTableColumnsConfig=[
   },
   {
     title:'可用库存',
-    dataIndex:'skuQty'
+    dataIndex:'skuQty',
+    render:(v,record)=>record.skuQty-record.lockQty
   },
   {
     title:'锁定库存',

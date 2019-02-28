@@ -274,6 +274,7 @@ module.exports = function(webpackEnv) {
         '@layout':path.resolve(__dirname, '../src/layout'),
         '@redux':path.resolve(__dirname, '../src/redux'),
         '@router':path.resolve(__dirname, '../src/router'),
+        '@publickApi':path.resolve(__dirname, '../src/publickApi'),
       },
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding

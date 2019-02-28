@@ -14,12 +14,14 @@ service.interceptors.response.use(
        if(response.data&&response.data.success){
          selectMessage('success','数据请求成功！')
          return Promise.resolve(response.data&&response.data.data)
+       } else if(response.request.responseURL.includes('export')){
+         selectMessage('success','数据请求成功！')
+         return Promise.resolve(response.data) 
        } else if(response.data&&response.data.code==='ratel-512'){
-         console.log(response.data.code)
-         debugger
          if(!window.location.hash.includes('login')){
            selectMessage('error','用户未登陆或登录失效 !')
            window.location.href=`${window.location.href}/#/login`
+           window.event.returnValue=false; 
            sessionStorage.clear()
          }
 
@@ -33,7 +35,15 @@ service.interceptors.response.use(
     }
   },
   error => {
-    selectMessage('error','请求异常！')
+    if(!window.location.hash.includes('login')){
+      selectMessage('error','请求异常,即将关闭当前会话')
+      window.location.href=`${window.location.href}/#/login`
+      window.event.returnValue=false; 
+      sessionStorage.clear()
+    } else{
+      selectMessage('error','请求异常！')
+    }
+
     return Promise.reject(error)
   }
 )
