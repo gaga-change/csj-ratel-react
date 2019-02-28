@@ -16,13 +16,11 @@ service.interceptors.response.use(
          return Promise.resolve(response.data&&response.data.data)
        } else if(response.data&&response.data.code==='ratel-512'){
          console.log(response.data.code)
-         debugger
          if(!window.location.hash.includes('login')){
            selectMessage('error','用户未登陆或登录失效 !')
            window.location.href=`${window.location.href}/#/login`
            sessionStorage.clear()
          }
-
        } else {
          selectMessage('error',`${response.data.errorMsg||'请求异常！'}`)
          return Promise.reject(response.data)
