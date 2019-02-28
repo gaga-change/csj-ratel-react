@@ -1,7 +1,5 @@
 import React from 'react'
-import {
-  Modal
-} from 'antd'
+import { Modal } from 'antd'
 import RoleAddForm from './roleAddForm.js'
 import request from '@lib/request'
 
@@ -10,12 +8,14 @@ import request from '@lib/request'
  *  onClose<Function> 通知父组件关闭当前弹窗。
  * child:
  *  open<Function> 打开窗口
+ *     (obj) 如果传递一个数据对象则为编辑
  */
 class RoleAddModal extends React.Component {
   state = {
     visible: false,
     loading: false,
     goSubmit: false,
+    obj: null,
   }
 
   componentDidMount() {
@@ -24,21 +24,22 @@ class RoleAddModal extends React.Component {
 
   ref = (child) => this.child = child
 
-  open = (id) => {
-    this.init(id)
+  open = (obj) => {
+    this.init(obj)
   }
 
   /**
    * 初始化，打开窗口
    * @param {*} props 
    */
-  init() {
+  init(obj) {
     let {
       visible
     } = this.state
     if (!visible) {
       this.setState({
         visible: true,
+        obj,
       })
     }
   }
@@ -73,13 +74,17 @@ class RoleAddModal extends React.Component {
       this.setState({
         loading: true,
       })
+      let { obj } = this.state
+      if (obj) {
+        value.roleId = obj.id
+      }
       request({
-        url: '/webApi/base/role/add',
+        url: obj ? '/webApi/base/role/update' : '/webApi/base/role/add',
         method: 'post',
         data: value
       }).then(res => {
         this.child.handleRest()
-        this.close()
+        this.close(null, value)
       }).catch(err => {
         console.error(err)
       }).then(() => {
@@ -87,7 +92,6 @@ class RoleAddModal extends React.Component {
           loading: false
         })
       })
-
     }
   }
   render() {
@@ -100,18 +104,19 @@ class RoleAddModal extends React.Component {
       return null
     } else
       return (<div>
-        <Modal title="添加角色"
+        <Modal title={this.state.obj ? '编辑角色' : '添加角色'}
           visible={visible}
           onOk={this.handleOk}
           confirmLoading={loading}
           onCancel={() => this.close('cancel')} >
-          <RoleAddForm goSubmit={goSubmit}
+          <RoleAddForm
+            obj={this.state.obj}
+            goSubmit={goSubmit}
             onSubmited={this.handleSubmited}
             onRef={this.ref} >
           </RoleAddForm>
         </Modal>
-      </div>
-      )
+      </div>)
   }
 }
 

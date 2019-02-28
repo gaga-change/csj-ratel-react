@@ -1,5 +1,5 @@
 import React from 'react'
-import {Form, Input} from 'antd'
+import { Form, Input } from 'antd'
 const { TextArea } = Input
 /**
  * props:
@@ -11,13 +11,13 @@ class DataForm extends React.Component {
   state = {
   }
 
-  componentWillReceiveProps (prevProps) {
+  componentWillReceiveProps(prevProps) {
     if (prevProps.goSubmit && !this.props.goSubmit) {
       this.handleSubmit()
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.onRef(this)
   }
 
@@ -31,9 +31,9 @@ class DataForm extends React.Component {
     this.props.form.resetFields()
   }
 
-  render () {
+  render() {
     const { getFieldDecorator } = this.props.form
-
+    const { obj = {} } = this.props
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -52,10 +52,11 @@ class DataForm extends React.Component {
         >
           {getFieldDecorator('roleName', {
             rules: [{
-              required: true, message: '请输入角色名称！',
+              required: true, message: '请输入角色名称！', whitespace: true,
             }],
+            initialValue: obj.roleName
           })(
-            <Input maxLength={50}/>
+            <Input maxLength={50} />
           )}
         </Form.Item>
         <Form.Item
@@ -66,8 +67,9 @@ class DataForm extends React.Component {
             rules: [{
               required: false, message: '请输入角色描述！',
             }],
+            initialValue: obj.roleDesc
           })(
-            <TextArea rows={4} maxLength={300}/>
+            <TextArea rows={4} maxLength={300} />
           )}
         </Form.Item>
       </Form>

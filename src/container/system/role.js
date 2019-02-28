@@ -85,8 +85,9 @@ export default class Role extends React.Component {
   /**
    * 编辑对象
    */
-  handleEditor = () => {
-
+  handleEditor = (item) => {
+    console.log(item)
+    this.roleAddModal.open(item)
   }
 
   /**
@@ -157,7 +158,7 @@ export default class Role extends React.Component {
           return (columns.length >= 1
             ? (
               <span className="Dropdown_Menu_box">
-                <span onClick={this.handleEditor}>编辑</span>
+                <span onClick={() => this.handleEditor(record)}>编辑</span>
                 <span onClick={() => this.handleRoleJurisdictionModalShowChange(true)}>操作权限</span>
               </span>
             ) : null)
