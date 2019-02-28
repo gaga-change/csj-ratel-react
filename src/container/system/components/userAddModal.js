@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from 'antd';
 import UserAddForm from './userAddForm.js'
+import request from '@lib/request'
 
 /**
  * props:
@@ -30,7 +31,7 @@ class UserAddModal extends React.Component {
    * @param {*} props 
    */
   init(obj) {
-    this.setState({obj})
+    this.setState({ obj })
     let { visible } = this.state
     if (!visible) {
       this.setState({
@@ -39,9 +40,9 @@ class UserAddModal extends React.Component {
     }
   }
 
-   /**
-   * 窗口关闭
-   */
+  /**
+  * 窗口关闭
+  */
   close = (type, obj) => {
     this.setState({
       visible: false
@@ -60,17 +61,40 @@ class UserAddModal extends React.Component {
    * 表单提交
    */
   handleSubmited = (err, value) => {
+    console.log(value)
+    let info = sessionStorage.getItem('info')
+    info = info ? JSON.parse(info) : {}
     this.setState({ goSubmit: false })
     if (!err) {
       this.setState({
         confirmLoading: true,
       })
-      setTimeout(() => {
+      let { obj } = this.state
+      if (obj) {
+        value.userId = obj.id
+      }
+      request({
+        url: '/webApi/base/user/add',
+        method: 'post',
+        data: {
+          ...value,
+          isAdmin: 0,
+          userStatus: 0,
+          ownerCode: info.ownerCode,
+          ownerName: info.ownerName
+        }
+      }).then(res => {
+        this.child.handleRest()
+        this.close(null, { ...obj, ...value })
+      }).catch(err => {
+        console.error(err)
+      }).then(() => {
         this.setState({
           confirmLoading: false,
         })
-        this.close(null, value)
-      }, 1000)
+      })
+
+
     }
   }
   render() {
@@ -85,7 +109,7 @@ class UserAddModal extends React.Component {
           confirmLoading={confirmLoading}
           onCancel={() => this.close('cancel')}
         >
-          <UserAddForm goSubmit={goSubmit} onSubmited={this.handleSubmited}></UserAddForm>
+          <UserAddForm goSubmit={goSubmit} onSubmited={this.handleSubmited} onRef={this.ref}></UserAddForm>
         </Modal>
       </div>
     )

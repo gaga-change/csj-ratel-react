@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Select, Tooltip, Icon } from 'antd';
+import request from '@lib/request'
 const { Option } = Select;
 const { TextArea } = Input;
 /**
@@ -10,6 +11,12 @@ const { TextArea } = Input;
  */
 class DataForm extends React.Component {
   state = {
+    roles: []
+  }
+
+  componentDidMount() {
+    this.props.onRef(this)
+    this.initRole()
   }
 
   componentWillReceiveProps(prevProps) {
@@ -18,11 +25,31 @@ class DataForm extends React.Component {
     }
   }
 
+  /**
+   * 初始化角色列表
+   */
+  initRole = () => {
+    request({
+      url: '/webApi/base/role/list',
+      method: 'get',
+      data: { roleName: '' }
+    }).then(res => {
+      this.setState({ roles: res })
+    }).catch(err => {
+
+    })
+  }
+
+  handleRest = () => {
+    this.props.form.resetFields()
+  }
+
   handleSubmit = () => {
     this.props.form.validateFieldsAndScroll((err, values) => {
       this.props.onSubmited(err, values)
     })
   }
+
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -43,7 +70,7 @@ class DataForm extends React.Component {
           {...formItemLayout}
           label="用户角色"
         >
-          {getFieldDecorator('role', {
+          {getFieldDecorator('roleId', {
             rules: [{
               required: true, message: '请选择用户角色！',
             }],
@@ -51,8 +78,11 @@ class DataForm extends React.Component {
             <Select
               placeholder="请选择用户角色"
             >
-              <Option value="销售">销售</Option>
-              <Option value="采购">采购</Option>
+              {
+                this.state.roles.map(role => {
+                  return (<Option value={role.id} key={role.id}>{role.roleName}</Option>)
+                })
+              }
             </Select>
           )}
         </Form.Item>
@@ -60,21 +90,26 @@ class DataForm extends React.Component {
           {...formItemLayout}
           label="用户名"
         >
-          {getFieldDecorator('username', {
+          {getFieldDecorator('userName', {
             rules: [{
-              required: true, message: '请输入用户名！',
+              required: true, message: '请输入用户名！', whitespace: true,
+            }, {
+              message: '用户名长度必须为6~20位字符', min: 6, max: 20,
             }],
           })(
-            <Input placeholder="6~12位字符，字母区分大小写" />
+            <Input placeholder="6~20位字符，字母区分大小写" />
           )}
         </Form.Item>
         <Form.Item
           {...formItemLayout}
           label="手机号"
         >
-          {getFieldDecorator('phone', {
+          {getFieldDecorator('linkTel', {
             rules: [{
               required: true, message: '请输入手机号！',
+            },
+            {
+              message: '不是正确的手机号码', pattern: /^1[34578]\d{9}$/,
             }],
           })(
             <Input placeholder="请输入手机号" />
@@ -83,8 +118,7 @@ class DataForm extends React.Component {
         <Form.Item
           {...formItemLayout}
           label={(
-            <span>
-              密码&nbsp;
+            <span>密码
               <Tooltip title="6-20位，字母与数字结合，字母区分大小写，初始密码默认为123456">
                 <Icon type="question-circle-o" />
               </Tooltip>
@@ -94,16 +128,24 @@ class DataForm extends React.Component {
           {getFieldDecorator('password', {
             rules: [{
               required: true, message: '请输入密码！',
+            }, {
+              message: '密码长度必须为6~20位字符', min: 6, max: 20,
+            }, {
+              message: '密码不能全部为数字', pattern: /^.*[^\d].*$/
+            }, {
+              message: '密码不能全部为字母', pattern: /^.*[^A-z].*$/
+            }, {
+              message: '密码只能为数字和字母', pattern: /^[A-Za-z0-9]+$/
             }],
           })(
-            <Input placeholder="6-20位，字母与数字结合，字母区分大小写" type="password"/>
+            <Input placeholder="6-20位，字母与数字结合，字母区分大小写" type="password" />
           )}
         </Form.Item>
         <Form.Item
           {...formItemLayout}
           label="备注"
         >
-          {getFieldDecorator('remark', {
+          {getFieldDecorator('remarkInfo', {
             rules: [{
               required: false, message: '请输入备注！',
             }],
