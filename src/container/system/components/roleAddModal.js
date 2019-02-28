@@ -99,34 +99,18 @@ class RoleAddModal extends React.Component {
     if (!visible) {
       return null
     } else
-      return ( <
-        div >
-        <
-        Modal title = "添加角色"
-        visible = {
-          visible
-        }
-        onOk = {
-          this.handleOk
-        }
-        confirmLoading = {
-          loading
-        }
-        onCancel = {
-          () => this.close('cancel')
-        } >
-        <
-        RoleAddForm goSubmit = {
-          goSubmit
-        }
-        onSubmited = {
-          this.handleSubmited
-        }
-        onRef = {
-          this.ref
-        } > < /RoleAddForm> <
-        /Modal> <
-        /div>
+      return (<div>
+        <Modal title="添加角色"
+          visible={visible}
+          onOk={this.handleOk}
+          confirmLoading={loading}
+          onCancel={() => this.close('cancel')} >
+          <RoleAddForm goSubmit={goSubmit}
+            onSubmited={this.handleSubmited}
+            onRef={this.ref} >
+          </RoleAddForm>
+        </Modal>
+      </div>
       )
   }
 }
