@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Popconfirm } from 'antd';
 import _ from 'lodash';
+import request from '@lib/request'
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import UserSearchForm from './components/userSearchForm'
@@ -12,10 +13,8 @@ export default class User extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      dataSource: [{ id: 1 }, { id: 2 }],
-      pagination: {
-
-      },
+      dataSource: [],
+      pagination: {},
       userJurisdictionModalShow: false,
       loading: false
     }
@@ -26,15 +25,58 @@ export default class User extends React.Component {
     this.fetch()
   }
 
-  fetch = () => {
-
+  fetch = (json = {}) => {
+    this.setState({ loading: true })
+    let { dataSource, pagination } = this.state;
+    let data = {
+      ...json,
+      pageNum: pagination.current || 1,
+      pageSize: pagination.pageSize || 10
+    }
+    request({
+      url: '/webApi/base/user/selectByCondition',
+      method: 'post',
+      data: data
+    }).then(res => {
+      if (res.list && Array.isArray(res.list)) {
+        res.list.forEach(item => {
+          item.gmtCreate = this._formData(item.gmtCreate)
+          item.statusName = item.userStatus === 0 ? '启用' : '禁用'
+        })
+        dataSource = res.list
+        pagination.total = res.total
+      }
+      this.setState({
+        dataSource,
+        pagination,
+        loading: false,
+      })
+    }).catch(err => {
+      this.setState({
+        loading: false,
+      })
+    })
   }
 
   /**
    * 删除
    */
-  handleDelete = (item) => {
-    console.log(item)
+  handleDelete = (obj) => {
+    console.log(obj)
+    let { dataSource } = this.state;
+
+    request({
+      url: '/webApi/base/user/delete',
+      method: 'get',
+      data: {
+        userId: obj.id,
+      }
+    }).then(res => {
+      dataSource = dataSource.filter(v => v.id != obj.id)
+      this.setState({dataSource})
+    }).catch(err => {
+
+    })
   }
 
   /**
@@ -52,14 +94,48 @@ export default class User extends React.Component {
   }
 
   handleTableChange = (pagination, filters, sorter) => {
-    console.log(pagination)
+    this.setState({
+      pagination
+    },()=>{
+      this.fetch()
+    })
   }
 
   /**
    * 添加角色表单弹窗 关闭
    */
   handleUserAddModalClose = (type, obj) => {
-    
+
+  }
+
+  handleDisableUser = (obj) => {
+    let {dataSource} = this.state
+    console.log(obj)
+    obj.userStatus = obj.userStatus === 0 ? 1 : 0
+    request({
+      url: '/webApi/base/user/updateUserStatus',
+      method: 'post',
+      data: {
+        userId: obj.id,
+        userStatus: obj.userStatus === 0 ? 1 : 0
+      }
+    }).then(res => {
+      this.setState({dataSource})
+    }).catch(err => {
+
+    })
+  }
+
+  _formData(date) {
+    date = new Date(date)
+    let d = new Date()
+    function _(num) {
+      if (num < 10) {
+        return '0' + num
+      }
+      return num
+    }
+    return `${d.getFullYear()}-${_(d.getMonth() + 1)}-${_(d.getDay())} ${_(d.getHours())}:${_(d.getMinutes())}:${_(d.getSeconds())}`
   }
 
   handleUserAddModalRef = child => this.userAddModal = child
@@ -69,12 +145,15 @@ export default class User extends React.Component {
     const columns = _.cloneDeep(userConfig_config).map(v => {
       if (v.render === '') {
         v.render = (text, record) => {
+          let statusName = record.userStatus === 0 ? '禁用' : '启用'
           return (columns.length >= 1
             ? (
               <span className="Dropdown_Menu_box">
                 <span>查看</span>
-                <span>禁用</span>
-                <Popconfirm title="确定要删除该角色吗?" onConfirm={() => this.handleDelete(record)}>
+                <Popconfirm title={`确定要${statusName}该账户吗？`} onConfirm={() => this.handleDisableUser(record)}>
+                  <span>{statusName}</span>
+                </Popconfirm>
+                <Popconfirm title="确定要删除账户吗？" onConfirm={() => this.handleDelete(record)}>
                   <span>删除</span>
                 </Popconfirm>
               </span>

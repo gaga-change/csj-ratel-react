@@ -22,35 +22,35 @@ export  const roleConfig_config= [
 export  const userConfig_config= [
     {
         title: '用户名',
-        dataIndex: ''
+        dataIndex: 'userName'
     },
     {
         title: '手机',
-        dataIndex: ''
+        dataIndex: 'linkTel'
     },
     {
         title: '用户角色',
-        dataIndex: ''
+        dataIndex: 'roleName'
     },
     {
         title: '启用状态',
-        dataIndex: ''
+        dataIndex: 'statusName'
     },
     {
         title: '创建日期',
-        dataIndex: ''
+        dataIndex: 'gmtCreate'
     },
     {
         title: '创建者',
-        dataIndex: ''
+        dataIndex: 'createrName'
     },
     {
         title: '最后操作日期',
-        dataIndex: ''
+        dataIndex: 'gmtModify'
     },
     {
         title: '最后操作者',
-        dataIndex: ''
+        dataIndex: 'modifierName'
     },
     {
         title: '操作',
