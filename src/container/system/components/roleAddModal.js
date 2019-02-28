@@ -56,11 +56,11 @@ class RoleAddModal extends React.Component {
   /**
    * 窗口关闭
    */
-  close = (type) => {
+  close = (type, obj) => {
     this.setState({
       visible: false
     })
-    this.props.onClose && this.props.onClose(type)
+    this.props.onClose && this.props.onClose(type, obj)
   }
 
   /**
@@ -84,7 +84,7 @@ class RoleAddModal extends React.Component {
         data: value
       }).then(res => {
         this.child.handleRest()
-        this.close(null, value)
+        this.close(null, {...obj, ...value})
       }).catch(err => {
         console.error(err)
       }).then(() => {

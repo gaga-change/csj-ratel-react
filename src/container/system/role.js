@@ -76,17 +76,9 @@ export default class Role extends React.Component {
   }
 
   /**
-   * 添加对象按钮
+   * 添加/编辑 对象按钮
    */
-  handleAdd = () => {
-    this.roleAddModal.open()
-  }
-
-  /**
-   * 编辑对象
-   */
-  handleEditor = (item) => {
-    console.log(item)
+  openRoleFormMoadl = (item) => {
     this.roleAddModal.open(item)
   }
 
@@ -102,7 +94,22 @@ export default class Role extends React.Component {
   /** 
    * 关闭 添加/修改 角色弹窗
    */
-  handleRoleAddModalClose = (cancel) => {
+  handleRoleAddModalClose = (cancel, obj) => {
+    if (obj && obj.id) { // 编辑
+      console.log('编辑')
+      console.log(obj)
+      let { dataSource } = this.state
+      dataSource.forEach((item, index) => {
+        if (item.id === obj.id) {
+          dataSource[index] = obj
+        }
+        this.setState({
+          dataSource
+        })
+      })
+
+      return
+    }
     if (!cancel) {
       this.fetch()
     }
@@ -158,7 +165,7 @@ export default class Role extends React.Component {
           return (columns.length >= 1
             ? (
               <span className="Dropdown_Menu_box">
-                <span onClick={() => this.handleEditor(record)}>编辑</span>
+                <span onClick={() => this.openRoleFormMoadl(record)}>编辑</span>
                 <span onClick={() => this.handleRoleJurisdictionModalShowChange(true)}>操作权限</span>
               </span>
             ) : null)
@@ -176,7 +183,7 @@ export default class Role extends React.Component {
           </Popconfirm>
         </div>
         <div className="alert_Btn">
-          <Button type="primary" onClick={this.handleAdd}>创建角色</Button>
+          <Button type="primary" onClick={this.openRoleFormMoadl}>创建角色</Button>
         </div>
         <SelectingTable
           selectedRowKeys={this.state.selectedRowKeys}
