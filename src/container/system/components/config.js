@@ -57,10 +57,6 @@ export  const jurisdiction_config= [
 
 
 export  const roleConfig_config= [
-    {
-        title: '序号',
-        dataIndex: 'index'
-    },
   {
       title: '角色ID',
       dataIndex: 'id'

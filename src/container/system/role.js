@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Popconfirm, message} from 'antd';
 import _ from 'lodash';
 import Sider from '../../component/sider/sider'
 import request from '@lib/request'
-import FetchTable from '../../component/fetchTable/fetchTable'
+import SelectingTable from '../../component/selectionTable/selectionTable'
 import RoleSearchForm from './components/roleSearchForm'
 import RoleJurisdictionModal from './components/roleJurisdictionModal'
 import { roleConfig_config } from './components/config'
@@ -15,10 +15,12 @@ export default class Role extends React.Component {
     super(props)
     this.state = {
       dataSource: [],
+      selectedRowKeys: [],
       pagination: {},
       roleAddFormShow: false,
       roleJurisdictionModalShow: false,
-      loading: false
+      loading: false,
+      delLoading: false
     }
   }
 
@@ -33,8 +35,6 @@ export default class Role extends React.Component {
     let data = {
       roleName: '',
       ...json,
-      // pageNum: pagination.current || 1,
-      // pageSize: pagination.pageSize || 10
     }
     request({
       url: '/webApi/base/role/list',
@@ -98,6 +98,47 @@ export default class Role extends React.Component {
     }))
   }
 
+
+  /**
+   * 批量删除
+   */
+  handleDel = () => {
+    console.log(this.state.selectedRowKeys)
+    if (!this.state.selectedRowKeys.length) {
+      message.info('请先勾选角色！');
+      return
+    }
+    this.setState({
+      delLoading: true,
+    })
+    request({
+      url: '/webApi/base/role/delete',
+      method: 'post',
+      data: this.state.selectedRowKeys
+    }).then(res => {
+      let ids = this.state.selectedRowKeys.join(',') + ','
+      let {dataSource} = this.state
+      dataSource =  dataSource.filter(item => !~ids.indexOf(item.id+','))
+      this.setState({
+        dataSource,
+        selectedRowKeys: [],
+        delLoading: false,
+      })
+    }).catch(err => {
+      this.setState({
+        delLoading: false,
+      })
+    })
+  }
+
+  /**
+   * 表格选择
+   */
+  onSelectChange = (selectedRowKeys, other) => {
+    console.log('当前选择的key值 ', selectedRowKeys, other);
+    this.setState({ selectedRowKeys });
+  }
+
   render() {
     const { dataSource } = this.state;
     const columns = _.cloneDeep(roleConfig_config).map(v => {
@@ -121,13 +162,20 @@ export default class Role extends React.Component {
       <div className="Role">
         <Sider history={this.props.history} />
         <RoleSearchForm onSubmit={this.handleFormSubmit}></RoleSearchForm>
+        <div>
+        <Popconfirm title="你确定要删除角色吗?" onConfirm={this.handleDel} okText="确定" cancelText="取消">
+          <Button className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
+        </Popconfirm>
+        </div>
         <div className="alert_Btn">
           <Button type="primary" onClick={this.handleAdd}>创建角色</Button>
         </div>
-        <FetchTable
+        <SelectingTable
+          selectedRowKeys={this.state.selectedRowKeys}
           dataSource={dataSource}
           columns={columns}
-          useIndex={true}
+          rowKey={"id"}
+          onSelectChange={this.onSelectChange}
           loading={this.state.loading}
           pagination={this.state.pagination}
           onChange={this.handleTableChange} />
