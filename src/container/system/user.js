@@ -104,8 +104,8 @@ export default class User extends React.Component {
   /**
    * 添加对象按钮
    */
-  handleAdd = () => {
-    this.userAddModal.open()
+  handleAdd = (obj) => {
+    this.userAddModal.open(obj)
   }
 
   handleTableChange = (pagination, filters, sorter) => {
@@ -164,7 +164,7 @@ export default class User extends React.Component {
           return (columns.length >= 1
             ? (
               <span className="Dropdown_Menu_box">
-                <span>查看</span>
+                <span onClick={() => this.handleAdd(record)}>查看</span>
                 <Popconfirm title={`确定要${statusName}该账户吗？`} onConfirm={() => this.handleDisableUser(record)}>
                   <span>{statusName}</span>
                 </Popconfirm>

@@ -36,6 +36,7 @@ class DataForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { obj = {} } = this.props
 
     const formItemLayout = {
       labelCol: {
@@ -57,13 +58,14 @@ class DataForm extends React.Component {
             rules: [{
               required: true, message: '请选择用户角色！',
             }],
+            initialValue: obj.roleName&&obj.roleId ?  obj.roleId : null
           })(
             <Select
               placeholder="请选择用户角色"
             >
               {
                 this.props.roles.map(role => {
-                  return (<Option value={role.id} key={role.id}>{role.roleName}</Option>)
+                  return (<Option  value={role.id} key={role.id}>{role.roleName}</Option>)
                 })
               }
             </Select>
@@ -79,6 +81,7 @@ class DataForm extends React.Component {
             }, {
               message: '用户名长度必须为6~20位字符', min: 6, max: 20,
             }],
+            initialValue: obj.userName
           })(
             <Input placeholder="6~20位字符，字母区分大小写" />
           )}
@@ -94,6 +97,7 @@ class DataForm extends React.Component {
             {
               message: '不是正确的手机号码', pattern: /^1[34578]\d{9}$/,
             }],
+            initialValue: obj.linkTel
           })(
             <Input placeholder="请输入手机号" />
           )}
@@ -132,6 +136,7 @@ class DataForm extends React.Component {
             rules: [{
               required: false, message: '请输入备注！',
             }],
+            initialValue: obj.remarkInfo
           })(
             <TextArea rows={4} placeholder="请输入备注" />
           )}
