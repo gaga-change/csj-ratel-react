@@ -78,7 +78,6 @@ export default class User extends React.Component {
    * 删除
    */
   handleDelete = (obj) => {
-    console.log(obj)
     let { dataSource } = this.state;
 
     request({

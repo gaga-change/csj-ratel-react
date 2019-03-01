@@ -3,7 +3,7 @@ import { Button, Popconfirm, message } from 'antd';
 import _ from 'lodash';
 import Sider from '../../component/sider/sider'
 import request from '@lib/request'
-import SelectingTable from '../../component/selectionTable/selectionTable'
+import FetchTable from '../../component/fetchTable/fetchTable'
 import { menuConfig_config } from './components/config'
 import MenuAddModal from './components/menuAddModal'
 import './style/menu.scss'
@@ -18,7 +18,6 @@ export default class Menu extends React.Component {
       expandedRowKeys: [], // 树形表格默认展开行
       pagination: {},
       loading: false,
-      delLoading: false,
       menus: [], // 所有菜单项
     }
   }
@@ -67,7 +66,9 @@ export default class Menu extends React.Component {
    */
   _filterMenu(menus) {
     let {expandedRowKeys} = this.state
-    menus.forEach(item => {
+    menus.forEach((item, index) => {
+      item._index = index
+      item._faArr = menus
       item.key = item.id
       item.title = item.text
       if (item.children && item.children.length) {
@@ -110,41 +111,31 @@ export default class Menu extends React.Component {
   }
 
   /**
-   * 批量删除
-   */
-  handleDel = () => {
-    if (!this.state.selectedRowKeys.length) {
-      message.info('请先勾选菜单！');
-      return
-    }
-    this.setState({
-      delLoading: true,
-    })
-    request({
-      url: '/webApi/base/menu/delete',
-      method: 'post',
-      data: this.state.selectedRowKeys
-    }).then(res => {
-      let ids = this.state.selectedRowKeys.join(',') + ','
-      let { dataSource } = this.state
-      dataSource = dataSource.filter(item => !~ids.indexOf(item.id + ','))
-      this.setState({
-        dataSource,
-        selectedRowKeys: [],
-        delLoading: false,
-      })
-    }).catch(err => {
-      this.setState({
-        delLoading: false,
-      })
-    })
-  }
-
-  /**
    * 表格选择
    */
   onSelectChange = (selectedRowKeys, other) => {
     this.setState({ selectedRowKeys });
+  }
+
+  /**
+   * 删除
+   */
+  handleDelete = (obj) => {
+    let { dataSource, menus } = this.state;
+
+    request({
+      url: '/webApi/base/menu/delete',
+      method: 'get',
+      data: {
+        menuId: obj.id
+      }
+    }).then(res => {
+      obj._faArr.splice(obj._index, 1)
+      this.setState({ dataSource })
+      this.setState({ dataSource, menus })
+    }).catch(err => {
+
+    })
   }
 
   onMenuAddModalRef = (child) => this.menuAddModal = child
@@ -158,6 +149,9 @@ export default class Menu extends React.Component {
             ? (
               <span className="Dropdown_Menu_box">
                 <span onClick={() => this.openMenuFormMoadl(record)}>编辑</span>
+                <Popconfirm title="确定要删除菜单吗？" onConfirm={() => this.handleDelete(record)}>
+                  <span>删除</span>
+                </Popconfirm>
               </span>
             ) : null)
         }
@@ -167,15 +161,10 @@ export default class Menu extends React.Component {
     return (
       <div className="Menu">
         <Sider history={this.props.history} />
-        <div>
-          <Popconfirm title="你确定要删除菜单吗?" onConfirm={this.handleDel} okText="确定" cancelText="取消">
-            <Button className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
-          </Popconfirm>
-        </div>
         <div className="alert_Btn">
           <Button type="primary" onClick={() => this.openMenuFormMoadl()}>创建菜单</Button>
         </div>
-        <SelectingTable
+        <FetchTable
           expandedRowKeys={this.state.expandedRowKeys}
           selectedRowKeys={this.state.selectedRowKeys}
           dataSource={dataSource}
