@@ -8,7 +8,7 @@ const { TreeNode } = Tree;
 class SelectMenu extends React.Component {
   constructor(props) {
     super(props)
-    const value = props.value || ''
+    const value = props.value
     this.state = {
       expandedKeys: [],
       autoExpandParent: true,
@@ -16,6 +16,14 @@ class SelectMenu extends React.Component {
     }
   }
 
+  componentWillReceiveProps(prevProps) {
+    if (Number(prevProps.value)  !== Number(this.props.value)) {
+      this.setState({
+        selectedKeys: prevProps.value ? [prevProps.value + ''] : []
+      })
+    }
+  }
+  
   onExpand = (expandedKeys) => {
     this.setState({
       expandedKeys,
@@ -40,10 +48,11 @@ class SelectMenu extends React.Component {
         </TreeNode >
       )
     }
-    return <TreeNode {...item} disabled={this.props.obj && Number(item.key) === Number(this.props.obj.id)}/>
+    return <TreeNode {...item} disabled={this.props.obj && Number(item.key) === Number(this.props.obj.id)} />
   })
   render() {
     let { menus = {} } = this.props
+
     return (
       <Tree
         onExpand={this.onExpand}
@@ -190,7 +199,7 @@ class DataForm extends React.Component {
         >
           {getFieldDecorator('hidden', {
             valuePropName: 'checked',
-            initialValue: !(obj.hidden === '1'),
+            initialValue: !(Number(obj.hidden) === 1),
           })(
             <Switch checkedChildren="显示" unCheckedChildren="隐藏" />
           )}
@@ -210,7 +219,7 @@ class DataForm extends React.Component {
           label="上级菜单"
         >
           {getFieldDecorator('parentId', {
-
+            initialValue: obj.parentId
           })(
             <SelectMenu menus={this.props.menus} obj={obj} />
           )}

@@ -81,7 +81,6 @@ class MenuAddModal extends React.Component {
    * 表单提交
    */
   handleSubmited = (err, value) => {
-    console.log(value)
     this.setState({
       goSubmit: false
     })
