@@ -60,13 +60,6 @@ export default class Role extends React.Component {
   }
 
   /**
-   * 删除
-   */
-  handleDelete = (item) => {
-    console.log(item)
-  }
-
-  /**
    * 搜索表单提交
    */
   handleFormSubmit = (val) => {
@@ -93,8 +86,6 @@ export default class Role extends React.Component {
    */
   handleRoleAddModalClose = (cancel, obj) => {
     if (obj && obj.id) { // 编辑
-      console.log('编辑')
-      console.log(obj)
       let { dataSource } = this.state
       dataSource.forEach((item, index) => {
         if (item.id === obj.id) {
@@ -116,7 +107,6 @@ export default class Role extends React.Component {
    * 批量删除
    */
   handleDel = () => {
-    console.log(this.state.selectedRowKeys)
     if (!this.state.selectedRowKeys.length) {
       message.info('请先勾选角色！');
       return
@@ -148,7 +138,6 @@ export default class Role extends React.Component {
    * 表格选择
    */
   onSelectChange = (selectedRowKeys, other) => {
-    console.log('当前选择的key值 ', selectedRowKeys, other);
     this.setState({ selectedRowKeys });
   }
 
