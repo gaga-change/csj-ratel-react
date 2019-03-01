@@ -45,9 +45,9 @@ export default class Menu extends React.Component {
       method: 'get',
       data: data
     }).then(res => {
+      this.setState({menus: res})
       res = res.children
       this._filterMenu(res) // 过滤空 children
-      this.setState({menus: res})
       dataSource = res
       pagination.total = res.length
       this.setState({
@@ -183,7 +183,7 @@ export default class Menu extends React.Component {
           onSelectChange={this.onSelectChange}
           loading={this.state.loading}
           pagination={this.state.pagination} />
-        <MenuAddModal onRef={this.onMenuAddModalRef} onClose={this.handleMenuAddModalClose}></MenuAddModal>
+        <MenuAddModal onRef={this.onMenuAddModalRef} onClose={this.handleMenuAddModalClose} menus={this.state.menus}></MenuAddModal>
       </div>
     )
   }

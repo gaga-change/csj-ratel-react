@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal } from 'antd'
-import RoleAddForm from './roleAddForm.js'
+import MenuAddForm from './menuAddForm.js'
 import request from '@lib/request'
 
 /**
@@ -11,7 +11,7 @@ import request from '@lib/request'
  *  open<Function> 打开窗口
  *     (obj) 如果传递一个数据对象则为编辑
  */
-class RoleAddModal extends React.Component {
+class MenuAddModal extends React.Component {
   state = {
     visible: false,
     loading: false,
@@ -72,10 +72,10 @@ class RoleAddModal extends React.Component {
       })
       let { obj } = this.state
       if (obj) {
-        value.roleId = obj.id
+        value.menuId = obj.id
       }
       request({
-        url: obj ? '/webApi/base/role/update' : '/webApi/base/role/add',
+        url: obj ? '/webApi/base/menu/update' : '/webApi/base/menu/add',
         method: 'post',
         data: value
       }).then(res => {
@@ -101,15 +101,17 @@ class RoleAddModal extends React.Component {
           onOk={this.handleOk}
           confirmLoading={loading}
           onCancel={() => this.close('cancel')} >
-          <RoleAddForm
+          <MenuAddForm
             obj={this.state.obj}
             goSubmit={goSubmit}
             onSubmited={this.handleSubmited}
-            onRef={this.ref} >
-          </RoleAddForm>
+            onRef={this.ref}
+            menus={this.props.menus}
+          >
+          </MenuAddForm>
         </Modal>
       </div>)
   }
 }
 
-export default RoleAddModal
+export default MenuAddModal
