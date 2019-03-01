@@ -70,7 +70,7 @@ class AddForm extends React.Component {
   }
 
   handleCancel = ()=>{
-    console.log('这是取消选择入库商品弹窗的调用')
+    console.log('这是取消选择出库商品弹窗的调用')
     this.setState({visible:false})
   }
 
@@ -328,15 +328,15 @@ class AddForm extends React.Component {
 
             {/* 该组件为隐藏组件和下面显示的下拉框配合使用 */}
            
-            <Form.Item label="收货地址" style={{display:'none'}}>
+            <Form.Item label="收货地址" {...formItemLayout_arrivalAddress}  style={{display:arrivalAddressConfig.length>0?'none':'block'}}>
               { getFieldDecorator('arrivalAddress', {
                 rules: [{ required: false}],
               })(
-                 <Input autoComplete='off' placeholder="请输入收货地址" />
+                 <Input autoComplete='off' style={{width:620}} placeholder="请输入收货地址" />
               )}
             </Form.Item>
 
-            <Form.Item label="收货地址" {...formItemLayout_arrivalAddress}>
+            <Form.Item label="收货地址" {...formItemLayout_arrivalAddress} style={{display:arrivalAddressConfig.length>0?'block':'none'}}>
               { getFieldDecorator('arrivalAddressId', {
                 rules: [{ 
                   required: true, 

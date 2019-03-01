@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input,Button,Row,Col,Select,DatePicker } from 'antd';
+import {warehousing_planStateEnum} from '@lib/enum';
 import './form.scss'
 
 const { RangePicker } = DatePicker;
@@ -64,8 +65,9 @@ class SelestForm extends React.Component {
                       rules: [{ required: false, message: '' }],
                     })(
                       <Select  style={{width:180}} placeholder="请选择状态">
-                        <Option value="5">Jack</Option>
-                        <Option value="0">Lucy</Option>
+                        {
+                          warehousing_planStateEnum.map(v=> <Option key={v.key} value={v.key}>{v.value}</Option>)
+                        }
                       </Select>
                     )}
                   </Form.Item>

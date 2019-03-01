@@ -90,7 +90,7 @@ class SetPassForm extends React.Component {
 
     return (
       <div className="SetPassForm" >
-        <Form onSubmit={this.handleSubmit} >
+        <Form onSubmit={this.handleSubmit} autoComplete="off" >
           <Form.Item
             {...formItemLayout}
             label="原密码">
@@ -101,7 +101,7 @@ class SetPassForm extends React.Component {
                   message: '请输入原密码！',
                 }],
               })(
-                <Input type="password" autoComplete='off' placeholder="6-20位，字母与数字结合，字母区分大小写" maxLength={20} />
+                <Input   type="text"  autoComplete='off' placeholder="6-20位，字母与数字结合，字母区分大小写" maxLength={20} />
               )}
           </Form.Item>
 
@@ -118,7 +118,7 @@ class SetPassForm extends React.Component {
                   validator: this.checkRole,
                 }]
               })(
-                <Input type="password" autoComplete='off' placeholder="6-20位，字母与数字结合，字母区分大小写" />
+                <Input type="text" autoComplete='off' placeholder="6-20位，字母与数字结合，字母区分大小写" />
               )}
           </Form.Item>
 
@@ -133,7 +133,7 @@ class SetPassForm extends React.Component {
                   validator: this.compareToFirstPassword
                 }]
               })(
-                <Input type="password" autoComplete='off' placeholder="6-20位，字母与数字结合，字母区分大小写" onBlur={this.handleConfirmBlur} />
+                <Input type="text" autoComplete='off' placeholder="6-20位，字母与数字结合，字母区分大小写" onBlur={this.handleConfirmBlur} />
               )}
           </Form.Item>
 

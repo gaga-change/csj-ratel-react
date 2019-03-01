@@ -1,7 +1,7 @@
 export  const routerConfig=[
   { 
     name:'首页',
-    path:'/',
+    path:'/home',
     hidden: false,
     component:'/home/home',
     icon:'home',
@@ -71,6 +71,7 @@ export  const routerConfig=[
   { 
     name:'系统',
     path:'/system',
+    Redirect:'/system/user',
     hidden: false,
     component:'/system/user',
     icon:'system',
