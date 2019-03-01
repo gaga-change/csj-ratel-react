@@ -91,22 +91,10 @@ export default class Stock extends React.Component {
     }
   }
 
-  export = ()=>{
-    let { search } = this.props.history.location;
-    request({
-      url:'/webApi/stock/export',
-      method: 'get',
-      data:parse(search.slice(1))
-    }).then(data => {
-      console.log(data)
-    }).catch(err=>{
-      console.log(err)
-    })
-  }
-
   render() {
     const { dataSource,count}=this.state;
     const columns=_.cloneDeep(indexTableColumnsConfig)
+    let { search } = this.props.history.location;
     return (
         <div className="Stock"  >
             <Sider history={this.props.history} /> 
@@ -129,7 +117,9 @@ export default class Stock extends React.Component {
                      </span>
                    }
                </div>
-               <Button type="primary"  onClick={this.export} >库存导出</Button>
+               <a href={`/webApi/stock/export${search}`}>
+                 <Button type="primary">库存导出</Button> 
+               </a>
             </div>
             <FetchTable 
               dataSource={dataSource} 
