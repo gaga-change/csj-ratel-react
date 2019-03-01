@@ -10,7 +10,7 @@ export  const routerConfig=[
   },
   { 
     name:'登录页',
-    path:'/login',
+    path:'/web_login',
     hidden: true,
     component:'/login/login',
     icon:'',
@@ -25,8 +25,7 @@ export  const routerConfig=[
     component:'/warehousing/warehousing',
     icon:'warehousing',
     indexIcon:'warehousing_business',
-    sort:3,
-    children:[],
+    sort:3
   },
   { 
     name:'出库',
@@ -102,7 +101,6 @@ export  const routerConfig=[
       }, 
       { 
         name:'修改密码',
-        indexName:'修改密码',
         path:'/system/setPass',
         component:'/system/setPass',
         indexIcon:'change_password',

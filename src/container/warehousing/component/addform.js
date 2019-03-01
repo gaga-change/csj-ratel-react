@@ -123,11 +123,9 @@ class AddForm extends React.Component {
 
   onSelectOptionChange = (value,option)=>{
     let { warehouse } = this.state;
-    // let options=option.props;
-    // warehouse.warehouseCode=options.value;
-    // warehouse.warehouseName=options.children;
-    warehouse.warehouseCode='csj001';
-    warehouse.warehouseName='SHARK工厂库-test';
+    let options=option.props;
+    warehouse.warehouseCode=options.value;
+    warehouse.warehouseName=options.children;
     this.setState({warehouse})
   }
 

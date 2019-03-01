@@ -20,7 +20,7 @@ service.interceptors.response.use(
        } else if(response.data&&response.data.code==='ratel-512'){
          if(!window.location.href.includes('login')){
            selectMessage('error','用户未登陆或登录失效 !')
-           window.location.href=`${window.location.origin}/login`
+           window.location.href=`${window.location.origin}/web_login`
            sessionStorage.clear()
          }
        } else {

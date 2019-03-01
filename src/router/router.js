@@ -29,7 +29,7 @@ class Router extends React.Component {
                                   component={BasicLayout}/>
                               })
                             }
-                            <Redirect to='/login'></Redirect>
+                            <Redirect to='/web_login'></Redirect>
                         </Switch>
                     </BrowserRouter>
              </div>
