@@ -1,57 +1,57 @@
-export  const roleConfig_config= [
-  {
-      title: '角色ID',
-      dataIndex: 'id'
-  },
-  {
-      title: '角色名称',
-      dataIndex: 'roleName'
-  },
-  {
-      title: '角色描述',
-      dataIndex: 'roleDesc'
-  },
-  {
-      title: '操作',
-      dataIndex: '',
-      render: '',
-      width: 120
-  },
+export const roleConfig_config = [
+    {
+        title: '角色ID',
+        dataIndex: 'id'
+    },
+    {
+        title: '角色名称',
+        dataIndex: 'roleName'
+    },
+    {
+        title: '角色描述',
+        dataIndex: 'roleDesc'
+    },
+    {
+        title: '操作',
+        dataIndex: '',
+        render: '',
+        width: 120
+    },
 ]
-export  const menuConfig_config= [
-  {
-      title: '菜单ID',
-      dataIndex: 'id'
-  },
-  {
-      title: '菜单名称',
-      dataIndex: 'text'
-  },
-//   {
-//       title: '菜单路径',
-//       dataIndex: 'menuPath'
-//   },
-//   {
-//       title: '菜单权限',
-//       dataIndex: 'menuPerms'
-//   },
-//   {
-//       title: '容器路由',
-//       dataIndex: 'pageComponent'
-//   },
-//   {
-//       title: '图标',
-//       dataIndex: 'menuIcon'
-//   },
-  {
-      title: '操作',
-      dataIndex: '',
-      render: '',
-      width: 120
-  },
+export const menuConfig_config = [
+    {
+        title: '菜单ID',
+        dataIndex: 'id'
+    },
+    {
+        title: '菜单名称',
+        dataIndex: 'text'
+    },
+    {
+        title: '菜单路径',
+        dataIndex: 'path'
+    },
+    //   {
+    //       title: '菜单权限',
+    //       dataIndex: 'menuPerms'
+    //   },
+    //   {
+    //       title: '容器路由',
+    //       dataIndex: 'pageComponent'
+    //   },
+    {
+        title: '图标',
+        dataIndex: 'icon'
+    },
+    {
+        title: '操作',
+        dataIndex: '',
+        render: '',
+        width: 120
+    },
 ]
 
-export  const userConfig_config= [
+export const userConfig_config = [
     {
         title: '用户名',
         dataIndex: 'userName'
@@ -90,4 +90,4 @@ export  const userConfig_config= [
         render: '',
         width: 140
     },
-  ]
+]
