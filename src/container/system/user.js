@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button, Popconfirm } from 'antd';
+import { Button, Popconfirm, message } from 'antd';
 import _ from 'lodash';
 import request from '@lib/request'
 import Sider from '../../component/sider/sider'
-import FetchTable from '../../component/fetchTable/fetchTable'
+import SelectingTable from '../../component/selectionTable/selectionTable'
 import UserSearchForm from './components/userSearchForm'
 import { userConfig_config } from './components/config'
 import UserAddModal from './components/userAddModal'
@@ -15,6 +15,8 @@ export default class User extends React.Component {
     pagination: {},
     userJurisdictionModalShow: false,
     loading: false,
+    delLoading: false, // 删除更多按钮加载提示
+    selectedRowKeys: [], // 多选框选中的id列表
     roles: [], // 角色列表
   }
   seachVal = {} // 搜索内容
@@ -41,6 +43,7 @@ export default class User extends React.Component {
         res.list.forEach(item => {
           item.gmtCreate = this._formData(item.gmtCreate)
           item.statusName = item.userStatus === 0 ? '启用' : '禁用'
+          item.statusName = item.id
         })
         dataSource = res.list
         pagination.total = res.total
@@ -81,10 +84,8 @@ export default class User extends React.Component {
 
     request({
       url: '/webApi/base/user/delete',
-      method: 'get',
-      data: {
-        userId: obj.id,
-      }
+      method: 'post',
+      data: [obj.id]
     }).then(res => {
       dataSource = dataSource.filter(v => v.id !== obj.id)
       this.setState({ dataSource })
@@ -92,6 +93,39 @@ export default class User extends React.Component {
 
     })
   }
+
+
+  /**
+   * 批量删除
+   */
+  handleDeleteMore = () => {
+    if (!this.state.selectedRowKeys.length) {
+      message.info('请先勾选用户！');
+      return
+    }
+    this.setState({
+      delLoading: true,
+    })
+    request({
+      url: '/webApi/base/user/delete',
+      method: 'post',
+      data: this.state.selectedRowKeys
+    }).then(res => {
+      let ids = this.state.selectedRowKeys.join(',') + ','
+      let { dataSource } = this.state
+      dataSource = dataSource.filter(item => !~ids.indexOf(item.id + ','))
+      this.setState({
+        dataSource,
+        selectedRowKeys: [],
+        delLoading: false,
+      })
+    }).catch(err => {
+      this.setState({
+        delLoading: false,
+      })
+    })
+  }
+
 
   /**
    * 搜索表单提交
@@ -114,6 +148,13 @@ export default class User extends React.Component {
     }, () => {
       this.fetch()
     })
+  }
+
+  /**
+  * 表格选择
+  */
+  onSelectChange = (selectedRowKeys, other) => {
+    this.setState({ selectedRowKeys });
   }
 
   /**
@@ -140,6 +181,9 @@ export default class User extends React.Component {
     })
   }
 
+  /**
+   * 时间转换器
+   */
   _formData(date) {
     date = new Date(date)
     let d = new Date()
@@ -180,12 +224,20 @@ export default class User extends React.Component {
       <div className="User">
         <Sider history={this.props.history} />
         <UserSearchForm onSubmit={this.handleFormSubmit} roles={this.state.roles}></UserSearchForm>
+        <div>
+          <Popconfirm title="你确定要删除角色吗?" onConfirm={this.handleDeleteMore} okText="确定" cancelText="取消">
+            <Button className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
+          </Popconfirm>
+        </div>
         <div className="alert_Btn">
           <Button type="primary" onClick={() => this.handleAdd()}>创建角色</Button>
         </div>
-        <FetchTable
+        <SelectingTable
+          selectedRowKeys={this.state.selectedRowKeys}
           dataSource={dataSource}
           columns={columns}
+          rowKey={"id"}
+          onSelectChange={this.onSelectChange}
           loading={this.state.loading}
           pagination={this.state.pagination}
           onChange={this.handleTableChange} />
