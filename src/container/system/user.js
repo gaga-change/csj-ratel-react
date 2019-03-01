@@ -120,12 +120,11 @@ export default class User extends React.Component {
    * 添加角色表单弹窗 关闭
    */
   handleUserAddModalClose = (type, obj) => {
-
+    this.fetch()
   }
 
   handleDisableUser = (obj) => {
     let { dataSource } = this.state
-    console.log(obj)
     obj.userStatus = obj.userStatus === 0 ? 1 : 0
     request({
       url: '/webApi/base/user/updateUserStatus',

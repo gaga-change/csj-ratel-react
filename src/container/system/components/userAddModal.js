@@ -62,7 +62,6 @@ class UserAddModal extends React.Component {
    * 表单提交
    */
   handleSubmited = (err, value) => {
-    console.log(value)
     let info = sessionStorage.getItem('info')
     info = info ? JSON.parse(info) : {}
     this.setState({ goSubmit: false })
