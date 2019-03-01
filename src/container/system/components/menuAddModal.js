@@ -32,10 +32,27 @@ class MenuAddModal extends React.Component {
    */
   init = (obj) => {
     let { visible } = this.state
+    this.setState({
+      obj: null
+    })
     if (!visible) {
       this.setState({
         visible: true,
-        obj,
+      })
+    }
+    if (obj) {
+      request({
+        url: '/webApi/base/menu/find',
+        method: 'get',
+        data: {
+          menuId: obj.id
+        }
+      }).then(res => {
+        this.setState({
+          obj: res
+        })
+      }).catch(err => {
+        console.error(err)
       })
     }
   }
@@ -53,6 +70,7 @@ class MenuAddModal extends React.Component {
    * 窗口关闭
    */
   close = (type, obj) => {
+    this.child.handleRest()
     this.setState({
       visible: false
     })

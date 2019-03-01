@@ -12,7 +12,7 @@ class SelectMenu extends React.Component {
     this.state = {
       expandedKeys: [],
       autoExpandParent: true,
-      selectedKeys: value ? [value] : [],
+      selectedKeys: value ? [value + ''] : [],
     }
   }
 
@@ -35,12 +35,12 @@ class SelectMenu extends React.Component {
   renderTreeNodes = data => data.map((item) => {
     if (item.children) {
       return (
-        <TreeNode title={item.title} key={item.key} dataRef={item}>
+        <TreeNode title={item.title} key={item.key} dataRef={item} disabled={this.props.obj && Number(item.key) === Number(this.props.obj.id)}>
           {this.renderTreeNodes(item.children)}
-        </TreeNode>
-      );
+        </TreeNode >
+      )
     }
-    return <TreeNode {...item} />;
+    return <TreeNode {...item} disabled={this.props.obj && Number(item.key) === Number(this.props.obj.id)}/>
   })
   render() {
     let { menus = {} } = this.props
@@ -88,7 +88,8 @@ class DataForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { obj = {} } = this.props
+    let { obj = {} } = this.props
+    obj = obj || {}
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -211,7 +212,7 @@ class DataForm extends React.Component {
           {getFieldDecorator('parentId', {
 
           })(
-            <SelectMenu menus={this.props.menus} />
+            <SelectMenu menus={this.props.menus} obj={obj} />
           )}
         </Form.Item>
 

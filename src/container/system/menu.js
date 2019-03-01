@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Popconfirm, message } from 'antd';
+import { Button, Popconfirm } from 'antd';
 import _ from 'lodash';
 import Sider from '../../component/sider/sider'
 import request from '@lib/request'
@@ -93,18 +93,6 @@ export default class Menu extends React.Component {
    * 关闭 添加/修改 菜单弹窗
    */
   handleMenuAddModalClose = (cancel, obj) => {
-    if (obj && obj.id) { // 编辑
-      let { dataSource } = this.state
-      dataSource.forEach((item, index) => {
-        if (item.id === obj.id) {
-          dataSource[index] = obj
-        }
-        this.setState({
-          dataSource
-        })
-      })
-      return
-    }
     if (!cancel) {
       this.fetch()
     }
