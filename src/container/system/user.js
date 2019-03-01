@@ -229,7 +229,7 @@ export default class User extends React.Component {
           </Popconfirm>
         </div>
         <div className="alert_Btn">
-          <Button type="primary" onClick={() => this.handleAdd()}>创建角色</Button>
+          <Button type="primary" onClick={() => this.handleAdd()}>创建用户</Button>
         </div>
         <SelectingTable
           selectedRowKeys={this.state.selectedRowKeys}

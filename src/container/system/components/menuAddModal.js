@@ -63,6 +63,7 @@ class MenuAddModal extends React.Component {
    * 表单提交
    */
   handleSubmited = (err, value) => {
+    console.log(value)
     this.setState({
       goSubmit: false
     })
@@ -74,6 +75,9 @@ class MenuAddModal extends React.Component {
       if (obj) {
         value.menuId = obj.id
       }
+
+      value.parentId = value.parentId || this.props.menus.id
+      value.hidden = value.hidden ? '0' : '1'
       request({
         url: obj ? '/webApi/base/menu/update' : '/webApi/base/menu/add',
         method: 'post',

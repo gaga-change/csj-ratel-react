@@ -68,6 +68,8 @@ export default class Menu extends React.Component {
   _filterMenu(menus) {
     let {expandedRowKeys} = this.state
     menus.forEach(item => {
+      item.key = item.id
+      item.title = item.text
       if (item.children && item.children.length) {
         expandedRowKeys.push(item.id)
         this.setState({expandedRowKeys})        
@@ -100,7 +102,6 @@ export default class Menu extends React.Component {
           dataSource
         })
       })
-
       return
     }
     if (!cancel) {
