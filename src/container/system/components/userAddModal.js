@@ -31,6 +31,7 @@ class UserAddModal extends React.Component {
    * @param {*} props 
    */
   init(obj) {
+    console.log(obj)
     this.setState({ obj })
     let { visible } = this.state
     if (!visible) {
@@ -72,16 +73,19 @@ class UserAddModal extends React.Component {
       let { obj } = this.state
       if (obj) {
         value.userId = obj.id
+        value.userStatus = obj.userStatus
+      } else {
+        value.ownerCode = info.ownerCode
+        value.ownerName = info.ownerName
+        value.ownerName = info.ownerName
+        value.isAdmin = 0
+        value.userStatus = 0
       }
       request({
-        url: '/webApi/base/user/add',
+        url: obj ?  '/webApi/base/user/updateUserInfo':'/webApi/base/user/add',
         method: 'post',
         data: {
           ...value,
-          isAdmin: 0,
-          userStatus: 0,
-          ownerCode: info.ownerCode,
-          ownerName: info.ownerName
         }
       }).then(res => {
         this.child.handleRest()
@@ -93,8 +97,6 @@ class UserAddModal extends React.Component {
           confirmLoading: false,
         })
       })
-
-
     }
   }
   render() {
@@ -103,7 +105,7 @@ class UserAddModal extends React.Component {
     return (
       <div>
         <Modal
-          title="添加用户"
+          title={this.state.obj ? '编辑用户' : '添加用户'}
           visible={visible}
           onOk={this.handleOk}
           confirmLoading={confirmLoading}

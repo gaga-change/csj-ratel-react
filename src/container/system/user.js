@@ -182,7 +182,7 @@ export default class User extends React.Component {
         <Sider history={this.props.history} />
         <UserSearchForm onSubmit={this.handleFormSubmit} roles={this.state.roles}></UserSearchForm>
         <div className="alert_Btn">
-          <Button type="primary" onClick={this.handleAdd}>创建角色</Button>
+          <Button type="primary" onClick={() => this.handleAdd()}>创建角色</Button>
         </div>
         <FetchTable
           dataSource={dataSource}

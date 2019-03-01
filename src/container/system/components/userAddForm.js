@@ -58,7 +58,7 @@ class DataForm extends React.Component {
             rules: [{
               required: true, message: '请选择用户角色！',
             }],
-            initialValue: obj.roleName&&obj.roleId ?  obj.roleId : null
+            initialValue: obj.roleName&&obj.roleId ?  obj.roleId : undefined
           })(
             <Select
               placeholder="请选择用户角色"
