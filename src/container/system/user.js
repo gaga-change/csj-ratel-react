@@ -43,7 +43,6 @@ export default class User extends React.Component {
         res.list.forEach(item => {
           item.gmtCreate = this._formData(item.gmtCreate)
           item.statusName = item.userStatus === 0 ? '启用' : '禁用'
-          item.statusName = item.id
         })
         dataSource = res.list
         pagination.total = res.total
