@@ -18,6 +18,38 @@ export  const roleConfig_config= [
       width: 120
   },
 ]
+export  const menuConfig_config= [
+  {
+      title: '菜单ID',
+      dataIndex: 'id'
+  },
+  {
+      title: '菜单名称',
+      dataIndex: 'text'
+  },
+//   {
+//       title: '菜单路径',
+//       dataIndex: 'menuPath'
+//   },
+//   {
+//       title: '菜单权限',
+//       dataIndex: 'menuPerms'
+//   },
+//   {
+//       title: '容器路由',
+//       dataIndex: 'pageComponent'
+//   },
+//   {
+//       title: '图标',
+//       dataIndex: 'menuIcon'
+//   },
+  {
+      title: '操作',
+      dataIndex: '',
+      render: '',
+      width: 120
+  },
+]
 
 export  const userConfig_config= [
     {

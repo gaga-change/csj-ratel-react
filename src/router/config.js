@@ -82,6 +82,14 @@ export  const routerConfig=[
         component:'/system/role',
         indexIcon:'role_management',
         sort:1
+      },
+      { 
+        name:'菜单管理',
+        indexName:'菜单管理',
+        path:'/system/menu',
+        component:'/system/menu',
+        indexIcon:'role_management',
+        sort:1
       },  
       { 
         name:'用户管理',
