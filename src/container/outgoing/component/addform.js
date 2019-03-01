@@ -328,18 +328,22 @@ class AddForm extends React.Component {
 
             {/* 该组件为隐藏组件和下面显示的下拉框配合使用 */}
            
-            <Form.Item label="收货地址" {...formItemLayout_arrivalAddress}  style={{display:arrivalAddressConfig.length>0?'none':'block'}}>
+            <Form.Item label="收货地址" {...formItemLayout_arrivalAddress}  style={{height:60,display:arrivalAddressConfig.length>0?'none':'block'}}>
               { getFieldDecorator('arrivalAddress', {
-                rules: [{ required: false}],
+                rules: [{ 
+                  required: !arrivalAddressConfig.length>0,
+                  message: '请输入收货地址',
+                  validator:checkArrivalAddress
+                }],
               })(
-                 <Input autoComplete='off' style={{width:620}} placeholder="请输入收货地址" />
+                 <Input autoComplete='off' style={{width:620}} placeholder="请输入收货地址" onFocus={this.onFocus.bind(this,'arrivalAddress')} />
               )}
             </Form.Item>
 
-            <Form.Item label="收货地址" {...formItemLayout_arrivalAddress} style={{display:arrivalAddressConfig.length>0?'block':'none'}}>
+            <Form.Item label="收货地址" {...formItemLayout_arrivalAddress} style={{height:60,display:arrivalAddressConfig.length>0?'block':'none'}}>
               { getFieldDecorator('arrivalAddressId', {
                 rules: [{ 
-                  required: true, 
+                  required: arrivalAddressConfig.length>0, 
                   message: '请选择收货地址',
                   validator:checkArrivalAddress
                 }],

@@ -18,9 +18,9 @@ service.interceptors.response.use(
          selectMessage('success','数据请求成功！')
          return Promise.resolve(response.data) 
        } else if(response.data&&response.data.code==='ratel-512'){
-         if(!window.location.href.includes('login')){
+         if(!window.location.href.includes('web_login')){
            selectMessage('error','用户未登陆或登录失效 !')
-           window.location.href=`${window.location.origin}/web_login`
+           window.location.href=`${window.location.origin}/#/web_login`
            sessionStorage.clear()
          }
        } else {

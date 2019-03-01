@@ -5,3 +5,4 @@ export function arrivalMap(){
     url:'/webApi/base/cust/list'
   })
 }
+
