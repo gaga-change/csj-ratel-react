@@ -7,6 +7,7 @@ export  const indexTableColumns_Config=[
   {
     title:'计划出库时间',
     dataIndex:'planOutTime',
+    type:'time',
   },
   {
     title:'计划出库仓库',
@@ -23,6 +24,7 @@ export  const indexTableColumns_Config=[
   {
     title:'单据状态',
     dataIndex:'planState',
+    useLocalEnum:'outgoing_planStateEnum'
   },
   {
     title:'操作',
@@ -92,7 +94,7 @@ export  const formTable_config=[
   },
   {
     title:'出库数量',
-    dataIndex: 'num',
+    dataIndex: 'planOutQty',
     editable:true,
     inputType:'InputNumber',
     width:120,

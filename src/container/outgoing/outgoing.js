@@ -31,7 +31,6 @@ export default class Outgoing extends React.Component {
   }
 
   onSubmit = (type,value)=>{
-    console.log('这是提交的调用',type,value)
     if(type==="select"){
       for(let i in value){
         if(value[i]===''){
@@ -43,13 +42,36 @@ export default class Outgoing extends React.Component {
         value.createEndDate=moment(value.createTime[1]).valueOf()
       }
       this.fetch(value)
-    }
+    } else if(['submit','save'].includes(type)){
+      console.log(type,value)
+      value.planOutTime=moment(value.planOutTime).valueOf();
+      value.isCommitFlag=type==='submit'?true:false;
+      if(Array.isArray(value.items)){
+        value.items=value.items.map(v=>{
+           v.busiIndex=v.index;
+           v.skuBrandCode=v.brandCode;
+           v.skuBrandName=v.brandName;
+           v.skuModel=v.skuFormat;
+           v.productFactory=v.factoryName;
+           v.outPrice=v.costPrice;
+           v.skuCategoryName='李松'
+           return v
+        })
+       }
+       request({
+        url: '/webApi/out/bill/saveOutBill',
+        method: 'post',
+        data:value
+      }).then(res=>{
+        this.setState({visible:false})
+        if(this.child){
+          this.child.handleRest()
+        }
+        this.fetch()
+      }).catch(err=>{
+        console.log(err)
+      })
 
-    if(type!=='select'){
-      this.setState({visible:false})
-      if(this.child){
-        this.child.handleRest()
-      }
     }
     
   }
@@ -63,7 +85,7 @@ export default class Outgoing extends React.Component {
   }
 
   add = ()=>{
-    console.log('这是出现创建入库单弹窗调用')
+    console.log('这是出现创建出库单弹窗调用')
     this.setState({visible:true})
   }
 
@@ -119,7 +141,7 @@ export default class Outgoing extends React.Component {
   }
 
   handleCancel = ()=>{
-    console.log('这是取消创建入库单的调用')
+    console.log('这是取消创建出库单的调用')
     this.setState({visible:false,detailVisible:false})
   }
 
@@ -208,7 +230,7 @@ export default class Outgoing extends React.Component {
             expandedRowRender={childTable}
             dataSource={dataSource}/>
             <Modal
-              title="创建入库业务单"
+              title="创建出库业务单"
               centered={true}
               destroyOnClose={true}
               width={1000}
@@ -221,7 +243,7 @@ export default class Outgoing extends React.Component {
             </Modal>
 
             <Modal
-              title="入库业务单详情"
+              title="出库业务单详情"
               className="Outgoing_detail_modal"
               visible={detailVisible}
               width={1000}

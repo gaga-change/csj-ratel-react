@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import request from '@lib/request'
 import  { Link }  from  'react-router-dom';
 import { depthForEachIndex } from '@lib/lib'
 import Sider from '../../component/sider/sider'
@@ -18,14 +19,18 @@ export default class Home extends React.Component {
     super(props)
     this.state = {
       // 头部数据显示
-      Total_dataSource:{
-        本周入库单数:100,
-        本周入库件数:300,
-        本周出库单数:200,
-        本周出库件数:400,
-        商品库存数:300
-      }
+      Total_dataSource:{}
     }
+  }
+
+  componentDidMount(){
+    request({
+      url:'/webApi/home/index',
+    }).then(res=>{
+      this.setState({Total_dataSource:res})  
+    }).catch(err=>{
+      console.log(err)
+    })
   }
 
   render () {
@@ -43,18 +48,18 @@ export default class Home extends React.Component {
                 <div className="right-area">
                   <p className="num-area">
                     {
-                      Total_dataSource[item.orderNumber_dataIndex] && (
+                      Total_dataSource&&Total_dataSource[item.orderNumber_dataIndex]!==undefined?(
                       <span className="num-item">
                         <span className="num">{Total_dataSource[item.orderNumber_dataIndex]}</span><span>单</span>
                       </span>
-                     )
+                     ):null
                     }
                     {
-                       Total_dataSource[item.orderPiece_dataIndex] && (
+                       Total_dataSource&&Total_dataSource[item.orderPiece_dataIndex]!==undefined?(
                       <span className="num-item">
                         <span className="num">{Total_dataSource[item.orderPiece_dataIndex]}</span><span>件</span>
                       </span>
-                     )
+                     ):null
                     }
                   </p>
                   <p className="hint-area">

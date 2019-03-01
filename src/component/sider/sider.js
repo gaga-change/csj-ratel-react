@@ -42,7 +42,6 @@ export default class Sider extends React.Component {
   }
 
   getInfo = () => {
-    const { isLoginPage } = this.state
     request({
       url: '/webApi/base/user/info',
       method: 'get',
@@ -50,9 +49,7 @@ export default class Sider extends React.Component {
       this.props.setInfo(res)
       this.props.setMenus(deepExistMenu(res.menus.children, routerConfig))
     }).catch(err => {
-      if (!isLoginPage) {
-        this.props.history.push(`/login`)
-      }
+       console.log(err)
     })
   }
 
@@ -69,6 +66,7 @@ export default class Sider extends React.Component {
   }
 
   render () {
+    const { ownerName,nick} = (this.props.info&&this.props.info.info)||{};
     let activePath = this.props.history && this.props.history.location && this.props.history.location.pathname;
     let arr = activePath && activePath.split('/');
     if (arr.length > 2) {
@@ -97,9 +95,9 @@ export default class Sider extends React.Component {
           <ul>
             {
               config.map(v =>
-                <li key={v.id || v.path} className={activePath === v.path ? 'active' : null}>
-                  <Link to={v.path} replace>
-                    <img src={activePath === v.path ? imgSouce[`${v.icon}_click`] : imgSouce[v.icon]} alt="" />
+                <li key={v.id || v.path} className={activePath === v.path||activePath === v.Redirect ? 'active' : null}>
+                  <Link to={v.Redirect||v.path} replace>
+                    <img src={activePath === v.path||activePath === v.Redirect? imgSouce[`${v.icon}_click`] : imgSouce[v.icon]} alt="" />
                     <span>{v.name}</span>
                   </Link>
                   {
@@ -145,8 +143,8 @@ export default class Sider extends React.Component {
                 <Dropdown overlay={menu}>
                   <span className="ant-dropdown-link header_set_content" >
                     <p className="user-area">
-                      <span className="user-name">李芷逸</span>
-                      <span className="company-name">李氏集团</span>
+                      <span className="user-name">{nick}</span>
+                      <span className="company-name">{ownerName}</span>
                     </p>
                     <Icon type="down" />
                   </span>

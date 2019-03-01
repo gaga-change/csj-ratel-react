@@ -1,4 +1,3 @@
-import moment from 'moment'
 export  const indexTableColumns_Config=[
   {
     title: '业务单编号',
@@ -7,6 +6,7 @@ export  const indexTableColumns_Config=[
   {
     title:'计划入库时间',
     dataIndex:'planTime',
+    type:'time',
   },
   {
     title:'计划入库仓库',
@@ -23,6 +23,7 @@ export  const indexTableColumns_Config=[
   {
     title:'单据状态',
     dataIndex:'planState',
+    useLocalEnum:'warehousing_planStateEnum'
   },
   {
     title:'操作',
@@ -180,7 +181,7 @@ export  const BaseCard_Config=[
   {
     title:'计划入库日期',
     dataIndex:'planTime',
-    render:(v)=>moment(v).format('YYYY-MM-DD')
+    type:'time'
   },
   {
     title:'入库仓库',

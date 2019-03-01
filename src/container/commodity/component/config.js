@@ -30,7 +30,8 @@ export  const indexTableColumnsConfig=[
   },
   {
     title:'创建日期',
-    dataIndex:'gmtCreate'
+    dataIndex:'gmtCreate',
+    type:'time',
   },
   {
     title:'创建者',
@@ -38,7 +39,8 @@ export  const indexTableColumnsConfig=[
   },
   {
     title:'最后操作日期',
-    dataIndex:'gmtModify'
+    dataIndex:'gmtModify',
+    type:'time',
   },
   {
     title:'最后操作者',
@@ -59,7 +61,8 @@ export  const costPriceChange_config=[
   },
   {
     title:'变动日期',
-    dataIndex:'gmtCreate'
+    dataIndex:'gmtCreate',
+    type:'time',
   },
   {
     title:'操作人',
@@ -74,7 +77,8 @@ export  const priceChange_config=[
   },
   {
     title:'变动日期',
-    dataIndex:'gmtCreate'
+    dataIndex:'gmtCreate',
+    type:'time',
   },
   {
     title:'操作人',

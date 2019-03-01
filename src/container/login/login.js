@@ -7,7 +7,7 @@ import NormalLoginForm from './components/form'
 import './login.scss'
 
 export default class Login extends React.Component {
-
+ 
   state={
     loginLoding:false,
   }
@@ -30,7 +30,7 @@ export default class Login extends React.Component {
        this.setState({
          loginLoding:false,
        })
-       this.props.history.push('/')
+       this.props.history.push('/home')
     }).catch(err=>{
        this.setState({loginLoding:false})
     })

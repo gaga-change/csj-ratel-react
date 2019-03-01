@@ -18,10 +18,9 @@ service.interceptors.response.use(
          selectMessage('success','数据请求成功！')
          return Promise.resolve(response.data) 
        } else if(response.data&&response.data.code==='ratel-512'){
-         if(!window.location.hash.includes('login')){
+         if(!window.location.href.includes('login')){
            selectMessage('error','用户未登陆或登录失效 !')
-           window.location.href=`${window.location.href}/#/login`
-           window.event.returnValue=false; 
+           window.location.href=`${window.location.origin}/login`
            sessionStorage.clear()
          }
        } else {
@@ -34,15 +33,7 @@ service.interceptors.response.use(
     }
   },
   error => {
-    if(!window.location.hash.includes('login')){
-      selectMessage('error','请求异常,即将关闭当前会话')
-      window.location.href=`${window.location.href}/#/login`
-      window.event.returnValue=false; 
-      sessionStorage.clear()
-    } else{
-      selectMessage('error','请求异常！')
-    }
-
+    selectMessage('error','请求异常！')
     return Promise.reject(error)
   }
 )
