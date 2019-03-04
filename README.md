@@ -65,7 +65,7 @@ npm run build
 ### 五、公共组件介绍
 > 具体用法和antd一致,既antd所支持属性和方法以下组件都支持,只是对antd部分组件做了扩展和统一规范,以及将一些复杂的业务抽象出来，让使用者可以更简单的去使用，对于嵌套表格可以参考入库业务和出库业务，因元antd使用简单，故未做封装
 
-#### ---FetchTable
+#### (1)、FetchTable
 > 基础table组件，具体用法和antd一致,只是略作扩展
 
 1. 可以不用设置key值,已经默认设置
@@ -133,7 +133,7 @@ npm run build
 其余属性同antd
 
 ---------------------------------------------------------------------------------
-#### ---SelectionTable 
+#### (2)、SelectionTable 
 > 多选table组件,具体用法和antd一致,只是略作扩展，如果页面没有多选需求，建议使用FetchTable,当然FetchTable所拥有的属性和方法该组件都有
 
 1. onSelectChange和selectedRowKey是该组件的核心属性,selectedRowKey是当前选中的key值数组，多选的列是受控类型的，onSelectChange是选中后的回调，返回时选中的key值数组
@@ -154,7 +154,7 @@ npm run build
 属性同FetchTable
 
 --------------------------------------------------------------------------------------
-#### ---EditableTable 
+#### (3)、EditableTable 
 > 可编辑table组件，可实现双击单元格而实现可编辑状态，若无此类需求，建议使用FetchTable
 
 1. EditableTable上的onChange方法和columns中的editable属性是该组件的核心属性,onChange是一个函数,当你在input中输入值改变的时候,他会将改变后的dataSource传递回去,editable是一个布尔型的属性,他决定了是否对于某个字段进行可编辑
@@ -188,7 +188,7 @@ columns案例:
 
 ----------------------------------------------------------------------
 
-#### ---BaseTitle 
+#### (4)、BaseTitle 
 > 小标题样式组件,为了大家把标题的样式写的统一一点,您也可以选择不使用
 ##### BaseTitle  props
 
@@ -197,7 +197,7 @@ columns案例:
 | title |  标题  |  String  | null  |  否  |
 
 
-#### ---BaseCard 
+#### (5)、BaseCard 
 > 该组件主要用于table查看详情时的基本信息卡片,可以参考入库业务点击table的详情弹窗
 
 1. columns 和 dataSource是该组件的核心属性,dataSource是数据源,与table不同的是他的数据源是一个对象而并非数组,columns是配置属性,大体方式和table的columns相同,只不过目前仅支持(title,dataIndex,type,format,useLocalEnum,useFetchMap,render,span,marginBottom)
