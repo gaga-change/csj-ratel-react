@@ -66,7 +66,7 @@ npm run build
 > 具体用法和antd一致,既antd所支持属性和方法以下组件都支持,只是对antd部分组件做了扩展和统一规范,以及将一些复杂的业务抽象出来，让使用者可以更简单的去使用
 
 #### FetchTable
-> 基础table组件，具体用法和antd一致
+> 基础table组件，具体用法和antd一致,只是略作扩展
 
 1. 可以不用设置key值,已经默认设置
 
@@ -127,3 +127,23 @@ npm run build
 | useLocalEnum |  使用本地何种枚举,既上述4  |  String  | -  |  否  |
 
 其余属性同antd
+
+#### SelectionTable 
+> 多选table组件,具体用法和antd一致,只是略作扩展，如果页面没有多选需求，建议使用FetchTable,当然FetchTable所拥有的属性和方法该组件都有
+
+1. onSelectChange和selectedRowKey是该组件的核心属性,selectedRowKey是当前选中的key值数组，多选的列是受控类型的，onSelectChange是选中后的回调，返回时选中的key值数组
+
+2. 该组件支持前后端分页，但建议后端一次性把所有数据返回过来，全选支持选中当前页所有数据，也支持选中所有页数据，是一个下拉菜单
+
+##### FetchTable props
+
+| 属性  | 描述  |  类型 | 默认值 | 是否必填  |
+| --- | --- |  --- | --- | --- | 
+| selectedRowKey |  当前选中数据的key值数组  |  Array  | []  |  true  |
+| onSelectChange |  选中后的回调  |  Function(selectedRowKeys数组)  | -  |  true  |
+
+其余属性同antd
+
+##### columns props
+
+属性同antd

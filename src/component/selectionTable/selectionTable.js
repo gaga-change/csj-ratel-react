@@ -1,5 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
+import moment from 'moment'
+import * as Enum from '@lib/enum';
 import './selectionTable.scss'
 export default class SelectionTable extends React.Component {
   
@@ -24,6 +26,14 @@ export default class SelectionTable extends React.Component {
     
     columns=columns.map((v,i)=>{
       v.key=i+1;
+      if(v.type){ 
+        switch(v.type){
+          case 'time':v.render=(item)=>moment(Number(item)).format(v.format||'YYYY-MM-DD');break;
+          default:break;
+        }
+      } else if(v.useLocalEnum){
+        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))['value']
+      }
       return v;
     })
 
