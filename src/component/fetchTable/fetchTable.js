@@ -1,12 +1,19 @@
 import React from 'react';
 import moment from 'moment'
 import { Table } from 'antd';
+import { connect } from 'react-redux';
 import * as Enum from '@lib/enum';
 import './fetchTable.scss'
+
+@connect(
+  state => state.map
+)
+
 export default class FetchTable extends React.Component {
   
   render() {
     let { dataSource=[],useIndex=false,columns=[],size='small',locale={emptyText:'暂无数据' }, bordered=true,...rest } = this.props;
+    const { mapSouce } =this.props;
     columns=columns.map((v,i)=>{
       v.key=i+1;
       if(v.type){ 
@@ -15,7 +22,9 @@ export default class FetchTable extends React.Component {
           default:break;
         }
       } else if(v.useLocalEnum){
-        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))['value']
+        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
+      } else if(v.useFetchMap){
+        v.render=(item)=>mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
       }
       return v;
     })

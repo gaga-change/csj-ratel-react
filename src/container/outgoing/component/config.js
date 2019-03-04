@@ -1,4 +1,4 @@
-import moment from 'moment'
+
 export  const indexTableColumns_Config=[
   {
     title: '业务单编号',
@@ -19,7 +19,7 @@ export  const indexTableColumns_Config=[
   },
   {
     title:'已出库数量',
-    dataIndex:'outQty',
+    dataIndex:'outQty'
   },
   {
     title:'单据状态',
@@ -196,7 +196,7 @@ export  const BaseCard_Config=[
   {
     title:'计划出库日期',
     dataIndex: 'planOutTime',
-    render:(v)=>moment(v).format('YYYY-MM-DD')
+    type:'time'
   },
   {
     title:'出库仓库',

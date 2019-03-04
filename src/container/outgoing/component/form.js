@@ -1,10 +1,15 @@
 import React from 'react';
 import { Form, Input,Button,Row,Col,Select,DatePicker } from 'antd';
+import { connect } from 'react-redux';
 import {outgoing_planStateEnum} from '@lib/enum';
 import './form.scss'
 
 const { RangePicker } = DatePicker;
 const Option = Select.Option;
+
+@connect(
+  state => state.map
+)
 
 class SelestForm extends React.Component {
 
@@ -26,7 +31,7 @@ class SelestForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { selectWordsArr=[],className='CommodityForm' } = this.props;
-
+    const { mapSouce } =this.props;
     return (
       <div className={className}>
           <Form onSubmit={this.handleSubmit}  layout="inline">
@@ -124,10 +129,9 @@ class SelestForm extends React.Component {
                       rules: [{ required: false, message: '' }],
                     })(
                       <Select  style={{width:180}}  placeholder="请选择仓库">
-                        <Option value="jack">Jack</Option>
-                        <Option value="lucy">Lucy</Option>
-                        <Option value="disabled" disabled>Disabled</Option>
-                        <Option value="Yiminghe">yiminghe</Option>
+                       {
+                         Array.isArray(mapSouce['warehouseMap'])&&mapSouce['warehouseMap'].map(v=><Option key={v.key} value={v.key}>{v.value}</Option>)
+                       }
                       </Select>
                     )}
                   </Form.Item>

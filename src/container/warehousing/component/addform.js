@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input,Button,DatePicker,Select,Modal } from 'antd';
 import _  from 'lodash';
 import request from '@lib/request'
+import { connect } from 'react-redux';
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import { formTable_config,goodsInStorage_config } from './config'
@@ -10,6 +11,10 @@ import './addform.scss'
 
 const { TextArea } = Input;
 const Option = Select.Option;
+
+@connect(
+  state => state.map
+)
 
 class AddForm extends React.Component {
 
@@ -138,7 +143,7 @@ class AddForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     let { items,visible,goodsInStorage_dataSource,selectedRowKeys,selectionTableLoding} = this.state;
-
+    const { mapSouce } =this.props;
     const formItemLayout_left = {
       labelCol: {
         span:9
@@ -206,10 +211,9 @@ class AddForm extends React.Component {
                     rules: [{ required: true, message: '请选择计划入库仓库' }],
                   })(
                     <Select  style={{width:180}} placeholder="请选择计划入库仓库" onChange={this.onSelectOptionChange}>
-                      <Option value="1">Jack</Option>
-                      <Option value="2">Lucy</Option>
-                      <Option value="3" >Disabled</Option>
-                      <Option value="4">yiminghe</Option>
+                     {
+                      Array.isArray(mapSouce['warehouseMap'])&&mapSouce['warehouseMap'].map(v=><Option key={v.key} value={v.key}>{v.value}</Option>)
+                     }
                     </Select>
                   )}
                 </Form.Item>

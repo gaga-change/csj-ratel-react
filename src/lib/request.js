@@ -24,16 +24,16 @@ service.interceptors.response.use(
            sessionStorage.clear()
          }
        } else {
-         selectMessage('error',`${response.data.errorMsg||'请求异常！'}`)
+         selectMessage('error',`${response.data.errorMsg||'请求异常'},接口${response.config.url}`)
          return Promise.reject(response.data)
        }
     } else {
-      selectMessage('error','请求异常！')
+      selectMessage('error',`请求异常,接口${response.config.url}`)
       return Promise.reject(response.data)
     }
   },
   error => {
-    selectMessage('error','请求异常！')
+    selectMessage('error',`请求异常!`)
     return Promise.reject(error)
   }
 )

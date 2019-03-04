@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Enum from '@lib/enum';
+import { connect } from 'react-redux';
 import moment from 'moment'
 import {Table, Input, Form,InputNumber} from 'antd';
 import './editableTable.scss'
@@ -117,6 +118,9 @@ class EditableCell extends React.Component {
 }
 
 
+@connect(
+  state => state.map
+)
 export default class EditableTable extends React.Component {
 
   handleSave = (row) => {
@@ -142,6 +146,7 @@ export default class EditableTable extends React.Component {
     };
 
     let { columns=[],dataSource=[],useIndex=false,size='small',locale={emptyText:'暂无数据' },components=componentsDefaul,bordered=true,...rest } = this.props;
+    const { mapSouce } =this.props;
 
     columns = columns.map((v,i) => {
       v.key=i+1;
@@ -151,7 +156,9 @@ export default class EditableTable extends React.Component {
           default:break;
         }
       } else if(v.useLocalEnum){
-        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))['value']
+        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
+      } else if(v.useFetchMap){
+        v.render=(item)=>mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
       } else if(v.editable){
         v={
           ...v,

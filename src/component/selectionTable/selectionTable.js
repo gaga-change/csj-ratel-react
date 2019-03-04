@@ -1,8 +1,12 @@
 import React from 'react';
 import { Table } from 'antd';
+import { connect } from 'react-redux';
 import moment from 'moment'
 import * as Enum from '@lib/enum';
 import './selectionTable.scss'
+@connect(
+  state => state.map
+)
 export default class SelectionTable extends React.Component {
   
   onSelectChange = (type,selectedRowKeys) => {
@@ -23,7 +27,7 @@ export default class SelectionTable extends React.Component {
   render() {
 
     let { dataSource=[], columns=[],useIndex=false,selectedRowKeys=[],size='small',locale={emptyText:'暂无数据' }, bordered=true,...rest } = this.props;
-    
+    const { mapSouce } =this.props;
     columns=columns.map((v,i)=>{
       v.key=i+1;
       if(v.type){ 
@@ -32,7 +36,9 @@ export default class SelectionTable extends React.Component {
           default:break;
         }
       } else if(v.useLocalEnum){
-        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))['value']
+        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
+      } else if(v.useFetchMap){
+        v.render=(item)=>mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
       }
       return v;
     })

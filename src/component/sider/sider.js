@@ -6,13 +6,14 @@ import request from '../../lib/request'
 import { deepExistMenu } from '../../lib/lib'
 import { setInfo, removeInfo } from "../../redux/info.redux";
 import { setMenus } from "../../redux/menus.redux";
+import { setMap } from "../../redux/map.redux";
 import { routerConfig } from '../../router/config'
 import imgSouce from '../../imgSouce/imgSouce'
 import './sider.scss'
 
 @connect(
   state => state,
-  { setInfo, setMenus, removeInfo }
+  { setInfo, setMenus, removeInfo,setMap}
 )
 
 export default class Sider extends React.Component {
@@ -35,7 +36,7 @@ export default class Sider extends React.Component {
   }
 
   spin = () => {
-    const { isLoginPage,hasGetInfo} = this.state
+    const { isLoginPage} = this.state
     if ((!this.props.info || !this.props.info.info || this.props.info.info.id === undefined) && !isLoginPage) {
       this.getInfo()
     }
@@ -48,6 +49,7 @@ export default class Sider extends React.Component {
     }).then(res => {
       this.props.setInfo(res)
       this.props.setMenus(deepExistMenu(res.menus.children, routerConfig))
+      this.props.setMap()
     }).catch(err => {
        console.log(err)
     })

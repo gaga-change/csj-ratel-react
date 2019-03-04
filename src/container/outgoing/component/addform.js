@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input,Button,DatePicker,Select,Modal,message} from 'antd';
 import _  from 'lodash';
 import request from '@lib/request'
+import { connect } from 'react-redux';
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import {custList} from '@publickApi/publickApi'
@@ -11,6 +12,10 @@ import './addform.scss'
 
 const { TextArea } = Input;
 const Option = Select.Option;
+
+@connect(
+  state => state.map
+)
 
 class AddForm extends React.Component {
 

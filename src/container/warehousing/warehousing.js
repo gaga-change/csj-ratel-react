@@ -13,6 +13,7 @@ import BaseTitle from '@component/baseTitle/baseTitle'
 import './warehousing.scss'
 
 const confirm = Modal.confirm;
+
 export default class Warehousing extends React.Component {
   constructor(props){
     super(props);

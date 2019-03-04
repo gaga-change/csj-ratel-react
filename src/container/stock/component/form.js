@@ -1,8 +1,14 @@
 import React from 'react';
 import { Form, Input,Button,Row,Col,Select  } from 'antd';
+import { connect } from 'react-redux';
 import './form.scss'
 
 const Option = Select.Option;
+
+@connect(
+  state => state.map
+)
+
 class CommodityForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
@@ -19,7 +25,7 @@ class CommodityForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-
+    const { mapSouce } =this.props;
     return (
       <div className="CommodityForm">
           <Form onSubmit={this.handleSubmit}  layout="inline">
@@ -31,8 +37,9 @@ class CommodityForm extends React.Component {
                     rules: [{ required: false, message: '' }],
                   })(
                     <Select  style={{width:180}} placeholder="请选择仓库">
-                      <Option value="5">Jack</Option>
-                      <Option value="0">Lucy</Option>
+                       {
+                         Array.isArray(mapSouce['warehouseMap'])&&mapSouce['warehouseMap'].map(v=><Option key={v.key} value={v.key}>{v.value}</Option>)
+                       }
                     </Select>
                   )}
                 </Form.Item>
