@@ -20,9 +20,11 @@ export default class FetchTable extends React.Component {
       return v;
     })
 
-    if(!this.props.rowKey&&Array.isArray(dataSource)){
+    if(Array.isArray(dataSource)){
       dataSource=dataSource.map((v,i)=>{
-        v.key=i+1;
+        if(!this.props.rowKey){
+          v.key=i+1;
+        }
         if(useIndex){
           v.index=i+1;
         }

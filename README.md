@@ -16,7 +16,14 @@
 npm run start
 
 ```
-### 三、目录结构
+
+### 三、打包方式
+
+```
+npm run build
+
+```
+### 四、目录结构
 
 ```
 /
@@ -54,4 +61,64 @@ npm run start
  └── README.md                      # 项目说明
 
 ```
+
+### 五、公共组件介绍
+> 具体用法和antd一致,既antd所支持属性和方法以下组件都支持,只是对antd部分组件做了扩展和统一规范,以及将一些复杂的业务抽象出来，让使用者可以更简单的去使用
+
+#### FetchTable
+> 基础table组件，具体用法和antd一致
+
+1. 可以不用设置key值,已经默认设置
+
+2. 如果需要序号列,只需设置属性useIndex=true即可
+
+3. 对于需要格式化类别的数据,只需要对列的配置项columns每列加上type属性即可,如需要格式化为时间的只需要加上type:'time'即可，同时你还可以加上format属性自定义时间展示格式，format:'YYYY-MM-DD'(可以参考moment),当然你也可以自行扩展
+
+```
+{ title:'计划出库时间',dataIndex:'planOutTime',type:'time'}
+
+```
+4. 对于本地枚举类格式化数据，只需要对列的配置项columns每列加上useLocalEnum属性即可,其属性值只要为src/lib/enum.js文件中对应的枚举变量名即可
+
+```
+{ title:'单据状态',dataIndex:'planState',useLocalEnum:'outgoing_planStateEnum'}
+
+```
+
+主要逻辑
+
+```
+    columns=columns.map((v,i)=>{
+      v.key=i+1;
+      if(v.type){ 
+        switch(v.type){
+          case 'time':v.render=(item)=>moment(Number(item)).format(v.format||'YYYY-MM-DD');break;
+          default:break;
+        }
+      } else if(v.useLocalEnum){
+        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))['value']
+      }
+      return v;
+    })
+
+    if(Array.isArray(dataSource)){
+      dataSource=dataSource.map((v,i)=>{
+        if(!this.props.rowKey){
+          v.key=i+1;
+        }
+        if(useIndex){
+          v.index=i+1;
+        }
+        return v;
+      }) 
+    }
+    
+```
+
+| 属性  | 描述  |  类型 | 默认值 | 是否必填  |
+| --- | --- |  --- | --- | --- | 
+| loading | loading  |  Boolean  | false  |  否  |
+| elementLoadingText | loading提示文字  |  String  | 加载中  |  否  |
+| elementLoadingBackground | loading背景颜色  |  String  | rgba(255, 255, 255, 0.5)  |  否  |
+
 
