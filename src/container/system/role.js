@@ -17,7 +17,6 @@ export default class Role extends React.Component {
     this.state = {
       dataSource: [],
       selectedRowKeys: [],
-      pagination: {},
       loading: false,
       delLoading: false
     }
@@ -34,7 +33,7 @@ export default class Role extends React.Component {
    */
   fetch = (json = {}) => {
     this.setState({ loading: true })
-    let { dataSource, pagination } = this.state;
+    let { dataSource } = this.state;
     let data = {
       roleName: '',
       ...json,
@@ -46,10 +45,8 @@ export default class Role extends React.Component {
       data: data
     }).then(res => {
       dataSource = res
-      pagination.total = res.length
       this.setState({
         dataSource,
-        pagination,
         loading: false,
       })
     }).catch(err => {
@@ -179,7 +176,7 @@ export default class Role extends React.Component {
           rowKey={"id"}
           onSelectChange={this.onSelectChange}
           loading={this.state.loading}
-          pagination={this.state.pagination} />
+          pagination={false} />
         <RoleAddModal onRef={this.onRoleAddModalRef} onClose={this.handleRoleAddModalClose}></RoleAddModal>
         <RoleJurisdictionModal onRef={this.onRoleJurisdictionModalRef}></RoleJurisdictionModal>
       </div>

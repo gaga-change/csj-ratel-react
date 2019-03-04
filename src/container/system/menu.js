@@ -14,9 +14,7 @@ export default class Menu extends React.Component {
     super(props)
     this.state = {
       dataSource: [],
-      selectedRowKeys: [],
       expandedRowKeys: [], // 树形表格默认展开行
-      pagination: {},
       loading: false,
       menus: [], // 所有菜单项
     }
@@ -33,7 +31,7 @@ export default class Menu extends React.Component {
    */
   fetch = (json = {}) => {
     this.setState({ loading: true })
-    let { dataSource, pagination } = this.state;
+    let { dataSource } = this.state;
     let data = {
       menuName: '',
       ...json,
@@ -48,10 +46,8 @@ export default class Menu extends React.Component {
       res = res.children
       this._filterMenu(res) // 过滤空 children
       dataSource = res
-      pagination.total = res.length
       this.setState({
         dataSource,
-        pagination,
         loading: false,
       })
     }).catch(err => {
@@ -99,13 +95,6 @@ export default class Menu extends React.Component {
   }
 
   /**
-   * 表格选择
-   */
-  onSelectChange = (selectedRowKeys, other) => {
-    this.setState({ selectedRowKeys });
-  }
-
-  /**
    * 删除
    */
   handleDelete = (obj) => {
@@ -129,7 +118,7 @@ export default class Menu extends React.Component {
   onMenuAddModalRef = (child) => this.menuAddModal = child
 
   render() {
-    const { dataSource } = this.state;
+    const { dataSource,expandedRowKeys,loading,menus } = this.state;
     const columns = _.cloneDeep(menuConfig_config).map(v => {
       if (v.render === '') {
         v.render = (text, record) => {
@@ -153,15 +142,13 @@ export default class Menu extends React.Component {
           <Button type="primary" onClick={() => this.openMenuFormMoadl()}>创建菜单</Button>
         </div>
         <FetchTable
-          expandedRowKeys={this.state.expandedRowKeys}
-          selectedRowKeys={this.state.selectedRowKeys}
+          expandedRowKeys={expandedRowKeys}
           dataSource={dataSource}
           columns={columns}
           rowKey={"id"}
-          onSelectChange={this.onSelectChange}
-          loading={this.state.loading}
-          pagination={this.state.pagination} />
-        <MenuAddModal onRef={this.onMenuAddModalRef} onClose={this.handleMenuAddModalClose} menus={this.state.menus}></MenuAddModal>
+          loading={loading}
+          pagination={false} />
+        <MenuAddModal onRef={this.onMenuAddModalRef} onClose={this.handleMenuAddModalClose} menus={menus}></MenuAddModal>
       </div>
     )
   }
