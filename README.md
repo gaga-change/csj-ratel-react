@@ -126,3 +126,4 @@ npm run build
 | type |  格式化为何中数据如time,既上述3  |  String  | -  |  否  |
 | useLocalEnum |  使用本地何种枚举,既上述4  |  String  | -  |  否  |
 
+其余属性同antd
