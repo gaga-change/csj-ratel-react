@@ -20,7 +20,7 @@ export default class Sider extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoginPage: this.props.history.location.pathname === '/web_login',
+      isLoginPage: this.props.history.location.pathname === '/web_login'
     }
   }
 
@@ -35,7 +35,7 @@ export default class Sider extends React.Component {
   }
 
   spin = () => {
-    const { isLoginPage } = this.state
+    const { isLoginPage,hasGetInfo} = this.state
     if ((!this.props.info || !this.props.info.info || this.props.info.info.id === undefined) && !isLoginPage) {
       this.getInfo()
     }

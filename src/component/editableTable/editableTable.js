@@ -1,4 +1,6 @@
 import React from 'react';
+import * as Enum from '@lib/enum';
+import moment from 'moment'
 import {Table, Input, Form,InputNumber} from 'antd';
 import './editableTable.scss'
 
@@ -141,23 +143,32 @@ export default class EditableTable extends React.Component {
 
     let { columns=[],dataSource=[],useIndex=false,size='small',locale={emptyText:'暂无数据' },components=componentsDefaul,bordered=true,...rest } = this.props;
 
-    columns = columns.map((col,i) => {
-      if (!col.editable) {
-        return {...col,key:i+1};
+    columns = columns.map((v,i) => {
+      v.key=i+1;
+      if(v.type){ 
+        switch(v.type){
+          case 'time':v.render=(item)=>moment(Number(item)).format(v.format||'YYYY-MM-DD');break;
+          default:break;
+        }
+      } else if(v.useLocalEnum){
+        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))['value']
+      } else if(v.editable){
+        v={
+          ...v,
+          onCell: record => ({
+            record,
+            editable: v.editable,
+            dataIndex: v.dataIndex,
+            title: v.title,
+            rules:v.rules,
+            handleSave: this.handleSave,
+            inputType:v.inputType
+          }),
+        }
       }
-      return {
-        key:i+1,
-        ...col,
-        onCell: record => ({
-          record,
-          editable: col.editable,
-          dataIndex: col.dataIndex,
-          title: col.title,
-          rules:col.rules,
-          handleSave: this.handleSave,
-          inputType:col.inputType
-        }),
-      };
+
+      return v
+
     });
 
     if(Array.isArray(dataSource)){

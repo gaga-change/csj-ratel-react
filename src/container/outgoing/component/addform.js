@@ -4,7 +4,7 @@ import _  from 'lodash';
 import request from '@lib/request'
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
-import {arrivalMap} from '@publickApi/map'
+import {custList} from '@publickApi/publickApi'
 import { formTable_config,goodsInStorage_config } from './config'
 import SelestForm from './form'
 import './addform.scss'
@@ -117,7 +117,7 @@ class AddForm extends React.Component {
     if(arrivalConfig.length>0){
       return 
     }
-    arrivalMap().then(res=>{
+    custList().then(res=>{
       this.setState({arrivalConfig:res})
     }).catch(err=>{
        console.log(err)

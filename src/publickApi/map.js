@@ -1,8 +1,8 @@
 import request from '@lib/request'
 
-export function arrivalMap(){
+export function warehouseMap(){
   return request({
-    url:'/webApi/base/cust/list'
+    url:'/webApi/base/warehouse/list'
   })
 }
 

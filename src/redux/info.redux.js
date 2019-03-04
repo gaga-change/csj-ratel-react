@@ -1,7 +1,7 @@
 const LOGIN='LOGIN';
 const LOGOUT='LOGOUT';
 
-export function info(state={info:(sessionStorage.getItem('info')!=='undefined'&&JSON.parse(sessionStorage.getItem('info')))||{}},action) {
+export function info(state={info:{}},action) {
     switch (action.type){
         case LOGIN:
             return {info:action.info};
@@ -13,12 +13,10 @@ export function info(state={info:(sessionStorage.getItem('info')!=='undefined'&&
 }
 
 export function setInfo(info) {
-  sessionStorage.setItem('info',JSON.stringify(info))
   return {type:LOGIN,info:info};
 }
 
 export function removeInfo() {
-    sessionStorage.removeItem('info')
-    sessionStorage.removeItem('menus')
+    sessionStorage.clear()
     return {type:LOGOUT}
 }
