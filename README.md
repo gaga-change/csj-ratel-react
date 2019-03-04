@@ -74,20 +74,16 @@ npm run build
 
 3. 对于需要格式化类别的数据,只需要对列的配置项columns每列加上type属性即可,如需要格式化为时间的只需要加上type:'time'即可，同时你还可以加上format属性自定义时间展示格式，format:'YYYY-MM-DD'(可以参考moment),当然你也可以自行扩展
 
-```
-{ title:'计划出库时间',dataIndex:'planOutTime',type:'time'}
-
-```
 4. 对于本地枚举类格式化数据，只需要对列的配置项columns每列加上useLocalEnum属性即可,其属性值只要为src/lib/enum.js文件中对应的枚举变量名即可
-
-```
-{ title:'单据状态',dataIndex:'planState',useLocalEnum:'outgoing_planStateEnum'}
-
-```
 
 主要逻辑
 
 ```
+    columns=[
+      { title:'计划出库时间',dataIndex:'planOutTime',type:'time'},
+      { title:'单据状态',dataIndex:'planState',useLocalEnum:'outgoing_planStateEnum'}
+    ]
+    
     columns=columns.map((v,i)=>{
       v.key=i+1;
       if(v.type){ 
@@ -115,10 +111,18 @@ npm run build
     
 ```
 
+##### FetchTable props
+
 | 属性  | 描述  |  类型 | 默认值 | 是否必填  |
 | --- | --- |  --- | --- | --- | 
-| loading | loading  |  Boolean  | false  |  否  |
-| elementLoadingText | loading提示文字  |  String  | 加载中  |  否  |
-| elementLoadingBackground | loading背景颜色  |  String  | rgba(255, 255, 255, 0.5)  |  否  |
+| useIndex |  是否使用序号索引，既上述2的描述  |  Boolean  | false  |  否  |
 
+其余属性同antd
+
+##### columns props
+
+| 属性  | 描述  |  类型 | 默认值 | 是否必填  |
+| --- | --- |  --- | --- | --- | 
+| type |  格式化为何中数据如time,既上述3  |  String  | -  |  否  |
+| useLocalEnum |  使用本地何种枚举,既上述4  |  String  | -  |  否  |
 
