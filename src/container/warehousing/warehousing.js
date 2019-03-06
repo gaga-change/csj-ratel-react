@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Modal,Spin } from 'antd';
+import {Button,Modal,Spin,Dropdown,Menu,Icon} from 'antd';
 import moment from "moment"
 import _  from 'lodash';
 import request from '@lib/request'
@@ -27,7 +27,9 @@ export default class Warehousing extends React.Component {
       },
       dataSource:[],
       warehousingDetail_dataSource:[{},{}],
-      BaseCard_dataSource:{}
+      BaseCard_dataSource:{},
+      record:{},
+
     }
   }
 
@@ -81,9 +83,23 @@ export default class Warehousing extends React.Component {
     })
   }
 
-  add = ()=>{
-    console.log('这是出现创建入库单弹窗调用')
-    this.setState({visible:true})
+  add = (type,record)=>{
+    if(type==='update'){
+      request({
+        url:'/webApi/in/bill/getInBusiBillDetail',
+        method:'get',
+        data:{ 
+          planCode:record.planCode
+        }
+      }).then(res => {
+         console.log(res)
+         this.setState({visible:true,record:res,ModalTitle:'修改入库业务单'})
+      }).catch(err=>{
+        console.log(err)
+      })
+    } else{
+      this.setState({visible:true,record:{},ModalTitle:'创建入库业务单'})
+    }
   }
 
   fetch = (json={})=>{
@@ -176,22 +192,46 @@ export default class Warehousing extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
 
   render() {
-    const { dataSource,spinning,visible,detailVisible,warehousingDetail_dataSource,BaseCard_dataSource} =this.state;
+    const { dataSource,spinning,record,visible,ModalTitle,detailVisible,warehousingDetail_dataSource,BaseCard_dataSource} =this.state;
     const columns=_.cloneDeep(indexTableColumns_Config).map(v=>{
       if(v.render===''){
          v.render=(ext, record, index)=>{
             return <span className="Dropdown_Menu_box">
               <span onClick={this.showDetail.bind(this,record)}>查看</span> 
-              {
-                 [0,2].includes(Number(record.issuedState))&&
-                <span onClick={this.onOperation.bind(this,'delete',record)}>删除</span>
-              }
-
               { 
-                [0].includes(Number(record.planState))&&
-                <span onClick={this.onOperation.bind(this,'submit',record)}>提交</span>
+                [0,2].includes(Number(record.issuedState))&&
+                <Dropdown overlay={
+                  <Menu className="Dropdown_Menu_child" >
+                    { 
+                      [0,2].includes(Number(record.issuedState))&&
+                      <Menu.Item onClick={this.add.bind(this,'update',record)}>
+                        <span>修改</span>
+                      </Menu.Item>
+                    }
+  
+                    {
+                      [0,2].includes(Number(record.issuedState))&&
+                      <Menu.Item onClick={this.onOperation.bind(this,'delete',record)}>
+                        <span>删除</span>
+                      </Menu.Item>
+                    }
+  
+                    { 
+                      [0].includes(Number(record.planState))&&
+                      <Menu.Item onClick={this.onOperation.bind(this,'submit',record)}>
+                        <span>提交</span>
+                       </Menu.Item>
+                    } 
+                  </Menu>}>
+                   <span>更多操作<Icon type="down" /></span>
+                </Dropdown>
               }
             </span>
          }
@@ -225,13 +265,14 @@ export default class Warehousing extends React.Component {
             expandedRowRender={childTable}
             dataSource={dataSource}/>
             <Modal
-              title="创建入库业务单"
+              title={ModalTitle}
               centered={true}
               width={1000}
               visible={visible}
               footer={null}
               onCancel={this.handleCancel}>
               <AddForm
+                record={record}
                 onRef={this.ref} 
                 onSubmit={this.onSubmit}/>
             </Modal>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input,Button,DatePicker,Select,Modal } from 'antd';
 import _  from 'lodash';
+import moment from 'moment'
 import request from '@lib/request'
 import { connect } from 'react-redux';
 import EditableTable from '@component/editableTable/editableTable'
@@ -134,16 +135,28 @@ class AddForm extends React.Component {
     this.setState({warehouse})
   }
 
-
-
   componentDidMount(){
+    let {record} = this.props
+    let { warehouse,items } = this.state;
     this.props.onRef(this)
+    if(record.planWarehouseCode){
+      warehouse.warehouseName=record.planWarehouseName;
+      if(Array.isArray(record.planDetails)){
+        items=record.planDetails.map(v=>{
+          v.brandName=v.skuBrandName;
+          return v
+        })
+      }
+      this.setState({warehouse,items})
+      this.props.form.setFieldsValue({items});
+    }
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
     let { items,visible,goodsInStorage_dataSource,selectedRowKeys,selectionTableLoding} = this.state;
-    const { mapSouce } =this.props;
+    const { mapSouce,record} =this.props;
+    console.log(record)
     const formItemLayout_left = {
       labelCol: {
         span:9
@@ -208,6 +221,7 @@ class AddForm extends React.Component {
 
                 <Form.Item label="计划入库仓库" {...formItemLayout_left}>
                   { getFieldDecorator('warehouseCode', {
+                    initialValue:record.planWarehouseCode,
                     rules: [{ required: true, message: '请选择计划入库仓库' }],
                   })(
                     <Select  style={{width:180}} placeholder="请选择计划入库仓库" onChange={this.onSelectOptionChange}>
@@ -220,6 +234,7 @@ class AddForm extends React.Component {
  
                  <Form.Item label="计划入库日期"  {...formItemLayout_right}>
                   { getFieldDecorator('planInTime', {
+                     initialValue:(record.planTime&&!isNaN(record.planTime)&&moment(Number(record.planTime)))||null,
                      rules: [{ required: true,message: '请选择计划入库日期' }],
                   })(
                     <DatePicker/>
@@ -228,7 +243,7 @@ class AddForm extends React.Component {
 
                 <Form.Item label="备注" {...formItemLayout_left} style={{width:300,minHeight:110}}>
                   { getFieldDecorator('remarkInfo', {
-                    initialValue:'',
+                    initialValue:record.remarkInfo,
                     rules: [{ required: false }],
                   })(
                     <TextArea rows={4} placeholder="请输入备注信息" />

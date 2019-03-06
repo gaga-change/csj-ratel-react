@@ -18,6 +18,9 @@ export default class Login extends React.Component {
 
   componentWillUnmount(){
     document.querySelector('body').style.overflow='auto'
+    this.setState = (state, callback) => {
+      return
+    }
   }
 
   onSubmit=(json)=>{

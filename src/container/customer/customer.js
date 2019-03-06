@@ -217,6 +217,12 @@ export default class Customer extends React.Component {
     this.setState({ visible_operation: true, addressDetail: value,activeOperation:'修改地址' })
   }
 
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
+
   render() {
     const {dataSource,visible_addCustomer,loading,pagination,addressDetail,spinning,customerspinning,visible_address,activeOperation,visible_operation, address_dataSource,address_loading} = this.state
     const columns = _.cloneDeep(indexTableColumnsConfig).map(v => {

@@ -200,6 +200,12 @@ export default class Commodity extends React.Component {
     })
   }
 
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
+
   render() {
     const { dataSource,submitLoding,visible,modifypriceVisible,costPriceChange_dataSource,modifyprice_loding,priceChange_dataSource,modifypriceActiveRow,loading,pagination}=this.state;
     const columns=_.cloneDeep(indexTableColumnsConfig).map(v=>{

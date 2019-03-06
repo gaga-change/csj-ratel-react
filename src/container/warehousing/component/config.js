@@ -198,10 +198,12 @@ export  const BaseCard_Config=[
   {
     title:'创建日期',
     dataIndex:'gmtCreate',
+    type:'time'
   },
   {
     title:'状态',
     dataIndex:'planState',
+    useLocalEnum:'warehousing_planStateEnum'
   },
 
 ]

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input,Button,DatePicker,Select,Modal,message} from 'antd';
+import moment from 'moment'
 import _  from 'lodash';
 import request from '@lib/request'
 import { connect } from 'react-redux';
@@ -29,7 +30,6 @@ class AddForm extends React.Component {
       arrival:{},
       arrivalConfig:[],
       arrivalAddressConfig:[]
-      
     };
   }
 
@@ -112,8 +112,22 @@ class AddForm extends React.Component {
   }
 
   componentDidMount(){
+    let {record} = this.props
+    let { arrival,items } = this.state;
     this.props.onRef(this);
-    this.fetchArriva()
+    this.fetchArriva();
+    if(record.arrivalCode){
+      arrival.arrivalName=record.arrivalName;
+      if(Array.isArray(record.planDetails)){
+        items=record.planDetails.map(v=>{
+          v.brandName=v.skuBrandName;
+          v.costPrice=v.outPrice
+          return v
+        })
+      }
+      this.setState({arrival,items})
+      this.props.form.setFieldsValue({items});
+    }
   }
 
 
@@ -220,6 +234,7 @@ class AddForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     let { items,visible,arrivalConfig,arrivalAddressConfig,goodsInStorage_dataSource,selectedRowKeys,selectionTableLoding} = this.state;
+    let { record } = this.props;
     const formItemLayout_left = {
       labelCol: {
         span:7
@@ -307,6 +322,7 @@ class AddForm extends React.Component {
 
             <Form.Item label="客户名称"  {...formItemLayout_left} >
               { getFieldDecorator('arrivalCode', {
+                initialValue:record.arrivalCode,
                 rules: [{ required: true, message: '请选择客户' }],
               })(
                 <Select  
@@ -325,6 +341,7 @@ class AddForm extends React.Component {
 
             <Form.Item label="计划出库日期"  {...formItemLayout_right} style={{width:400}}>
               { getFieldDecorator('planOutTime', {
+                initialValue:(record.planOutTime&&!isNaN(record.planOutTime)&&moment(Number(record.planOutTime)))||null,
                 rules: [{ required: true,message: '请选择计划出库日期' }],
               })(
                 <DatePicker/>
@@ -335,6 +352,7 @@ class AddForm extends React.Component {
            
             <Form.Item label="收货地址" {...formItemLayout_arrivalAddress}  style={{height:60,display:arrivalAddressConfig.length>0?'none':'block'}}>
               { getFieldDecorator('arrivalAddress', {
+                initialValue:record.arrivalAddress,
                 rules: [{ 
                   required: !arrivalAddressConfig.length>0,
                   message: '请输入收货地址',
@@ -347,6 +365,7 @@ class AddForm extends React.Component {
 
             <Form.Item label="收货地址" {...formItemLayout_arrivalAddress} style={{height:60,display:arrivalAddressConfig.length>0?'block':'none'}}>
               { getFieldDecorator('arrivalAddressId', {
+                initialValue:'',
                 rules: [{ 
                   required: arrivalAddressConfig.length>0, 
                   message: '请选择收货地址',
@@ -363,7 +382,7 @@ class AddForm extends React.Component {
 
             <Form.Item label="收货人" {...formItemLayout_left}>
                 { getFieldDecorator('arrivalLinkName', {
-                  initialValue:'',
+                  initialValue:record.arrivalLinkName,
                   rules: [{ required: false, message: '' }],
                 })(
                   <Input autoComplete='off'   placeholder="请输入收货人" />
@@ -372,7 +391,7 @@ class AddForm extends React.Component {
                 
             <Form.Item label="手机" {...formItemLayout_right} >
                 { getFieldDecorator('arrivalLinkTel', {
-                  initialValue:'',
+                  initialValue:record.arrivalLinkTel,
                   rules: [{ required: false, message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/ }],
                 })(
                   <Input autoComplete='off'  placeholder="请输入手机" />
@@ -381,7 +400,7 @@ class AddForm extends React.Component {
 
             <Form.Item label="备注" {...formItemLayout_left}  style={{width:300,minHeight:110}}>
               { getFieldDecorator('remarkInfo', {
-                initialValue:'',
+                initialValue:record.remarkInfo,
                 rules: [{ required: false }],
               })(
                 <TextArea rows={4}  placeholder="请输入备注信息" />

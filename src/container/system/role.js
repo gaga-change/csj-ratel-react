@@ -140,7 +140,13 @@ export default class Role extends React.Component {
 
   onRoleAddModalRef = (child) => this.roleAddModal = child
   onRoleJurisdictionModalRef = (child) => this.roleJurisdictionModal = child
-
+  
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
+  
   render() {
     const { dataSource } = this.state;
     const columns = _.cloneDeep(roleConfig_config).map(v => {

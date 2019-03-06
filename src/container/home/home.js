@@ -33,6 +33,12 @@ export default class Home extends React.Component {
     })
   }
 
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
+
   render () {
     const menu=depthForEachIndex(this.props.menus);
     const { Total_dataSource }=this.state;

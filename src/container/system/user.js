@@ -196,6 +196,12 @@ export default class User extends React.Component {
 
   handleUserAddModalRef = child => this.userAddModal = child
 
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
+  
   render() {
     const { dataSource } = this.state;
     const columns = _.cloneDeep(userConfig_config).map(v => {

@@ -30,7 +30,7 @@ export  const indexTableColumns_Config=[
     title:'操作',
     dataIndex: '',
     render:'',
-    width:130,
+    width:180,
   },
 ]
 
@@ -63,6 +63,7 @@ export  const formTable_config=[
   {
     title: '序号',
     dataIndex: 'index',
+    width:40
   },
   {
     title:'商品编号',
@@ -71,10 +72,12 @@ export  const formTable_config=[
   {
     title:'商品名称',
     dataIndex:'skuName',
+    width:80
   },
   {
     title:'品牌',
     dataIndex:'brandName',
+    width:80
   },
   {
     title:'规格型号',
@@ -91,6 +94,7 @@ export  const formTable_config=[
   {
     title:'仓库',
     dataIndex: 'warehouseName',
+    width:80
   },
   {
     title:'出库数量',
@@ -213,10 +217,12 @@ export  const BaseCard_Config=[
   {
     title:'创建日期',
     dataIndex: 'gmtCreate',
+    type:'time'
   },
   {
     title:'状态',
     dataIndex: 'planState',
+    useLocalEnum:'outgoing_planStateEnum'
   },
 
 ]

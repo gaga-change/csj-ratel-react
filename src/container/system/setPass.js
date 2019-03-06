@@ -37,6 +37,12 @@ export default class SetPass extends React.Component {
     this.child = child
   }
 
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
+
   render() {
     return (
       <div className="setPass">

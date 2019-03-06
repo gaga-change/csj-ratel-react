@@ -116,7 +116,13 @@ export default class Menu extends React.Component {
   }
 
   onMenuAddModalRef = (child) => this.menuAddModal = child
-
+  
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
+  
   render() {
     const { dataSource,expandedRowKeys,loading,menus } = this.state;
     const columns = _.cloneDeep(menuConfig_config).map(v => {

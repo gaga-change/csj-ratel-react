@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Modal,Spin } from 'antd';
+import {Button,Modal,Spin,Dropdown,Menu,Icon } from 'antd';
 import _  from 'lodash';
 import moment from "moment"
 import request from '@lib/request'
@@ -26,11 +26,14 @@ export default class Outgoing extends React.Component {
       },
       dataSource:[],
       warehousingDetail_dataSource:[],
-      BaseCard_dataSource:{}
+      BaseCard_dataSource:{},
+      record:{},
+      ModalTitle:'创建出库业务单'
     }
   }
 
   onSubmit = (type,value)=>{
+    const {ModalTitle,record}=this.state;
     if(type==="select"){
       for(let i in value){
         if(value[i]===''){
@@ -43,9 +46,11 @@ export default class Outgoing extends React.Component {
       }
       this.fetch(value)
     } else if(['submit','save'].includes(type)){
-      console.log(type,value)
       value.planOutTime=moment(value.planOutTime).valueOf();
       value.isCommitFlag=type==='submit'?true:false;
+      if(ModalTitle==='修改出库业务单'){
+        value.planCode=record.planCode
+      }
       if(Array.isArray(value.items)){
         value.items=value.items.map(v=>{
            v.busiIndex=v.index;
@@ -84,9 +89,22 @@ export default class Outgoing extends React.Component {
     })
   }
 
-  add = ()=>{
-    console.log('这是出现创建出库单弹窗调用')
-    this.setState({visible:true})
+  add = (type,record)=>{
+    if(type==='update'){
+      request({
+        url:'/webApi/out/bill/getOutBusiBillDetail',
+        method:'get',
+        data:{ 
+          planCode:record.planCode
+        }
+      }).then(res => {
+         this.setState({visible:true,record:res,ModalTitle:'修改出库业务单'})
+      }).catch(err=>{
+        console.log(err)
+      })
+    } else{
+      this.setState({visible:true,record:{},ModalTitle:'创建出库业务单'})
+    }
   }
 
 
@@ -141,7 +159,6 @@ export default class Outgoing extends React.Component {
   }
 
   handleCancel = ()=>{
-    console.log('这是取消创建出库单的调用')
     this.setState({visible:false,detailVisible:false})
   }
 
@@ -181,23 +198,47 @@ export default class Outgoing extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
 
   render() {
-    const { dataSource,spinning,visible,detailVisible,warehousingDetail_dataSource,BaseCard_dataSource} =this.state;
+    const { dataSource,ModalTitle,spinning,record,visible,detailVisible,warehousingDetail_dataSource,BaseCard_dataSource} =this.state;
     const columns=_.cloneDeep(indexTableColumns_Config).map(v=>{
       if(v.render===''){
          v.render=(ext, record, index)=>{
             return <span className="Dropdown_Menu_box">
                 <span onClick={this.showDetail.bind(this,record)}>查看</span> 
-                  { 
-                     [0,2].includes(Number(record.issuedState))&&
-                    <span onClick={this.onOperation.bind(this,'delete',record)}>删除</span>
-                  }
-
-                  { 
-                     [0].includes(Number(record.planState))&&
-                    <span onClick={this.onOperation.bind(this,'submit',record)}>提交</span>
-                  }
+                { 
+                  [0,2].includes(Number(record.issuedState))&&
+                  <Dropdown overlay={
+                    <Menu className="Dropdown_Menu_child" >
+                      { 
+                        [0,2].includes(Number(record.issuedState))&&
+                        <Menu.Item onClick={this.add.bind(this,'update',record)}>
+                          <span>修改</span>
+                        </Menu.Item>
+                      }
+    
+                      {
+                        [0,2].includes(Number(record.issuedState))&&
+                        <Menu.Item onClick={this.onOperation.bind(this,'delete',record)}>
+                          <span>删除</span>
+                        </Menu.Item>
+                      }
+    
+                      { 
+                        [0].includes(Number(record.planState))&&
+                        <Menu.Item onClick={this.onOperation.bind(this,'submit',record)}>
+                          <span>提交</span>
+                        </Menu.Item>
+                      } 
+                    </Menu>}>
+                    <span>更多操作<Icon type="down" /></span>
+                  </Dropdown>
+                }
             </span>
          }
       }
@@ -230,7 +271,7 @@ export default class Outgoing extends React.Component {
             expandedRowRender={childTable}
             dataSource={dataSource}/>
             <Modal
-              title="创建出库业务单"
+              title={ModalTitle}
               centered={true}
               destroyOnClose={true}
               width={1000}
@@ -238,6 +279,7 @@ export default class Outgoing extends React.Component {
               footer={null}
               onCancel={this.handleCancel}>
                <AddForm
+                 record={record}
                  onRef={this.ref} 
                  onSubmit={this.onSubmit}/>
             </Modal>

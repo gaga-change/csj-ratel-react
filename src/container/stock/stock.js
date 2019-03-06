@@ -91,6 +91,12 @@ export default class Stock extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
+
   render() {
     const { dataSource,count}=this.state;
     const columns=_.cloneDeep(indexTableColumnsConfig)
