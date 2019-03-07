@@ -156,7 +156,7 @@ export default class Role extends React.Component {
             ? (
               <span className="Dropdown_Menu_box">
                 <span onClick={() => this.openRoleFormMoadl(record)}>编辑</span>
-                <span onClick={() => this.openRoleJurisdictionModal(record)}>操作权限</span>
+                <span onClick={() => this.openRoleJurisdictionModal(record)}>菜单权限</span>
               </span>
             ) : null)
         }

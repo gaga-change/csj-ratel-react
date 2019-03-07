@@ -18,6 +18,10 @@ $blue: #5868D9;
         color: #666;
         cursor: pointer;
         transition: all .3s;
+        margin-right: 12px;
+        &:last-child{
+            margin-right:0;  
+        }
 
         &:hover {
             box-shadow: #d9d9d9 4px 4px 12px 0px;

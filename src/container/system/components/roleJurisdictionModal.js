@@ -111,7 +111,7 @@ class RoleJurisdictionModal extends React.Component {
     return (
       <div className="RoleJurisdiction">
         <Modal
-          title="权限配置"
+          title="菜单权限配置"
           visible={visible}
           onOk={this.handleOk}
           confirmLoading={confirmLoading}

@@ -195,7 +195,7 @@ export default class User extends React.Component {
           return (columns.length >= 1
             ? (
               <span className="Dropdown_Menu_box">
-                <span onClick={() => this.handleAdd(record)}>查看</span>
+                <span onClick={() => this.handleAdd(record)}>编辑</span>
                 <Popconfirm title={`确定要${statusName}该账户吗？`} onConfirm={() => this.handleDisableUser(record)}>
                   <span>{statusName}</span>
                 </Popconfirm>
