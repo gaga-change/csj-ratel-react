@@ -30,7 +30,7 @@ class NormalLoginForm extends React.Component {
               {getFieldDecorator('password', {
                 rules: [{ required: true, message: '请输入用密码' }],
               })(
-                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="密码" />
+                <Input.Password onPressEnter={this.handleSubmit}  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="密码" />
               )}
             </Form.Item>
 
