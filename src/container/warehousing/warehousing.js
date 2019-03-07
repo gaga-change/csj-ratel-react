@@ -6,7 +6,7 @@ import request from '@lib/request'
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
-import { indexTableColumns_Config,indexTableColumns_ChildConfig ,warehousingDetail_Config,BaseCard_Config} from './component/config'
+import { indexTableColumns_Config,map_Config,indexTableColumns_ChildConfig ,warehousingDetail_Config,BaseCard_Config} from './component/config'
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
 import BaseTitle from '@component/baseTitle/baseTitle'
@@ -34,6 +34,7 @@ export default class Warehousing extends React.Component {
   }
 
   onSubmit = (type,value)=>{
+    const {ModalTitle,record}=this.state;
     if(type==="select"){
       for(let i in value){
         if(value[i]===''){
@@ -47,15 +48,16 @@ export default class Warehousing extends React.Component {
       this.fetch(value)
     } else if(['saveSubmit','addSubmit'].includes(type)){
        value.isCommitFlag=type==='addSubmit'?true:false;
-       value.planInTime=moment(value.planInTime).valueOf()
+       value.planInTime=moment(value.planInTime).valueOf();
+       if(ModalTitle==='修改入库业务单'){
+        value.planCode=record.planCode
+       }
        if(Array.isArray(value.items)){
-        value.items=value.items.map(v=>{
-           v.inPrice=v.costPrice;
-           v.skuBrandName=v.brandName;
-           v.skuModel=v.skuFormat;
-           v.busiIndex=v.index;
-           v.skuCategoryName=v.categoryName;
-           return v
+        value.items=_.cloneDeep(value.items).map(v=>{
+          for(let i in map_Config){
+            v[i]=v[map_Config[i]]
+          }
+          return v
         })
        }
        console.log(type,value)
@@ -64,14 +66,16 @@ export default class Warehousing extends React.Component {
         method:'post',
         data:value,
       }).then(res => {
+         this.setState({visible:false})
+         this.fetch()
+         if(this.child){
+          this.child.handleRest()
+         }
          console.log(res)
       }).catch(err => {
          console.log(err)
       })
-      this.setState({visible:false})
-      if(this.child){
-        this.child.handleRest()
-      }
+
     }
   }
 
@@ -267,6 +271,7 @@ export default class Warehousing extends React.Component {
             <Modal
               title={ModalTitle}
               centered={true}
+              destroyOnClose={true}
               width={1000}
               visible={visible}
               footer={null}

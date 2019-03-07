@@ -70,7 +70,8 @@ export const userConfig_config = [
     },
     {
         title: '创建日期',
-        dataIndex: 'gmtCreate'
+        dataIndex: 'gmtCreate',
+        type:'time'
     },
     {
         title: '创建者',
@@ -78,7 +79,8 @@ export const userConfig_config = [
     },
     {
         title: '最后操作日期',
-        dataIndex: 'gmtModify'
+        dataIndex: 'gmtModify',
+        type:'time'
     },
     {
         title: '最后操作者',

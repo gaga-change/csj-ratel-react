@@ -40,7 +40,7 @@ class CommodityForm extends React.Component {
             <Row gutter={24}>
                { 
                 selectWordsArr.includes('商品名称')&&
-                <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+                <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="商品名称">
                     { getFieldDecorator('skuName', {
                       initialValue:'',
@@ -53,7 +53,7 @@ class CommodityForm extends React.Component {
                }
                {
                  selectWordsArr.includes('商品编码')&&
-                 <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+                 <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="商品编码">
                     { getFieldDecorator('skuCode', {
                       initialValue:'',

@@ -41,7 +41,6 @@ export default class User extends React.Component {
     }).then(res => {
       if (res.list && Array.isArray(res.list)) {
         res.list.forEach(item => {
-          item.gmtCreate = this._formData(item.gmtCreate)
           item.statusName = item.userStatus === 0 ? '启用' : '禁用'
         })
         dataSource = res.list
@@ -177,21 +176,6 @@ export default class User extends React.Component {
     }).catch(err => {
 
     })
-  }
-
-  /**
-   * 时间转换器
-   */
-  _formData(date) {
-    date = new Date(date)
-    let d = new Date()
-    function _(num) {
-      if (num < 10) {
-        return '0' + num
-      }
-      return num
-    }
-    return `${d.getFullYear()}-${_(d.getMonth() + 1)}-${_(d.getDay())} ${_(d.getHours())}:${_(d.getMinutes())}:${_(d.getSeconds())}`
   }
 
   handleUserAddModalRef = child => this.userAddModal = child

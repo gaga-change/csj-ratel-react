@@ -25,7 +25,7 @@ class CommodityForm extends React.Component {
             <Row gutter={24}>
                { 
                 selectWordsArr.includes('客户名称')&&
-                <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+                <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="客户名称">
                     { getFieldDecorator('customerName', {
                       initialValue:'',
@@ -38,7 +38,7 @@ class CommodityForm extends React.Component {
                }
                {
                  selectWordsArr.includes('负责人')&&
-                 <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+                 <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="负责人">
                     { getFieldDecorator('customerLinkUser', {
                       initialValue:'',

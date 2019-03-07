@@ -30,7 +30,7 @@ export  const indexTableColumns_Config=[
     title:'操作',
     dataIndex: '',
     render:'',
-    width:180,
+    width:130,
   },
 ]
 
@@ -226,3 +226,13 @@ export  const BaseCard_Config=[
   },
 
 ]
+
+//出库
+export  const map_Config={
+  'busiIndex':'index',
+  'skuBrandCode':'brandCode',
+  'outPrice':'costPrice',
+  'skuBrandName':'brandName',
+  'skuModel':'skuFormat',
+  'productFactory':'factoryName'
+}

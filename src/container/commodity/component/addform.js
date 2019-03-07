@@ -36,7 +36,7 @@ class AddForm extends React.Component {
 
   fetch = ()=>{
     request({
-      url: '/webApi/sku/category/trees',
+      url: '/api/sku/category/trees',
       method: 'get',
     }).then(res => {
        this.setState({

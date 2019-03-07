@@ -31,7 +31,7 @@ class CommodityForm extends React.Component {
           <Form onSubmit={this.handleSubmit}  layout="inline">
             <Row gutter={24}>
 
-              <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+              <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                 <Form.Item label="仓库名称">
                   { getFieldDecorator('warehouseCode', {
                     rules: [{ required: false, message: '' }],
@@ -45,7 +45,7 @@ class CommodityForm extends React.Component {
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+              <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                 <Form.Item label="商品名称">
                   { getFieldDecorator('skuName', {
                     initialValue:'',
@@ -56,7 +56,7 @@ class CommodityForm extends React.Component {
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+              <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                 <Form.Item label="商品编码">
                   { getFieldDecorator('skuCode', {
                     initialValue:'',

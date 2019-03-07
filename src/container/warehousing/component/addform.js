@@ -6,7 +6,7 @@ import request from '@lib/request'
 import { connect } from 'react-redux';
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
-import { formTable_config,goodsInStorage_config } from './config'
+import { formTable_config,map_Config,goodsInStorage_config } from './config'
 import SelestForm from './form'
 import './addform.scss'
 
@@ -119,8 +119,14 @@ class AddForm extends React.Component {
       json.data=value
     }
     request(json).then(res => {
-       console.log(res)
-       this.setState({selectionTableLoding:false,goodsInStorage_dataSource:res||[]})
+       let goodsInStorage_dataSource=[];
+       if(Array.isArray(res)){
+         goodsInStorage_dataSource=_.cloneDeep(res).map(v=>{
+           v.id=v.skuCode;
+           return v;
+         })
+       }
+       this.setState({selectionTableLoding:false,goodsInStorage_dataSource})
     }).catch(err => {
        console.log(err)
        this.setState({selectionTableLoding:false})
@@ -137,17 +143,24 @@ class AddForm extends React.Component {
 
   componentDidMount(){
     let {record} = this.props
-    let { warehouse,items } = this.state;
+    let { warehouse,items,selectedRowKeys} = this.state;
     this.props.onRef(this)
     if(record.planWarehouseCode){
       warehouse.warehouseName=record.planWarehouseName;
+      console.log(record.planDetails[0])
       if(Array.isArray(record.planDetails)){
-        items=record.planDetails.map(v=>{
-          v.brandName=v.skuBrandName;
+        items=_.cloneDeep(record.planDetails).map(v=>{
+          for(let i in map_Config){
+            if(map_Config[i]!=='index'){
+              v[map_Config[i]]=v[i]
+            }
+          }
+          v.id=v.skuCode
           return v
         })
       }
-      this.setState({warehouse,items})
+      selectedRowKeys=items.map(v=>v.id)
+      this.setState({warehouse,items,selectedRowKeys})
       this.props.form.setFieldsValue({items});
     }
   }
@@ -156,7 +169,6 @@ class AddForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     let { items,visible,goodsInStorage_dataSource,selectedRowKeys,selectionTableLoding} = this.state;
     const { mapSouce,record} =this.props;
-    console.log(record)
     const formItemLayout_left = {
       labelCol: {
         span:9
@@ -240,6 +252,24 @@ class AddForm extends React.Component {
                     <DatePicker/>
                   )}
                 </Form.Item>
+
+               <Form.Item label="供应商编码" {...formItemLayout_left}>
+                  { getFieldDecorator('providerCode', {
+                    initialValue:record.providerCode,
+                    rules: [{ required: true, message: '' }],
+                  })(
+                    <Input autoComplete='off'   placeholder="请输入供应商编码" />
+                  )}
+              </Form.Item>
+
+                <Form.Item label="供应商名称" {...formItemLayout_right}>
+                  { getFieldDecorator('providerName', {
+                    initialValue:record.providerName,
+                    rules: [{ required: true, message: '' }],
+                  })(
+                    <Input autoComplete='off'   placeholder="请输入供应商名称" />
+                  )}
+              </Form.Item>
 
                 <Form.Item label="备注" {...formItemLayout_left} style={{width:300,minHeight:110}}>
                   { getFieldDecorator('remarkInfo', {

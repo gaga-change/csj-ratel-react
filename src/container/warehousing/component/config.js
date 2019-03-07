@@ -85,7 +85,7 @@ export  const formTable_config=[
   },
   {
     title:'单价（成本）',
-    dataIndex:'salePrice',
+    dataIndex:'costPrice',
   },
   {
     title:'入库数量',
@@ -207,3 +207,12 @@ export  const BaseCard_Config=[
   },
 
 ]
+
+//入库
+export  const map_Config={
+  'busiIndex':'index',
+  'inPrice':'costPrice',
+  'skuBrandName':'brandName',
+  'skuModel':'skuFormat',
+  'skuCategoryName':'categoryName'
+}

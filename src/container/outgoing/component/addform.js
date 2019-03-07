@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import {custList} from '@publickApi/publickApi'
-import { formTable_config,goodsInStorage_config } from './config'
+import { formTable_config,goodsInStorage_config,map_Config } from './config'
 import SelestForm from './form'
 import './addform.scss'
 
@@ -113,19 +113,26 @@ class AddForm extends React.Component {
 
   componentDidMount(){
     let {record} = this.props
-    let { arrival,items } = this.state;
+    let { arrival,items,selectedRowKeys } = this.state;
     this.props.onRef(this);
     this.fetchArriva();
     if(record.arrivalCode){
       arrival.arrivalName=record.arrivalName;
+      console.log(record.planDetails[0])
       if(Array.isArray(record.planDetails)){
-        items=record.planDetails.map(v=>{
-          v.brandName=v.skuBrandName;
-          v.costPrice=v.outPrice
+        items=_.cloneDeep(record.planDetails).map(v=>{
+          for(let i in map_Config){
+            if(map_Config[i]!=='index'){
+              v[map_Config[i]]=v[i]
+            }
+          }
+          v.id=`${v.warehouseCode}_${v.skuCode}`
           return v
         })
       }
-      this.setState({arrival,items})
+      
+      selectedRowKeys=items.map(v=>v.id)
+      this.setState({arrival,items,selectedRowKeys})
       this.props.form.setFieldsValue({items});
     }
   }
@@ -213,7 +220,14 @@ class AddForm extends React.Component {
       json.data=value
     }
     request(json).then(res => {
-       this.setState({selectionTableLoding:false,goodsInStorage_dataSource:res||[]})
+      let goodsInStorage_dataSource=[];
+      if(Array.isArray(res)){
+       goodsInStorage_dataSource=_.cloneDeep(res).map(v=>{
+          v.id=`${v.warehouseCode}_${v.skuCode}`
+          return v
+       })
+      }
+      this.setState({selectionTableLoding:false,goodsInStorage_dataSource})
     }).catch(err => {
        console.log(err)
        this.setState({selectionTableLoding:false})

@@ -6,7 +6,7 @@ import request from '@lib/request'
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
-import { indexTableColumns_Config,indexTableColumns_ChildConfig ,warehousingDetail_Config,BaseCard_Config} from './component/config'
+import { indexTableColumns_Config,indexTableColumns_ChildConfig ,map_Config,warehousingDetail_Config,BaseCard_Config} from './component/config'
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
 import BaseTitle from '@component/baseTitle/baseTitle'
@@ -52,14 +52,10 @@ export default class Outgoing extends React.Component {
         value.planCode=record.planCode
       }
       if(Array.isArray(value.items)){
-        value.items=value.items.map(v=>{
-           v.busiIndex=v.index;
-           v.skuBrandCode=v.brandCode;
-           v.skuBrandName=v.brandName;
-           v.skuModel=v.skuFormat;
-           v.productFactory=v.factoryName;
-           v.outPrice=v.costPrice;
-           v.skuCategoryName='李松'
+        value.items=_.cloneDeep(value.items).map(v=>{
+           for(let i in map_Config){
+             v[i]=v[map_Config[i]]
+           }
            return v
         })
        }

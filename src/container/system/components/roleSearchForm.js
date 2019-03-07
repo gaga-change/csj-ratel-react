@@ -22,7 +22,7 @@ class RoleForm extends React.Component {
       <div className="RoleForm b-1 mb-12 p-12">
         <Form onSubmit={this.handleSubmit} layout="inline">
           <Row gutter={24}>
-            <Col span={6} style={{ width: '290px', marginBottom: '12px' }}>
+            <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
               <Form.Item label="角色名称">
                 {getFieldDecorator('roleName', {
                   initialValue: '',

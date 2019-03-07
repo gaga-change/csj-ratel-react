@@ -31,7 +31,7 @@ class SelestForm extends React.Component {
             
             {
                selectWordsArr.includes('业务单号')&&
-               <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+               <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="业务单号">
                     { getFieldDecorator('planCode', {
                       initialValue:'',
@@ -45,7 +45,7 @@ class SelestForm extends React.Component {
 
               {
                selectWordsArr.includes('商品名称')&&
-               <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+               <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="商品名称">
                     { getFieldDecorator('skuName', {
                       initialValue:'',
@@ -58,8 +58,21 @@ class SelestForm extends React.Component {
               }
 
               {
+                selectWordsArr.includes('创建日期')&&
+                <Col span={8} style={{marginBottom:'12px',width:'458px'}}>
+                  <Form.Item label="创建日期">
+                    { getFieldDecorator('createTime', {
+                      rules: [{ type: 'array', required: false }],
+                    })(
+                      <RangePicker />
+                    )}
+                  </Form.Item>
+              </Col>
+              }
+
+              {
                  selectWordsArr.includes('状态')&&
-                 <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+                 <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="状态">
                     { getFieldDecorator('planState', {
                       rules: [{ required: false, message: '' }],
@@ -72,19 +85,6 @@ class SelestForm extends React.Component {
                     )}
                   </Form.Item>
                  </Col>
-              }
-
-              {
-                selectWordsArr.includes('创建日期')&&
-                <Col span={8} style={{marginBottom:'12px'}}>
-                  <Form.Item label="创建日期">
-                    { getFieldDecorator('createTime', {
-                      rules: [{ type: 'array', required: false }],
-                    })(
-                      <RangePicker />
-                    )}
-                  </Form.Item>
-              </Col>
               }
 
               {

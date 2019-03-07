@@ -38,7 +38,7 @@ class SelestForm extends React.Component {
             <Row gutter={24}>
               {
                selectWordsArr.includes('业务单号')&&
-               <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+               <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="业务单号">
                     { getFieldDecorator('planCode', {
                       initialValue:'',
@@ -52,7 +52,7 @@ class SelestForm extends React.Component {
 
               {
                selectWordsArr.includes('商品名称')&&
-               <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+               <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="商品名称">
                     { getFieldDecorator('skuName', {
                       initialValue:'',
@@ -66,7 +66,7 @@ class SelestForm extends React.Component {
 
               {
                  selectWordsArr.includes('状态')&&
-                 <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+                 <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="状态">
                     { getFieldDecorator('planState', {
                       rules: [{ required: false, message: '' }],
@@ -81,22 +81,9 @@ class SelestForm extends React.Component {
                  </Col>
               }
 
-              {
-                selectWordsArr.includes('创建日期')&&
-                <Col span={8} style={{width:'442px',marginBottom:'12px'}}>
-                  <Form.Item label="创建日期">
-                    { getFieldDecorator('createTime', {
-                      rules: [{ type: 'array', required: false }],
-                    })(
-                      <RangePicker />
-                    )}
-                  </Form.Item>
-              </Col>
-              }
-
             {
                selectWordsArr.includes('客户名称')&&
-               <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+               <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="客户名称">
                     { getFieldDecorator('客户名称', {
                       initialValue:'',
@@ -110,7 +97,7 @@ class SelestForm extends React.Component {
 
             {
                selectWordsArr.includes('联系人电话')&&
-               <Col span={6} style={{width:'300px',marginBottom:'12px'}}>
+               <Col span={6} style={{width:'306px',marginBottom:'12px'}}>
                   <Form.Item label="联系人电话">
                     { getFieldDecorator('arrivalLinkTel', {
                       rules: [{ required: false, message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/ }],
@@ -123,7 +110,7 @@ class SelestForm extends React.Component {
 
               {
                  selectWordsArr.includes('仓库')&&
-                 <Col span={6} style={{width:'290px',marginBottom:'12px'}}>
+                 <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="仓库">
                     { getFieldDecorator('仓库', {
                       rules: [{ required: false, message: '' }],
@@ -137,6 +124,19 @@ class SelestForm extends React.Component {
                   </Form.Item>
                  </Col>
               }
+
+             {
+                selectWordsArr.includes('创建日期')&&
+                <Col span={8} style={{width:'458px',marginBottom:'12px'}}>
+                  <Form.Item label="创建日期">
+                    { getFieldDecorator('createTime', {
+                      rules: [{ type: 'array', required: false }],
+                    })(
+                      <RangePicker />
+                    )}
+                  </Form.Item>
+              </Col>
+             }
 
               {
                  selectWordsArr.includes('查询')&&
