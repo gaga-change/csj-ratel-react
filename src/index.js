@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+
 import { LocaleProvider  } from 'antd';
 import { createStore,applyMiddleware,compose } from 'redux';
 import {Provider} from 'react-redux'
@@ -9,6 +12,7 @@ import reducers from './reducers';
 import SussLayout from "./layout/layout";
 import './index.scss';
 
+moment.locale('zh-cn');
 const  reduxDevtools=window.devToolsExtension?window.devToolsExtension():f=>f;
 const store=createStore(reducers,compose(
     applyMiddleware(thunk),

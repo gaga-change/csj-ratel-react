@@ -11,6 +11,13 @@ class SelestForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        for(let i in values){
+          if(Array.isArray(values[i])&&!values[i].length){
+             delete values[i]
+          } else if([undefined,'undefined',''].includes(values[i])){
+             delete values[i]
+          }
+        }
         this.props.onSubmit(values)
       }
     });

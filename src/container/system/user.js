@@ -34,6 +34,7 @@ export default class User extends React.Component {
       pageSize: pagination.pageSize || 10,
       ...this.seachVal
     }
+    
     request({
       url: '/webApi/base/user/selectByCondition',
       method: 'post',
