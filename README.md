@@ -183,6 +183,7 @@ columns案例:
 | 属性  | 描述  |  类型 | 默认值 | 是否必填  |
 | --- | --- |  --- | --- | --- | 
 | editable |  是否可编辑  |  Boolean  | false  |  否  |
+| editing |  对于控件是否默认显示编辑模式  |  String  | 如果你想默认为编辑状态请传一个'true',记住是字符串,否则请不要使用此字段,不使用此字段的情况下,对于编辑项是双击出现可编辑状态的  |  否  |
 | rules | 校验规则,同form   |  Array  | -  |  否  |
 | inputType | input类型(Input|InputNumber)   |  String  | Input  |  否  |
 
