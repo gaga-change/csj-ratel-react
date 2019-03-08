@@ -2,6 +2,7 @@ import React from 'react';
 import {Button,Modal,Spin,Dropdown,Menu,Icon} from 'antd';
 import moment from "moment"
 import _  from 'lodash';
+import {stringify,parse} from 'qs';
 import request from '@lib/request'
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
@@ -34,18 +35,21 @@ export default class Warehousing extends React.Component {
   }
 
   onSubmit = (type,value)=>{
-    const {ModalTitle,record}=this.state;
+    let {ModalTitle,record,pagination}=this.state;
     if(type==="select"){
-      for(let i in value){
-        if(value[i]===''){
-          delete value[i]
-        }
-      }
       if(Array.isArray(value.createTime)){
         value.createBeginDate=moment(value.createTime[0]).valueOf()
         value.createEndDate=moment(value.createTime[1]).valueOf()
       }
-      this.fetch(value)
+      if(!Object.keys(value).length){
+        pagination={
+          current:1,
+          pageSize:10
+        }
+      } 
+      this.setState({pagination},()=>{
+        this.fetch(value)
+      })
     } else if(['saveSubmit','addSubmit'].includes(type)){
        value.isCommitFlag=type==='addSubmit'?true:false;
        value.planInTime=moment(value.planInTime).valueOf();
@@ -106,14 +110,30 @@ export default class Warehousing extends React.Component {
     }
   }
 
-  fetch = (json={})=>{
+  fetch = (json)=>{
     this.setState({loading:true})
+    let {search,pathname} = this.props.history.location
+    let { current,pageSize,...rest} = parse(search.slice(1))
     let { dataSource,pagination} =this.state;
-    let data={
-      ...json,
-      pageNum:pagination.current||1,
-      pageSize:pagination.pageSize||10
+    if(!Object.keys(pagination).length){
+      pagination={
+        current:Number(current)||1,
+        pageSize:Number(pageSize)||10
+      }
+      this.setState({pagination})
+    } 
+    let data={};
+    if(json){
+      data={...pagination,...json};
+    } else{
+      data={...pagination,...rest};
     }
+
+    delete data.total;
+    this.props.history.replace(`${pathname}?${stringify(data)}`)
+    data.pageNum=data.current;
+    delete data.current;
+
     request({
       url: '/webApi/in/bill/getInBusiBill',
       method: 'post',
