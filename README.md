@@ -63,7 +63,7 @@ npm run build
 ```
 
 ### 五、公共组件介绍
-> 具体用法和antd一致,既antd所支持属性和方法以下组件都支持,只是对antd部分组件做了扩展和统一规范,以及将一些复杂的业务抽象出来，让使用者可以更简单的去使用，对于嵌套表格可以参考入库业务和出库业务，因元antd使用简单，故未做封装
+> 具体用法和antd一致,既antd所支持属性和方法以下组件都支持,只是对antd部分组件做了扩展和统一规范,以及将一些复杂的业务抽象出来，让使用者可以更简单的去使用，对于嵌套表格可以参考入库业务和出库业务，因原antd使用简单，故未做封装
 
 #### (1)、FetchTable
 > 基础table组件，具体用法和antd一致,只是略作扩展
@@ -72,7 +72,7 @@ npm run build
 
 2. 如果需要序号列,只需设置属性useIndex=true即可
 
-3. 对于需要格式化类别的数据,只需要对列的配置项columns每列加上type属性即可,如需要格式化为时间的只需要加上type:'time'即可，同时你还可以加上format属性自定义时间展示格式，format:'YYYY-MM-DD'(可以参考moment),当然你也可以自行扩展
+3. 对于需要格式化类别的数据,只需要对列的配置项columns每列加上type属性即可,如需要格式化为时间的只需要加上type:'time'即可，同时你还可以加上format属性自定义时间展示格式,format:'YYYY-MM-DD'(可以参考moment),当然你也可以自行扩展
 
 4. 对于本地枚举类格式化数据，只需要对列的配置项columns每列加上useLocalEnum属性即可,其属性值只要为src/lib/enum.js文件中对应的枚举变量名即可
 
@@ -86,7 +86,7 @@ npm run build
       { title:'单据状态',dataIndex:'planState',useLocalEnum:'outgoing_planStateEnum'}
     ]
     
-    columns=columns.map((v,i)=>{
+     columns=columns.map((v,i)=>{
       v.key=i+1;
       if(v.type){ 
         switch(v.type){
@@ -94,7 +94,9 @@ npm run build
           default:break;
         }
       } else if(v.useLocalEnum){
-        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===Number(item))['value']
+        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
+      } else if(v.useFetchMap){
+        v.render=(item)=>mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
       }
       return v;
     })
@@ -147,7 +149,7 @@ npm run build
 | selectedRowKey |  当前选中数据的key值数组  |  Array  | []  |  是  |
 | onSelectChange |  选中后的回调  |  Function(selectedRowKeys数组)  | -  |  是  |
 
-其余属性同antd
+其余属性同FetchTable
 
 ##### columns props
 
@@ -174,7 +176,7 @@ columns案例:
 | --- | --- |  --- | --- | --- | 
 | onChange | 输入改变后的回调   |  Function(dataSource数组)  | -  |  是  |
 
-其余属性同antd
+其余属性同FetchTable
 
 ##### columns props
 
@@ -184,7 +186,7 @@ columns案例:
 | rules | 校验规则,同form   |  Array  | -  |  否  |
 | inputType | input类型(Input|InputNumber)   |  String  | Input  |  否  |
 
-其余属性同antd
+其余属性同FetchTable
 
 ----------------------------------------------------------------------
 
