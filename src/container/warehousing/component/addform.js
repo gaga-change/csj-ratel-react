@@ -55,7 +55,7 @@ class AddForm extends React.Component {
     let { warehouse } = this.state;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      if (!err) {
+      if (!err&&!values.items.some(v=>isNaN(v.planInQty))) {
         this.props.onSubmit(type,{...values,...warehouse})
       }
     });
@@ -283,7 +283,7 @@ class AddForm extends React.Component {
                 <Form.Item  {...formItemLayout_table}>
                   { getFieldDecorator('items', {
                     initialValue:items,
-                    rules: [{ required: true }],
+                    rules: [{ required: true,message:'改项为必填' }],
                   })(
                      <div className="form_item_table">
                         <div className="alert_Btn">
