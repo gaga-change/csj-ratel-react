@@ -103,11 +103,11 @@ export default class Sider extends React.Component {
                     <span>{v.name}</span>
                   </Link>
                   {
-                    v.children && uesHover &&
+                    v.children&&Array.isArray(v.children)&&uesHover&&
                     <div className="li_hover">
                       <ul>
                         {
-                          v.children.sort((a, b) => a.sort - b.sort).map(item =>
+                          v.children.filter(v => !v.hidden).sort((a, b) => a.sort - b.sort).map(item =>
                             <li key={item.id || item.path}>
                               <Link to={item.path} replace>
                                 {item.name}

@@ -87,6 +87,7 @@ export  const routerConfig=[
         name:'菜单管理',
         indexName:'菜单管理',
         path:'/system/menu',
+        hidden: true,
         component:'/system/menu',
         indexIcon:'role_management',
         sort:1
