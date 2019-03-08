@@ -256,7 +256,7 @@ class AddForm extends React.Component {
                <Form.Item label="供应商编码" {...formItemLayout_left}>
                   { getFieldDecorator('providerCode', {
                     initialValue:record.providerCode,
-                    rules: [{ required: true, message: '' }],
+                    rules: [{ required: true, message:'请输入供应商编码' }],
                   })(
                     <Input autoComplete='off'   placeholder="请输入供应商编码" />
                   )}
@@ -265,7 +265,7 @@ class AddForm extends React.Component {
                 <Form.Item label="供应商名称" {...formItemLayout_right}>
                   { getFieldDecorator('providerName', {
                     initialValue:record.providerName,
-                    rules: [{ required: true, message: '' }],
+                    rules: [{ required: true, message:'请输入供应商名称' }],
                   })(
                     <Input autoComplete='off'   placeholder="请输入供应商名称" />
                   )}
