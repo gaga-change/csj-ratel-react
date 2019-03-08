@@ -91,6 +91,21 @@ export  const formTable_config=[
     title:'入库数量',
     dataIndex:'planInQty',
     editable:true,
+    editing:'true',
+    rules:[
+      {
+        required: true,
+        validator:(rule, value, callback) => {
+          if(isNaN(value)){
+            callback('不能为空且要为数字')
+          } else if(value<=0){
+            callback('数量必须大于0')
+          } else{
+            callback()
+          }
+        }
+      }
+    ],
     inputType:'InputNumber',
     width:120,
   },

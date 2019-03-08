@@ -18,7 +18,7 @@ const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
   state = {
-    editing: false,
+    editing:this.props.editing,
   }
 
   componentDidMount() {
@@ -169,7 +169,8 @@ export default class EditableTable extends React.Component {
             title: v.title,
             rules:v.rules,
             handleSave: this.handleSave,
-            inputType:v.inputType
+            inputType:v.inputType,
+            editing:v.editing
           }),
         }
       }
