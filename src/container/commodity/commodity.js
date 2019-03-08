@@ -149,6 +149,7 @@ export default class Commodity extends React.Component {
     })
 
     if(modifypriceActiveRow.id===value.id){
+      this.setState({ modifyprice_loding:false })
       return ''
     }
     //查询商品成本价格变动记录
