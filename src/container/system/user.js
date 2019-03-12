@@ -85,6 +85,7 @@ export default class User extends React.Component {
       method: 'post',
       data: [obj.id]
     }).then(res => {
+      message.success('操作成功')
       dataSource = dataSource.filter(v => v.id !== obj.id)
       this.setState({ dataSource })
     }).catch(err => {
@@ -109,6 +110,7 @@ export default class User extends React.Component {
       method: 'post',
       data: this.state.selectedRowKeys
     }).then(res => {
+      message.success('操作成功')
       let ids = this.state.selectedRowKeys.join(',') + ','
       let { dataSource } = this.state
       dataSource = dataSource.filter(item => !~ids.indexOf(item.id + ','))
@@ -173,6 +175,7 @@ export default class User extends React.Component {
         userStatus: obj.userStatus === 0 ? 1 : 0
       }
     }).then(res => {
+      message.success('操作成功')
       this.setState({ dataSource })
     }).catch(err => {
 

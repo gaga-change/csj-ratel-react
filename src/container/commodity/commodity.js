@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button,Modal,Tabs,Popconfirm } from 'antd';
+import { Button,Modal,Tabs,Popconfirm,message} from 'antd';
 import _  from 'lodash';
 import {stringify,parse} from 'qs';
 import request from '@lib/request'
@@ -95,6 +95,7 @@ export default class Commodity extends React.Component {
         method: 'post',
         data:value
       }).then(res=>{
+        message.success('操作成功')
         this.child.handleRest()
         this.setState({
           visible:false,
@@ -126,6 +127,7 @@ export default class Commodity extends React.Component {
         method: 'post',
         data:value
       }).then(res=>{
+        message.success('操作成功')
         this.setState({
           submitLoding:false,
           modifypriceVisible:false
@@ -218,9 +220,9 @@ export default class Commodity extends React.Component {
       url: `/webApi/sku/info/delete/${value.id}`,
       method: 'delete',
     }).then(res => {
+      message.success('操作成功')
       this.fetch()
     }).catch(err => {
-       console.log(err)
        this.setState({
         modifypriceVisible:false
       })

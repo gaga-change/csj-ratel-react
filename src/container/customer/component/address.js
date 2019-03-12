@@ -115,7 +115,8 @@ class AddressForm extends React.Component {
                   initialValue:receiverTel,
                   rules: [
                     {
-                      message: '请输入正确格式的手机号',
+                      required: true,
+                      message: '手机号必填且格式要正确',
                       pattern: /^1[34578]\d{9}$/
                     }
                   ]

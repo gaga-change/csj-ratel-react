@@ -92,7 +92,7 @@ class SelestForm extends React.Component {
                selectWordsArr.includes('客户名称')&&
                <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="客户名称">
-                    { getFieldDecorator('客户名称', {
+                    { getFieldDecorator('arrivalName', {
                       initialValue:'',
                       rules: [{ required: false, message: '' }],
                     })(
@@ -119,7 +119,7 @@ class SelestForm extends React.Component {
                  selectWordsArr.includes('仓库')&&
                  <Col span={6} style={{width:'292px',marginBottom:'12px'}}>
                   <Form.Item label="仓库">
-                    { getFieldDecorator('仓库', {
+                    { getFieldDecorator('warehouseCode', {
                       rules: [{ required: false, message: '' }],
                     })(
                       <Select  style={{width:180}}  placeholder="请选择仓库">
@@ -146,7 +146,7 @@ class SelestForm extends React.Component {
              }
 
               {
-                 selectWordsArr.includes('查询')&&
+                 selectWordsArr.includes('横向查询')&&
                  <Form.Item>
                   <Button
                     type="primary"
@@ -154,11 +154,17 @@ class SelestForm extends React.Component {
                     htmlType="submit">
                     查询
                   </Button>
+                   <Button
+                      type="primary"
+                      onClick={this.handleRest}
+                      htmlType="submit">
+                      重置
+                   </Button>
                </Form.Item>
               }
 
               {
-                selectWordsArr.includes('查询重置')&&
+                selectWordsArr.includes('纵向查询')&&
                 <Col span={24}>
                   <Form.Item>
                     <Button

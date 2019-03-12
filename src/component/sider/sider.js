@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Dropdown, Icon } from 'antd';
+import { Menu, Dropdown, Icon,message} from 'antd';
 import { connect } from 'react-redux';
 import request from '../../lib/request'
 import { deepExistMenu } from '../../lib/lib'
@@ -47,9 +47,11 @@ export default class Sider extends React.Component {
       url: '/webApi/base/user/info',
       method: 'get',
     }).then(res => {
-      this.props.setInfo(res)
-      this.props.setMenus(deepExistMenu(res.menus.children, routerConfig))
-      this.props.setMap()
+      if(res){
+        this.props.setInfo(res)
+        this.props.setMenus(deepExistMenu(res.menus.children, routerConfig))
+        this.props.setMap()
+      }
     }).catch(err => {
        console.log(err)
     })
@@ -60,6 +62,7 @@ export default class Sider extends React.Component {
       url: '/login_out',
       method: 'get',
     }).then(res => {
+      message.success('操作成功')
       this.props.removeInfo();
       this.getInfo()
     }).catch(err => {

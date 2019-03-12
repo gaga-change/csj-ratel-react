@@ -470,7 +470,7 @@ class AddForm extends React.Component {
                 <SelestForm 
                   className='CommodityFormArert'
                   onSubmit={this.onSelect} 
-                  selectWordsArr={['商品名称','仓库','查询']}/>
+                  selectWordsArr={['商品名称','仓库','横向查询']}/>
                 <SelectionTable
                   rowKey="id"
                   selectedRowKeys={selectedRowKeys}

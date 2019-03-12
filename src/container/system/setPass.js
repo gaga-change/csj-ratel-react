@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card } from 'antd'
+import { Card,message} from 'antd'
 import Sider from '../../component/sider/sider'
 import SetPassForm from './components/setPassForm'
 import request from '../../lib/request'
@@ -25,7 +25,13 @@ export default class SetPass extends React.Component {
         ...value
       }
     }).then(res => {
-      this.child.handleRest()
+      message.info('密码修改成功,即将跳转登录页面',1.5, ()=>{
+        this.setState({
+          submitLoding: false
+        })
+        this.child.handleRest()
+        this.props.history.push('/web_login')
+      })
     }).catch(err => {
       this.setState({
         submitLoding: false
@@ -48,7 +54,7 @@ export default class SetPass extends React.Component {
       <div className="setPass">
         <Sider history={this.props.history} />
         <Card title="修改密码" className="changePass">
-          <SetPassForm onSubmit={this.onSubmit} onRef={this.ref} loading={this.state.submitLoding} />
+            <SetPassForm onSubmit={this.onSubmit} onRef={this.ref} loading={this.state.submitLoding} />
         </Card>
       </div>
     )

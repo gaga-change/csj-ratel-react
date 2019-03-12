@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Popconfirm } from 'antd';
+import { Button, Popconfirm,message } from 'antd';
 import _ from 'lodash';
 import Sider from '../../component/sider/sider'
 import request from '@lib/request'
@@ -107,6 +107,7 @@ export default class Menu extends React.Component {
         menuId: obj.id
       }
     }).then(res => {
+      message.success('操作成功')
       obj._faArr.splice(obj._index, 1)
       this.setState({ dataSource })
       this.setState({ dataSource, menus })

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin } from 'antd';
+import { Spin,message } from 'antd';
 import request from '../../lib/request'
 import imgSouce from '../../imgSouce/imgSouce'
 import Sider from '../../component/sider/sider'
@@ -33,6 +33,7 @@ export default class Login extends React.Component {
        this.setState({
          loginLoding:false,
        })
+       message.success('登录成功')
        this.props.history.push('/home')
     }).catch(err=>{
        this.setState({loginLoding:false})
