@@ -7,7 +7,7 @@ import AddForm from './component/add'
 import AddressForm from './component/address'
 import FetchTable from '@component/fetchTable/fetchTable'
 import {indexTableColumnsConfig,addressTableColumnsConfig} from './component/config'
-import { Button, Modal, Tag, Spin,Popconfirm} from 'antd'
+import { Button, Modal, Tag, Spin,Popconfirm,message} from 'antd'
 import fetchData from '@lib/request'
 import './customer.scss'
 
@@ -44,6 +44,7 @@ export default class Customer extends React.Component {
         method: 'post',
         data: { ...value}
       }).then(res => {
+          message.success('操作成功')
           this.setState({ customerspinning: false,visible_addCustomer:false})
           this.child.handleRest()
           this.fetch()
@@ -84,6 +85,7 @@ export default class Customer extends React.Component {
         method: 'post',
         data
       }).then(res => {
+          message.success('操作成功')
           this.setState({ spinning: false, visible_operation: false,addressDetail:{}})
           this.showAddress(basicCustomerInfo)
           this.operation_child.handleRest()
@@ -221,6 +223,7 @@ export default class Customer extends React.Component {
         id:value.id
       }
     }).then(res => {
+        message.success('操作成功')
         this.setState({ spinning: false})
         if(type!=='customerDelete'){
           this.showAddress(basicCustomerInfo)

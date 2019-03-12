@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal } from 'antd'
+import { Modal,message } from 'antd'
 import MenuAddForm from './menuAddForm.js'
 import request from '@lib/request'
 
@@ -100,6 +100,7 @@ class MenuAddModal extends React.Component {
         method: 'post',
         data: value
       }).then(res => {
+        message.success('操作成功')
         this.child.handleRest()
         this.close(null, { ...obj, ...value })
       }).catch(err => {

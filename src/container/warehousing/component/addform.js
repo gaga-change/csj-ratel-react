@@ -283,7 +283,7 @@ class AddForm extends React.Component {
                 <Form.Item  {...formItemLayout_table}>
                   { getFieldDecorator('items', {
                     initialValue:items,
-                    rules: [{ required: true,message:'改项为必填' }],
+                    rules: [{ required: true,message:'该项为必填' }],
                   })(
                      <div className="form_item_table">
                         <div className="alert_Btn">

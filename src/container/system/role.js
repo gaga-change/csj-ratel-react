@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Popconfirm, message } from 'antd';
+import { Button, Popconfirm, message} from 'antd';
 import _ from 'lodash';
 import Sider from '../../component/sider/sider'
 import request from '@lib/request'
@@ -116,6 +116,7 @@ export default class Role extends React.Component {
       method: 'post',
       data: this.state.selectedRowKeys
     }).then(res => {
+      message.success('操作成功')
       let ids = this.state.selectedRowKeys.join(',') + ','
       let { dataSource } = this.state
       dataSource = dataSource.filter(item => !~ids.indexOf(item.id + ','))

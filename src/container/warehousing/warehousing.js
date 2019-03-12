@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Modal,Spin,Dropdown,Menu,Icon} from 'antd';
+import {Button,Modal,Spin,Dropdown,Menu,Icon,message} from 'antd';
 import moment from "moment"
 import _  from 'lodash';
 import {stringify,parse} from 'qs';
@@ -70,6 +70,7 @@ export default class Warehousing extends React.Component {
         method:'post',
         data:value,
       }).then(res => {
+         message.success('操作成功')
          this.setState({visible:false})
          this.fetch()
          if(this.child){
@@ -100,7 +101,6 @@ export default class Warehousing extends React.Component {
           planCode:record.planCode
         }
       }).then(res => {
-         console.log(res)
          this.setState({visible:true,record:res,ModalTitle:'修改入库业务单'})
       }).catch(err=>{
         console.log(err)
@@ -207,7 +207,7 @@ export default class Warehousing extends React.Component {
             planCode:record.planCode
           }
         }).then(res=>{
-           console.log(res)
+           message.success('操作成功')
            that.fetch()
         }).catch(err=>{
           console.log(err)

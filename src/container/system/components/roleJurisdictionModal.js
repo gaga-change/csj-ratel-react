@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'antd';
+import { Modal,message } from 'antd';
 import RoleJurisdictionForm from './roleJurisdictionForm.js'
 import './roleJurisdiction.scss'
 import request from '@lib/request'
@@ -96,6 +96,7 @@ class RoleJurisdictionModal extends React.Component {
         menuList
       }
     }).then(res => {
+      message.success('操作成功')
       this.close()
     }).catch(err => {
       console.error(err)

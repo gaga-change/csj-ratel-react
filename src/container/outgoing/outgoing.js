@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Modal,Spin,Dropdown,Menu,Icon } from 'antd';
+import {Button,Modal,Spin,Dropdown,Menu,Icon,message} from 'antd';
 import _  from 'lodash';
 import moment from "moment"
 import {stringify,parse} from 'qs';
@@ -68,6 +68,7 @@ export default class Outgoing extends React.Component {
         method: 'post',
         data:value
       }).then(res=>{
+        message.success('操作成功')
         this.setState({visible:false})
         this.fetch()
         if(this.child){
@@ -206,7 +207,7 @@ export default class Outgoing extends React.Component {
             planCode:record.planCode
           }
         }).then(res=>{
-           console.log(res)
+           message.success('操作成功')
            that.fetch()
         }).catch(err=>{
           console.log(err)
@@ -275,7 +276,7 @@ export default class Outgoing extends React.Component {
 
           <SelestForm 
             onSubmit={this.onSubmit.bind(this,'select')} 
-            selectWordsArr={['商品名称','状态','创建日期','查询重置','联系人电话','业务单号']}/>
+            selectWordsArr={['商品名称','状态','创建日期','纵向查询','联系人电话','业务单号']}/>
           <div className="alert_Btn">
               <Button type="primary" onClick={this.add}>创建出库业务单</Button>
            </div>

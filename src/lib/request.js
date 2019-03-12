@@ -1,22 +1,18 @@
 import axios from 'axios'
 import { message} from 'antd';
 import {stringify} from 'qs';
+
 // 创建axios实例
 const service = axios.create({
   baseURL: '',
   timeout: 60000
 })
 
-
 service.interceptors.response.use(
   response => {
     if(response.status===200){
        if(response.data&&response.data.success){
-         selectMessage('success','数据请求成功！')
          return Promise.resolve(response.data&&response.data.data)
-       } else if(response.request.responseURL.includes('export')){
-         selectMessage('success','数据请求成功！')
-         return Promise.resolve(response.data) 
        } else if(response.data&&response.data.code==='ratel-512'){
          if(!window.location.href.includes('web_login')){
            selectMessage('error','用户未登陆或登录失效 !')
@@ -24,7 +20,7 @@ service.interceptors.response.use(
            sessionStorage.clear()
          }
        } else {
-         selectMessage('error',`${response.data.errorMsg||'请求异常'},接口${response.config.url}`)
+         selectMessage('error',`${response.data.errorMsg||'请求异常'},报错接口${response.config.url}`)
          return Promise.reject(response.data)
        }
     } else {
