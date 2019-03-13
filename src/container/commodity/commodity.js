@@ -130,7 +130,8 @@ export default class Commodity extends React.Component {
         message.success('操作成功')
         this.setState({
           submitLoding:false,
-          modifypriceVisible:false
+          modifypriceVisible:false,
+          modifypriceActiveRow:{}
         })
         this.modifyprice_child.handleRest()
         this.fetch()
