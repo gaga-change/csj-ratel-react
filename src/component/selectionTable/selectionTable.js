@@ -26,13 +26,14 @@ export default class SelectionTable extends React.Component {
 
   render() {
 
-    let { dataSource=[], columns=[],useIndex=false,selectedRowKeys=[],size='small',locale={emptyText:'暂无数据' }, bordered=true,...rest } = this.props;
+    let { dataSource=[], columns=[],useIndex=false,pagination,selectedRowKeys=[],size='small',locale={emptyText:'暂无数据' }, bordered=true,...rest } = this.props;
     const { mapSouce } =this.props;
+    pagination={...pagination, showTotal:total => `共 ${total} 条`}
     columns=columns.map((v,i)=>{
       v.key=i+1;
       if(v.type){ 
         switch(v.type){
-          case 'time':v.render=(item)=>moment(Number(item)).format(v.format||'YYYY-MM-DD');break;
+          case 'time':v.render=(item)=>moment(Number(item)).format(v.format||'YYYY-MM-DD HH:mm:ss');break;
           default:break;
         }
       } else if(v.useLocalEnum){
@@ -72,6 +73,7 @@ export default class SelectionTable extends React.Component {
       <div className="SelectionTable">
           <Table  
              {...rest}
+             pagination={pagination}
              rowSelection={rowSelection}
              dataSource={dataSource}
              columns={columns}
