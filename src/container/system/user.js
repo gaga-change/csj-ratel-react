@@ -166,7 +166,6 @@ export default class User extends React.Component {
 
   handleDisableUser = (obj) => {
     let { dataSource } = this.state
-    obj.userStatus = obj.userStatus === 0 ? 1 : 0
     request({
       url: '/webApi/base/user/updateUserStatus',
       method: 'post',
@@ -177,6 +176,7 @@ export default class User extends React.Component {
     }).then(res => {
       message.success('操作成功')
       this.setState({ dataSource })
+      this.fetch()
     }).catch(err => {
 
     })
