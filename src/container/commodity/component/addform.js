@@ -141,7 +141,7 @@ class AddForm extends React.Component {
                 <Form.Item label="规格型号" {...formItemLayout_right}>
                   { getFieldDecorator('skuFormat', {
                     initialValue:'',
-                    rules: [{ required: false }],
+                    rules: [{ required:true,message: '请输入规格型号' }],
                   })(
                     <Input  autoComplete='off' placeholder="请输入规格型号" />
                   )}
