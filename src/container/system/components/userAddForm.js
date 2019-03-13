@@ -83,7 +83,7 @@ class DataForm extends React.Component {
             }],
             initialValue: obj.userName
           })(
-            <Input placeholder="6~20位字符，字母区分大小写" />
+            <Input autoComplete='off'  placeholder="6~20位字符，字母区分大小写" />
           )}
         </Form.Item>
         <Form.Item
@@ -125,7 +125,7 @@ class DataForm extends React.Component {
               message: '密码只能为数字和字母', pattern: /^[A-Za-z0-9]+$/
             }],
           })(
-            <Input placeholder="6-20位，字母与数字结合，字母区分大小写" type="password" />
+            <Input autoComplete='off'  placeholder="6-20位，字母与数字结合，字母区分大小写"  />
           )}
         </Form.Item>
         <Form.Item
