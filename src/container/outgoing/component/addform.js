@@ -424,7 +424,7 @@ class AddForm extends React.Component {
             <Form.Item  {...formItemLayout_table}>
               { getFieldDecorator('items', {
                 initialValue:items,
-                rules: [{ required: true,message:'改项为必填' }],
+                rules: [{ required: true,message:'该项为必填' }],
               })(
                   <div className="form_item_table" style={{width:'100%'}}>
                     <div className="alert_Btn">
@@ -473,6 +473,7 @@ class AddForm extends React.Component {
                   selectWordsArr={['商品名称','仓库','横向查询']}/>
                 <SelectionTable
                   rowKey="id"
+                  pagination={{pageSize:10}}
                   selectedRowKeys={selectedRowKeys}
                   loading={selectionTableLoding}
                   onSelectChange={this.onSelectChange}

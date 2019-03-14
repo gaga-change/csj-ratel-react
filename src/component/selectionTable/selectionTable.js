@@ -28,7 +28,9 @@ export default class SelectionTable extends React.Component {
 
     let { dataSource=[], columns=[],useIndex=false,pagination,selectedRowKeys=[],size='small',locale={emptyText:'暂无数据' }, bordered=true,...rest } = this.props;
     const { mapSouce } =this.props;
-    pagination={...pagination, showTotal:total => `共 ${total} 条`}
+    if(pagination){
+      pagination={...pagination, showTotal:total => `共 ${total} 条`}
+    }
     columns=columns.map((v,i)=>{
       v.key=i+1;
       if(v.type){ 

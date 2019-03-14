@@ -18,5 +18,9 @@
     border-radius: 4px;
     padding: 4px 11px;
   }
+  .has-error .ant-form-explain, .has-error .ant-form-split{
+    font-size: 8px;
+  }
+  
 }
 
