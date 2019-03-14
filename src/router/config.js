@@ -85,7 +85,6 @@ export  const routerConfig=[
       },
       { 
         name:'菜单管理',
-        indexName:'菜单管理',
         path:'/system/menu',
         hidden: true,
         component:'/system/menu',
@@ -102,6 +101,7 @@ export  const routerConfig=[
       }, 
       { 
         name:'修改密码',
+        indexName:'修改密码',
         path:'/system/setPass',
         component:'/system/setPass',
         indexIcon:'change_password',

@@ -56,14 +56,14 @@ export default class Home extends React.Component {
                     {
                       Total_dataSource&&Total_dataSource[item.orderNumber_dataIndex]!==undefined?(
                       <span className="num-item">
-                        <span className="num">{Total_dataSource[item.orderNumber_dataIndex]}</span><span>单</span>
+                        <span className="num">{Total_dataSource[item.orderNumber_dataIndex]}</span><span>{item.orderNumber_Company||'单'}</span>
                       </span>
                      ):null
                     }
                     {
                        Total_dataSource&&Total_dataSource[item.orderPiece_dataIndex]!==undefined?(
                       <span className="num-item">
-                        <span className="num">{Total_dataSource[item.orderPiece_dataIndex]}</span><span>件</span>
+                        <span className="num">{Total_dataSource[item.orderPiece_dataIndex]}</span><span>{item.orderPiece_Company||'件'}</span>
                       </span>
                      ):null
                     }
