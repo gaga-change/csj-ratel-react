@@ -1,5 +1,5 @@
 import React from 'react';
-import  { Route,Switch,Redirect,HashRouter }  from  'react-router-dom';
+import  { Route,Switch,Redirect,BrowserRouter }  from  'react-router-dom';
 import {connect} from 'react-redux';
 import Loadable from 'react-loadable';
 import MyLoadingComponent from './MyloadingComponent'
@@ -12,7 +12,7 @@ class Router extends React.Component {
          let config=depthForEach(this.props.menus);
          return (
              <div>
-                    <HashRouter basename="/" history={this.props.history}>
+                    <BrowserRouter basename="/" history={this.props.history}>
                         <Switch>
                             {
                               config.map(v=>{
@@ -31,7 +31,7 @@ class Router extends React.Component {
                             }
                             <Redirect to='/web_login'></Redirect>
                         </Switch>
-                    </HashRouter>
+                    </BrowserRouter>
              </div>
          );
     }
