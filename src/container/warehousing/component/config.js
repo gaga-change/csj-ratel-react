@@ -163,7 +163,7 @@ export  const warehousingDetail_Config=[
   },
   {
     title:'品牌',
-    dataIndex:'skuBrandCode',
+    dataIndex:'skuBrandName',
   },
   {
     title:'规格型号',
@@ -184,6 +184,7 @@ export  const warehousingDetail_Config=[
   {
     title:'已入库量',
     dataIndex:'realInQty',
+    render:'',
   }
 ]
 
@@ -222,6 +223,35 @@ export  const BaseCard_Config=[
   },
 
 ]
+
+
+export  const PopoverTable_Config=[
+  {
+    title: '序号',
+    dataIndex:'index',
+  },
+  {
+    title: '入库单号',
+    dataIndex:'warehouseExeCode',
+  },
+  {
+    title:'入库时间',
+    dataIndex:'inWarehouseTime',
+    type:'time'
+  },
+  {
+    title:'入库数量',
+    dataIndex:'inQty'
+  },
+  {
+    title:'入库金额',
+    dataIndex:'inAmt'
+  }
+]
+
+
+
+
 
 //入库
 export  const map_Config={
