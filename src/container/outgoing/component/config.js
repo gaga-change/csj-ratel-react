@@ -90,6 +90,7 @@ export  const formTable_config=[
   {
     title:'单价（成本）',
     dataIndex: 'costPrice',
+    width:100
   },
   {
     title:'仓库',

@@ -230,7 +230,7 @@ export default class Outgoing extends React.Component {
             return <span className="Dropdown_Menu_box">
                 <span onClick={this.showDetail.bind(this,record)}>查看</span> 
                 { 
-                  [0,2].includes(Number(record.issuedState))&&
+                  [0,2,7].includes(Number(record.issuedState))&&
                   <Dropdown overlay={
                     <Menu className="Dropdown_Menu_child" >
                       { 
@@ -241,7 +241,7 @@ export default class Outgoing extends React.Component {
                       }
     
                       {
-                        [0,2].includes(Number(record.issuedState))&&
+                        [0,2,7].includes(Number(record.issuedState))&&
                         <Menu.Item onClick={this.onOperation.bind(this,'delete',record)}>
                           <span>删除</span>
                         </Menu.Item>

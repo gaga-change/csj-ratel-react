@@ -14,7 +14,9 @@ export default class FetchTable extends React.Component {
   render() {
     let { dataSource=[],useIndex=false,columns=[],pagination,size='small',locale={emptyText:'暂无数据' }, bordered=true,...rest } = this.props;
     const { mapSouce } =this.props;
-    pagination={...pagination, showTotal:total => `共 ${total} 条`}
+    if(pagination){
+      pagination={...pagination, showTotal:total => `共 ${total} 条`}
+    }
     columns=columns.map((v,i)=>{
       v.key=i+1;
       if(v.type){ 

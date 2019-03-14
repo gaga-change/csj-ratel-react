@@ -147,7 +147,9 @@ export default class EditableTable extends React.Component {
 
     let { columns=[],dataSource=[],useIndex=false,size='small',pagination,locale={emptyText:'暂无数据' },components=componentsDefaul,bordered=true,...rest } = this.props;
     const { mapSouce } =this.props;
-    pagination={...pagination, showTotal:total => `共 ${total} 条`}
+    if(pagination){
+      pagination={...pagination, showTotal:total => `共 ${total} 条`}
+    }
     columns = columns.map((v,i) => {
       v.key=i+1;
       if(v.type){ 

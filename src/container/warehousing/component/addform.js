@@ -329,6 +329,7 @@ class AddForm extends React.Component {
                   selectWordsArr={['商品名称','查询']}/>
                 <SelectionTable
                   rowKey="id"
+                  pagination={{pageSize:10}}
                   loading={selectionTableLoding}
                   selectedRowKeys={selectedRowKeys}
                   onSelectChange={this.onSelectChange}
