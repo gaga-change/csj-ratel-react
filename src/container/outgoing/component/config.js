@@ -183,7 +183,7 @@ export  const warehousingDetail_Config=[
   },
   {
     title:'品牌',
-    dataIndex: 'skuBrandCode',
+    dataIndex: 'skuBrandName',
   },
   {
     title:'规格型号',
@@ -204,6 +204,7 @@ export  const warehousingDetail_Config=[
   {
     title:'已出库量',
     dataIndex: 'realOutQty',
+    render:''
   }
 ]
 
@@ -242,6 +243,31 @@ export  const BaseCard_Config=[
   },
 
 ]
+
+export  const PopoverTable_Config=[
+  {
+    title: '序号',
+    dataIndex:'index',
+  },
+  {
+    title: '出库单号',
+    dataIndex:'warehouseExeCode',
+  },
+  {
+    title:'出库时间',
+    dataIndex:'outStoreTime',
+    type:'time'
+  },
+  {
+    title:'出库数量',
+    dataIndex:'outQty'
+  },
+  {
+    title:'出库金额',
+    dataIndex:'outAmt'
+  }
+]
+
 
 //出库
 export  const map_Config={

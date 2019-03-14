@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Modal,Spin,Dropdown,Menu,Icon,message} from 'antd';
+import {Button,Modal,Spin,Dropdown,Menu,Icon,message,Popover} from 'antd';
 import moment from "moment"
 import _  from 'lodash';
 import {stringify,parse} from 'qs';
@@ -7,7 +7,7 @@ import request from '@lib/request'
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
-import { indexTableColumns_Config,map_Config,indexTableColumns_ChildConfig ,warehousingDetail_Config,BaseCard_Config} from './component/config'
+import { indexTableColumns_Config,map_Config,indexTableColumns_ChildConfig ,warehousingDetail_Config,BaseCard_Config,PopoverTable_Config} from './component/config'
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
 import BaseTitle from '@component/baseTitle/baseTitle'
@@ -30,6 +30,11 @@ export default class Warehousing extends React.Component {
       warehousingDetail_dataSource:[{},{}],
       BaseCard_dataSource:{},
       record:{},
+      PopoverTable_dataSource:[],
+      PopoverTable_loading:false,
+
+      activePopover_row:{}
+
 
     }
   }
@@ -167,7 +172,10 @@ export default class Warehousing extends React.Component {
     }).then(res => {
       BaseCard_dataSource=res;
       if(Array.isArray(res.planDetails)){
-        warehousingDetail_dataSource=res.planDetails;
+        warehousingDetail_dataSource=res.planDetails.map(v=>{
+          v.planCode=res.planCode;
+          return v;
+        });
       }
       this.setState({BaseCard_dataSource,warehousingDetail_dataSource,spinning:false})
     }).catch(err => {
@@ -222,8 +230,33 @@ export default class Warehousing extends React.Component {
     }
   }
 
+  onMouseEnter(row){
+    let {activePopover_row}=this.state;
+    if(activePopover_row.id===row.id){
+      return 
+    }
+    this.setState({PopoverTable_loading:true})
+    request({
+      url: '/webApi/in/bill/getInOrder',
+      method: 'post',
+      data:row
+    }).then(res => {
+       this.setState({
+        activePopover_row:row,
+        PopoverTable_dataSource:res,
+        PopoverTable_loading:false
+       })
+    }).catch(err=>{
+      this.setState({
+        PopoverTable_loading:false
+      })
+      console.log(err)
+    })
+  }
+
   render() {
-    const { dataSource,spinning,record,visible,ModalTitle,detailVisible,warehousingDetail_dataSource,BaseCard_dataSource} =this.state;
+    const { PopoverTable_loading,PopoverTable_dataSource,dataSource,spinning,record,visible,ModalTitle,detailVisible,warehousingDetail_dataSource,BaseCard_dataSource} =this.state;
+   
     const columns=_.cloneDeep(indexTableColumns_Config).map(v=>{
       if(v.render===''){
          v.render=(ext, record, index)=>{
@@ -263,13 +296,40 @@ export default class Warehousing extends React.Component {
       return v
     })
 
+
+
+    const PopoverTable=<div  className="PopoverTable" style={{minWidth:300}}>
+         <FetchTable 
+          useIndex={true}
+          loading={PopoverTable_loading}
+          pagination={false}
+          columns={ PopoverTable_Config }
+          dataSource={PopoverTable_dataSource} />
+    </div>
+
+
+
+    const alert_columns=_.cloneDeep(warehousingDetail_Config).map(v=>{
+      if(v.render===''){
+         v.render=(ext, record, index)=>{
+            return Number(ext)? <Popover  placement="topLeft" title="入库订单信息" trigger="hover" content={PopoverTable} >
+                        <div onMouseEnter={this.onMouseEnter.bind(this,record)} style={{cursor:'pointer'}}>{ext}</div> 
+                  </Popover> : ext
+         }
+      }
+      return v
+    })
+
+
+
     const childTable=(record)=>{
       return <FetchTable 
+               pagination={false}
                columns={indexTableColumns_ChildConfig}  
-               dataSource={record.planDetails} 
-               pagination={false}/>
+               dataSource={record.planDetails}/>
     }
     
+
     return (
       <div className="Warehousing">
           <Sider history={this.props.history} />
@@ -316,8 +376,9 @@ export default class Warehousing extends React.Component {
                    <BaseCard  columns={BaseCard_Config} dataSource={BaseCard_dataSource}/>
                    <BaseTitle title="相关明细"/>
                    <FetchTable 
+                     pagination={{pageSize:10}}
                      useIndex={true}
-                     columns={warehousingDetail_Config}
+                     columns={alert_columns}
                      dataSource={warehousingDetail_dataSource} />
                 </div>
                </Spin>
