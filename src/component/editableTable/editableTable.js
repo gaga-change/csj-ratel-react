@@ -145,14 +145,14 @@ export default class EditableTable extends React.Component {
       },
     };
 
-    let { columns=[],dataSource=[],useIndex=false,size='small',locale={emptyText:'暂无数据' },components=componentsDefaul,bordered=true,...rest } = this.props;
+    let { columns=[],dataSource=[],useIndex=false,size='small',pagination,locale={emptyText:'暂无数据' },components=componentsDefaul,bordered=true,...rest } = this.props;
     const { mapSouce } =this.props;
-
+    pagination={...pagination, showTotal:total => `共 ${total} 条`}
     columns = columns.map((v,i) => {
       v.key=i+1;
       if(v.type){ 
         switch(v.type){
-          case 'time':v.render=(item)=>moment(Number(item)).format(v.format||'YYYY-MM-DD');break;
+          case 'time':v.render=(item)=>moment(Number(item)).format(v.format||'YYYY-MM-DD HH:mm:ss');break;
           default:break;
         }
       } else if(v.useLocalEnum){
@@ -194,6 +194,7 @@ export default class EditableTable extends React.Component {
     return (
       <div className="EditableTable">
         <Table
+          pagination={pagination}
           components={components}
           bordered={bordered}
           dataSource={dataSource}

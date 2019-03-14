@@ -217,7 +217,7 @@ export default class User extends React.Component {
         <Sider history={this.props.history} />
         <UserSearchForm onSubmit={this.handleFormSubmit} roles={this.state.roles}></UserSearchForm>
         <div>
-          <Popconfirm title="你确定要删除角色吗?" onConfirm={this.handleDeleteMore} okText="确定" cancelText="取消">
+          <Popconfirm title="你确定要删除这些账户吗?" onConfirm={this.handleDeleteMore} okText="确定" cancelText="取消">
             <Button className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
           </Popconfirm>
         </div>
