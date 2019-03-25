@@ -40,7 +40,7 @@ class AddForm extends React.Component {
                getFieldDecorator('customerName', {
                 initialValue: '',
                 rules: [{ required: true, message: '请输入客户名称' }]
-              })(<Input autoComplete="off" placeholder="请输入商品名称" />)
+              })(<Input autoComplete="off" placeholder="请输入客户名称" />)
             }
           </Form.Item>
 
