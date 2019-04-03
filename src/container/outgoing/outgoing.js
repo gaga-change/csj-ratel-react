@@ -134,10 +134,10 @@ export default class Outgoing extends React.Component {
     }
 
     delete data.total;
+    delete data.createTime;
     this.props.history.replace(`${pathname}?${stringify(data)}`)
     data.pageNum=data.current;
     delete data.current;
-    delete data.createTime;
 
     request({
       url: '/webApi/out/bill/getOutBusiBill',
