@@ -138,7 +138,7 @@ export default class Warehousing extends React.Component {
     this.props.history.replace(`${pathname}?${stringify(data)}`)
     data.pageNum=data.current;
     delete data.current;
-
+    delete data.createTime;
     request({
       url: '/webApi/in/bill/getInBusiBill',
       method: 'post',
