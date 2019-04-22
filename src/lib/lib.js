@@ -5,6 +5,7 @@ export function depthForEach(arr,resultArr=[]){
           resultArr.push({
             path:item.path,
             component:item.component,
+            name:item.name
           })
         }
         depthForEach(item.children,resultArr)
@@ -12,6 +13,7 @@ export function depthForEach(arr,resultArr=[]){
         resultArr.push({
           path:item.path,
           component:item.component,
+          name:item.name
         })
       }
   })

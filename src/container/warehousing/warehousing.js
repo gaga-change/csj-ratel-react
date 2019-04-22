@@ -349,6 +349,7 @@ export default class Warehousing extends React.Component {
             onChange={this.handleTableChange}
             expandedRowRender={childTable}
             dataSource={dataSource}/>
+
             <Modal
               title={ModalTitle}
               centered={true}
@@ -362,6 +363,7 @@ export default class Warehousing extends React.Component {
                 onRef={this.ref} 
                 onSubmit={this.onSubmit}/>
             </Modal>
+            
  
             <Modal
               title="入库业务单详情"

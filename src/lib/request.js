@@ -42,7 +42,7 @@ function selectMessage(type,tip){
 }
 
 
-function request({ url, method='get',data,...rest}={}){
+function request({ url, method='get',data,...rest}){
   let json={method,url,...rest};
   if(method==='get'||method==='GET'){
     let stringifyData=stringify(data);
