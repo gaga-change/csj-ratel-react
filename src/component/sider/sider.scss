@@ -32,6 +32,9 @@ $blue: #5868D9;
                 line-height: 30px;
                 text-align: center;
                 color: #fff;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
                 &:hover{
                   background: #14182F;
                 }
