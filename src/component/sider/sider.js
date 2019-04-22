@@ -76,8 +76,9 @@ export default class Sider extends React.Component {
     pathArr=pathArr.map((v,i)=>'/'+pathArr.slice(0,i+1).join('/')).map(v=>menu.find(item=>item.path===v));
     return pathArr.length>1?<Breadcrumb style={{marginBottom:12}}>
       {
-        pathArr.map((v,i)=><Breadcrumb.Item key={i}>{i!==pathArr.length?
-         <Link to={v.path} replace>{v.name}</Link>:<span>{v.name}</span>}</Breadcrumb.Item>)
+        pathArr.map((v,i)=>i!==pathArr.length-1?
+        <Breadcrumb.Item key={i}> <Link to={v.path} replace>{v.name}</Link></Breadcrumb.Item>
+        :<Breadcrumb.Item key={i}>{v.name}</Breadcrumb.Item>)
       }
     </Breadcrumb>:null
   }  
