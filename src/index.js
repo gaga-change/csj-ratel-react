@@ -13,7 +13,7 @@ import SussLayout from "./layout/layout";
 import './index.scss';
 
 moment.locale('zh-cn');
-const  reduxDevtools=window.devToolsExtension?window.devToolsExtension():f=>f;
+const  reduxDevtools=window.__REDUX_DEVTOOLS_EXTENSION__?window.__REDUX_DEVTOOLS_EXTENSION__():f=>f;
 const store=createStore(reducers,compose(
     applyMiddleware(thunk),
     reduxDevtools

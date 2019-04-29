@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Dropdown, Icon,message} from 'antd';
+import { Menu, Dropdown, Icon,message,Breadcrumb} from 'antd';
 import { connect } from 'react-redux';
 import request from '../../lib/request'
-import { deepExistMenu } from '../../lib/lib'
+import { deepExistMenu,depthForEach} from '../../lib/lib'
 import { setInfo, removeInfo } from "../../redux/info.redux";
 import { setMenus } from "../../redux/menus.redux";
 import { setMap } from "../../redux/map.redux";
@@ -69,6 +69,19 @@ export default class Sider extends React.Component {
 
     })
   }
+
+  BreadcrumbFn({history,menus,...rest}){
+    let pathArr=history.location.pathname.slice(1).split('/');
+    let menu=depthForEach(menus.menus);
+    pathArr=pathArr.map((v,i)=>'/'+pathArr.slice(0,i+1).join('/')).map(v=>menu.find(item=>item.path===v));
+    return pathArr.length>1?<Breadcrumb style={{marginBottom:12}}>
+      {
+        pathArr.map((v,i)=>i!==pathArr.length-1?
+        <Breadcrumb.Item key={i}> <Link to={v.path} replace>{v.name}</Link></Breadcrumb.Item>
+        :<Breadcrumb.Item key={i}>{v.name}</Breadcrumb.Item>)
+      }
+    </Breadcrumb>:null
+  }  
 
   render () {
     const { ownerName,nick} = (this.props.info&&this.props.info.info)||{};
@@ -158,7 +171,10 @@ export default class Sider extends React.Component {
             }
           </header>
         </div>
+        <this.BreadcrumbFn {...this.props}/>
       </div>
     )
   }
 }
+
+
