@@ -39,7 +39,7 @@ export  const indexTableColumnsConfig=[
   },
   {
     title:'最后操作日期',
-    dataIndex:'gmtModify',
+    dataIndex:'gmtCreate',
     type:'time',
   },
   {
