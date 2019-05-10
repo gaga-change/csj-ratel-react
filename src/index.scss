@@ -86,3 +86,16 @@ code {
 .p-12 {
   padding: 12px;
 }
+
+// 处理360兼容性问题。输入框换行
+.CommodityForm {
+  .ant-col-6 {
+    input {
+      width: 174px;
+    }
+  }
+  .ant-calendar-picker {
+    width: 334px;
+  }
+  
+}

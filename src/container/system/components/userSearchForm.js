@@ -29,10 +29,10 @@ class UserForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <div className="UserForm b-1 mb-12 p-12">
+      <div className="UserForm b-1 mb-12 p-12 CommodityForm">
         <Form onSubmit={this.handleSubmit} layout="inline">
           <Row gutter={24}>
-            <Col span={6} style={{ width: '290px', marginBottom: '12px' }}>
+            <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
               <Form.Item label="用户名">
                 {getFieldDecorator('userName', {
                   initialValue: '',
@@ -42,7 +42,7 @@ class UserForm extends React.Component {
                 )}
               </Form.Item>
             </Col>
-            <Col span={6} style={{ width: '290px', marginBottom: '12px' }}>
+            <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
               <Form.Item label="手机">
                 {getFieldDecorator('linkTel', {
                   initialValue: '',
@@ -52,7 +52,7 @@ class UserForm extends React.Component {
                 )}
               </Form.Item>
             </Col>
-            <Col span={6} style={{ width: '290px', marginBottom: '12px' }}>
+            <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
               <Form.Item label="状态" >
                 {getFieldDecorator('userStatus', {
                   rules: [{ required: false, message: '' }],
@@ -66,7 +66,7 @@ class UserForm extends React.Component {
                 )}
               </Form.Item>
             </Col>
-            <Col span={6} style={{ width: '290px', marginBottom: '12px' }}>
+            <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
               <Form.Item label="角色">
                 {getFieldDecorator('roleId', {
                   rules: [{ required: false, message: '' }],

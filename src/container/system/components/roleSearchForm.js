@@ -19,7 +19,7 @@ class RoleForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     
     return (
-      <div className="RoleForm b-1 mb-12 p-12">
+      <div className="RoleForm b-1 mb-12 p-12 CommodityForm">
         <Form onSubmit={this.handleSubmit} layout="inline">
           <Row gutter={24}>
             <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
