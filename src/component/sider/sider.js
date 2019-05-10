@@ -64,7 +64,7 @@ export default class Sider extends React.Component {
     }).then(res => {
       message.success('操作成功')
       this.props.removeInfo();
-      this.getInfo()
+      this.props.history.push('/web_login')
     }).catch(err => {
 
     })
@@ -81,7 +81,7 @@ export default class Sider extends React.Component {
         :<Breadcrumb.Item key={i}>{v.name}</Breadcrumb.Item>)
       }
     </Breadcrumb>:null
-  }  
+  }
 
   render () {
     const { ownerName,nick} = (this.props.info&&this.props.info.info)||{};
@@ -176,5 +176,3 @@ export default class Sider extends React.Component {
     )
   }
 }
-
-
