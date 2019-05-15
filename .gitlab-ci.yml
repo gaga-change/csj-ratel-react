@@ -4,43 +4,22 @@ services:
   - docker:dind
 stages:
   - build
-  - pack
   - deploy
-build:
-    image: node:12-alpine
-    stage: build
-    cache:
-        key: csj-ratel-react-build-cache
-        paths:
-        - node_modules/
-    before_script:
-        - npm config set sass_binary_site=https://npm.taobao.org/mirrors/node-sass
-        - npm install
-    script:
-        - npm run build
-    artifacts:
-        paths:
-        - build
-        expire_in: 1 day
-    only:
-        - tags
 
 pack:
-  stage: pack
+  stage: build
   script:
     - export IMAGE_TAG=$(echo -en $CI_COMMIT_REF_NAME | tr -c '[:alnum:]_.-' '-')
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
-  dependencies:
-    - build
   only:
     - tags
-
-
+    
 deploy:
   image: gempesaw/curl-jq
   stage: deploy
-  dependencies: []
+  variables:
+    GIT_STRATEGY: none
   script:
     - export IMAGE_TAG=$(echo -en $CI_COMMIT_REF_NAME | tr -c '[:alnum:]_.-' '-')
     - export IMAGE=$CI_REGISTRY_IMAGE:$IMAGE_TAG
