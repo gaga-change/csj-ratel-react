@@ -39,6 +39,7 @@ pack:
 deploy:
   image: gempesaw/curl-jq
   stage: deploy
+  dependencies: []
   script:
     - export IMAGE_TAG=$(echo -en $CI_COMMIT_REF_NAME | tr -c '[:alnum:]_.-' '-')
     - export IMAGE=$CI_REGISTRY_IMAGE:$IMAGE_TAG
