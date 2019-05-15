@@ -1,0 +1,49 @@
+variables:
+  DOCKER_DRIVER: overlay
+services:
+  - docker:dind
+stages:
+  - build
+  - pack
+  - deploy
+build:
+    image: node:8-alpine
+    stage: build
+    cache:
+        key: csj-ratel-react-build-cache
+        paths:
+        - node_modules/
+    before_script:
+        - npm install
+    script:
+        - npm run build
+    artifacts:
+        paths:
+        - build
+        expire_in: 1 day
+    only:
+        - tags
+
+pack:
+  stage: pack
+  script:
+    - export IMAGE_TAG=$(echo -en $CI_COMMIT_REF_NAME | tr -c '[:alnum:]_.-' '-')
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
+    - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
+  dependencies:
+    - build
+  only:
+    - tags
+
+
+deploy:
+  image: gempesaw/curl-jq
+  stage: deploy
+  script:
+    - export IMAGE_TAG=$(echo -en $CI_COMMIT_REF_NAME | tr -c '[:alnum:]_.-' '-')
+    - export IMAGE=$CI_REGISTRY_IMAGE:$IMAGE_TAG
+    - curl -u "$CI_RANCHER_TOKEN" -o temp.json $CI_RANCHER_POD_API
+    - export CONTAINER=$(cat temp.json | jq --compact-output '.containers[0]' | jq --compact-output 'to_entries |  map(if .key == "image" then . + {"value":"'${IMAGE}'"} else . end) | from_entries')
+    - curl  -u "$CI_RANCHER_TOKEN" -X PUT -H 'Accept:application/json' -H 'Content-Type:application/json' -d '{"containers":['${CONTAINER}']}' $CI_RANCHER_POD_API
+  only:
+    - tags
