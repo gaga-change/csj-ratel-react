@@ -1,16 +1,15 @@
 import React from 'react';
-import { Button,Modal,Tabs,Popconfirm,message} from 'antd';
+import { Button,Modal,Popconfirm,message} from 'antd';
 import _  from 'lodash';
 import {stringify,parse} from 'qs';
 import request from '@lib/request'
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
-import { indexTableColumnsConfig,costPriceChange_config,priceChange_config} from './component/config'
+import { indexTableColumnsConfig} from './component/config'
 import CommodityForm from './component/form'
 import AddForm from './component/addform'
 import'./commodity.scss'
 
-const TabPane = Tabs.TabPane;
 export default class Commodity extends React.Component {
 
   constructor(props){
@@ -31,6 +30,10 @@ export default class Commodity extends React.Component {
 
   componentDidMount(){
     this.fetch()
+  }
+
+  componentWillUnmount() {
+    this.setState = () => {}
   }
 
   fetch = (json)=>{
@@ -144,7 +147,6 @@ export default class Commodity extends React.Component {
     }
   }
 
-
   addCommodity = ()=>{
     this.setState({visible:true})
   }
@@ -165,57 +167,6 @@ export default class Commodity extends React.Component {
     this.child=res
   }
 
-  modifyprice_ref = (res)=>{
-    this.modifyprice_child=res
-  }
-
-  modifyprice = (value)=>{
-    let { modifypriceActiveRow } = this.state;
-    this.setState({
-      modifypriceVisible:true,
-      modifypriceActiveRow:value,
-      modifyprice_loding:true
-    })
-
-    if(modifypriceActiveRow.id===value.id){
-      this.setState({ modifyprice_loding:false })
-      return ''
-    }
-    //查询商品成本价格变动记录
-    request({
-      url: `/webApi/sku/price/queryCostPriceRecord`,
-      method: 'get',
-      data:value.id
-    }).then(res => {
-       this.setState({
-        costPriceChange_dataSource:res||[],
-        modifyprice_loding:false
-       })
-    }).catch(err => {
-       console.log(err)
-       this.setState({
-        modifyprice_loding:false
-       })
-    })
-    
-    //查询商品成本售价变动记录
-    request({
-      url: `/webApi/sku/price/querySalePriceRecord`,
-      method: 'get',
-      data:value.id,
-    }).then(res => {
-       this.setState({
-        priceChange_dataSource:res||[],
-        modifyprice_loding:false
-       })
-    }).catch(err => {
-       console.log(err)
-       this.setState({
-        modifypriceVisible:false
-      })
-    })
-  }
-
   deleteCommodity = (value)=>{
     request({
       url: `/webApi/sku/info/delete/${value.id}`,
@@ -230,14 +181,12 @@ export default class Commodity extends React.Component {
     })
   }
 
-  componentWillUnmount() {
-    this.setState = (state, callback) => {
-      return
-    }
+  modifyprice = item => {
+
   }
 
   render() {
-    const { dataSource,submitLoding,visible,modifypriceVisible,costPriceChange_dataSource,modifyprice_loding,priceChange_dataSource,modifypriceActiveRow,loading,pagination}=this.state;
+    const { dataSource,submitLoding,visible,loading,pagination}=this.state;
     const columns=_.cloneDeep(indexTableColumnsConfig).map(v=>{
       if(v.render===''){
          v.render=(ext, record, index)=>{
@@ -245,7 +194,8 @@ export default class Commodity extends React.Component {
                 <Popconfirm title="确定要删除吗?" onConfirm={this.deleteCommodity.bind(this,record)}>
                   <span>删除</span> 
                 </Popconfirm>
-              <span onClick={this.modifyprice.bind(this,record)}>调价</span> 
+              <span onClick={this.modifyprice.bind(this,record)}>供货价</span> 
+              <span onClick={this.modifyprice.bind(this,record)}>销售价</span> 
             </span>
          }
       }
@@ -281,42 +231,7 @@ export default class Commodity extends React.Component {
                   onRef={this.ref}
                   onSubmit={this.onSubmit.bind(this,'add')}/>
             </Modal>
-
-            <Modal
-              title="调价"
-              footer={false}
-              centered={true}
-              width={800}
-              bodyStyle={{paddingTop:16}}
-              visible={modifypriceVisible}
-              onCancel={this.handleCancel}>
-                <div className="modifyprice_alert">
-                <CommodityForm 
-                 loading={submitLoding}
-                 onRef={this.modifyprice_ref}
-                 modifypriceActiveRow={modifypriceActiveRow}
-                 selectWordsArr={['成本价','售价']}
-                 submitTex="提交"
-                 resetText="取消"
-                 onSubmit={this.onSubmit.bind(this,'modifyprice')}/>
-                  <Tabs type="card">
-                      <TabPane tab='成本价变动记录' key='1'>
-                          <FetchTable 
-                            dataSource={costPriceChange_dataSource} 
-                            columns={costPriceChange_config}
-                            loading={modifyprice_loding}
-                            pagination={false}/>
-                      </TabPane>
-                      <TabPane tab='售价变动记录' key='2'>
-                          <FetchTable 
-                            dataSource={priceChange_dataSource} 
-                            columns={priceChange_config}
-                            loading={modifyprice_loding}
-                            pagination={false}/>
-                      </TabPane>
-                    </Tabs>
-                </div>
-              </Modal>
+            
         </div>
     );
   }

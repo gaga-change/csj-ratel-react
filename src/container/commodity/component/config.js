@@ -21,14 +21,6 @@ export  const indexTableColumnsConfig=[
     dataIndex:'skuUnitName'
   },
   {
-    title:'成本价(最新)',
-    dataIndex:'costPrice'
-  },
-  {
-    title:'售价(最新)',
-    dataIndex:'salePrice'
-  },
-  {
     title:'创建日期',
     dataIndex:'gmtCreate',
     type:'time',
@@ -50,23 +42,7 @@ export  const indexTableColumnsConfig=[
     title:'操作',
     dataIndex: '',
     render:'',
-    width:100
-  },
-]
-
-export  const costPriceChange_config=[
-  {
-    title: '成本价',
-    dataIndex:'costPrice'
-  },
-  {
-    title:'变动日期',
-    dataIndex:'gmtCreate',
-    type:'time',
-  },
-  {
-    title:'操作人',
-    dataIndex:'createrName'
+    width:200
   },
 ]
 
