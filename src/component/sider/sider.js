@@ -59,10 +59,9 @@ class Sider extends React.Component {
   }
 
   logOut = () => {
-    loginOut().then(res => {
-      this.props.removeInfo();
-      this.props.history.push('/web_login')
-    })
+    this.props.removeInfo();
+    this.props.history.push('/web_login')
+    loginOut()
   }
 
   BreadcrumbFn({ history, menus, ...rest }) {

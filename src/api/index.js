@@ -6,7 +6,7 @@ const base = '/webApi'
 axios.interceptors.response.use(function (response) {
   let data = response.data
   if (data.code !== '200') {
-    data.errorMsg && message.error(data.errorMsg)
+    data.errorMsg && message.warning(data.errorMsg)
     data = null
   }
   return data
@@ -17,3 +17,5 @@ axios.interceptors.response.use(function (response) {
 export const skuInfoList = params => axios.get(`${base}/sku/info/list`, { params })
 /** 退出登录 */
 export const loginOut = params => axios.get(`/login_out`, { params })
+/** 登录 */
+export const login = params => axios.post(`/login`, params)
