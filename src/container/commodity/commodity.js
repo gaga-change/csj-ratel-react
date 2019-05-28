@@ -8,7 +8,7 @@ import FetchTable from '../../component/fetchTable/fetchTable'
 import { indexTableColumnsConfig } from './component/config'
 import CommodityForm from './component/form'
 import AddForm from './component/addform'
-import { skuInfoList } from 'api'
+import { skuInfoList, skuInfoAdd } from 'api'
 
 import './commodity.scss'
 
@@ -76,6 +76,7 @@ export default class Commodity extends React.Component {
     })
   }
 
+  /** 翻页 */
   handleTableChange = (pagination, filters, sorter) => {
     this.setState({
       pagination
@@ -84,69 +85,43 @@ export default class Commodity extends React.Component {
     })
   }
 
-  onSubmit = (type, value) => {
-    let { pagination } = this.state;
-    if (type === 'add') {
-      this.setState({ submitLoding: true })
-      request({
-        url: '/webApi/sku/info/add',
-        method: 'post',
-        data: value
-      }).then(res => {
-        message.success('操作成功')
-        this.child.handleRest()
-        this.setState({
-          visible: false,
-          submitLoding: false
-        })
-        this.fetch()
-      }).catch(err => {
-        console.log(err)
-        this.setState({
-          submitLoding: false
-        })
-      })
-    } else if (type === "select") {
-      if (!Object.keys(value).length) {
-        pagination = {
-          current: 1,
-          pageSize: 10
-        }
-      }
-      this.setState({ pagination }, () => {
-        this.fetch(value)
-      })
-    } else if (type === 'modifyprice') {
+  /** 创建sku */
+  handleCreateSku = (value) => {
+    this.setState({ submitLoding: true })
+    skuInfoAdd(value).then(res => {
       this.setState({
-        submitLoding: true
+        submitLoding: false
       })
-      request({
-        url: '/webApi/sku/price/change',
-        method: 'post',
-        data: value
-      }).then(res => {
+      if (res) {
         message.success('操作成功')
-        this.setState({
-          submitLoding: false,
-          modifypriceVisible: false,
-          modifypriceActiveRow: {}
-        })
-        this.modifyprice_child.handleRest()
         this.fetch()
-      }).catch(err => {
-        console.log(err)
-        this.setState({
-          submitLoding: false
-        })
-      })
-    }
+        this.child.handleRest()
+        this.setState({ visible: false })
+      }
+    })
   }
 
-  addCommodity = () => {
+  /** 搜索 */
+  handleSearch = (value) => {
+    let { pagination } = this.state;
+    if (!Object.keys(value).length) {
+      pagination = {
+        current: 1,
+        pageSize: 10
+      }
+    }
+    this.setState({ pagination }, () => {
+      this.fetch(value)
+    })
+  }
+
+  /** 显示sku表单 */
+  handleShowSkuForm = () => {
     this.setState({ visible: true })
   }
 
 
+  /** 取消显示表单 */
   handleCancel = () => {
     if (this.modifyprice_child) {
       this.modifyprice_child.handleRest()
@@ -154,6 +129,7 @@ export default class Commodity extends React.Component {
     this.setState({ visible: false, modifypriceVisible: false })
   }
 
+  /** 确定 */
   handleOk = (e) => {
     this.child.handleSubmit(e)
   }
@@ -202,9 +178,9 @@ export default class Commodity extends React.Component {
         <Sider history={this.props.history} />
         <CommodityForm
           selectWordsArr={['商品名称', '商品编码']}
-          onSubmit={this.onSubmit.bind(this, 'select')} />
+          onSubmit={this.handleSearch} />
         <div className="alert_Btn">
-          <Button type="primary" onClick={this.addCommodity}>创建商品</Button>
+          <Button type="primary" onClick={this.handleShowSkuForm}>创建商品</Button>
         </div>
         <FetchTable
           dataSource={dataSource}
@@ -224,7 +200,7 @@ export default class Commodity extends React.Component {
           onOk={this.handleOk}>
           <AddForm
             onRef={this.ref}
-            onSubmit={this.onSubmit.bind(this, 'add')} />
+            onSubmit={this.handleCreateSku} />
         </Modal>
 
       </div>

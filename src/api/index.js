@@ -5,7 +5,12 @@ const base = '/webApi'
 // 响应拦截器
 axios.interceptors.response.use(function (response) {
   let data = response.data
-  if (data.code !== '200') {
+  // 用户未登录拦截
+  if (data.code === 'ratel-512') {
+    window.location.href = '/web_login'
+  }
+  // 系统异常提示（返回的数据为 null）
+  else if (data.code !== '200') {
     data.errorMsg && message.warning(data.errorMsg)
     data = null
   }
@@ -19,3 +24,5 @@ export const skuInfoList = params => axios.get(`${base}/sku/info/list`, { params
 export const loginOut = params => axios.get(`/login_out`, { params })
 /** 登录 */
 export const login = params => axios.post(`/login`, params)
+/** 添加商品 */
+export const skuInfoAdd = params => axios.post(`${base}/sku/info/add`, params)
