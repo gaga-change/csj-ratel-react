@@ -5,6 +5,6 @@ const ip = "http://172.16.81.26:8686" // 苗
 
 module.exports = function (app) {
   app.use(
-    proxy(['/webApi', '/login'], { target: ip, changeOrigin: true })
+    proxy(['/webApi', '/login', '/api'], { target: ip, changeOrigin: true })
   )
 }

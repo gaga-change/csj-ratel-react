@@ -1,63 +1,67 @@
 
-export  const indexTableColumnsConfig=[
+export const indexTableColumnsConfig = [
   {
-    title:'商品编码',
-    dataIndex:'skuCode'
+    title: '货主商品编码',
+    dataIndex: 'skuCode'
   },
   {
-    title:'商品名称',
-    dataIndex:'skuName'
+    title: '商品名称',
+    dataIndex: 'skuName'
   },
   {
-    title:'品牌',
-    dataIndex:'brandName'
+    title: '品牌',
+    dataIndex: 'brandName'
   },
   {
-    title:'规格型号',
-    dataIndex:'skuFormat'
+    title: '规格',
+    dataIndex: 'skuFormat'
   },
   {
-    title:'单位',
-    dataIndex:'skuUnitName'
+    title: '型号',
+    dataIndex: 'skuModel'
   },
   {
-    title:'创建日期',
-    dataIndex:'gmtCreate',
-    type:'time',
+    title: '单位',
+    dataIndex: 'skuUnitName'
   },
   {
-    title:'创建者',
-    dataIndex:'createrName'
+    title: '创建日期',
+    dataIndex: 'gmtCreate',
+    type: 'time',
   },
   {
-    title:'最后操作日期',
-    dataIndex:'gmtCreate',
-    type:'time',
+    title: '创建者',
+    dataIndex: 'createrName'
   },
   {
-    title:'最后操作者',
-    dataIndex:'modifierName'
+    title: '最后操作日期',
+    dataIndex: 'gmtCreate',
+    type: 'time',
   },
   {
-    title:'操作',
+    title: '最后操作者',
+    dataIndex: 'modifierName'
+  },
+  {
+    title: '操作',
     dataIndex: '',
-    render:'',
-    width:200
+    render: '',
+    width: 200
   },
 ]
 
-export  const priceChange_config=[
+export const priceChange_config = [
   {
     title: '售价',
-    dataIndex:'salePrice'
+    dataIndex: 'salePrice'
   },
   {
-    title:'变动日期',
-    dataIndex:'gmtCreate',
-    type:'time',
+    title: '变动日期',
+    dataIndex: 'gmtCreate',
+    type: 'time',
   },
   {
-    title:'操作人',
-    dataIndex:'createrName'
+    title: '操作人',
+    dataIndex: 'createrName'
   },
 ]
