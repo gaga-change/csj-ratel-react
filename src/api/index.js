@@ -26,3 +26,5 @@ export const loginOut = params => axios.get(`/login_out`, { params })
 export const login = params => axios.post(`/login`, params)
 /** 添加商品 */
 export const skuInfoAdd = params => axios.post(`${base}/sku/info/add`, params)
+/** 删除商品 */
+export const skuInfoDel = skuId => axios.delete(`${base}/sku/info/delete/${skuId}`)

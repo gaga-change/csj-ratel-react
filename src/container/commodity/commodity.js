@@ -2,13 +2,12 @@ import React from 'react';
 import { Button, Modal, Popconfirm, message } from 'antd';
 import _ from 'lodash';
 import { stringify, parse } from 'qs';
-import request from '@lib/request'
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import { indexTableColumnsConfig } from './component/config'
 import CommodityForm from './component/form'
 import AddForm from './component/addform'
-import { skuInfoList, skuInfoAdd } from 'api'
+import { skuInfoList, skuInfoAdd, skuInfoDel } from 'api'
 
 import './commodity.scss'
 
@@ -138,17 +137,11 @@ export default class Commodity extends React.Component {
     this.child = res
   }
 
+  /** 删除商品 */
   deleteCommodity = (value) => {
-    request({
-      url: `/webApi/sku/info/delete/${value.id}`,
-      method: 'delete',
-    }).then(res => {
+    skuInfoDel(value.id).then(res => {
       message.success('操作成功')
       this.fetch()
-    }).catch(err => {
-      this.setState({
-        modifypriceVisible: false
-      })
     })
   }
 
