@@ -1,22 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Dropdown, Icon,message,Breadcrumb} from 'antd';
+import { Menu, Dropdown, Icon, Breadcrumb } from 'antd';
 import { connect } from 'react-redux';
 import request from '../../lib/request'
-import { deepExistMenu,depthForEach} from '../../lib/lib'
+import { deepExistMenu, depthForEach } from '../../lib/lib'
 import { setInfo, removeInfo } from "../../redux/info.redux";
 import { setMenus } from "../../redux/menus.redux";
 import { setMap } from "../../redux/map.redux";
 import { routerConfig } from '../../router/config'
 import imgSouce from '../../imgSouce/imgSouce'
 import './sider.scss'
+import { loginOut } from 'api'
 
 @connect(
   state => state,
-  { setInfo, setMenus, removeInfo,setMap}
+  { setInfo, setMenus, removeInfo, setMap }
 )
 
-export default class Sider extends React.Component {
+class Sider extends React.Component {
 
   constructor(props) {
     super(props)
@@ -25,18 +26,18 @@ export default class Sider extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     document.documentElement.scrollTop = 0;
     document.querySelector('.SiderNav').style.minHeight = document.body.clientWidth + 'px';
     this.spin()
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     document.querySelector('.SiderNav').style.minHeight = document.body.clientWidth + 'px';
   }
 
   spin = () => {
-    const { isLoginPage} = this.state
+    const { isLoginPage } = this.state
     if ((!this.props.info || !this.props.info.info || this.props.info.info.id === undefined) && !isLoginPage) {
       this.getInfo()
     }
@@ -47,44 +48,38 @@ export default class Sider extends React.Component {
       url: '/webApi/base/user/info',
       method: 'get',
     }).then(res => {
-      if(res){
+      if (res) {
         this.props.setInfo(res)
         this.props.setMenus(deepExistMenu(res.menus.children, routerConfig))
         this.props.setMap()
       }
     }).catch(err => {
-       console.log(err)
+      console.log(err)
     })
   }
 
   logOut = () => {
-    request({
-      url: '/login_out',
-      method: 'get',
-    }).then(res => {
-      message.success('操作成功')
+    loginOut().then(res => {
       this.props.removeInfo();
       this.props.history.push('/web_login')
-    }).catch(err => {
-
     })
   }
 
-  BreadcrumbFn({history,menus,...rest}){
-    let pathArr=history.location.pathname.slice(1).split('/');
-    let menu=depthForEach(menus.menus);
-    pathArr=pathArr.map((v,i)=>'/'+pathArr.slice(0,i+1).join('/')).map(v=>menu.find(item=>item.path===v));
-    return pathArr.length>1?<Breadcrumb style={{marginBottom:12}}>
+  BreadcrumbFn({ history, menus, ...rest }) {
+    let pathArr = history.location.pathname.slice(1).split('/');
+    let menu = depthForEach(menus.menus);
+    pathArr = pathArr.map((v, i) => '/' + pathArr.slice(0, i + 1).join('/')).map(v => menu.find(item => item.path === v));
+    return pathArr.length > 1 ? <Breadcrumb style={{ marginBottom: 12 }}>
       {
-        pathArr.map((v,i)=>i!==pathArr.length-1?
-        <Breadcrumb.Item key={i}> <Link to={v.path} replace>{v.name}</Link></Breadcrumb.Item>
-        :<Breadcrumb.Item key={i}>{v.name}</Breadcrumb.Item>)
+        pathArr.map((v, i) => i !== pathArr.length - 1 ?
+          <Breadcrumb.Item key={i}> <Link to={v.path} replace>{v.name}</Link></Breadcrumb.Item>
+          : <Breadcrumb.Item key={i}>{v.name}</Breadcrumb.Item>)
       }
-    </Breadcrumb>:null
+    </Breadcrumb> : null
   }
 
-  render () {
-    const { ownerName,nick} = (this.props.info&&this.props.info.info)||{};
+  render() {
+    const { ownerName, nick } = (this.props.info && this.props.info.info) || {};
     let activePath = this.props.history && this.props.history.location && this.props.history.location.pathname;
     let arr = activePath && activePath.split('/');
     if (arr.length > 2) {
@@ -100,9 +95,9 @@ export default class Sider extends React.Component {
           <span className="siderNav_header_Nav" onClick={this.logOut}>退出登录</span>
         </Menu.Item>
         <Menu.Item>
-        <Link to='/system/setPass' replace>
-           <span className="siderNav_header_Nav">修改密码</span>
-        </Link>
+          <Link to='/system/setPass' replace>
+            <span className="siderNav_header_Nav">修改密码</span>
+          </Link>
         </Menu.Item>
       </Menu>
     );
@@ -113,13 +108,13 @@ export default class Sider extends React.Component {
           <ul>
             {
               config.map(v =>
-                <li key={v.id || v.path} className={activePath === v.path||activePath === v.Redirect ? 'active' : null}>
-                  <Link to={v.Redirect||v.path} replace>
-                    <img src={activePath === v.path||activePath === v.Redirect? imgSouce[`${v.icon}_click`] : imgSouce[v.icon]} alt="" />
+                <li key={v.id || v.path} className={activePath === v.path || activePath === v.Redirect ? 'active' : null}>
+                  <Link to={v.Redirect || v.path} replace>
+                    <img src={activePath === v.path || activePath === v.Redirect ? imgSouce[`${v.icon}_click`] : imgSouce[v.icon]} alt="" />
                     <span>{v.name}</span>
                   </Link>
                   {
-                    v.children&&Array.isArray(v.children)&&uesHover&&
+                    v.children && Array.isArray(v.children) && uesHover &&
                     <div className="li_hover">
                       <ul>
                         {
@@ -171,8 +166,10 @@ export default class Sider extends React.Component {
             }
           </header>
         </div>
-        <this.BreadcrumbFn {...this.props}/>
+        <this.BreadcrumbFn {...this.props} />
       </div>
     )
   }
 }
+
+export default Sider
