@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Modal, Popconfirm, message } from 'antd';
-import _ from 'lodash';
 import { stringify, parse } from 'qs';
 import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
@@ -8,24 +7,37 @@ import { indexTableColumnsConfig } from './component/config'
 import CommodityForm from './component/form'
 import AddForm from './component/addform'
 import { skuInfoList, skuInfoAdd, skuInfoDel } from 'api'
+import SupplyPrice from './component/supplyPrice'
 
 import './commodity.scss'
 
 export default class Commodity extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
+    let columns = [...indexTableColumnsConfig]
+    let controlRow = columns.pop()
+    controlRow = { ...controlRow }
+    controlRow.render = (ext, record, index) => {
+      return <span className="Dropdown_Menu_box">
+        <Popconfirm title="确定要删除吗?" onConfirm={this.deleteCommodity.bind(this, record)}>
+          <span>删除</span>
+        </Popconfirm>
+        <span onClick={this.modifySupplyPrice.bind(this, record)}>供货价</span>
+        <span onClick={this.modifySellPrice.bind(this, record)}>销售价</span>
+      </span>
+    }
+    columns.push(controlRow)
+    this.columns = columns
+
     this.state = {
       dataSource: [],
       pagination: {},
       submitLoding: false,
       loading: false,
       visible: false,
-      modifypriceVisible: false,
-      costPriceChange_dataSource: [],
-      priceChange_dataSource: [],
-      modifyprice_loding: false,
-      modifypriceActiveRow: {}
+      modifySupplyPriceVisible: false, // 需改供货价表单是否显示
+      controlRecord: null, // 当前操作的行数据
     }
   }
 
@@ -122,10 +134,8 @@ export default class Commodity extends React.Component {
 
   /** 取消显示表单 */
   handleCancel = () => {
-    if (this.modifyprice_child) {
-      this.modifyprice_child.handleRest()
-    }
-    this.setState({ visible: false, modifypriceVisible: false })
+    this.modifyprice_child && this.modifyprice_child.handleRest()
+    this.setState({ visible: false, modifySupplyPriceVisible: false })
   }
 
   /** 确定 */
@@ -145,26 +155,21 @@ export default class Commodity extends React.Component {
     })
   }
 
-  modifyprice = item => {
+  /** 修改供货价 */
+  modifySupplyPrice = item => {
+    this.setState({
+      modifySupplyPriceVisible: true,
+      controlRecord: item
+    })
+  }
+
+  /** 修改销售价 */
+  modifySellPrice = item => {
 
   }
 
   render() {
-    const { dataSource, submitLoding, visible, loading, pagination } = this.state;
-    const columns = _.cloneDeep(indexTableColumnsConfig).map(v => {
-      if (v.render === '') {
-        v.render = (ext, record, index) => {
-          return <span className="Dropdown_Menu_box">
-            <Popconfirm title="确定要删除吗?" onConfirm={this.deleteCommodity.bind(this, record)}>
-              <span>删除</span>
-            </Popconfirm>
-            <span onClick={this.modifyprice.bind(this, record)}>供货价</span>
-            <span onClick={this.modifyprice.bind(this, record)}>销售价</span>
-          </span>
-        }
-      }
-      return v
-    })
+    const { dataSource, submitLoding, visible, loading, pagination, modifySupplyPriceVisible, controlRecord } = this.state;
 
     return (
       <div className="Commodity"  >
@@ -177,7 +182,7 @@ export default class Commodity extends React.Component {
         </div>
         <FetchTable
           dataSource={dataSource}
-          columns={columns}
+          columns={this.columns}
           loading={loading}
           pagination={pagination}
           onChange={this.handleTableChange} />
@@ -195,7 +200,16 @@ export default class Commodity extends React.Component {
             onRef={this.ref}
             onSubmit={this.handleCreateSku} />
         </Modal>
-
+        <Modal
+          title="供货价"
+          width={800}
+          okText="保存"
+          centered={true}
+          bodyStyle={{ paddingBottom: 16 }}
+          onCancel={this.handleCancel}
+          visible={modifySupplyPriceVisible}>
+          <SupplyPrice record={controlRecord} />
+        </Modal>
       </div>
     );
   }
