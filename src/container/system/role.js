@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Popconfirm, message } from 'antd';
+import { Button, Popconfirm, message, Breadcrumb } from 'antd';
 import _ from 'lodash';
 import request from '@lib/request'
 import SelectingTable from '../../component/selectionTable/selectionTable'
@@ -165,8 +165,13 @@ export default class Role extends React.Component {
     })
     return (
       <div className="Role">
+        <Breadcrumb >
+          <Breadcrumb.Item>系统</Breadcrumb.Item>
+          <Breadcrumb.Item>角色管理</Breadcrumb.Item>
+        </Breadcrumb>
+        <div className="mt10"></div>
         <RoleSearchForm onSubmit={this.handleFormSubmit}></RoleSearchForm>
-        <div>
+        <div >
           <Popconfirm title="你确定要删除角色吗?" onConfirm={this.handleDel} okText="确定" cancelText="取消">
             <Button className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
           </Popconfirm>

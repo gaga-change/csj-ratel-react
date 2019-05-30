@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, message } from 'antd'
+import { Card, message, Breadcrumb } from 'antd'
 import SetPassForm from './components/setPassForm'
 import request from '../../lib/request'
 import './style/setPass.scss'
@@ -51,6 +51,11 @@ export default class SetPass extends React.Component {
   render() {
     return (
       <div className="setPass">
+        <Breadcrumb >
+          <Breadcrumb.Item>系统</Breadcrumb.Item>
+          <Breadcrumb.Item>修改密码</Breadcrumb.Item>
+        </Breadcrumb>
+        <div className="mt10"></div>
         <Card title="修改密码" className="changePass">
           <SetPassForm onSubmit={this.onSubmit} onRef={this.ref} loading={this.state.submitLoding} />
         </Card>

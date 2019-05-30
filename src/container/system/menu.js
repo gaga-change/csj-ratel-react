@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Popconfirm, message } from 'antd';
+import { Button, Popconfirm, message, Breadcrumb } from 'antd';
 import _ from 'lodash';
 import request from '@lib/request'
 import FetchTable from '../../component/fetchTable/fetchTable'
@@ -143,6 +143,11 @@ export default class Menu extends React.Component {
     })
     return (
       <div className="Menu">
+        <Breadcrumb >
+          <Breadcrumb.Item>系统</Breadcrumb.Item>
+          <Breadcrumb.Item>菜单管理</Breadcrumb.Item>
+        </Breadcrumb>
+        <div className="mt10"></div>
         <div className="alert_Btn">
           <Button type="primary" onClick={() => this.openMenuFormMoadl()}>创建菜单</Button>
         </div>

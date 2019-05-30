@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Popconfirm, message } from 'antd';
+import { Button, Popconfirm, message, Breadcrumb } from 'antd';
 import _ from 'lodash';
 import request from '@lib/request'
 import SelectingTable from '../../component/selectionTable/selectionTable'
@@ -213,6 +213,11 @@ export default class User extends React.Component {
     })
     return (
       <div className="User">
+        <Breadcrumb >
+          <Breadcrumb.Item>系统</Breadcrumb.Item>
+          <Breadcrumb.Item>用户管理</Breadcrumb.Item>
+        </Breadcrumb>
+        <div className="mt10"></div>
         <UserSearchForm onSubmit={this.handleFormSubmit} roles={this.state.roles}></UserSearchForm>
         <div>
           <Popconfirm title="你确定要删除这些账户吗?" onConfirm={this.handleDeleteMore} okText="确定" cancelText="取消">
