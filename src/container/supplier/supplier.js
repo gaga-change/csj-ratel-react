@@ -108,7 +108,6 @@ export default class Supplier extends React.Component {
     else if (type === 'address') {
       const { area, ...rest } = value
       const { basicSupplierInfo, activeOperation, addressDetail } = this.state
-      console.log(basicSupplierInfo)
       let api = providerAddrSave
       let data = {
         ...rest,
@@ -117,7 +116,6 @@ export default class Supplier extends React.Component {
         providerCity: area[1],
         providerArea: area[2],
         providerId: basicSupplierInfo.id,
-        // basicSupplierInfoCode: basicSupplierInfo.supplierCode
       }
       if (activeOperation === '修改地址') {
         api = providerAddrUpdate
@@ -135,7 +133,6 @@ export default class Supplier extends React.Component {
     }
   }
 
-
   handleCancel = type => {
     if (type === 'visible_operation') {
       this.setState({ visible_operation: false })
@@ -143,7 +140,6 @@ export default class Supplier extends React.Component {
       this.setState({ visible_addSupplier: false, visible_address: false })
     }
   }
-
 
   handleTableChange = (pagination, filters, sorter) => {
     this.setState({
@@ -174,7 +170,6 @@ export default class Supplier extends React.Component {
     })
   }
 
-
   handleOk = e => {
     this.child.handleSubmit(e)
   }
@@ -187,11 +182,9 @@ export default class Supplier extends React.Component {
     this.operation_child = res
   }
 
-
   showAddAddress = () => {
     this.setState({ visible_operation: true, activeOperation: '新增地址' })
   }
-
 
   deleteAndSettings = (type, value) => {
     let { basicSupplierInfo } = this.state
@@ -208,7 +201,6 @@ export default class Supplier extends React.Component {
     })
   }
 
-
   operationAddress = (value) => {
     this.setState({ visible_operation: true, addressDetail: value, activeOperation: '修改地址' })
   }
@@ -222,9 +214,6 @@ export default class Supplier extends React.Component {
             <span className="Dropdown_Menu_box">
               <span onClick={this.showAddSupplier.bind(this, record)}>修改</span>
               <span onClick={this.showAddress.bind(this, record)}>维护地址</span>
-              {/* <Popconfirm title="确定要删除吗?" onConfirm={this.deleteAndSettings.bind(this, 'supplierDelete', record)}>
-                <span>删除</span>
-              </Popconfirm> */}
             </span>
           )
         }
