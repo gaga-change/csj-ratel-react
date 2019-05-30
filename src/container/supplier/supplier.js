@@ -7,8 +7,7 @@ import AddressForm from './component/address'
 import FetchTable from '@component/fetchTable/fetchTable'
 import { indexTableColumnsConfig, addressTableColumnsConfig } from './component/config'
 import { Button, Modal, Tag, Spin, Popconfirm, message } from 'antd'
-import { providerList, providerAdd, providerUpdate, providerAddrList, providerAddrSave, providerAddrUpdate } from 'api'
-import fetchData from '@lib/request'
+import { providerList, providerAdd, providerUpdate, providerAddrList, providerAddrSave, providerAddrUpdate, providerAddrDefault, providerAddrDel } from 'api'
 import './supplier.scss'
 
 export default class Supplier extends React.Component {
@@ -196,29 +195,16 @@ export default class Supplier extends React.Component {
 
   deleteAndSettings = (type, value) => {
     let { basicSupplierInfo } = this.state
-    this.setState({ spinning: true })
-    let url = '/webApi/supplier/addr/del'
+    let api = providerAddrDel
     if (type === "set") {
-      url = '/webApi/supplier/addr/default'
-    } else if (type === 'supplierDelete') {
-      url = '/webApi/supplier/del'
+      api = providerAddrDefault
     }
-    fetchData({
-      url,
-      method: 'get',
-      data: {
-        id: value.id
-      }
-    }).then(res => {
+    this.setState({ spinning: true })
+    api({ id: value.id }).then(res => {
+      this.setState({ spinning: false })
+      if (!res) return
       message.success('操作成功')
-      this.setState({ spinning: false })
-      if (type !== 'supplierDelete') {
-        this.showAddress(basicSupplierInfo)
-      } else {
-        this.fetch()
-      }
-    }).catch(err => {
-      this.setState({ spinning: false })
+      this.showAddress(basicSupplierInfo)
     })
   }
 
