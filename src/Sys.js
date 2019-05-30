@@ -1,22 +1,23 @@
 import React, { Component } from 'react'
-
-import { Layout, Menu, Icon } from 'antd'
+import { Layout, Menu } from 'antd'
 import { connect } from 'react-redux'
 import { setUser } from 'actions'
 import { userInfo } from 'api'
 import MyContent from './Content'
+import imgSouce from 'imgSouce/imgSouce'
+import './Sys.scss'
 const { Header, Sider, Content } = Layout
 const { SubMenu } = Menu
 
 class App extends Component {
   state = {
-    collapsed: false,
+    collapsed: true,
   }
 
   toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    })
+    // this.setState({
+    //   collapsed: !this.state.collapsed,
+    // })
   }
 
   componentDidMount() {
@@ -37,12 +38,13 @@ class App extends Component {
     menusRoot.unshift({
       id: 0,
       text: '首页',
-      path: '/home'
+      path: '/home',
+      icon: 'home'
     })
     return (
       <div className="Sys">
         <Layout>
-          <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+          <Sider className="Sider" trigger={null} collapsible collapsed={this.state.collapsed}>
             <div className="logo" />
             <Menu mode="inline" defaultSelectedKeys={['0']}>
               {
@@ -51,27 +53,30 @@ class App extends Component {
                     <SubMenu
                       key={menuFa.id}
                       title={
-                        <span>
-                          <Icon type="mail" />
+                        <span className="menu-item">
+                          <img src={imgSouce[`${menuFa.icon}_click`]} alt="" />
                           <span>{menuFa.text}</span>
                         </span>
                       }
                     >
                       {menuFa.children.map(menu =>
                         <Menu.Item key={menu.id} onClick={this.handleMenuClick.bind(this, menu)}>
-                          <Icon type="user" />
+                          {/* <Icon type="user" /> */}
                           <span>{menu.text}</span>
                         </Menu.Item>
                       )}
                       <Menu.Item key={999} onClick={this.handleMenuClick.bind(this, { path: '/system/menu' })}>
-                        <Icon type="user" />
+                        {/* <Icon type="user" /> */}
                         <span>菜单管理</span>
                       </Menu.Item>
                     </SubMenu>
                   ) : (
                       <Menu.Item key={menuFa.id} onClick={this.handleMenuClick.bind(this, menuFa)}>
-                        <Icon type="user" />
-                        <span>{menuFa.text}</span>
+                        {/* <Icon type="user" /> */}
+                        <span className="menu-item">
+                          <img src={imgSouce[`${menuFa.icon}_click`]} alt="" />
+                          <span>{menuFa.text}</span>
+                        </span>
                       </Menu.Item>
                     )
                 )
@@ -79,12 +84,12 @@ class App extends Component {
             </Menu>
           </Sider>
           <Layout>
-            <Header style={{ background: '#fff', padding: 0 }}>
-              <Icon
+            <Header >
+              {/* <Icon
                 className="trigger"
                 type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
                 onClick={this.toggle}
-              />
+              /> */}
               川山甲
             </Header>
             <Content>
