@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import MyContent from './Content'
 import imgSouce from 'imgSouce/imgSouce'
 import { loginOut } from 'api'
+import { deep } from 'lib'
 import './Sys.scss'
 
 const { Header, Sider, Content } = Layout
@@ -22,6 +23,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.location.pathname)
     userInfo().then(res => {
       res && this.props.dispatch(setUser(res.data))
     })
@@ -39,16 +41,30 @@ class App extends Component {
   }
 
   render() {
+    const { pathname } = this.props.location
     const { user } = this.props
     const { ownerName, nick } = user || {}
     const menus = (user && user.menus) || {}
     let menusRoot = [...menus.children]
+    const defaultSelectedKeys = []
+    deep(menus, 'children', v => {
+      if (('/sys' + v.path) === pathname) {
+        defaultSelectedKeys.push(v.id)
+      }
+    })
+    if (pathname === '/sys/home') {
+      defaultSelectedKeys.push('0')
+    } else if (pathname === '/sys/system/menu') {
+      defaultSelectedKeys.push('999')
+    }
+    console.log(defaultSelectedKeys)
     menusRoot.unshift({
       id: 0,
       text: '首页',
       path: '/home',
       icon: 'home'
     })
+
     const menu = (
       <Menu>
         <Menu.Item>
@@ -66,42 +82,44 @@ class App extends Component {
         <Layout>
           <Sider className="Sider" trigger={null} collapsible collapsed={this.state.collapsed}>
             <div className="logo" />
-            <Menu mode="inline" defaultSelectedKeys={['0']}>
-              {
-                menusRoot.map(menuFa =>
-                  (menuFa.children && menuFa.children.length) ? (
-                    <SubMenu
-                      key={menuFa.id}
-                      title={
-                        <span className="menu-item">
-                          <img src={imgSouce[`${menuFa.icon}_click`]} alt="" />
-                          <span>{menuFa.text}</span>
-                        </span>
-                      }
-                    >
-                      {menuFa.children.map(menu =>
-                        <Menu.Item key={menu.id} onClick={this.handleMenuClick.bind(this, menu)}>
+            {
+              defaultSelectedKeys.length && <Menu mode="inline" defaultSelectedKeys={defaultSelectedKeys}>
+                {
+                  menusRoot.map(menuFa =>
+                    (menuFa.children && menuFa.children.length) ? (
+                      <SubMenu
+                        key={menuFa.id}
+                        title={
+                          <span className="menu-item">
+                            <img src={imgSouce[`${menuFa.icon}_click`]} alt="" />
+                            <span>{menuFa.text}</span>
+                          </span>
+                        }
+                      >
+                        {menuFa.children.map(menu =>
+                          <Menu.Item key={menu.id} onClick={this.handleMenuClick.bind(this, menu)}>
+                            {/* <Icon type="user" /> */}
+                            <span>{menu.text}</span>
+                          </Menu.Item>
+                        )}
+                        {this.state.DEV && <Menu.Item key={999} onClick={this.handleMenuClick.bind(this, { path: '/system/menu' })}>
                           {/* <Icon type="user" /> */}
-                          <span>{menu.text}</span>
+                          <span>菜单管理</span>
+                        </Menu.Item>}
+                      </SubMenu>
+                    ) : (
+                        <Menu.Item key={menuFa.id} onClick={this.handleMenuClick.bind(this, menuFa)}>
+                          {/* <Icon type="user" /> */}
+                          <span className="menu-item">
+                            <img src={imgSouce[`${menuFa.icon}_click`]} alt="" />
+                            <span>{menuFa.text}</span>
+                          </span>
                         </Menu.Item>
-                      )}
-                      {this.state.DEV && <Menu.Item key={999} onClick={this.handleMenuClick.bind(this, { path: '/system/menu' })}>
-                        {/* <Icon type="user" /> */}
-                        <span>菜单管理</span>
-                      </Menu.Item>}
-                    </SubMenu>
-                  ) : (
-                      <Menu.Item key={menuFa.id} onClick={this.handleMenuClick.bind(this, menuFa)}>
-                        {/* <Icon type="user" /> */}
-                        <span className="menu-item">
-                          <img src={imgSouce[`${menuFa.icon}_click`]} alt="" />
-                          <span>{menuFa.text}</span>
-                        </span>
-                      </Menu.Item>
-                    )
-                )
-              }
-            </Menu>
+                      )
+                  )
+                }
+              </Menu>
+            }
           </Sider>
           <Layout>
             <Header >
