@@ -6,6 +6,7 @@ import Outgoing from 'container/outgoing/outgoing'
 import Commodity from 'container/commodity/commodity'
 import Stock from 'container/stock/stock'
 import Customer from 'container/customer/customer'
+import Supplier from 'container/supplier/supplier'
 import Role from 'container/system/role'
 import Menu from 'container/system/menu'
 import User from 'container/system/user'
@@ -28,6 +29,7 @@ class Content extends React.Component {
           <Route exact path={`${match.path}/system/user`} component={User} />
           <Route exact path={`${match.path}/system/setPass`} component={SetPass} />
           <Route exact path={`${match.path}/system/menu`} component={Menu} />
+          <Route exact path={`${match.path}/supplier`} component={Supplier} />
           <Redirect to={`${match.path}/home`} />
         </Switch>
       </div>
