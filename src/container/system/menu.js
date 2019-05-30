@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, Popconfirm,message } from 'antd';
+import { Button, Popconfirm, message } from 'antd';
 import _ from 'lodash';
-import Sider from '../../component/sider/sider'
 import request from '@lib/request'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import { menuConfig_config } from './components/config'
@@ -42,7 +41,7 @@ export default class Menu extends React.Component {
       method: 'get',
       data: data
     }).then(res => {
-      this.setState({menus: res})
+      this.setState({ menus: res })
       res = res.children
       this._filterMenu(res) // 过滤空 children
       dataSource = res
@@ -61,7 +60,7 @@ export default class Menu extends React.Component {
    * 删除空 children
    */
   _filterMenu(menus) {
-    let {expandedRowKeys} = this.state
+    let { expandedRowKeys } = this.state
     menus.forEach((item, index) => {
       item._index = index
       item._faArr = menus
@@ -69,7 +68,7 @@ export default class Menu extends React.Component {
       item.title = item.text
       if (item.children && item.children.length) {
         expandedRowKeys.push(item.id)
-        this.setState({expandedRowKeys})        
+        this.setState({ expandedRowKeys })
         this._filterMenu(item.children)
       }
       if (item.children && item.children.length === 0) {
@@ -117,15 +116,15 @@ export default class Menu extends React.Component {
   }
 
   onMenuAddModalRef = (child) => this.menuAddModal = child
-  
+
   componentWillUnmount() {
     this.setState = (state, callback) => {
       return
     }
   }
-  
+
   render() {
-    const { dataSource,expandedRowKeys,loading,menus } = this.state;
+    const { dataSource, expandedRowKeys, loading, menus } = this.state;
     const columns = _.cloneDeep(menuConfig_config).map(v => {
       if (v.render === '') {
         v.render = (text, record) => {
@@ -144,7 +143,6 @@ export default class Menu extends React.Component {
     })
     return (
       <div className="Menu">
-        <Sider history={this.props.history} />
         <div className="alert_Btn">
           <Button type="primary" onClick={() => this.openMenuFormMoadl()}>创建菜单</Button>
         </div>

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, Popconfirm, message} from 'antd';
+import { Button, Popconfirm, message } from 'antd';
 import _ from 'lodash';
-import Sider from '../../component/sider/sider'
 import request from '@lib/request'
 import SelectingTable from '../../component/selectionTable/selectionTable'
 import RoleSearchForm from './components/roleSearchForm'
@@ -141,13 +140,13 @@ export default class Role extends React.Component {
 
   onRoleAddModalRef = (child) => this.roleAddModal = child
   onRoleJurisdictionModalRef = (child) => this.roleJurisdictionModal = child
-  
+
   componentWillUnmount() {
     this.setState = (state, callback) => {
       return
     }
   }
-  
+
   render() {
     const { dataSource } = this.state;
     const columns = _.cloneDeep(roleConfig_config).map(v => {
@@ -166,7 +165,6 @@ export default class Role extends React.Component {
     })
     return (
       <div className="Role">
-        <Sider history={this.props.history} />
         <RoleSearchForm onSubmit={this.handleFormSubmit}></RoleSearchForm>
         <div>
           <Popconfirm title="你确定要删除角色吗?" onConfirm={this.handleDel} okText="确定" cancelText="取消">

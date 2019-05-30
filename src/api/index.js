@@ -22,9 +22,14 @@ axios.interceptors.response.use(function (response) {
 export const skuInfoList = params => axios.get(`${base}/sku/info/list`, { params })
 /** 退出登录 */
 export const loginOut = params => axios.get(`/login_out`, { params })
+/** 用户信息 */
+export const userInfo = params => axios.get(`${base}/base/user/info`, { params })
+/** 获取首页统计数值 */
+export const homeTotalNum = params => axios.get(`${base}/home/index`, { params })
 /** 登录 */
 export const login = params => axios.post(`/login`, params)
 /** 添加商品 */
 export const skuInfoAdd = params => axios.post(`${base}/sku/info/add`, params)
 /** 删除商品 */
 export const skuInfoDel = skuId => axios.delete(`${base}/sku/info/delete/${skuId}`)
+

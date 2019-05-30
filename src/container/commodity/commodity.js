@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Modal, Popconfirm, message } from 'antd';
 import { stringify, parse } from 'qs';
-import Sider from '../../component/sider/sider'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import { indexTableColumnsConfig } from './component/config'
 import CommodityForm from './component/form'
@@ -173,7 +172,6 @@ export default class Commodity extends React.Component {
 
     return (
       <div className="Commodity"  >
-        <Sider history={this.props.history} />
         <CommodityForm
           selectWordsArr={['商品名称', '商品编码']}
           onSubmit={this.handleSearch} />

@@ -1,8 +1,8 @@
 import React from 'react';
 import * as Enum from '@lib/enum';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import moment from 'moment'
-import {Table, Input, Form,InputNumber} from 'antd';
+import { Table, Input, Form, InputNumber } from 'antd';
 import './editableTable.scss'
 
 const FormItem = Form.Item;
@@ -18,7 +18,7 @@ const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
   state = {
-    editing:this.props.editing,
+    editing: this.props.editing,
   }
 
   componentDidMount() {
@@ -63,7 +63,7 @@ class EditableCell extends React.Component {
   render() {
     const { editing } = this.state;
     const {
-      inputType='Input',
+      inputType = 'Input',
       editable,
       dataIndex,
       title,
@@ -73,9 +73,9 @@ class EditableCell extends React.Component {
       handleSave,
       ...restProps
     } = this.props;
-    let InputDom=Input;
-    if(inputType==='InputNumber'){
-      InputDom=InputNumber;
+    let InputDom = Input;
+    if (inputType === 'InputNumber') {
+      InputDom = InputNumber;
     }
     return (
       <td ref={node => (this.cell = node)} {...restProps}>
@@ -87,27 +87,27 @@ class EditableCell extends React.Component {
                 editing ? (
                   <FormItem style={{ margin: 0 }}>
                     {form.getFieldDecorator(dataIndex, {
-                      rules:rules?rules:[{
+                      rules: rules ? rules : [{
                         required: true,
                         message: `该项为必填`,
                       }],
                       initialValue: record[dataIndex],
                     })(
-                        <InputDom
-                          ref={node => (this.input = node)}
-                          onPressEnter={this.save}
-                        />
+                      <InputDom
+                        ref={node => (this.input = node)}
+                        onPressEnter={this.save}
+                      />
                     )}
                   </FormItem>
                 ) : (
-                  <div
-                    className="editable-cell-value-wrap"
-                    style={{ paddingRight: 24 }}
-                    onClick={this.toggleEdit}
-                  >
-                    {restProps.children}
-                  </div>
-                )
+                    <div
+                      className="editable-cell-value-wrap"
+                      style={{ paddingRight: 24 }}
+                      onClick={this.toggleEdit}
+                    >
+                      {restProps.children}
+                    </div>
+                  )
               );
             }}
           </EditableContext.Consumer>
@@ -118,13 +118,13 @@ class EditableCell extends React.Component {
 }
 
 
-@connect(
-  state => state.map
-)
+// @connect(
+//   state => state.map
+// )
 export default class EditableTable extends React.Component {
 
   handleSave = (row) => {
-    let { dataSource,onChange} = this.props;
+    let { dataSource, onChange } = this.props;
     const newData = [...dataSource];
     const index = newData.findIndex(item => row.key === item.key);
     const item = newData[index];
@@ -132,7 +132,7 @@ export default class EditableTable extends React.Component {
       ...item,
       ...row,
     });
-    if(onChange){
+    if (onChange) {
       onChange(newData)
     }
   }
@@ -145,34 +145,34 @@ export default class EditableTable extends React.Component {
       },
     };
 
-    let { columns=[],dataSource=[],useIndex=false,size='small',pagination,locale={emptyText:'暂无数据' },components=componentsDefaul,bordered=true,...rest } = this.props;
-    const { mapSouce } =this.props;
-    if(pagination){
-      pagination={...pagination, showTotal:total => `共 ${total} 条`}
+    let { columns = [], dataSource = [], useIndex = false, size = 'small', pagination, locale = { emptyText: '暂无数据' }, components = componentsDefaul, bordered = true, ...rest } = this.props;
+    // const { mapSouce } = this.props;
+    if (pagination) {
+      pagination = { ...pagination, showTotal: total => `共 ${total} 条` }
     }
-    columns = columns.map((v,i) => {
-      v.key=i+1;
-      if(v.type){ 
-        switch(v.type){
-          case 'time':v.render=(item)=>moment(Number(item)).format(v.format||'YYYY-MM-DD HH:mm:ss');break;
-          default:break;
+    columns = columns.map((v, i) => {
+      v.key = i + 1;
+      if (v.type) {
+        switch (v.type) {
+          case 'time': v.render = (item) => moment(Number(item)).format(v.format || 'YYYY-MM-DD HH:mm:ss'); break;
+          default: break;
         }
-      } else if(v.useLocalEnum){
-        v.render=(item)=>Enum[v.useLocalEnum].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&Enum[v.useLocalEnum].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
-      } else if(v.useFetchMap){
-        v.render=(item)=>mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
-      } else if(v.editable){
-        v={
+      } else if (v.useLocalEnum) {
+        v.render = (item) => Enum[v.useLocalEnum].find(eItem => eItem.key === (isNaN(item) ? item : Number(item))) && Enum[v.useLocalEnum].find(eItem => eItem.key === (isNaN(item) ? item : Number(item)))['value']
+      } else if (v.useFetchMap) {
+        // v.render=(item)=>mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
+      } else if (v.editable) {
+        v = {
           ...v,
           onCell: record => ({
             record,
             editable: v.editable,
             dataIndex: v.dataIndex,
             title: v.title,
-            rules:v.rules,
+            rules: v.rules,
             handleSave: this.handleSave,
-            inputType:v.inputType,
-            editing:v.editing
+            inputType: v.inputType,
+            editing: v.editing
           }),
         }
       }
@@ -181,18 +181,18 @@ export default class EditableTable extends React.Component {
 
     });
 
-    if(Array.isArray(dataSource)){
-      dataSource=dataSource.map((v,i)=>{
-        if(!this.props.rowKey){
-          v.key=i+1;
+    if (Array.isArray(dataSource)) {
+      dataSource = dataSource.map((v, i) => {
+        if (!this.props.rowKey) {
+          v.key = i + 1;
         }
-        if(useIndex){
-          v.index=i+1;
+        if (useIndex) {
+          v.index = i + 1;
         }
         return v;
-      }) 
+      })
     }
-    
+
     return (
       <div className="EditableTable">
         <Table

@@ -1,19 +1,19 @@
-import React from 'react';
-import { Spin } from 'antd';
-import imgSouce from '../../imgSouce/imgSouce'
-import Sider from '../../component/sider/sider'
+import React from 'react'
+import { Spin } from 'antd'
+import imgSouce from 'imgSouce/imgSouce'
 import NormalLoginForm from './components/form'
 import { login } from 'api'
+import { connect } from 'react-redux'
 import './login.scss'
 
-export default class Login extends React.Component {
+class Login extends React.Component {
 
   state = {
     loginLoding: false,
   }
 
   componentDidMount() {
-    document.querySelector('body').style.overflow = 'hidden';
+    document.querySelector('body').style.overflow = 'hidden'
   }
 
   componentWillUnmount() {
@@ -28,16 +28,15 @@ export default class Login extends React.Component {
     login(json).then(res => {
       this.setState({ loginLoding: false })
       if (res) {
-        this.props.history.push('/home')
+        this.props.history.push('/sys')
       }
     })
   }
 
   render() {
-    const { loginLoding } = this.state;
+    const { loginLoding } = this.state
     return (
       <div className="Login">
-        <Sider history={this.props.history} />
         <div className="LoginContaner">
           <main>
             <img src={imgSouce.banner} alt='' />
@@ -58,13 +57,11 @@ export default class Login extends React.Component {
               </div>
             </div>
           </main>
-
-          <footer>
-
-          </footer>
         </div>
       </div>
-    );
+    )
   }
 }
+
+export default connect()(Login)
 

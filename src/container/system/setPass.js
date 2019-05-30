@@ -1,6 +1,5 @@
 import React from 'react'
-import { Card,message} from 'antd'
-import Sider from '../../component/sider/sider'
+import { Card, message } from 'antd'
 import SetPassForm from './components/setPassForm'
 import request from '../../lib/request'
 import './style/setPass.scss'
@@ -25,7 +24,7 @@ export default class SetPass extends React.Component {
         ...value
       }
     }).then(res => {
-      message.info('密码修改成功,即将跳转登录页面',1.5, ()=>{
+      message.info('密码修改成功,即将跳转登录页面', 1.5, () => {
         this.setState({
           submitLoding: false
         })
@@ -52,9 +51,8 @@ export default class SetPass extends React.Component {
   render() {
     return (
       <div className="setPass">
-        <Sider history={this.props.history} />
         <Card title="修改密码" className="changePass">
-            <SetPassForm onSubmit={this.onSubmit} onRef={this.ref} loading={this.state.submitLoding} />
+          <SetPassForm onSubmit={this.onSubmit} onRef={this.ref} loading={this.state.submitLoding} />
         </Card>
       </div>
     )

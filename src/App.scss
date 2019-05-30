@@ -1,0 +1,130 @@
+// 当前项目公共样式。（拷贝到其他项目未必能用）
+
+// 按钮连接
+.btn-link {
+  color: #1890ff;
+  text-decoration: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  transition: color 0.3s;
+  padding: 0;
+  border: none;
+  margin: 0;
+
+  &:hover {
+    color: #40a9ff;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: transparent;
+  position: relative;
+  background: #F0F3F7 !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+#components-layout-demo-top .logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, .2);
+  margin: 16px 24px 16px 0;
+  float: left;
+}
+
+.Dropdown_Menu_box {
+  span {
+    font-size: 12px;
+    color: #1890ff;
+    cursor: pointer;
+    margin-left: 12px;
+  }
+
+}
+
+.canClick {
+  font-size: 12px;
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.Dropdown_Menu_child {
+  li {
+    text-align: center;
+
+    span {
+      font-size: 12px;
+    }
+  }
+}
+
+.alert_Btn {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+  align-items: flex-end;
+
+  .Total {
+    .Total_list {
+      font-size: 12px;
+
+      span {
+        &:first-child {
+          font-size: 12px;
+          font-weight: 600;
+        }
+
+        &:last-child {
+          padding-right: 16px;
+        }
+      }
+    }
+  }
+}
+
+// 公共样式
+.b-1 {
+  border: 1px solid #e8e8e8;
+}
+
+.mb-12 {
+  margin-bottom: 12px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.p-12 {
+  padding: 12px;
+}
+
+// 处理360兼容性问题。输入框换行
+.CommodityForm {
+  .ant-col-6 {
+    input {
+      width: 174px;
+    }
+  }
+
+  .ant-calendar-picker {
+    width: 334px;
+  }
+
+}

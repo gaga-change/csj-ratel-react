@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Popconfirm, message } from 'antd';
 import _ from 'lodash';
 import request from '@lib/request'
-import Sider from '../../component/sider/sider'
 import SelectingTable from '../../component/selectionTable/selectionTable'
 import UserSearchForm from './components/userSearchForm'
 import { userConfig_config } from './components/config'
@@ -34,7 +33,7 @@ export default class User extends React.Component {
       pageSize: pagination.pageSize || 10,
       ...this.seachVal
     }
-    
+
     request({
       url: '/webApi/base/user/selectByCondition',
       method: 'post',
@@ -189,7 +188,7 @@ export default class User extends React.Component {
       return
     }
   }
-  
+
   render() {
     const { dataSource } = this.state;
     const columns = _.cloneDeep(userConfig_config).map(v => {
@@ -214,7 +213,6 @@ export default class User extends React.Component {
     })
     return (
       <div className="User">
-        <Sider history={this.props.history} />
         <UserSearchForm onSubmit={this.handleFormSubmit} roles={this.state.roles}></UserSearchForm>
         <div>
           <Popconfirm title="你确定要删除这些账户吗?" onConfirm={this.handleDeleteMore} okText="确定" cancelText="取消">

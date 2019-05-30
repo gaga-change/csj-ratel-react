@@ -1,13 +1,12 @@
 import React from 'react'
 import _ from 'lodash'
-import {stringify,parse} from 'qs';
-import Sider from '../../component/sider/sider'
+import { stringify, parse } from 'qs';
 import SearchForm from './component/search'
 import AddForm from './component/add'
 import AddressForm from './component/address'
 import FetchTable from '@component/fetchTable/fetchTable'
-import {indexTableColumnsConfig,addressTableColumnsConfig} from './component/config'
-import { Button, Modal, Tag, Spin,Popconfirm,message} from 'antd'
+import { indexTableColumnsConfig, addressTableColumnsConfig } from './component/config'
+import { Button, Modal, Tag, Spin, Popconfirm, message } from 'antd'
 import fetchData from '@lib/request'
 import './customer.scss'
 
@@ -37,34 +36,34 @@ export default class Customer extends React.Component {
   }
 
   onSubmit = (type, value) => {
-    if(type==='add'){
+    if (type === 'add') {
       this.setState({ customerspinning: true })
       fetchData({
         url: '/webApi/customer/save',
         method: 'post',
-        data: { ...value}
+        data: { ...value }
       }).then(res => {
-          message.success('操作成功')
-          this.setState({ customerspinning: false,visible_addCustomer:false})
-          this.child.handleRest()
-          this.fetch()
-        }).catch(err => {
-          this.setState({ customerspinning: false })
+        message.success('操作成功')
+        this.setState({ customerspinning: false, visible_addCustomer: false })
+        this.child.handleRest()
+        this.fetch()
+      }).catch(err => {
+        this.setState({ customerspinning: false })
       })
-    } else if(type==='search'){
-      let {pagination}=this.state;
-      if(!Object.keys(value).length){
-        pagination={
-          current:1,
-          pageSize:10
+    } else if (type === 'search') {
+      let { pagination } = this.state;
+      if (!Object.keys(value).length) {
+        pagination = {
+          current: 1,
+          pageSize: 10
         }
-      } 
-      this.setState({pagination},()=>{
+      }
+      this.setState({ pagination }, () => {
         this.fetch(value)
       })
-    } else if(type==='address'){
+    } else if (type === 'address') {
       const { area, ...rest } = value
-      const { basicCustomerInfo,activeOperation,addressDetail} =this.state;
+      const { basicCustomerInfo, activeOperation, addressDetail } = this.state;
       let url = '/webApi/customer/addr/save'
       let data = {
         ...rest,
@@ -72,10 +71,10 @@ export default class Customer extends React.Component {
         customerProvince: area[0],
         customerCity: area[1],
         customerArea: area[2],
-        basicCustomerInfoId:basicCustomerInfo.id,
-        basicCustomerInfoCode:basicCustomerInfo.customerCode
+        basicCustomerInfoId: basicCustomerInfo.id,
+        basicCustomerInfoCode: basicCustomerInfo.customerCode
       }
-      if (activeOperation==='修改地址') {
+      if (activeOperation === '修改地址') {
         url = '/webApi/customer/addr/update'
         data.id = addressDetail.id
       }
@@ -85,14 +84,14 @@ export default class Customer extends React.Component {
         method: 'post',
         data
       }).then(res => {
-          message.success('操作成功')
-          this.setState({ spinning: false, visible_operation: false,addressDetail:{}})
-          this.showAddress(basicCustomerInfo)
-          this.operation_child.handleRest()
-        }).catch(err => {
-          console.log(err)
-          this.setState({ spinning: false })
-        })
+        message.success('操作成功')
+        this.setState({ spinning: false, visible_operation: false, addressDetail: {} })
+        this.showAddress(basicCustomerInfo)
+        this.operation_child.handleRest()
+      }).catch(err => {
+        console.log(err)
+        this.setState({ spinning: false })
+      })
     }
   }
 
@@ -109,54 +108,54 @@ export default class Customer extends React.Component {
   handleTableChange = (pagination, filters, sorter) => {
     this.setState({
       pagination
-    },()=>{
+    }, () => {
       this.fetch()
     })
   }
 
 
-  fetch = (json)=>{
-    this.setState({loading:true})
-    let {search,pathname} = this.props.history.location
-    let { current,pageSize,...rest} = parse(search.slice(1))
-    let { dataSource,pagination} =this.state;
-    if(!Object.keys(pagination).length){
-      pagination={
-        current:Number(current)||1,
-        pageSize:Number(pageSize)||10
+  fetch = (json) => {
+    this.setState({ loading: true })
+    let { search, pathname } = this.props.history.location
+    let { current, pageSize, ...rest } = parse(search.slice(1))
+    let { dataSource, pagination } = this.state;
+    if (!Object.keys(pagination).length) {
+      pagination = {
+        current: Number(current) || 1,
+        pageSize: Number(pageSize) || 10
       }
-      this.setState({pagination})
-    } 
-    let data={};
-    if(json){
-      data={...pagination,...json};
-    } else{
-      data={...pagination,...rest};
+      this.setState({ pagination })
+    }
+    let data = {};
+    if (json) {
+      data = { ...pagination, ...json };
+    } else {
+      data = { ...pagination, ...rest };
     }
 
     delete data.total;
     this.props.history.replace(`${pathname}?${stringify(data)}`)
-    data.pageNum=data.current;
+    data.pageNum = data.current;
     delete data.current;
 
     fetchData({
       url: '/webApi/customer/list',
       method: 'get',
-      data:data
+      data: data
     }).then(res => {
-       if(res.list&&Array.isArray(res.list)){
-        dataSource=res.list
-        pagination.total=res.total
-       }
-       this.setState({
+      if (res.list && Array.isArray(res.list)) {
+        dataSource = res.list
+        pagination.total = res.total
+      }
+      this.setState({
         dataSource,
         pagination,
-        loading:false,
-       })
+        loading: false,
+      })
     }).catch(err => {
       this.setState({
-        loading:false,
-       })
+        loading: false,
+      })
     })
   }
 
@@ -173,19 +172,19 @@ export default class Customer extends React.Component {
       method: 'get',
       data: { basicCustomerInfoId: record.id }
     }).then(res => {
-        this.setState({ address_loading: false })
-        let address_dataSource = res.map((item, index) => {
-          item.area = `${item.customerProvince}/${item.customerCity}/${item.customerArea}`
-          return item
-        })
-        this.setState({
-          address_dataSource,
-          basicCustomerInfo: record
-        })
-      }).catch(err => {
-        console.log(err)
-        this.setState({ address_loading: false })
+      this.setState({ address_loading: false })
+      let address_dataSource = res.map((item, index) => {
+        item.area = `${item.customerProvince}/${item.customerCity}/${item.customerArea}`
+        return item
       })
+      this.setState({
+        address_dataSource,
+        basicCustomerInfo: record
+      })
+    }).catch(err => {
+      console.log(err)
+      this.setState({ address_loading: false })
+    })
   }
 
 
@@ -197,48 +196,48 @@ export default class Customer extends React.Component {
     this.child = res
   }
 
-  operationRef = res =>{
+  operationRef = res => {
     this.operation_child = res
   }
 
 
   showAddAddress = () => {
-    this.setState({ visible_operation: true,activeOperation:'新增地址'})
+    this.setState({ visible_operation: true, activeOperation: '新增地址' })
   }
 
 
-  deleteAndSettings = (type,value) => {
+  deleteAndSettings = (type, value) => {
     let { basicCustomerInfo } = this.state;
-    this.setState({ spinning: true})
-    let url='/webApi/customer/addr/del';
-    if(type==="set"){
-      url='/webApi/customer/addr/default';
-    } else if(type==='customerDelete'){
-      url='/webApi/customer/del';
+    this.setState({ spinning: true })
+    let url = '/webApi/customer/addr/del';
+    if (type === "set") {
+      url = '/webApi/customer/addr/default';
+    } else if (type === 'customerDelete') {
+      url = '/webApi/customer/del';
     }
     fetchData({
       url,
       method: 'get',
-      data:{
-        id:value.id
+      data: {
+        id: value.id
       }
     }).then(res => {
-        message.success('操作成功')
-        this.setState({ spinning: false})
-        if(type!=='customerDelete'){
-          this.showAddress(basicCustomerInfo)
-        } else{
-          this.fetch()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.setState({ spinning: false })
-      })
+      message.success('操作成功')
+      this.setState({ spinning: false })
+      if (type !== 'customerDelete') {
+        this.showAddress(basicCustomerInfo)
+      } else {
+        this.fetch()
+      }
+    }).catch(err => {
+      console.log(err)
+      this.setState({ spinning: false })
+    })
   }
 
 
   operationAddress = (value) => {
-    this.setState({ visible_operation: true, addressDetail: value,activeOperation:'修改地址' })
+    this.setState({ visible_operation: true, addressDetail: value, activeOperation: '修改地址' })
   }
 
   componentWillUnmount() {
@@ -248,15 +247,15 @@ export default class Customer extends React.Component {
   }
 
   render() {
-    const {dataSource,visible_addCustomer,loading,pagination,addressDetail,spinning,customerspinning,visible_address,activeOperation,visible_operation, address_dataSource,address_loading} = this.state
+    const { dataSource, visible_addCustomer, loading, pagination, addressDetail, spinning, customerspinning, visible_address, activeOperation, visible_operation, address_dataSource, address_loading } = this.state
     const columns = _.cloneDeep(indexTableColumnsConfig).map(v => {
       if (v.render === '') {
         v.render = (ext, record, index) => {
           return (
             <span className="Dropdown_Menu_box">
-              <span onClick={this.showAddress.bind(this,record)}>维护地址</span>
-              <Popconfirm title="确定要删除吗?" onConfirm={this.deleteAndSettings.bind(this,'customerDelete', record)}>
-                 <span>删除</span>
+              <span onClick={this.showAddress.bind(this, record)}>维护地址</span>
+              <Popconfirm title="确定要删除吗?" onConfirm={this.deleteAndSettings.bind(this, 'customerDelete', record)}>
+                <span>删除</span>
               </Popconfirm>
             </span>
           )
@@ -273,26 +272,26 @@ export default class Customer extends React.Component {
               {v.renderType === 'operation' && (
                 <span className="Dropdown_Menu_box">
                   <span onClick={this.operationAddress.bind(this, record)}>修改</span>
-                  <Popconfirm title="确定要删除吗?" onConfirm={this.deleteAndSettings.bind(this,'delete', record)}>
-                     <span> 删除</span>
+                  <Popconfirm title="确定要删除吗?" onConfirm={this.deleteAndSettings.bind(this, 'delete', record)}>
+                    <span> 删除</span>
                   </Popconfirm>
                 </span>
               )}
-              { 
+              {
                 v.renderType === 'tag' && (
-                <span className="Dropdown_Menu_box">
-                  { 
-                    record.isDefault !== 1&&
-                    <Popconfirm title="确定要将此地址设为默认地址吗?" onConfirm={this.deleteAndSettings.bind(this,'set', record)}>
-                       <span>设为默认</span>
-                    </Popconfirm>
-                  }
-                  {
-                    record.isDefault === 1&&
-                    <Tag color="volcano">默认地址</Tag>
-                  }
-                </span>
-              )}
+                  <span className="Dropdown_Menu_box">
+                    {
+                      record.isDefault !== 1 &&
+                      <Popconfirm title="确定要将此地址设为默认地址吗?" onConfirm={this.deleteAndSettings.bind(this, 'set', record)}>
+                        <span>设为默认</span>
+                      </Popconfirm>
+                    }
+                    {
+                      record.isDefault === 1 &&
+                      <Tag color="volcano">默认地址</Tag>
+                    }
+                  </span>
+                )}
             </span>
           )
         }
@@ -303,10 +302,9 @@ export default class Customer extends React.Component {
 
     return (
       <div className="Customer">
-        <Sider history={this.props.history} />
         <SearchForm
           selectWordsArr={['客户名称', '负责人', '手机']}
-          onSubmit={this.onSubmit.bind(this, 'search')}/>
+          onSubmit={this.onSubmit.bind(this, 'search')} />
         <div className="Customer_addBtn">
           <Button type="primary" onClick={this.showAddCustomer}>
             新增客户
@@ -319,7 +317,7 @@ export default class Customer extends React.Component {
           useIndex={true}
           loading={loading}
           pagination={pagination}
-          onChange={this.handleTableChange}/>
+          onChange={this.handleTableChange} />
 
         <Modal
           title="新增客户"
@@ -332,7 +330,7 @@ export default class Customer extends React.Component {
           <Spin tip="Loading..." spinning={customerspinning}>
             <AddForm
               onRef={this.ref}
-              onSubmit={this.onSubmit.bind(this, 'add')}/>
+              onSubmit={this.onSubmit.bind(this, 'add')} />
           </Spin>
         </Modal>
 
@@ -354,7 +352,7 @@ export default class Customer extends React.Component {
             useIndex={true}
             columns={address_columns}
             loading={address_loading}
-            pagination={false}/>
+            pagination={false} />
         </Modal>
 
         <Modal

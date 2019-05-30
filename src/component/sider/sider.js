@@ -1,26 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Dropdown, Icon, Breadcrumb } from 'antd';
-import { connect } from 'react-redux';
 import request from '../../lib/request'
 import { deepExistMenu, depthForEach } from '../../lib/lib'
-import { setInfo, removeInfo } from "../../redux/info.redux";
-import { setMenus } from "../../redux/menus.redux";
-import { setMap } from "../../redux/map.redux";
 import { routerConfig } from '../../router/config'
 import imgSouce from '../../imgSouce/imgSouce'
+import { connect } from 'react-redux'
 import './sider.scss'
 import { loginOut } from 'api'
 
-@connect(
-  state => state,
-  { setInfo, setMenus, removeInfo, setMap }
-)
+// @connect(
+//   state => state,
+//   { setInfo, setMenus, removeInfo, setMap }
+// )
 
 class Sider extends React.Component {
 
   constructor(props) {
     super(props)
+    console.log(props)
     this.state = {
       isLoginPage: this.props.history.location.pathname === '/web_login'
     }
@@ -171,4 +169,4 @@ class Sider extends React.Component {
   }
 }
 
-export default Sider
+export default connect()(Sider)

@@ -1,101 +1,52 @@
-* {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-decoration:none;
-}
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-   -webkit-font-smoothing: antialiased;
-   -moz-osx-font-smoothing: grayscale;
-   background-color: transparent;
-   position: relative;
-   background: #F0F3F7 !important;
+// 非当前项目专属的公共样式。即使拷贝到其他项目也能使用。
+
+.c-333 {
+  color: #333;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.c-666 {
+  color: #666;
 }
 
-#components-layout-demo-top .logo {
-  width: 120px;
-  height: 31px;
-  background: rgba(255,255,255,.2);
-  margin: 16px 24px 16px 0;
-  float: left;
-}
+//  字体大小。 如： f12、f26
+$fontSizeList: 12 14 16 18 20 22 24 26 28;
 
-.Dropdown_Menu_box{
-  span{
-    font-size: 12px;
-    color: #1890ff;
-    cursor: pointer;
-    margin-left:12px; 
+@each $var in $fontSizeList {
+  .f#{$var} {
+    font-size: #{$var}px;
   }
-  
 }
 
-.canClick{
-  font-size: 12px;
-  color: #1890ff;
-  cursor: pointer;
+// 字重。如: fw600
+$fontWeightList: 400 500 600 700;
+
+@each $var in $fontWeightList {
+  .fw#{$var} {
+    font-weight: #{$var};
+  }
 }
 
-.Dropdown_Menu_child{
-  li{
-    text-align: center;
-    span{
-      font-size: 12px;
+// margin。如: mt20（margin-top:20px;）、ml15(margin-left:15)
+$dirList: 'l''r''t''b';
+$dirMap: ('l': 'left', 'r': 'right', 't': 'top', 'b': 'bottom');
+
+$dirSizeList: 5 10 15 20;
+
+@each $dir in $dirList {
+  @each $size in $dirSizeList {
+    .m#{$dir}#{$size} {
+      margin-#{map-get($dirMap, $dir)}: #{$size}px;
     }
   }
 }
 
-.alert_Btn{
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 12px;
-  align-items: flex-end;
-  .Total{
-    .Total_list{
-      font-size: 12px;
-      span{
-        &:first-child{
-          font-size: 12px;
-          font-weight: 600;
-        }
-        &:last-child{
-          padding-right: 16px;
-        } 
-      }
-    }
-  }
-} 
-// 公共样式
-.b-1 {
-  border: 1px solid #e8e8e8;
-}
-.mb-12 {
-  margin-bottom: 12px;
-}
-.mb-20 {
-  margin-bottom: 20px;
-}
-.p-12 {
-  padding: 12px;
+.text-center {
+  text-align: center;
 }
 
-// 处理360兼容性问题。输入框换行
-.CommodityForm {
-  .ant-col-6 {
-    input {
-      width: 174px;
-    }
+.clearfix {
+  &::after {
+    content: "";
+    clear: both;
   }
-  .ant-calendar-picker {
-    width: 334px;
-  }
-  
 }

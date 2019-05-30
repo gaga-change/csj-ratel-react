@@ -1,50 +1,81 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import request from '@lib/request'
-import  { Link }  from  'react-router-dom';
-import { depthForEachIndex } from '@lib/lib'
-import Sider from '../../component/sider/sider'
-import imgSouce from '../../imgSouce/imgSouce'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import imgSouce from 'imgSouce/imgSouce'
 import { priceChange_config } from './components/config'
-import { Row, Col } from 'antd';
-
-import './home.scss';
-
-@connect(
-  state=>state.menus
-)
-
-export default class Home extends React.Component {
+import { Row, Col } from 'antd'
+import { connect } from 'react-redux'
+import { homeTotalNum } from 'api'
+import './home.scss'
+const quickItemText = {
+  '/warehousing': {
+    text: '入库业务',
+    icon: 'warehousing_business',
+  },
+  '/outgoing': {
+    text: '出库业务',
+    icon: 'outbound_business',
+  },
+  '/commodity': {
+    text: '商品管理',
+    icon: 'commodity_management',
+  },
+  '/stock': {
+    text: '库存查询',
+    icon: 'stock_search',
+  },
+  '/customer': {
+    text: '客户列表',
+    icon: 'commodity_management',
+  },
+  '/system/role': {
+    text: '角色管理',
+    icon: 'role_management',
+  },
+  '/system/user': {
+    text: '用户管理',
+    icon: 'user_management',
+  },
+  '/system/setPass': {
+    text: '修改密码',
+    icon: 'change_password',
+  },
+}
+class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       // 头部数据显示
-      Total_dataSource:{}
+      Total_dataSource: {}
     }
   }
 
-  componentDidMount(){
-    request({
-      url:'/webApi/home/index',
-    }).then(res=>{
-      this.setState({Total_dataSource:res})  
-    }).catch(err=>{
-      console.log(err)
+  componentDidMount() {
+    homeTotalNum().then(res => {
+      res && this.setState({ Total_dataSource: res.data })
     })
   }
 
   componentWillUnmount() {
-    this.setState = (state, callback) => {
-      return
-    }
+    this.setState = () => { }
   }
 
-  render () {
-    const menu=depthForEachIndex(this.props.menus);
-    const { Total_dataSource }=this.state;
+  render() {
+    const { Total_dataSource } = this.state
+    const { user } = this.props
+    let menus = (user && user.menus) || null
+    let menu = []
+    const _deep = (arr) => {
+      arr.forEach(v => {
+        if (v.children && v.children.length) {
+          _deep(v.children)
+        } else {
+          menu.push({ ...v, children: null })
+        }
+      })
+    }
+    menus && _deep(menus.children)
     return (
       <div className="Home">
-        <Sider history={this.props.history} />
         {/* 头部区域 */}
         <div className="data-items">
           {
@@ -54,18 +85,18 @@ export default class Home extends React.Component {
                 <div className="right-area">
                   <p className="num-area">
                     {
-                      Total_dataSource&&Total_dataSource[item.orderNumber_dataIndex]!==undefined?(
-                      <span className="num-item">
-                        <span className="num">{Total_dataSource[item.orderNumber_dataIndex]}</span><span>{item.orderNumber_Company||'单'}</span>
-                      </span>
-                     ):null
+                      Total_dataSource && Total_dataSource[item.orderNumber_dataIndex] !== undefined ? (
+                        <span className="num-item">
+                          <span className="num">{Total_dataSource[item.orderNumber_dataIndex]}</span><span>{item.orderNumber_Company || '单'}</span>
+                        </span>
+                      ) : null
                     }
                     {
-                       Total_dataSource&&Total_dataSource[item.orderPiece_dataIndex]!==undefined?(
-                      <span className="num-item">
-                        <span className="num">{Total_dataSource[item.orderPiece_dataIndex]}</span><span>{item.orderPiece_Company||'件'}</span>
-                      </span>
-                     ):null
+                      Total_dataSource && Total_dataSource[item.orderPiece_dataIndex] !== undefined ? (
+                        <span className="num-item">
+                          <span className="num">{Total_dataSource[item.orderPiece_dataIndex]}</span><span>{item.orderPiece_Company || '件'}</span>
+                        </span>
+                      ) : null
                     }
                   </p>
                   <p className="hint-area">
@@ -76,7 +107,7 @@ export default class Home extends React.Component {
             ))
           }
         </div>
-        
+
         {/* 快捷入口 */}
         <div className="quick-area">
           <h4 className="quick-title">
@@ -87,12 +118,12 @@ export default class Home extends React.Component {
               {
                 menu.map((item, index) => (
                   <Col xs={24} md={6} key={index}>
-                   <Link to={item.path} replace >
+                    <Link to={`/sys${item.path}`} replace >
                       <div className="quick-item">
-                          <img className="quick-logo" src={imgSouce[item.icon]} alt={item.name} />
-                          <p className="hint-area">
-                            {item.name}
-                          </p>
+                        {quickItemText[item.path] && <img className="quick-logo" src={imgSouce[quickItemText[item.path].icon]} alt={item.name} />}
+                        <p className="hint-area">
+                          {quickItemText[item.path] && quickItemText[item.path].text}
+                        </p>
                       </div>
                     </Link>
                   </Col>
@@ -102,7 +133,12 @@ export default class Home extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
+const mapStateToProps = (state) => ({
+  user: state.user
+})
+
+export default connect(mapStateToProps)(Home)
