@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal,message} from 'antd';
+import { Modal, message } from 'antd';
 import UserAddForm from './userAddForm.js'
 import request from '@lib/request'
 
@@ -31,7 +31,6 @@ class UserAddModal extends React.Component {
    * @param {*} props 
    */
   init(obj) {
-    console.log(obj)
     this.setState({ obj })
     let { visible } = this.state
     if (!visible) {
@@ -81,7 +80,7 @@ class UserAddModal extends React.Component {
         value.userStatus = 0
       }
       request({
-        url: obj ?  '/webApi/base/user/updateUserInfo':'/webApi/base/user/add',
+        url: obj ? '/webApi/base/user/updateUserInfo' : '/webApi/base/user/add',
         method: 'post',
         data: {
           ...value,

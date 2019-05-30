@@ -23,7 +23,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.location.pathname)
     userInfo().then(res => {
       res && this.props.dispatch(setUser(res.data))
     })
@@ -57,7 +56,7 @@ class App extends Component {
     } else if (pathname === '/sys/system/menu') {
       defaultSelectedKeys.push('999')
     }
-    console.log(defaultSelectedKeys)
+
     menusRoot.unshift({
       id: 0,
       text: '首页',

@@ -18,7 +18,6 @@ class Sider extends React.Component {
 
   constructor(props) {
     super(props)
-    console.log(props)
     this.state = {
       isLoginPage: this.props.history.location.pathname === '/web_login'
     }
@@ -52,7 +51,6 @@ class Sider extends React.Component {
         this.props.setMap()
       }
     }).catch(err => {
-      console.log(err)
     })
   }
 

@@ -15,7 +15,6 @@ class AddForm extends React.Component {
 
   handleSubmit = (e) => {
     let { activeCascader } = this.state;
-    console.log(activeCascader)
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -43,7 +42,6 @@ class AddForm extends React.Component {
         categoryTrees: (res && res.children) || []
       })
     }).catch(err => {
-      console.log(err)
     })
   }
 

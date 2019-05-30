@@ -66,7 +66,6 @@ export default class Stock extends React.Component {
         loading: false,
       })
     }).catch(err => {
-      console.log(err)
       this.setState({
         loading: false,
       })
@@ -79,7 +78,6 @@ export default class Stock extends React.Component {
     }).then(res => {
       this.setState({ count: res })
     }).catch(err => {
-      console.log(err)
     })
   }
 

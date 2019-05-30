@@ -32,7 +32,6 @@ class AddForm extends React.Component {
   }
 
   onSelectChange = (selectedRowKeys) => {
-    console.log('当前选择的key值 ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   }
 
@@ -67,13 +66,11 @@ class AddForm extends React.Component {
   }
 
   editableTableChange = (data) => {
-    console.log('这是可编辑表格触发后的调用')
     this.setState({ items: data })
     this.props.form.setFieldsValue({ items: data });
   }
 
   handleCancel = () => {
-    console.log('这是取消选择入库商品弹窗的调用')
     this.setState({ visible: false })
   }
 
@@ -104,7 +101,6 @@ class AddForm extends React.Component {
   }
 
   onSelect = (value) => {
-    console.log('回车搜索', value)
     this.getCommodity(value)
     this.setState({ selectedRowKeys: [] })
   }
@@ -128,7 +124,6 @@ class AddForm extends React.Component {
       }
       this.setState({ selectionTableLoding: false, goodsInStorage_dataSource })
     }).catch(err => {
-      console.log(err)
       this.setState({ selectionTableLoding: false })
     })
   }
@@ -147,7 +142,6 @@ class AddForm extends React.Component {
     this.props.onRef(this)
     if (record.planWarehouseCode) {
       warehouse.warehouseName = record.planWarehouseName;
-      console.log(record.planDetails[0])
       if (Array.isArray(record.planDetails)) {
         items = _.cloneDeep(record.planDetails).map(v => {
           for (let i in map_Config) {

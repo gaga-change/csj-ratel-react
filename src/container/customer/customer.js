@@ -89,7 +89,6 @@ export default class Customer extends React.Component {
         this.showAddress(basicCustomerInfo)
         this.operation_child.handleRest()
       }).catch(err => {
-        console.log(err)
         this.setState({ spinning: false })
       })
     }
@@ -182,7 +181,6 @@ export default class Customer extends React.Component {
         basicCustomerInfo: record
       })
     }).catch(err => {
-      console.log(err)
       this.setState({ address_loading: false })
     })
   }
@@ -230,7 +228,6 @@ export default class Customer extends React.Component {
         this.fetch()
       }
     }).catch(err => {
-      console.log(err)
       this.setState({ spinning: false })
     })
   }
