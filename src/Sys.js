@@ -1,23 +1,24 @@
 import React, { Component } from 'react'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Icon, Dropdown } from 'antd'
 import { connect } from 'react-redux'
 import { setUser } from 'actions'
 import { userInfo } from 'api'
+import { Link } from 'react-router-dom'
 import MyContent from './Content'
 import imgSouce from 'imgSouce/imgSouce'
+import { loginOut } from 'api'
 import './Sys.scss'
+
 const { Header, Sider, Content } = Layout
 const { SubMenu } = Menu
 
 class App extends Component {
-  state = {
-    collapsed: true,
-  }
-
-  toggle = () => {
-    // this.setState({
-    //   collapsed: !this.state.collapsed,
-    // })
+  constructor(props) {
+    super(props)
+    this.state = {
+      collapsed: true,
+      DEV: !!window.localStorage.getItem('DEV')
+    }
   }
 
   componentDidMount() {
@@ -31,8 +32,15 @@ class App extends Component {
     this.props.history.replace(`/sys` + menu.path)
   }
 
+  /** 退出登录 */
+  logOut = () => {
+    this.props.history.push('/web_login')
+    loginOut()
+  }
+
   render() {
     const { user } = this.props
+    const { ownerName, nick } = user || {}
     const menus = (user && user.menus) || {}
     let menusRoot = [...menus.children]
     menusRoot.unshift({
@@ -41,6 +49,18 @@ class App extends Component {
       path: '/home',
       icon: 'home'
     })
+    const menu = (
+      <Menu>
+        <Menu.Item>
+          <span className="siderNav_header_Nav" onClick={this.logOut}>退出登录</span>
+        </Menu.Item>
+        <Menu.Item>
+          <Link to='/sys/system/setPass' replace>
+            <span className="siderNav_header_Nav">修改密码</span>
+          </Link>
+        </Menu.Item>
+      </Menu>
+    )
     return (
       <div className="Sys">
         <Layout>
@@ -65,10 +85,10 @@ class App extends Component {
                           <span>{menu.text}</span>
                         </Menu.Item>
                       )}
-                      <Menu.Item key={999} onClick={this.handleMenuClick.bind(this, { path: '/system/menu' })}>
+                      {this.state.DEV && <Menu.Item key={999} onClick={this.handleMenuClick.bind(this, { path: '/system/menu' })}>
                         {/* <Icon type="user" /> */}
                         <span>菜单管理</span>
-                      </Menu.Item>
+                      </Menu.Item>}
                     </SubMenu>
                   ) : (
                       <Menu.Item key={menuFa.id} onClick={this.handleMenuClick.bind(this, menuFa)}>
@@ -85,12 +105,21 @@ class App extends Component {
           </Sider>
           <Layout>
             <Header >
-              {/* <Icon
-                className="trigger"
-                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                onClick={this.toggle}
-              /> */}
-              川山甲
+              <div className="header-logo">
+                <img src={imgSouce['logo']} alt="" />
+                <span>川山甲 SAASERP</span>
+              </div>
+              <div className="header-set">
+                <Dropdown overlay={menu}>
+                  <span className="ant-dropdown-link header_set_content" >
+                    <p className="user-area">
+                      <span className="user-name">{nick}</span>
+                      <span className="company-name">{ownerName}</span>
+                    </p>
+                    <Icon type="down" />
+                  </span>
+                </Dropdown>
+              </div>
             </Header>
             <Content>
               <MyContent />

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from "react-router-dom"
+import { Route, Switch, Redirect } from "react-router-dom"
 import Home from 'container/home/home'
 import Warehousing from 'container/warehousing/warehousing'
 import Outgoing from 'container/outgoing/outgoing'
@@ -28,6 +28,7 @@ class Content extends React.Component {
           <Route exact path={`${match.path}/system/user`} component={User} />
           <Route exact path={`${match.path}/system/setPass`} component={SetPass} />
           <Route exact path={`${match.path}/system/menu`} component={Menu} />
+          <Redirect to={`${match.path}/home`} />
         </Switch>
       </div>
     )

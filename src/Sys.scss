@@ -62,12 +62,64 @@
   }
 
   .ant-layout-header {
+    display: flex;
+    align-items: center;
     background-color: #fff;
     padding-left: 10px;
     height: 50px;
     line-height: 50px;
     box-shadow: 0 1px 10px 0 rgba(88, 104, 217, .21);
   }
+
+  .header-logo {
+    display: flex;
+    flex: 1;
+    align-items: center;
+
+    span {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 12px;
+      width: 100%;
+    }
+  }
+
+  .header-set {
+    p {
+      margin: 0;
+    }
+
+    .header_set_content {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      .user-area {
+        padding: 0 12px;
+        margin: 0;
+        text-align: center;
+
+        .user-name {
+          display: block;
+          color: #5868d9;
+          font-size: 14px;
+          line-height: 20px;
+        }
+
+        .company-name {
+          display: block;
+          color: #666;
+          font-size: 12px;
+          line-height: 20px;
+        }
+      }
+    }
+
+  }
+
+
 }
 
 .ant-menu-inline-collapsed-tooltip {
