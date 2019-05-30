@@ -37,6 +37,13 @@ class Login extends React.Component {
     const { loginLoding } = this.state
     return (
       <div className="Login">
+        <div className="header-logo" style={{ paddingLeft: '24px' }}>
+          <img src={imgSouce['logo']} alt="" />
+          <div className="logo_text">
+            <h3>川山甲 SAASERP</h3>
+            <span>协同供应链 .仓配一体化 .仓储租赁</span>
+          </div>
+        </div>
         <div className="LoginContaner">
           <main>
             <img src={imgSouce.banner} alt='' />
