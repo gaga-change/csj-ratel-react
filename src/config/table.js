@@ -1,5 +1,5 @@
-
-export const indexTableColumnsConfig = [
+/** 商品列表 */
+export const commondityColumns = [
   {
     title: '货主商品编码',
     dataIndex: 'skuCode'
@@ -50,18 +50,26 @@ export const indexTableColumnsConfig = [
   },
 ]
 
-export const priceChange_config = [
+/** 商品 - 供货价 */
+export const commonditySupplierPriceColums = [
   {
-    title: '售价',
-    dataIndex: 'salePrice'
+    title: '序号',
+    dataIndex: 'index'
   },
   {
-    title: '变动日期',
-    dataIndex: 'gmtCreate',
-    type: 'time',
+    title: '供应商编码',
+    dataIndex: 'providerCode'
   },
   {
-    title: '操作人',
-    dataIndex: 'createrName'
+    title: '供应商名称',
+    dataIndex: 'providerName'
   },
+  {
+    title: '供货价',
+    dataIndex: 'purchasePrice'
+  },
+  {
+    title: '单位',
+    dataIndex: 'largePackUnitName'
+  }
 ]

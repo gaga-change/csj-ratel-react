@@ -2,10 +2,10 @@ import React from 'react';
 import { Button, Modal, Popconfirm, message } from 'antd';
 import { stringify, parse } from 'qs';
 import FetchTable from '../../component/fetchTable/fetchTable'
-import { indexTableColumnsConfig } from './component/config'
+import { commondityColumns } from 'config/table'
 import CommodityForm from './component/form'
 import AddForm from './component/addform'
-import { skuInfoList, skuInfoAdd, skuInfoDel } from 'api'
+import { skuInfoList, skuInfoAdd, skuInfoDel, skuInfoAddSkuPro } from 'api'
 import SupplyPrice from './component/supplyPrice'
 
 import './commodity.scss'
@@ -14,7 +14,7 @@ export default class Commodity extends React.Component {
 
   constructor(props) {
     super(props)
-    let columns = [...indexTableColumnsConfig]
+    let columns = [...commondityColumns]
     let controlRow = columns.pop()
     controlRow = { ...controlRow }
     controlRow.render = (ext, record, index) => {
@@ -154,7 +154,7 @@ export default class Commodity extends React.Component {
     })
   }
 
-  /** 修改供货价 */
+  /** 修改供货价 按钮点击 */
   modifySupplyPrice = item => {
     this.setState({
       modifySupplyPriceVisible: true,
@@ -162,11 +162,29 @@ export default class Commodity extends React.Component {
     })
   }
 
-  /** 修改销售价 */
+  /** 修改销售价 按钮点击 */
   modifySellPrice = item => {
-
   }
 
+  /** 供货价数据 确认提交 */
+  handleSupplyPriceSubmit = () => {
+    let { dataSource } = this.supplyPrice.state
+    let { controlRecord } = this.state
+    dataSource = JSON.parse(JSON.stringify(dataSource))
+    dataSource.forEach(v => {
+      delete v.index
+      v.skuCode = controlRecord.skuCode
+      v.skuName = controlRecord.skuName
+    })
+    skuInfoAddSkuPro({ skuCode: controlRecord.skuCode, skuProviderInfoReqList: dataSource }).then(res => {
+      if (!res) return
+      message.success('操作成功')
+      this.supplyPrice && this.supplyPrice.handleReset()
+      this.setState({ modifySupplyPriceVisible: false, controlRecord: null })
+    })
+  }
+
+  onSupplyPrice = child => this.supplyPrice = child
   render() {
     const { dataSource, submitLoding, visible, loading, pagination, modifySupplyPriceVisible, controlRecord } = this.state;
 
@@ -205,8 +223,10 @@ export default class Commodity extends React.Component {
           centered={true}
           bodyStyle={{ paddingBottom: 16 }}
           onCancel={this.handleCancel}
+          onOk={this.handleSupplyPriceSubmit}
           visible={modifySupplyPriceVisible}>
-          <SupplyPrice record={controlRecord} />
+          <SupplyPrice record={controlRecord} onRef={this.onSupplyPrice}
+          />
         </Modal>
       </div>
     );

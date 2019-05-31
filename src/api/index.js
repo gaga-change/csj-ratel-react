@@ -36,6 +36,8 @@ export const providerAddrList = params => axios.get(`${base}/provider/addr/list`
 export const providerAddrDefault = params => axios.get(`${base}/provider/addr/default`, { params })
 /** 供应商默认地址删除 */
 export const providerAddrDel = params => axios.get(`${base}/provider/addr/del`, { params })
+/** 供应商商品信息详情 */
+export const skuInfoSelectProDetail = params => axios.get(`${base}/sku/info/selectProDetail`, { params })
 /** 添加商品 */
 export const skuInfoAdd = params => axios.post(`${base}/sku/info/add`, params)
 /** 添加供应商 */
@@ -46,6 +48,9 @@ export const providerUpdate = params => axios.post(`${base}/provider/update`, pa
 export const providerAddrSave = params => axios.post(`${base}/provider/addr/save`, params)
 /** 供应商地址修改 */
 export const providerAddrUpdate = params => axios.post(`${base}/provider/addr/update`, params)
+/** 新增or修改供应商商品 */
+export const skuInfoAddSkuPro = params => axios.post(`${base}/sku/info/updateSkuPro`, params)
 /** 删除商品 */
 export const skuInfoDel = skuId => axios.delete(`${base}/sku/info/delete/${skuId}`)
+
 
