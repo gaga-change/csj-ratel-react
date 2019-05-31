@@ -25,7 +25,7 @@ class AddressForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { providerProvince, providerCity, providerArea, supplierAddress, postalCode, receiverName, receiverTel, isDefault } = this.props.addressDetail;
+    const { providerProvince, providerCity, providerArea, providerAddress, postalCode, receiverName, receiverTel, isDefault } = this.props.addressDetail;
     const formItemLayout_left = {
       labelCol: {
         span: 9
@@ -82,7 +82,7 @@ class AddressForm extends React.Component {
           <Form.Item label="详细地址" {...formItemLayout_right} style={{ width: 400, minHeight: 110 }}>
             {
               getFieldDecorator('providerAddress', {
-                initialValue: supplierAddress,
+                initialValue: providerAddress,
                 rules: [{ required: true, message: '请输入详细地址' }]
               })(<TextArea rows={3} placeholder="请输入详细地址" />)
             }

@@ -8,8 +8,8 @@ class AddForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         let params = { ...values }
-        if (this.props.supplier) {
-          params.id = this.props.supplier.id
+        if (this.props.provider) {
+          params.id = this.props.provider.id
           this.props.onSubmit('modify', params)
         } else {
           this.props.onSubmit('add', params)
@@ -28,8 +28,8 @@ class AddForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    let { supplier = {} } = this.props
-    supplier = supplier || {}
+    let { provider = {} } = this.props
+    provider = provider || {}
     const formItemLayout = {
       labelCol: {
         span: 6
@@ -45,7 +45,7 @@ class AddForm extends React.Component {
           <Form.Item label="供应商名称" {...formItemLayout}>
             {
               getFieldDecorator('providerName', {
-                initialValue: supplier.providerName,
+                initialValue: provider.providerName,
                 rules: [{ required: true, message: '请输入供应商名称' }]
               })(<Input autoComplete="off" placeholder="请输入供应商名称" />)
             }

@@ -8,15 +8,15 @@ import FetchTable from '@component/fetchTable/fetchTable'
 import { indexTableColumnsConfig, addressTableColumnsConfig } from './component/config'
 import { Button, Modal, Tag, Spin, Popconfirm, message } from 'antd'
 import { providerList, providerAdd, providerUpdate, providerAddrList, providerAddrSave, providerAddrUpdate, providerAddrDefault, providerAddrDel } from 'api'
-import './supplier.scss'
+import './provider.scss'
 
-export default class Supplier extends React.Component {
+export default class Provider extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       loading: false,
       pagination: {},
-      visible_addSupplier: false,
+      visible_addProvider: false,
       visible_address: false,
       visible_operation: false,
       dataSource: [],
@@ -24,10 +24,10 @@ export default class Supplier extends React.Component {
       address_dataSource: [],
       address_loading: false,
       spinning: false,
-      supplierspinning: false,
-      basicSupplierInfo: {},
+      providerspinning: false,
+      basicProviderInfo: {},
       addressDetail: {},
-      controlSupplier: null, // 当前操作的供应商
+      controlProvider: null, // 当前操作的供应商
     }
   }
 
@@ -81,13 +81,13 @@ export default class Supplier extends React.Component {
   onSubmit = (type, value) => {
     // 新增供应商 \ 修改供应商
     if (type === 'add' || type === 'modify') {
-      this.setState({ supplierspinning: true })
+      this.setState({ providerspinning: true })
       let api = type === 'add' ? providerAdd : providerUpdate
       api({ ...value }).then(res => {
-        this.setState({ supplierspinning: false })
+        this.setState({ providerspinning: false })
         if (!res) return
         message.success('操作成功')
-        this.setState({ visible_addSupplier: false })
+        this.setState({ visible_addProvider: false })
         this.child.handleRest()
         this.fetch()
       })
@@ -107,7 +107,7 @@ export default class Supplier extends React.Component {
     }
     else if (type === 'address') {
       const { area, ...rest } = value
-      const { basicSupplierInfo, activeOperation, addressDetail } = this.state
+      const { basicProviderInfo, activeOperation, addressDetail } = this.state
       let api = providerAddrSave
       let data = {
         ...rest,
@@ -115,7 +115,7 @@ export default class Supplier extends React.Component {
         providerProvince: area[0],
         providerCity: area[1],
         providerArea: area[2],
-        providerId: basicSupplierInfo.id,
+        providerId: basicProviderInfo.id,
       }
       if (activeOperation === '修改地址') {
         api = providerAddrUpdate
@@ -127,7 +127,7 @@ export default class Supplier extends React.Component {
         if (!res) return
         message.success('操作成功')
         this.setState({ visible_operation: false, addressDetail: {} })
-        this.showAddress(basicSupplierInfo)
+        this.showAddress(basicProviderInfo)
         this.operation_child.handleRest()
       })
     }
@@ -137,7 +137,7 @@ export default class Supplier extends React.Component {
     if (type === 'visible_operation') {
       this.setState({ visible_operation: false })
     } else {
-      this.setState({ visible_addSupplier: false, visible_address: false })
+      this.setState({ visible_addProvider: false, visible_address: false })
     }
   }
 
@@ -150,8 +150,8 @@ export default class Supplier extends React.Component {
   }
 
   /** 修改\添加供应商 表单显示 */
-  showAddSupplier = (item) => {
-    this.setState({ visible_addSupplier: true, controlSupplier: item })
+  showAddProvider = (item) => {
+    this.setState({ visible_addProvider: true, controlProvider: item })
   }
 
   showAddress = record => {
@@ -165,7 +165,7 @@ export default class Supplier extends React.Component {
       })
       this.setState({
         address_dataSource,
-        basicSupplierInfo: record
+        basicProviderInfo: record
       })
     })
   }
@@ -187,7 +187,7 @@ export default class Supplier extends React.Component {
   }
 
   deleteAndSettings = (type, value) => {
-    let { basicSupplierInfo } = this.state
+    let { basicProviderInfo } = this.state
     let api = providerAddrDel
     if (type === "set") {
       api = providerAddrDefault
@@ -197,7 +197,7 @@ export default class Supplier extends React.Component {
       this.setState({ spinning: false })
       if (!res) return
       message.success('操作成功')
-      this.showAddress(basicSupplierInfo)
+      this.showAddress(basicProviderInfo)
     })
   }
 
@@ -206,13 +206,13 @@ export default class Supplier extends React.Component {
   }
 
   render() {
-    const { dataSource, visible_addSupplier, controlSupplier, loading, pagination, addressDetail, spinning, supplierspinning, visible_address, activeOperation, visible_operation, address_dataSource, address_loading } = this.state
+    const { dataSource, visible_addProvider, controlProvider, loading, pagination, addressDetail, spinning, providerspinning, visible_address, activeOperation, visible_operation, address_dataSource, address_loading } = this.state
     const columns = _.cloneDeep(indexTableColumnsConfig).map(v => {
       if (v.render === '') {
         v.render = (ext, record, index) => {
           return (
             <span className="Dropdown_Menu_box">
-              <span onClick={this.showAddSupplier.bind(this, record)}>修改</span>
+              <span onClick={this.showAddProvider.bind(this, record)}>修改</span>
               <span onClick={this.showAddress.bind(this, record)}>维护地址</span>
             </span>
           )
@@ -258,12 +258,12 @@ export default class Supplier extends React.Component {
 
 
     return (
-      <div className="Supplier">
+      <div className="Provider">
         <SearchForm
           selectWordsArr={['供应商名称', '负责人', '手机']}
           onSubmit={this.onSubmit.bind(this, 'search')} />
-        <div className="Supplier_addBtn">
-          <Button type="primary" onClick={this.showAddSupplier.bind(this, null)}>
+        <div className="Provider_addBtn">
+          <Button type="primary" onClick={this.showAddProvider.bind(this, null)}>
             新增供应商
           </Button>
         </div>
@@ -277,17 +277,17 @@ export default class Supplier extends React.Component {
           onChange={this.handleTableChange} />
 
         <Modal
-          title={controlSupplier ? '修改供应商' : '新增供应商'}
+          title={controlProvider ? '修改供应商' : '新增供应商'}
           okText="保存"
           centered={true}
           bodyStyle={{ paddingBottom: 0 }}
-          visible={visible_addSupplier}
+          visible={visible_addProvider}
           onCancel={this.handleCancel}
           onOk={this.handleOk}>
-          <Spin tip="Loading..." spinning={supplierspinning}>
+          <Spin tip="Loading..." spinning={providerspinning}>
             <AddForm
               onRef={this.ref}
-              supplier={controlSupplier}
+              provider={controlProvider}
               onSubmit={this.onSubmit.bind(this)} />
           </Spin>
         </Modal>
