@@ -93,3 +93,75 @@ export const commondityCustomerPriceColums = [
     dataIndex: 'sellPrice'
   }
 ]
+
+/** 计划出库 - 主列表 */
+export const planOutListColumns = [
+  {
+    title: '订单号',
+    dataIndex: 'planCode',
+  },
+  {
+    title: '计划出库时间',
+    dataIndex: 'planOutTime',
+    type: 'time',
+  },
+  {
+    title: '计划出库仓库',
+    dataIndex: 'warehouseName',
+  },
+  {
+    title: '计划出库总量',
+    dataIndex: 'outPlanQty',
+  },
+  {
+    title: '已出库数量',
+    dataIndex: 'outQty'
+  },
+  {
+    title: '单据状态',
+    dataIndex: 'planState',
+    useLocalEnum: 'outgoing_planStateEnum'
+  },
+  {
+    title: '操作',
+    dataIndex: '',
+    render: '',
+    width: 130,
+  },
+]
+
+/** 计划入库 - 主列表 */
+export const planInListColumns = [
+  {
+    title: '订单号',
+    dataIndex: 'planCode',
+  },
+  {
+    title: '计划入库时间',
+    dataIndex: 'planTime',
+    type: 'time',
+  },
+  {
+    title: '计划入库仓库',
+    dataIndex: 'planWarehouseName',
+  },
+  {
+    title: '计划入库总量',
+    dataIndex: 'inPlanQty',
+  },
+  {
+    title: '已入库数量',
+    dataIndex: 'inQty',
+  },
+  {
+    title: '单据状态',
+    dataIndex: 'planState',
+    useLocalEnum: 'warehousing_planStateEnum'
+  },
+  {
+    title: '操作',
+    dataIndex: '',
+    render: '',
+    width: 130,
+  },
+]

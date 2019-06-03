@@ -6,7 +6,8 @@ import { stringify, parse } from 'qs';
 import request from '@lib/request'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
-import { indexTableColumns_Config, indexTableColumns_ChildConfig, map_Config, warehousingDetail_Config, BaseCard_Config, PopoverTable_Config } from './component/config'
+import { planOutListColumns} from 'config/table'
+import { indexTableColumns_ChildConfig, map_Config, warehousingDetail_Config, BaseCard_Config, PopoverTable_Config } from './component/config'
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
 import BaseTitle from '@component/baseTitle/baseTitle'
@@ -251,7 +252,7 @@ export default class Outgoing extends React.Component {
 
   render() {
     const { PopoverTable_loading, PopoverTable_dataSource, dataSource, ModalTitle, spinning, record, visible, detailVisible, warehousingDetail_dataSource, BaseCard_dataSource } = this.state;
-    const columns = _.cloneDeep(indexTableColumns_Config).map(v => {
+    const columns = _.cloneDeep(planOutListColumns).map(v => {
       if (v.render === '') {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">

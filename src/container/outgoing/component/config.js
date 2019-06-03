@@ -1,280 +1,246 @@
 
-export  const indexTableColumns_Config=[
-  {
-    title: '业务单编号',
-    dataIndex:'planCode',
-  },
-  {
-    title:'计划出库时间',
-    dataIndex:'planOutTime',
-    type:'time',
-  },
-  {
-    title:'计划出库仓库',
-    dataIndex:'warehouseName',
-  },
-  {
-    title:'计划出库总量',
-    dataIndex:'outPlanQty',
-  },
-  {
-    title:'已出库数量',
-    dataIndex:'outQty'
-  },
-  {
-    title:'单据状态',
-    dataIndex:'planState',
-    useLocalEnum:'outgoing_planStateEnum'
-  },
-  {
-    title:'操作',
-    dataIndex: '',
-    render:'',
-    width:130,
-  },
-]
 
 
-export  const indexTableColumns_ChildConfig=[
+export const indexTableColumns_ChildConfig = [
   {
     title: '商品编码',
-    dataIndex:'skuCode',
+    dataIndex: 'skuCode',
   },
   {
-    title:'商品名称',
-    dataIndex:'skuName',
+    title: '商品名称',
+    dataIndex: 'skuName',
   },
   {
-    title:'单价',
-    dataIndex:'outPrice',
+    title: '单价',
+    dataIndex: 'outPrice',
   },
   {
-    title:'计划出库数量',
-    dataIndex:'planOutQty',
+    title: '计划出库数量',
+    dataIndex: 'planOutQty',
   },
   {
-    title:'已出库总量',
-    dataIndex:'realOutQty',
+    title: '已出库总量',
+    dataIndex: 'realOutQty',
   },
-  
+
 ]
 
-export  const formTable_config=[
+export const formTable_config = [
   {
     title: '序号',
     dataIndex: 'index',
-    width:40
+    width: 40
   },
   {
-    title:'商品编号',
-    dataIndex:'skuCode',
+    title: '商品编号',
+    dataIndex: 'skuCode',
   },
   {
-    title:'商品名称',
-    dataIndex:'skuName',
-    width:80
+    title: '商品名称',
+    dataIndex: 'skuName',
+    width: 80
   },
   {
-    title:'品牌',
-    dataIndex:'brandName',
-    width:80
+    title: '品牌',
+    dataIndex: 'brandName',
+    width: 80
   },
   {
-    title:'规格型号',
+    title: '规格型号',
     dataIndex: 'skuFormat',
   },
   {
-    title:'单位',
+    title: '单位',
     dataIndex: 'skuUnitName',
   },
   {
-    title:'单价（成本）',
+    title: '单价（成本）',
     dataIndex: 'costPrice',
-    width:100
+    width: 100
   },
   {
-    title:'仓库',
+    title: '仓库',
     dataIndex: 'warehouseName',
-    width:80
+    width: 80
   },
   {
-    title:'出库数量',
+    title: '出库数量',
     dataIndex: 'planOutQty',
-    editable:true,
-    editing:'true',
-    rules:[
+    editable: true,
+    editing: 'true',
+    rules: [
       {
         required: true,
-        validator:(rule, value, callback) => {
-          if(isNaN(value)){
+        validator: (rule, value, callback) => {
+          if (isNaN(value)) {
             callback('不能为空且要为数字')
-          } else if(value<=0){
+          } else if (value <= 0) {
             callback('数量必须大于0')
-          } else{
+          } else {
             callback()
           }
         }
       }
     ],
-    inputType:'InputNumber',
-    width:120,
+    inputType: 'InputNumber',
+    width: 120,
   },
   {
-    title:'操作',
+    title: '操作',
     dataIndex: '',
-    render:'',
-    width:100,
+    render: '',
+    width: 100,
   },
-  
+
 ]
 
 
-export  const goodsInStorage_config=[
+export const goodsInStorage_config = [
 
   {
-    title:'商品编号',
-    dataIndex:'skuCode',
+    title: '商品编号',
+    dataIndex: 'skuCode',
   },
   {
-    title:'商品名称',
-    dataIndex:'skuName',
+    title: '商品名称',
+    dataIndex: 'skuName',
   },
   {
-    title:'品牌',
-    dataIndex:'brandName',
+    title: '品牌',
+    dataIndex: 'brandName',
   },
   {
-    title:'规格型号',
-    dataIndex:'skuFormat',
+    title: '规格型号',
+    dataIndex: 'skuFormat',
   },
   {
-    title:'单位',
-    dataIndex:'skuUnitName',
+    title: '单位',
+    dataIndex: 'skuUnitName',
   },
   {
-    title:'单价（成本）',
-    dataIndex:'costPrice',
+    title: '单价（成本）',
+    dataIndex: 'costPrice',
   },
   {
-    title:'仓库',
-    dataIndex:'warehouseName',
+    title: '仓库',
+    dataIndex: 'warehouseName',
   },
   {
-    title:'可用库存',
-    dataIndex:'skuQty',
-    render:(v,record)=>record.skuQty-record.lockQty
+    title: '可用库存',
+    dataIndex: 'skuQty',
+    render: (v, record) => record.skuQty - record.lockQty
 
   },
 ]
 
 
-export  const warehousingDetail_Config=[
+export const warehousingDetail_Config = [
   {
     title: '序号',
     dataIndex: 'index',
   },
   {
-    title:'商品编码',
+    title: '商品编码',
     dataIndex: 'skuCode',
   },
   {
-    title:'商品名称',
+    title: '商品名称',
     dataIndex: 'skuName',
   },
   {
-    title:'品牌',
+    title: '品牌',
     dataIndex: 'skuBrandName',
   },
   {
-    title:'规格型号',
+    title: '规格型号',
     dataIndex: 'skuFormat',
   },
   {
-    title:'单位',
+    title: '单位',
     dataIndex: 'skuUnitName',
   },
   {
-    title:'单价(销售价)',
+    title: '单价(销售价)',
     dataIndex: 'outPrice',
   },
   {
-    title:'计划出库量',
+    title: '计划出库量',
     dataIndex: 'planOutQty',
   },
   {
-    title:'已出库量',
+    title: '已出库量',
     dataIndex: 'realOutQty',
-    render:''
+    render: ''
   }
 ]
 
 
-export  const BaseCard_Config=[
+export const BaseCard_Config = [
   {
     title: '业务单编号',
     dataIndex: 'planCode',
   },
   {
-    title:'计划出库日期',
+    title: '计划出库日期',
     dataIndex: 'planOutTime',
-    type:'time'
+    type: 'time'
   },
   {
-    title:'出库仓库',
+    title: '出库仓库',
     dataIndex: 'planWarehouseName',
   },
   {
-    title:'计划出库总量',
+    title: '计划出库总量',
     dataIndex: 'outPlanQty',
   },
   {
-    title:'创建人',
+    title: '创建人',
     dataIndex: 'createrName',
   },
   {
-    title:'创建日期',
+    title: '创建日期',
     dataIndex: 'gmtCreate',
-    type:'time'
+    type: 'time'
   },
   {
-    title:'状态',
+    title: '状态',
     dataIndex: 'planState',
-    useLocalEnum:'outgoing_planStateEnum'
+    useLocalEnum: 'outgoing_planStateEnum'
   },
 
 ]
 
-export  const PopoverTable_Config=[
+export const PopoverTable_Config = [
   {
     title: '序号',
-    dataIndex:'index',
+    dataIndex: 'index',
   },
   {
     title: '出库单号',
-    dataIndex:'warehouseExeCode',
+    dataIndex: 'warehouseExeCode',
   },
   {
-    title:'出库时间',
-    dataIndex:'outStoreTime',
-    type:'time'
+    title: '出库时间',
+    dataIndex: 'outStoreTime',
+    type: 'time'
   },
   {
-    title:'出库数量',
-    dataIndex:'outQty'
+    title: '出库数量',
+    dataIndex: 'outQty'
   },
   {
-    title:'出库金额',
-    dataIndex:'outAmt'
+    title: '出库金额',
+    dataIndex: 'outAmt'
   }
 ]
 
 
 //出库
-export  const map_Config={
-  'busiIndex':'index',
-  'skuBrandCode':'brandCode',
-  'outPrice':'costPrice',
-  'skuBrandName':'brandName',
-  'skuModel':'skuFormat',
-  'productFactory':'factoryName'
+export const map_Config = {
+  'busiIndex': 'index',
+  'skuBrandCode': 'brandCode',
+  'outPrice': 'costPrice',
+  'skuBrandName': 'brandName',
+  'skuModel': 'skuFormat',
+  'productFactory': 'factoryName'
 }
