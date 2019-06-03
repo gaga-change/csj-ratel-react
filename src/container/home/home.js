@@ -27,6 +27,10 @@ const quickItemText = {
     text: '客户列表',
     icon: 'commodity_management',
   },
+  '/provider': {
+    text: '供应商管理',
+    icon: 'commodity_management',
+  },
   '/system/role': {
     text: '角色管理',
     icon: 'role_management',
@@ -35,10 +39,10 @@ const quickItemText = {
     text: '用户管理',
     icon: 'user_management',
   },
-  '/system/setPass': {
-    text: '修改密码',
-    icon: 'change_password',
-  },
+  // '/system/setPass': {
+  //   text: '修改密码',
+  //   icon: 'change_password',
+  // },
 }
 class Home extends React.Component {
   constructor(props) {
@@ -117,7 +121,7 @@ class Home extends React.Component {
             <Row>
               {
                 menu.map((item, index) => (
-                  <Col xs={24} md={6} key={index}>
+                  !!quickItemText[item.path] && <Col xs={24} md={6} key={index}>
                     <Link to={`/sys${item.path}`} replace >
                       <div className="quick-item">
                         {quickItemText[item.path] && <img className="quick-logo" src={imgSouce[quickItemText[item.path].icon]} alt={item.name} />}
