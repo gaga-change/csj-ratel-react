@@ -98,7 +98,7 @@ export const commondityCustomerPriceColums = [
 export const planOutListColumns = [
   {
     title: '订单号',
-    dataIndex: 'planCode',
+    dataIndex: 'busiBillNo',
   },
   {
     title: '计划出库时间',
@@ -134,7 +134,7 @@ export const planOutListColumns = [
 export const planInListColumns = [
   {
     title: '订单号',
-    dataIndex: 'planCode',
+    dataIndex: 'busiBillNo',
   },
   {
     title: '计划入库时间',
