@@ -73,3 +73,23 @@ export const commonditySupplierPriceColums = [
     dataIndex: 'largePackUnitName'
   }
 ]
+
+/** 商品 - 销售价 */
+export const commondityCustomerPriceColums = [
+  {
+    title: '序号',
+    dataIndex: 'index'
+  },
+  {
+    title: '客户编码',
+    dataIndex: 'customerCode'
+  },
+  {
+    title: '客户名称',
+    dataIndex: 'customerName'
+  },
+  {
+    title: '销售价',
+    dataIndex: 'purchasePrice'
+  }
+]

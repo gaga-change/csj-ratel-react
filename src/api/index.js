@@ -16,7 +16,7 @@ axios.interceptors.response.use(function (response) {
   }
   return data
 }, function (error) {
-  return Promise.reject(error);
+  return Promise.reject(error)
 })
 /** 退出登录 */
 export const loginOut = params => axios.get(`/login_out`, { params })
@@ -30,6 +30,8 @@ export const userInfo = params => axios.get(`${base}/base/user/info`, { params }
 export const homeTotalNum = params => axios.get(`${base}/home/index`, { params })
 /** 供应商列表查询 */
 export const providerList = params => axios.get(`${base}/provider/list`, { params })
+/** 客户列表查询 */
+export const customerList = params => axios.get(`${base}/customer/list`, { params })
 /** 供应商地址列表 */
 export const providerAddrList = params => axios.get(`${base}/provider/addr/list`, { params })
 /** 供应商默认地址设置 */
@@ -38,6 +40,8 @@ export const providerAddrDefault = params => axios.get(`${base}/provider/addr/de
 export const providerAddrDel = params => axios.get(`${base}/provider/addr/del`, { params })
 /** 供应商商品信息详情 */
 export const skuInfoSelectProDetail = params => axios.get(`${base}/sku/info/selectProDetail`, { params })
+/** 客户商品信息详情 */
+export const skuInfoSelectCustDetail = params => axios.get(`${base}/sku/info/selectCustDetail`, { params })
 /** 添加商品 */
 export const skuInfoAdd = params => axios.post(`${base}/sku/info/add`, params)
 /** 添加供应商 */
@@ -50,6 +54,8 @@ export const providerAddrSave = params => axios.post(`${base}/provider/addr/save
 export const providerAddrUpdate = params => axios.post(`${base}/provider/addr/update`, params)
 /** 新增or修改供应商商品 */
 export const skuInfoAddSkuPro = params => axios.post(`${base}/sku/info/updateSkuPro`, params)
+/** 新增or修改客户商品 */
+export const skuInfoAddSkuCustomer = params => axios.post(`${base}/sku/info/updateSkuCustomer`, params)
 /** 删除商品 */
 export const skuInfoDel = skuId => axios.delete(`${base}/sku/info/delete/${skuId}`)
 
