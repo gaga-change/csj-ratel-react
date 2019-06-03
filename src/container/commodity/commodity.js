@@ -182,9 +182,9 @@ export default class Commodity extends React.Component {
       v.skuCode = controlSupplyRecord.skuCode
       v.skuName = controlSupplyRecord.skuName
     })
-    this.setState({skuInfoAddSkuProLoading: true})
+    this.setState({ skuInfoAddSkuProLoading: true })
     skuInfoAddSkuPro({ skuCode: controlSupplyRecord.skuCode, skuProviderInfoReqList: dataSource }).then(res => {
-      this.setState({skuInfoAddSkuProLoading: false})
+      this.setState({ skuInfoAddSkuProLoading: false })
       if (!res) return
       message.success('操作成功')
       this.supplyPrice && this.supplyPrice.handleReset()
@@ -202,9 +202,9 @@ export default class Commodity extends React.Component {
       v.skuCode = controlCustomerRecord.skuCode
       v.skuName = controlCustomerRecord.skuName
     })
-    this.setState({skuInfoAddSkuCustomerLoading: true})
-    skuInfoAddSkuCustomer({ skuCode: controlCustomerRecord.skuCode, skuCustomerInfoRespList: dataSource }).then(res => {
-      this.setState({skuInfoAddSkuCustomerLoading: false})
+    this.setState({ skuInfoAddSkuCustomerLoading: true })
+    skuInfoAddSkuCustomer({ skuCode: controlCustomerRecord.skuCode, skuCustomerReqList: dataSource }).then(res => {
+      this.setState({ skuInfoAddSkuCustomerLoading: false })
       if (!res) return
       message.success('操作成功')
       this.customerPrice && this.customerPrice.handleReset()

@@ -90,6 +90,6 @@ export const commondityCustomerPriceColums = [
   },
   {
     title: '销售价',
-    dataIndex: 'purchasePrice'
+    dataIndex: 'sellPrice'
   }
 ]
