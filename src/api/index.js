@@ -42,6 +42,8 @@ export const providerAddrDel = params => axios.get(`${base}/provider/addr/del`, 
 export const skuInfoSelectProDetail = params => axios.get(`${base}/sku/info/selectProDetail`, { params })
 /** 客户商品信息详情 */
 export const skuInfoSelectCustDetail = params => axios.get(`${base}/sku/info/selectCustDetail`, { params })
+/** 仓库列表 */
+export const warehouseList = params => axios.get(`${base}/base/warehouse/list`, { params })
 /** 添加商品 */
 export const skuInfoAdd = params => axios.post(`${base}/sku/info/add`, params)
 /** 添加供应商 */

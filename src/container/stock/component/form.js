@@ -1,17 +1,36 @@
-import React from 'react';
-import { Form, Input, Button, Row, Col } from 'antd';
-// import { connect } from 'react-redux';
+import React from 'react'
+import { Form, Input, Button, Row, Col, Select } from 'antd'
+import { warehouseList } from 'api'
 import './form.scss'
 
-// const Option = Select.Option;
-
-// @connect(
-//   state => state.map
-// )
+const Option = Select.Option
 
 class CommodityForm extends React.Component {
+
+  state = {
+    warehouseListLoading: false,
+    warehouseList: []
+  }
+
+  componentDidMount() {
+    this.initData()
+  }
+
+  componentWillUnmount() { this.setState = () => { } }
+
+  /** 相关数据初始化 */
+  initData() {
+    // 获取仓库列表
+    this.setState({ warehouseListLoading: true })
+    warehouseList().then(res => {
+      this.setState({ warehouseListLoading: false })
+      if (!res) return
+      this.setState({ warehouseList: res.data })
+    })
+  }
+
   handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
         for (let i in values) {
@@ -23,34 +42,34 @@ class CommodityForm extends React.Component {
         }
         this.props.onSubmit(values)
       }
-    });
+    })
   }
 
   handleRest = () => {
-    this.props.form.resetFields();
+    this.props.form.resetFields()
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    // const { mapSouce } = this.props;
+    const { getFieldDecorator } = this.props.form
+    const { warehouseListLoading, warehouseList } = this.state
     return (
       <div className="CommodityForm">
         <Form onSubmit={this.handleSubmit} layout="inline">
           <Row gutter={24}>
 
-            {/* <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
+            <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
               <Form.Item label="仓库名称">
                 {getFieldDecorator('warehouseCode', {
                   rules: [{ required: false, message: '' }],
                 })(
-                  // <Select style={{ width: 180 }} placeholder="请选择仓库">
-                  //   {
-                  //     Array.isArray(mapSouce['warehouseMap']) && mapSouce['warehouseMap'].map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)
-                  //   }
-                  // </Select>
+                  <Select style={{ width: 180 }} placeholder="请选择仓库" loading={warehouseListLoading}>
+                    {
+                      warehouseList.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)
+                    }
+                  </Select>
                 )}
               </Form.Item>
-            </Col> */}
+            </Col>
 
             <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
               <Form.Item label="商品名称">
@@ -93,8 +112,8 @@ class CommodityForm extends React.Component {
 
           </Row>
         </Form>
-      </div>);
+      </div>)
   }
 }
 
-export default Form.create({ name: 'CommodityForm' })(CommodityForm);
+export default Form.create({ name: 'CommodityForm' })(CommodityForm)
