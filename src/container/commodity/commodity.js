@@ -37,6 +37,8 @@ export default class Commodity extends React.Component {
       visible: false,
       modifySupplyPriceVisible: false, // 需改供货价表单是否显示
       controlSupplyRecord: null, // 当前操作的行数据
+      skuInfoAddSkuProLoading: false,
+      skuInfoAddSkuCustomerLoading: false
     }
   }
 
@@ -180,7 +182,9 @@ export default class Commodity extends React.Component {
       v.skuCode = controlSupplyRecord.skuCode
       v.skuName = controlSupplyRecord.skuName
     })
+    this.setState({skuInfoAddSkuProLoading: true})
     skuInfoAddSkuPro({ skuCode: controlSupplyRecord.skuCode, skuProviderInfoReqList: dataSource }).then(res => {
+      this.setState({skuInfoAddSkuProLoading: false})
       if (!res) return
       message.success('操作成功')
       this.supplyPrice && this.supplyPrice.handleReset()
@@ -198,7 +202,9 @@ export default class Commodity extends React.Component {
       v.skuCode = controlCustomerRecord.skuCode
       v.skuName = controlCustomerRecord.skuName
     })
+    this.setState({skuInfoAddSkuCustomerLoading: true})
     skuInfoAddSkuCustomer({ skuCode: controlCustomerRecord.skuCode, skuCustomerInfoRespList: dataSource }).then(res => {
+      this.setState({skuInfoAddSkuCustomerLoading: false})
       if (!res) return
       message.success('操作成功')
       this.customerPrice && this.customerPrice.handleReset()
@@ -217,7 +223,9 @@ export default class Commodity extends React.Component {
       modifySupplyPriceVisible,
       controlSupplyRecord,
       modifyCustomerPriceVisible,
-      controlCustomerRecord
+      controlCustomerRecord,
+      skuInfoAddSkuProLoading,
+      skuInfoAddSkuCustomerLoading
     } = this.state
 
     return (
@@ -256,18 +264,20 @@ export default class Commodity extends React.Component {
           bodyStyle={{ paddingBottom: 16 }}
           onCancel={this.handleCancel}
           onOk={this.handleSupplyPriceSubmit}
-          visible={modifySupplyPriceVisible}>
+          visible={modifySupplyPriceVisible}
+          confirmLoading={skuInfoAddSkuProLoading}>
           <SupplyPrice record={controlSupplyRecord} onRef={this.onSupplyPrice} />
         </Modal>
         <Modal
-          title="供货价"
+          title="销售价"
           width={800}
           okText="保存"
           centered={true}
           bodyStyle={{ paddingBottom: 16 }}
           onCancel={this.handleCancel}
           onOk={this.handleCustomerPriceSubmit}
-          visible={modifyCustomerPriceVisible}>
+          visible={modifyCustomerPriceVisible}
+          confirmLoading={skuInfoAddSkuCustomerLoading}>
           <CustomerPrice record={controlCustomerRecord} onRef={this.onCustomerPrice} />
         </Modal>
 
