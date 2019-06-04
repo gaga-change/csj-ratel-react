@@ -6,7 +6,7 @@ import { stringify, parse } from 'qs';
 import request from '@lib/request'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
-import { planOutListColumns} from 'config/table'
+import { planOutListColumns } from 'config/table'
 import { indexTableColumns_ChildConfig, map_Config, warehousingDetail_Config, BaseCard_Config, PopoverTable_Config } from './component/config'
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
@@ -323,7 +323,7 @@ export default class Outgoing extends React.Component {
 
         <SelestForm
           onSubmit={this.onSubmit.bind(this, 'select')}
-          selectWordsArr={['商品名称', '状态', '创建日期', '纵向查询', '联系人电话', '业务单号']} />
+          selectWordsArr={['商品名称', '状态', '创建日期', '纵向查询', '联系人电话', '订单号']} />
         <div className="alert_Btn">
           <Button type="primary" onClick={this.add}>创建出库业务单</Button>
         </div>

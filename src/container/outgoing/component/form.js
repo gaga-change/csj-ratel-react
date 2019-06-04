@@ -44,14 +44,14 @@ class SelestForm extends React.Component {
         <Form onSubmit={this.handleSubmit} layout="inline">
           <Row gutter={24}>
             {
-              selectWordsArr.includes('业务单号') &&
+              selectWordsArr.includes('订单号') &&
               <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
-                <Form.Item label="业务单号">
-                  {getFieldDecorator('planCode', {
+                <Form.Item label="订单号">
+                  {getFieldDecorator('busiBillNo', {
                     initialValue: '',
                     rules: [{ required: false, message: '' }],
                   })(
-                    <Input autoComplete='off' placeholder="请输入业务单号" />
+                    <Input autoComplete='off' placeholder="请输入订单号" />
                   )}
                 </Form.Item>
               </Col>
