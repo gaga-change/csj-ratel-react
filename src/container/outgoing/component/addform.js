@@ -1,18 +1,19 @@
-import React from 'react';
-import { Form, Input, Button, DatePicker, Select, Modal, message } from 'antd';
+import React from 'react'
+import { Form, Input, Button, DatePicker, Select, Modal, message } from 'antd'
 import moment from 'moment'
-import _ from 'lodash';
+import _ from 'lodash'
 import request from '@lib/request'
-// import { connect } from 'react-redux';
+// import { connect } from 'react-redux'
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import { custList } from '@publickApi/publickApi'
 import { formTable_config, goodsInStorage_config, map_Config } from './config'
 import SelestForm from './form'
+import { selectSkuByCustomerCode } from 'api'
 import './addform.scss'
 
-const { TextArea } = Input;
-const Option = Select.Option;
+const { TextArea } = Input
+const Option = Select.Option
 
 // @connect(
 //   state => state.map
@@ -21,7 +22,7 @@ const Option = Select.Option;
 class AddForm extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       items: [],
       visible: false,
@@ -30,46 +31,46 @@ class AddForm extends React.Component {
       arrival: {},
       arrivalConfig: [],
       arrivalAddressConfig: []
-    };
+    }
   }
 
   onSelectChange = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys });
+    this.setState({ selectedRowKeys })
   }
 
   handleDelete = (record) => {
-    let { selectedRowKeys } = this.state;
-    let items = this.props.form.getFieldValue('items');
-    let selectedRowKeys_index = selectedRowKeys.findIndex(v => v === record.id);
-    let items_index = items.findIndex(v => v.id === record.id);
+    let { selectedRowKeys } = this.state
+    let items = this.props.form.getFieldValue('items')
+    let selectedRowKeys_index = selectedRowKeys.findIndex(v => v === record.id)
+    let items_index = items.findIndex(v => v.id === record.id)
     if (selectedRowKeys_index >= 0) {
       selectedRowKeys.splice(selectedRowKeys_index, 1)
     }
     if (items_index >= 0) {
       items.splice(items_index, 1)
     }
-    this.setState({ selectedRowKeys, items });
-    this.props.form.setFieldsValue({ items });
+    this.setState({ selectedRowKeys, items })
+    this.props.form.setFieldsValue({ items })
   }
 
   handleSubmit = (type, e) => {
-    let { arrival } = this.state;
-    e.preventDefault();
+    let { arrival } = this.state
+    e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err && !values.items.some(v => isNaN(v.planOutQty))) {
         this.props.onSubmit(type, { ...values, ...arrival })
       }
-    });
+    })
   }
 
   handleRest = () => {
-    this.props.form.resetFields();
+    this.props.form.resetFields()
     this.setState({ items: [], arrivalConfig: [], arrivalAddressConfig: [] })
   }
 
   editableTableChange = (data) => {
     this.setState({ items: data })
-    this.props.form.setFieldsValue({ items: data });
+    this.props.form.setFieldsValue({ items: data })
   }
 
   handleCancel = () => {
@@ -77,12 +78,12 @@ class AddForm extends React.Component {
   }
 
   handleOk = () => {
-    let { selectedRowKeys, goodsInStorage_dataSource } = this.state;
+    let { selectedRowKeys, goodsInStorage_dataSource } = this.state
     let selectedItems = this.props.form.getFieldValue('items')
-    let newItems = [];
+    let newItems = []
     goodsInStorage_dataSource.forEach(item => {
       if (selectedRowKeys.includes(item.id)) {
-        let index = selectedItems.findIndex(v => v.id === item.id);
+        let index = selectedItems.findIndex(v => v.id === item.id)
         if (index >= 0) {
           newItems.push(selectedItems[index])
         } else {
@@ -91,29 +92,34 @@ class AddForm extends React.Component {
       }
     })
     this.setState({ visible: false, items: newItems })
-    this.props.form.setFieldsValue({ items: newItems });
+    this.props.form.setFieldsValue({ items: newItems })
   }
 
   selectCommoddity = () => {
-    let { goodsInStorage_dataSource } = this.state;
+    let { goodsInStorage_dataSource } = this.state
+    let { arrivalCode } = this.props.form.getFieldsValue(['arrivalCode'])
+    if (!arrivalCode) {
+      return message.warning('请先选择客户！')
+    }
     this.setState({ visible: true })
     if (!goodsInStorage_dataSource.length) {
-      this.getCommodity()
+      this.getCommodity({ customerCode: arrivalCode })
     }
   }
 
   onSelect = (value) => {
-    this.getCommodity(value)
+    let { arrivalCode } = this.props.form.getFieldsValue(['arrivalCode'])
+    this.getCommodity({ ...value, customerCode: arrivalCode })
     this.setState({ selectedRowKeys: [] })
   }
 
   componentDidMount() {
     let { record } = this.props
-    let { arrival, items, selectedRowKeys } = this.state;
-    this.props.onRef(this);
-    this.fetchArriva();
+    let { arrival, items, selectedRowKeys } = this.state
+    this.props.onRef(this)
+    this.fetchArriva()
     if (record.arrivalCode) {
-      arrival.arrivalName = record.arrivalName;
+      arrival.arrivalName = record.arrivalName
       if (Array.isArray(record.planDetails)) {
         items = _.cloneDeep(record.planDetails).map(v => {
           for (let i in map_Config) {
@@ -128,13 +134,13 @@ class AddForm extends React.Component {
 
       selectedRowKeys = items.map(v => v.id)
       this.setState({ arrival, items, selectedRowKeys })
-      this.props.form.setFieldsValue({ items });
+      this.props.form.setFieldsValue({ items })
     }
   }
 
 
   fetchArriva = () => {
-    let { arrivalConfig } = this.state;
+    let { arrivalConfig } = this.state
     if (arrivalConfig.length > 0) {
       return
     }
@@ -144,31 +150,33 @@ class AddForm extends React.Component {
     })
   }
 
-
+  /** 客户下拉选择 事件 */
   onSelectOptionChange = (value, option) => {
-    let { arrival } = this.state;
-    let options = option.props;
-    arrival.arrivalCode = options.value;
-    arrival.arrivalName = options.children;
+    let { arrival } = this.state
+    let options = option.props
+    arrival.arrivalCode = options.value
+    arrival.arrivalName = options.children
     this.setState({ arrival })
     this.custAddrListApi(arrival.arrivalCode)
+    this.setState({ items: [], goodsInStorage_dataSource: [], selectedRowKeys: [] })
+
   }
 
   arrivalAddressChange = (value, option) => {
-    let { arrivalAddressConfig } = this.state;
-    let index = arrivalAddressConfig.findIndex(v => v.id === value);
+    let { arrivalAddressConfig } = this.state
+    let index = arrivalAddressConfig.findIndex(v => v.id === value)
     if (index >= 0) {
       this.props.form.setFieldsValue({
         arrivalAddress: arrivalAddressConfig[index]['arrivalAddress'],
         arrivalLinkName: arrivalAddressConfig[index]['receiverName'],
         arrivalLinkTel: arrivalAddressConfig[index]['receiverTel']
-      });
+      })
     }
   }
 
 
   custAddrListApi = (basicCustomerInfoCode) => {
-    let { arrival } = this.state;
+    let { arrival } = this.state
     if (this.props.form.getFieldValue('arrivalCode') === arrival['arrivalCode']) {
       return
     }
@@ -178,51 +186,42 @@ class AddForm extends React.Component {
       data: { basicCustomerInfoCode }
     }).then(res => {
       let arrivalAddressConfig = res.map(v => {
-        v.arrivalAddress = `${v.customerCity}/${v.customerProvince}/${v.customerArea} ( 详细地址: ${v.customerAddress} )`;
-        return v;
+        v.arrivalAddress = `${v.customerCity}/${v.customerProvince}/${v.customerArea} ( 详细地址: ${v.customerAddress} )`
+        return v
       })
       this.setState({ arrivalAddressConfig })
-      let index = res.findIndex(v => v.isDefault === 1);
+      let index = res.findIndex(v => v.isDefault === 1)
       if (index >= 0) {
         this.props.form.setFieldsValue({
           arrivalAddressId: arrivalAddressConfig[index]['id'],
           arrivalAddress: arrivalAddressConfig[index]['arrivalAddress'],
           arrivalLinkName: arrivalAddressConfig[index]['receiverName'],
           arrivalLinkTel: arrivalAddressConfig[index]['receiverTel']
-        });
+        })
       } else {
         this.props.form.setFieldsValue({
           arrivalAddressId: '',
           arrivalAddress: '',
           arrivalLinkName: '',
           arrivalLinkTel: ''
-        });
+        })
       }
     }).catch(err => {
     })
   }
 
-
+  /** 获取商品 */
   getCommodity = (value = {}) => {
     this.setState({ selectionTableLoding: true })
-    let json = {
-      url: '/webApi/stock/list',
-      method: 'get'
-    }
-    if (value) {
-      json.data = value
-    }
-    request(json).then(res => {
-      let goodsInStorage_dataSource = [];
-      if (Array.isArray(res)) {
-        goodsInStorage_dataSource = _.cloneDeep(res).map(v => {
-          v.id = `${v.warehouseCode}_${v.skuCode}`
-          return v
-        })
-      }
-      this.setState({ selectionTableLoding: false, goodsInStorage_dataSource })
-    }).catch(err => {
+    selectSkuByCustomerCode(value).then(res => {
       this.setState({ selectionTableLoding: false })
+      if (!res) return
+      let goodsInStorage_dataSource = []
+      goodsInStorage_dataSource = res.data.map(v => {
+        v.id = `${v.warehouseCode}_${v.skuCode}`
+        return v
+      })
+      this.setState({ goodsInStorage_dataSource })
     })
   }
 
@@ -231,16 +230,16 @@ class AddForm extends React.Component {
       if (errors) {
         message.error('请先选择客户')
       } else {
-        let { arrival } = this.state;
+        let { arrival } = this.state
         this.custAddrListApi(arrival.arrivalCode)
       }
-    });
+    })
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    let { items, visible, arrivalConfig, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding } = this.state;
-    let { record } = this.props;
+    const { getFieldDecorator } = this.props.form
+    let { items, visible, arrivalConfig, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding } = this.state
+    let { record } = this.props
     const formItemLayout_left = {
       labelCol: {
         span: 7
@@ -252,7 +251,7 @@ class AddForm extends React.Component {
         width: 300,
         height: 60
       }
-    };
+    }
 
     const formItemLayout_arrivalAddress = {
       labelCol: {
@@ -277,7 +276,7 @@ class AddForm extends React.Component {
       style: {
         width: 400,
       }
-    };
+    }
 
     const formItemLayout_table = {
       labelCol: {
@@ -290,14 +289,14 @@ class AddForm extends React.Component {
         width: '100%',
         marginBottom: 12
       }
-    };
+    }
 
     const formItemLayout_button = {
       style: {
         display: 'flex',
         justifyContent: 'flex-end'
       }
-    };
+    }
 
     const columns = _.cloneDeep(formTable_config).map(v => {
       if (v.render === '') {
@@ -489,8 +488,8 @@ class AddForm extends React.Component {
               columns={goodsInStorage_config} />
           </div>
         </Modal>
-      </div>);
+      </div>)
   }
 }
 
-export default Form.create({ name: 'AddForm' })(AddForm);
+export default Form.create({ name: 'AddForm' })(AddForm)

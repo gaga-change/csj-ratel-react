@@ -51,11 +51,11 @@ export const formTable_config = [
   },
   {
     title: '单位',
-    dataIndex: 'skuUnitName',
+    dataIndex: 'packUnitName',
   },
   {
-    title: '单价（成本）',
-    dataIndex: 'costPrice',
+    title: '单价',
+    dataIndex: 'sellPrice',
     width: 100
   },
   {
@@ -98,8 +98,8 @@ export const formTable_config = [
 export const goodsInStorage_config = [
 
   {
-    title: '商品编号',
-    dataIndex: 'skuCode',
+    title: '货主商品编码',
+    dataIndex: 'ownerCode',
   },
   {
     title: '商品名称',
@@ -115,22 +115,17 @@ export const goodsInStorage_config = [
   },
   {
     title: '单位',
-    dataIndex: 'skuUnitName',
-  },
-  {
-    title: '单价（成本）',
-    dataIndex: 'costPrice',
+    dataIndex: 'packUnitName',
   },
   {
     title: '仓库',
     dataIndex: 'warehouseName',
   },
-  {
-    title: '可用库存',
-    dataIndex: 'skuQty',
-    render: (v, record) => record.skuQty - record.lockQty
-
-  },
+  // {
+  //   title: '可用库存',
+  //   dataIndex: 'skuQty',
+  //   render: (v, record) => record.skuQty - record.lockQty
+  // },
 ]
 
 
@@ -239,8 +234,9 @@ export const PopoverTable_Config = [
 export const map_Config = {
   'busiIndex': 'index',
   'skuBrandCode': 'brandCode',
-  'outPrice': 'costPrice',
+  'outPrice': 'sellPrice',
   'skuBrandName': 'brandName',
   'skuModel': 'skuFormat',
-  'productFactory': 'factoryName'
+  'productFactory': 'factoryName',
+  'skuUnitName': 'packUnitName'
 }

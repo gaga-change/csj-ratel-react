@@ -62,6 +62,8 @@ export const skuInfoAddSkuCustomer = params => axios.post(`${base}/sku/info/upda
 export const selectSkuByProviderCode = params => axios.post(`${base}/sku/info/selectSkuByProviderCode`, params)
 /** 创建入库业务单 */
 export const saveInBill = params => axios.post(`${base}/in/bill/saveInBill`, params)
+/** 根据客户筛选商品 */
+export const selectSkuByCustomerCode = params => axios.post(`${base}/sku/info/selectSkuByCustomerCode`, params)
 /** 删除商品 */
 export const skuInfoDel = skuId => axios.delete(`${base}/sku/info/delete/${skuId}`)
 
