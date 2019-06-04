@@ -325,7 +325,7 @@ export default class Warehousing extends React.Component {
       <div className="Warehousing">
         <SelestForm
           onSubmit={this.onSubmit.bind(this, 'select')}
-          selectWordsArr={['商品名称', '状态', '创建日期', '查询重置', '业务单号']} />
+          selectWordsArr={['商品名称', '状态', '创建日期', '查询重置', '订单号']} />
         <div className="alert_Btn">
           <Button type="primary" onClick={this.add}>创建入库业务单</Button>
         </div>
