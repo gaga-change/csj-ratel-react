@@ -54,7 +54,7 @@ export default class Warehousing extends React.Component {
       this.setState({ pagination }, () => {
         this.fetch(value)
       })
-    } else if (['saveSubmit', 'addSubmit'].includes(type)) {
+    } else if (type === 'addSubmit') {
       value.isCommitFlag = type === 'addSubmit' ? true : false;
       value.planInTime = moment(value.planInTime).valueOf();
       if (ModalTitle === '修改入库业务单') {

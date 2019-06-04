@@ -151,7 +151,8 @@ class AddForm extends React.Component {
   }
 
   onSelect = (value) => {
-    this.getCommodity(value)
+    let { providerCode } = this.props.form.getFieldsValue(['providerCode'])
+    this.getCommodity({ ...value, providerCode })
     this.setState({ selectedRowKeys: [] })
   }
 
@@ -354,12 +355,6 @@ class AddForm extends React.Component {
           </Form.Item>
 
           <Form.Item {...formItemLayout_button}>
-            <Button
-              type="primary"
-              style={{ marginRight: '12px' }}
-              onClick={this.handleSubmit.bind(this, 'saveSubmit')}>
-              保存
-                    </Button>
             <Button
               type="primary"
               onClick={this.handleSubmit.bind(this, 'addSubmit')}
