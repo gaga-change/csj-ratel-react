@@ -165,3 +165,33 @@ export const planInListColumns = [
     width: 130,
   },
 ]
+
+
+/** 入库商品列表 */
+export const planInGoodsListColums = [
+
+  {
+    title: '商品编号',
+    dataIndex: 'skuCode',
+  },
+  {
+    title: '商品名称',
+    dataIndex: 'skuName',
+  },
+  {
+    title: '品牌',
+    dataIndex: 'brandName',
+  },
+  {
+    title: '规格型号',
+    dataIndex: 'skuFormat',
+  },
+  {
+    title: '单位',
+    dataIndex: 'largePackUnitName',
+  },
+  {
+    title: '单价（成本）',
+    dataIndex: 'purchasePrice',
+  }
+]

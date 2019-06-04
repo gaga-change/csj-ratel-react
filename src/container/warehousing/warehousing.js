@@ -6,11 +6,13 @@ import { stringify, parse } from 'qs';
 import request from '@lib/request'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
-import { planInListColumns} from 'config/table'
+import { planInListColumns } from 'config/table'
 import { map_Config, indexTableColumns_ChildConfig, warehousingDetail_Config, BaseCard_Config, PopoverTable_Config } from './component/config'
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
 import BaseTitle from '@component/baseTitle/baseTitle'
+import { saveInBill } from 'api'
+
 import './warehousing.scss'
 
 const confirm = Modal.confirm;
@@ -32,10 +34,7 @@ export default class Warehousing extends React.Component {
       record: {},
       PopoverTable_dataSource: [],
       PopoverTable_loading: false,
-
       activePopover_row: {}
-
-
     }
   }
 
@@ -69,23 +68,15 @@ export default class Warehousing extends React.Component {
           return v
         })
       }
-      console.log(type, value)
-      request({
-        url: `/webApi/in/bill/saveInBill`,
-        method: 'post',
-        data: value,
-      }).then(res => {
+      saveInBill(value).then(res => {
+        if (!res) return
         message.success('操作成功')
         this.setState({ visible: false })
         this.fetch()
         if (this.child) {
           this.child.handleRest()
         }
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
       })
-
     }
   }
 
@@ -186,7 +177,6 @@ export default class Warehousing extends React.Component {
   }
 
   handleCancel = () => {
-    console.log('这是取消创建入库单的调用')
     this.setState({ visible: false, detailVisible: false })
   }
 

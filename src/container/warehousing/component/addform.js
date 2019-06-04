@@ -1,12 +1,12 @@
 import React from 'react'
-import { Form, Input, Button, DatePicker, Modal, Select } from 'antd'
+import { Form, Input, Button, DatePicker, Modal, Select, message } from 'antd'
 import _ from 'lodash'
 import moment from 'moment'
-import request from '@lib/request'
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
-import { formTable_config, map_Config, goodsInStorage_config } from './config'
-import { warehouseList, providerList } from 'api'
+import { planInGoodsListColums } from 'config/table'
+import { formTable_config, map_Config } from './config'
+import { warehouseList, providerList, selectSkuByProviderCode } from 'api'
 import SelestForm from './form'
 import './addform.scss'
 
@@ -98,6 +98,8 @@ class AddForm extends React.Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err && !values.items.some(v => isNaN(v.planInQty))) {
+        values = { ...values }
+        values.providerName = this.state.providerList.find(v => v.providerCode === values.providerCode).providerName
         this.props.onSubmit(type, { ...values, ...warehouse })
       }
     })
@@ -135,11 +137,16 @@ class AddForm extends React.Component {
     this.props.form.setFieldsValue({ items: newItems })
   }
 
+  /** “选择入库商品” 按钮点击事件 */
   selectCommoddity = () => {
+    let { providerCode } = this.props.form.getFieldsValue(['providerCode'])
+    if (!providerCode) {
+      return message.warning('请先选择供应商！')
+    }
     let { goodsInStorage_dataSource } = this.state
     this.setState({ visible: true })
     if (!goodsInStorage_dataSource.length) {
-      this.getCommodity()
+      this.getCommodity({ providerCode })
     }
   }
 
@@ -148,26 +155,19 @@ class AddForm extends React.Component {
     this.setState({ selectedRowKeys: [] })
   }
 
+  /** 获取（刷新）商品列表 */
   getCommodity = (value) => {
+    value = value || {}
     this.setState({ selectionTableLoding: true })
-    let json = {
-      url: '/webApi/sku/info/select',
-      method: 'get'
-    }
-    if (value) {
-      json.data = value
-    }
-    request(json).then(res => {
-      let goodsInStorage_dataSource = []
-      if (Array.isArray(res)) {
-        goodsInStorage_dataSource = _.cloneDeep(res).map(v => {
-          v.id = v.skuCode
-          return v
-        })
-      }
-      this.setState({ selectionTableLoding: false, goodsInStorage_dataSource })
-    }).catch(err => {
+    selectSkuByProviderCode(value).then(res => {
       this.setState({ selectionTableLoding: false })
+      if (!res) return
+      let goodsInStorage_dataSource = []
+      goodsInStorage_dataSource = res.data.map(v => {
+        v.id = v.skuCode
+        return v
+      })
+      this.setState({ goodsInStorage_dataSource })
     })
   }
 
@@ -179,12 +179,13 @@ class AddForm extends React.Component {
     this.setState({ warehouse })
   }
 
-  /** 供应商下拉选择 */
+  /** 供应商下拉选择 事件 */
   handleProviderSelectChange = (value, option) => {
     let item = this.state.providerList.find(v => v.providerCode === value)
     this.props.form.setFieldsValue({
       providerCode: item.providerCode
     })
+    this.setState({ items: [], goodsInStorage_dataSource: [], selectedRowKeys: [] })
   }
 
   render() {
@@ -386,7 +387,7 @@ class AddForm extends React.Component {
               selectedRowKeys={selectedRowKeys}
               onSelectChange={this.onSelectChange}
               dataSource={goodsInStorage_dataSource}
-              columns={goodsInStorage_config} />
+              columns={planInGoodsListColums} />
           </div>
         </Modal>
       </div>)

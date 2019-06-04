@@ -45,11 +45,11 @@ export const formTable_config = [
   },
   {
     title: '单位',
-    dataIndex: 'skuUnitName',
+    dataIndex: 'largePackUnitName',
   },
   {
     title: '单价（成本）',
-    dataIndex: 'costPrice',
+    dataIndex: 'purchasePrice',
   },
   {
     title: '入库数量',
@@ -81,36 +81,6 @@ export const formTable_config = [
   },
 
 ]
-
-
-export const goodsInStorage_config = [
-
-  {
-    title: '商品编号',
-    dataIndex: 'skuCode',
-  },
-  {
-    title: '商品名称',
-    dataIndex: 'skuName',
-  },
-  {
-    title: '品牌',
-    dataIndex: 'brandName',
-  },
-  {
-    title: '规格型号',
-    dataIndex: 'skuFormat',
-  },
-  {
-    title: '单位',
-    dataIndex: 'skuUnitName',
-  },
-  {
-    title: '单价（成本）',
-    dataIndex: 'costPrice',
-  }
-]
-
 
 export const warehousingDetail_Config = [
   {
@@ -220,8 +190,9 @@ export const PopoverTable_Config = [
 //入库
 export const map_Config = {
   'busiIndex': 'index',
-  'inPrice': 'costPrice',
+  'inPrice': 'purchasePrice',
   'skuBrandName': 'brandName',
   'skuModel': 'skuFormat',
-  'skuCategoryName': 'categoryName'
+  'skuCategoryName': 'categoryName',
+  'skuUnitName': 'largePackUnitName'
 }

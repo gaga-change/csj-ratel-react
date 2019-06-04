@@ -58,6 +58,10 @@ export const providerAddrUpdate = params => axios.post(`${base}/provider/addr/up
 export const skuInfoAddSkuPro = params => axios.post(`${base}/sku/info/updateSkuPro`, params)
 /** 新增or修改客户商品 */
 export const skuInfoAddSkuCustomer = params => axios.post(`${base}/sku/info/updateSkuCustomer`, params)
+/** 根据供应商筛选商品 */
+export const selectSkuByProviderCode = params => axios.post(`${base}/sku/info/selectSkuByProviderCode`, params)
+/** 创建入库业务单 */
+export const saveInBill = params => axios.post(`${base}/in/bill/saveInBill`, params)
 /** 删除商品 */
 export const skuInfoDel = skuId => axios.delete(`${base}/sku/info/delete/${skuId}`)
 
