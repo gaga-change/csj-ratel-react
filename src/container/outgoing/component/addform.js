@@ -325,7 +325,23 @@ class AddForm extends React.Component {
         <Form
           layout="inline"
           onSubmit={this.handleSubmit} >
-
+          <Form.Item label="订单号" {...formItemLayout_left}>
+            {getFieldDecorator('busiBillNo', {
+              initialValue: record.busiBillNo,
+              rules: [{ required: true, message: '请输入订单号' },
+              { pattern: /^[^\u4e00-\u9fa5]{0,}$/, message: '不能含有中文' }
+              ],
+            })(
+              <Input autoComplete='off' placeholder="请输入订单号" maxLength={40} />
+            )}
+          </Form.Item>
+          <Form.Item label="合同号" {...formItemLayout_right}>
+            {getFieldDecorator('contractNo', {
+              initialValue: record.contractNo
+            })(
+              <Input autoComplete='off' placeholder="请输入合同号" maxLength={40} />
+            )}
+          </Form.Item>
           <Form.Item label="客户名称"  {...formItemLayout_left} >
             {getFieldDecorator('arrivalCode', {
               initialValue: record.arrivalCode,
