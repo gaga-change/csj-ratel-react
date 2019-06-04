@@ -28,6 +28,7 @@ class AddForm extends React.Component {
       warehouseListLoading: true, // 仓库列表加载状态
       providerList: [], // 供应商列表
       providerListLoading: true, // 供应商列表加载状态
+      addSubmitLoading: false, // 创建入库业务单按钮提交状态
     }
   }
 
@@ -100,7 +101,10 @@ class AddForm extends React.Component {
       if (!err && !values.items.some(v => isNaN(v.planInQty))) {
         values = { ...values }
         values.providerName = this.state.providerList.find(v => v.providerCode === values.providerCode).providerName
-        this.props.onSubmit(type, { ...values, ...warehouse })
+        this.setState({ addSubmitLoading: true })
+        this.props.onSubmit(type, { ...values, ...warehouse }).then(res => {
+          this.setState({ addSubmitLoading: false })
+        })
       }
     })
   }
@@ -197,7 +201,8 @@ class AddForm extends React.Component {
       warehouseListLoading,
       warehouseList,
       providerListLoading,
-      providerList
+      providerList,
+      addSubmitLoading
     } = this.state
     const { record } = this.props
     const formItemLayout_left = {
@@ -358,9 +363,9 @@ class AddForm extends React.Component {
             <Button
               type="primary"
               onClick={this.handleSubmit.bind(this, 'addSubmit')}
+              loading={addSubmitLoading}
               htmlType="submit">
-              提交
-                    </Button>
+              提交</Button>
           </Form.Item>
         </Form>
         <Modal

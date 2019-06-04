@@ -68,7 +68,7 @@ export default class Warehousing extends React.Component {
           return v
         })
       }
-      saveInBill(value).then(res => {
+      return saveInBill(value).then(res => {
         if (!res) return
         message.success('操作成功')
         this.setState({ visible: false })
