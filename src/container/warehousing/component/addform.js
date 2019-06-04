@@ -6,7 +6,7 @@ import request from '@lib/request'
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import { formTable_config, map_Config, goodsInStorage_config } from './config'
-import { warehouseList } from 'api'
+import { warehouseList, providerList } from 'api'
 import SelestForm from './form'
 import './addform.scss'
 
@@ -25,7 +25,9 @@ class AddForm extends React.Component {
       selectionTableLoding: false,
       warehouse: {},
       warehouseList: [], // 仓库列表
-      warehouseListLoading: false, // 仓库列表加载状态
+      warehouseListLoading: true, // 仓库列表加载状态
+      providerList: [], // 供应商列表
+      providerListLoading: true, // 供应商列表加载状态
     }
   }
 
@@ -58,11 +60,17 @@ class AddForm extends React.Component {
   /** 相关数据初始化 */
   initData() {
     // 获取仓库列表
-    this.setState({ warehouseListLoading: true })
     warehouseList().then(res => {
       this.setState({ warehouseListLoading: false })
       if (!res) return
       this.setState({ warehouseList: res.data })
+    })
+
+    // 获取供应商列表
+    providerList({ pageSize: 9999999 }).then(res => {
+      this.setState({ providerListLoading: false })
+      if (!res) return
+      this.setState({ providerList: res.data.list })
     })
   }
 
@@ -171,13 +179,23 @@ class AddForm extends React.Component {
     this.setState({ warehouse })
   }
 
+  /** 供应商下拉选择 */
+  handleProviderSelectChange = (value, option) => {
+    let item = this.state.providerList.find(v => v.providerCode === value)
+    this.props.form.setFieldsValue({
+      providerCode: item.providerCode
+    })
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form
     let { items, visible, goodsInStorage_dataSource,
       selectedRowKeys,
       selectionTableLoding,
       warehouseListLoading,
-      warehouseList
+      warehouseList,
+      providerListLoading,
+      providerList
     } = this.state
     const { record } = this.props
     const formItemLayout_left = {
@@ -241,7 +259,23 @@ class AddForm extends React.Component {
         <Form
           layout="inline"
           onSubmit={this.handleSubmit} >
-
+          <Form.Item label="订单号" {...formItemLayout_left}>
+            {getFieldDecorator('busiBillNo', {
+              initialValue: record.busiBillNo,
+              rules: [{ required: true, message: '请输入订单号' },
+              { pattern: /^[^\u4e00-\u9fa5]{0,}$/, message: '不能含有中文' }
+              ],
+            })(
+              <Input autoComplete='off' placeholder="请输入订单号" maxLength={40} />
+            )}
+          </Form.Item>
+          <Form.Item label="合同号" {...formItemLayout_right}>
+            {getFieldDecorator('contractNo', {
+              initialValue: record.contractNo
+            })(
+              <Input autoComplete='off' placeholder="请输入合同号" maxLength={40} />
+            )}
+          </Form.Item>
           <Form.Item label="计划入库仓库" {...formItemLayout_left}>
             {getFieldDecorator('warehouseCode', {
               initialValue: record.planWarehouseCode,
@@ -261,25 +295,34 @@ class AddForm extends React.Component {
               <DatePicker />
             )}
           </Form.Item>
-
-          <Form.Item label="供应商编码" {...formItemLayout_left}>
-            {getFieldDecorator('providerCode', {
-              initialValue: record.providerCode,
-              rules: [{ required: true, message: '请输入供应商编码' }],
-            })(
-              <Input autoComplete='off' placeholder="请输入供应商编码" />
-            )}
-          </Form.Item>
-
-          <Form.Item label="供应商名称" {...formItemLayout_right}>
+          <Form.Item label="供应商名称" {...formItemLayout_left}>
             {getFieldDecorator('providerName', {
               initialValue: record.providerName,
               rules: [{ required: true, message: '请输入供应商名称' }],
             })(
-              <Input autoComplete='off' placeholder="请输入供应商名称" />
+              <Select
+                loading={providerListLoading}
+                showSearch
+                placeholder="请选择供应商"
+                optionFilterProp="children"
+                onChange={this.handleProviderSelectChange}
+                filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {providerList.map(v =>
+                  <Option key={v.providerCode} value={v.providerCode}>{v.providerName}</Option>
+                )}
+              </Select>
             )}
           </Form.Item>
-
+          <Form.Item label="供应商编码" {...formItemLayout_right}>
+            {getFieldDecorator('providerCode', {
+              initialValue: record.providerCode,
+            })(
+              <Input autoComplete='off' placeholder="供应商编码(选择供应商名称自动带出)" readOnly={true} />
+            )}
+          </Form.Item>
           <Form.Item label="备注" {...formItemLayout_left} style={{ width: 300, minHeight: 110 }}>
             {getFieldDecorator('remarkInfo', {
               initialValue: record.remarkInfo,
