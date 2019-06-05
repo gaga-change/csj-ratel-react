@@ -51,7 +51,7 @@ export const formTable_config = [
   },
   {
     title: '单位',
-    dataIndex: 'packUnitName',
+    dataIndex: 'skuUnitName',
   },
   {
     title: '单价',
@@ -99,7 +99,7 @@ export const goodsInStorage_config = [
 
   {
     title: '货主商品编码',
-    dataIndex: 'ownerCode',
+    dataIndex: 'ownerSkuCode',
   },
   {
     title: '商品名称',
@@ -115,17 +115,17 @@ export const goodsInStorage_config = [
   },
   {
     title: '单位',
-    dataIndex: 'packUnitName',
+    dataIndex: 'skuUnitName',
   },
   {
     title: '仓库',
     dataIndex: 'warehouseName',
   },
-  // {
-  //   title: '可用库存',
-  //   dataIndex: 'skuQty',
-  //   render: (v, record) => record.skuQty - record.lockQty
-  // },
+  {
+    title: '可用库存',
+    dataIndex: 'skuQty',
+    render: (v, record) => record.skuQty - record.lockQty
+  },
 ]
 
 
@@ -238,5 +238,4 @@ export const map_Config = {
   'skuBrandName': 'brandName',
   'skuModel': 'skuFormat',
   'productFactory': 'factoryName',
-  'skuUnitName': 'packUnitName'
 }

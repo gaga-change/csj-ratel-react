@@ -44,6 +44,8 @@ export const skuInfoSelectProDetail = params => axios.get(`${base}/sku/info/sele
 export const skuInfoSelectCustDetail = params => axios.get(`${base}/sku/info/selectCustDetail`, { params })
 /** 仓库列表 */
 export const warehouseList = params => axios.get(`${base}/base/warehouse/list`, { params })
+/** 获取所有商品 */
+export const stockList = params => axios.get(`${base}/stock/list`, { params })
 /** 添加商品 */
 export const skuInfoAdd = params => axios.post(`${base}/sku/info/add`, params)
 /** 添加供应商 */

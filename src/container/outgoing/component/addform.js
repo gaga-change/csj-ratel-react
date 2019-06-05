@@ -9,7 +9,7 @@ import SelectionTable from '@component/selectionTable/selectionTable'
 import { custList } from '@publickApi/publickApi'
 import { formTable_config, goodsInStorage_config, map_Config } from './config'
 import SelestForm from './form'
-import { selectSkuByCustomerCode } from 'api'
+import { stockList } from 'api'
 import './addform.scss'
 
 const { TextArea } = Input
@@ -34,7 +34,15 @@ class AddForm extends React.Component {
     }
   }
 
-  onSelectChange = (selectedRowKeys) => {
+  onSelectChange = (selectedRowKeys, b, c) => {
+    if (selectedRowKeys.length > this.state.selectedRowKeys.length) {
+      let newKey = selectedRowKeys[selectedRowKeys.length - 1]
+      let item = this.state.goodsInStorage_dataSource.find(v => v.id === newKey)
+      if (!item.sellPrice) {
+        message.warning(`请先维护该商品的客户销售价格！`)
+        selectedRowKeys.pop()
+      }
+    }
     this.setState({ selectedRowKeys })
   }
 
@@ -159,7 +167,6 @@ class AddForm extends React.Component {
     this.setState({ arrival })
     this.custAddrListApi(arrival.arrivalCode)
     this.setState({ items: [], goodsInStorage_dataSource: [], selectedRowKeys: [] })
-
   }
 
   arrivalAddressChange = (value, option) => {
@@ -213,7 +220,7 @@ class AddForm extends React.Component {
   /** 获取商品 */
   getCommodity = (value = {}) => {
     this.setState({ selectionTableLoding: true })
-    selectSkuByCustomerCode(value).then(res => {
+    stockList(value).then(res => {
       this.setState({ selectionTableLoding: false })
       if (!res) return
       let goodsInStorage_dataSource = []
