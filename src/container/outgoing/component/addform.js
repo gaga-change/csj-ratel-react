@@ -454,12 +454,6 @@ class AddForm extends React.Component {
           <Form.Item {...formItemLayout_button} >
             <Button
               type="primary"
-              style={{ marginRight: '12px' }}
-              onClick={this.handleSubmit.bind(this, 'save')}>
-              保存
-                  </Button>
-            <Button
-              type="primary"
               onClick={this.handleSubmit.bind(this, 'submit')}
               htmlType="submit">
               提交

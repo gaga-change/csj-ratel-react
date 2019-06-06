@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Spin, Dropdown, Menu, Icon, message, Popover } from 'antd';
+import { Button, Modal, Spin, message, Popover } from 'antd';
 import _ from 'lodash';
 import moment from "moment"
 import { stringify, parse } from 'qs';
@@ -53,7 +53,7 @@ export default class Outgoing extends React.Component {
       this.setState({ pagination }, () => {
         this.fetch(value)
       })
-    } else if (['submit', 'save'].includes(type)) {
+    } else if (type === "submit") {
       value.planOutTime = moment(value.planOutTime).valueOf();
       value.isCommitFlag = type === 'submit' ? true : false;
       if (ModalTitle === '修改出库业务单') {
@@ -257,7 +257,7 @@ export default class Outgoing extends React.Component {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">
             <span onClick={this.showDetail.bind(this, record)}>查看</span>
-            {
+            {/* {
               [0, 2, 7].includes(Number(record.issuedState)) &&
               <Dropdown overlay={
                 <Menu className="Dropdown_Menu_child" >
@@ -284,7 +284,7 @@ export default class Outgoing extends React.Component {
                 </Menu>}>
                 <span>更多操作<Icon type="down" /></span>
               </Dropdown>
-            }
+            } */}
           </span>
         }
       }

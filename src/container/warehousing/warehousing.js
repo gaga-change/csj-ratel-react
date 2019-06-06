@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Spin, Dropdown, Menu, Icon, message, Popover } from 'antd';
+import { Button, Modal, Spin, message, Popover } from 'antd';
 import moment from "moment"
 import _ from 'lodash';
 import { stringify, parse } from 'qs';
@@ -249,7 +249,7 @@ export default class Warehousing extends React.Component {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">
             <span onClick={this.showDetail.bind(this, record)}>查看</span>
-            {
+            {/* {
               [0, 2].includes(Number(record.issuedState)) &&
               <Dropdown overlay={
                 <Menu className="Dropdown_Menu_child" >
@@ -276,7 +276,7 @@ export default class Warehousing extends React.Component {
                 </Menu>}>
                 <span>更多操作<Icon type="down" /></span>
               </Dropdown>
-            }
+            } */}
           </span>
         }
       }
