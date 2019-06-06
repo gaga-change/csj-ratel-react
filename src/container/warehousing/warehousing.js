@@ -99,7 +99,6 @@ export default class Warehousing extends React.Component {
       }).then(res => {
         this.setState({ visible: true, record: res, ModalTitle: '修改入库业务单' })
       }).catch(err => {
-        console.log(err)
       })
     } else {
       this.setState({ visible: true, record: {}, ModalTitle: '创建入库业务单' })
@@ -171,7 +170,6 @@ export default class Warehousing extends React.Component {
       }
       this.setState({ BaseCard_dataSource, warehousingDetail_dataSource, spinning: false })
     }).catch(err => {
-      console.log(err)
       this.setState({ spinning: false })
     })
   }
@@ -209,7 +207,6 @@ export default class Warehousing extends React.Component {
           message.success('操作成功')
           that.fetch()
         }).catch(err => {
-          console.log(err)
         })
       },
     });
@@ -241,7 +238,6 @@ export default class Warehousing extends React.Component {
       this.setState({
         PopoverTable_loading: false
       })
-      console.log(err)
     })
   }
 

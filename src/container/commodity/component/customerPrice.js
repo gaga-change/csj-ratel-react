@@ -179,7 +179,6 @@ class CustomerPrice extends React.Component {
     if (newCode !== oldCode) {
       this.initData()
     }
-    console.log('new:', newCode, ' old:', oldCode)
   }
 
   /** 相关数据初始化 */
