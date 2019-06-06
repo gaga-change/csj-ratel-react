@@ -44,7 +44,7 @@ class App extends Component {
     const { user } = this.props
     const { ownerName, nick } = user || {}
     const menus = (user && user.menus) || {}
-    let menusRoot = [...menus.children]
+    let menusRoot = [...(menus.children || [])]
     const defaultSelectedKeys = []
     deep(menus, 'children', v => {
       if (('/sys' + v.path) === pathname) {
