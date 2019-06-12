@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Modal, Popconfirm, message } from 'antd'
+import { Button, Modal, message } from 'antd'
 import { stringify, parse } from 'qs'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import { commondityColumns } from 'config/table'
@@ -19,9 +19,9 @@ export default class Commodity extends React.Component {
     controlRow = { ...controlRow }
     controlRow.render = (ext, record, index) => {
       return <span className="Dropdown_Menu_box">
-        <Popconfirm title="确定要删除吗?" onConfirm={this.deleteCommodity.bind(this, record)}>
+        {/* <Popconfirm title="确定要删除吗?" onConfirm={this.deleteCommodity.bind(this, record)}>
           <span>删除</span>
-        </Popconfirm>
+        </Popconfirm> */}
         <span onClick={this.modifySupplyPrice.bind(this, record)}>供货价</span>
         <span onClick={this.modifyCustomerPrice.bind(this, record)}>销售价</span>
       </span>

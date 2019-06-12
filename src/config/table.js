@@ -46,7 +46,7 @@ export const commondityColumns = [
     title: '操作',
     dataIndex: '',
     render: '',
-    width: 150
+    width: 120
   },
 ]
 
