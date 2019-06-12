@@ -2,7 +2,7 @@
 export const commondityColumns = [
   {
     title: '货主商品编码',
-    dataIndex: 'skuCode'
+    dataIndex: 'ownerSkuCode'
   },
   {
     title: '商品名称',
