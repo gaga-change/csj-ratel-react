@@ -62,21 +62,12 @@
       .loginArert {
         width: 36rem;
         height: 20rem;
-        bottom: 16rem;
-        right: 10rem;
-        position: absolute;
-
-        @media screen and (min-width: 1600px) {
-          bottom: 25rem;
-        }
-
-        @media screen and (max-width: 1600px) and (min-width: 1400px) {
-          bottom: 16rem;
-        }
-
-        @media screen and (max-width: 1400px) {
-          bottom: 14rem;
-        }
+        position: fixed;
+        left: 0;
+        right: -22%;
+        bottom: 0;
+        top: 0;
+        margin: auto;
 
         .loginArertContaner {
           display: flex;
