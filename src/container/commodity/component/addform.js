@@ -108,7 +108,7 @@ class AddForm extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="货主商品编码" {...formItemLayout_left}>
-            {getFieldDecorator('skuCode', {
+            {getFieldDecorator('ownerSkuCode', {
             })(
               <Input autoComplete='off' placeholder="请输入货主商品编码" />
             )}
