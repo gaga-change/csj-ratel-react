@@ -30,16 +30,19 @@ class AddForm extends React.Component {
     }
   }
 
-  onSelectChange = (selectedRowKeys, b, c) => {
-    if (selectedRowKeys.length > this.state.selectedRowKeys.length) {
-      let newKey = selectedRowKeys[selectedRowKeys.length - 1]
-      let item = this.state.goodsInStorage_dataSource.find(v => v.id === newKey)
-      if (!item.sellPrice) {
-        message.warning(`请先维护该商品的客户销售价格！`)
-        selectedRowKeys.pop()
+  onSelectChange = (selectedRowKeys) => {
+    // 抽出添加的部分，删除部分不管
+    let temp = []
+    selectedRowKeys.forEach(v => {
+      let item = this.state.goodsInStorage_dataSource.find(item => item.id === v)
+      if (!this.state.selectedRowKeys.find(key => key === v)
+        && !item.sellPrice) {
+        message.warning(`请先维护该商品（${item.skuName}）的客户销售价格！`)
+      } else {
+        temp.push(v)
       }
-    }
-    this.setState({ selectedRowKeys })
+    })
+    this.setState({ selectedRowKeys: temp })
   }
 
   handleDelete = (record) => {
