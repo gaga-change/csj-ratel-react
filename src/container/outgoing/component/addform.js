@@ -25,7 +25,8 @@ class AddForm extends React.Component {
       selectedRowKeys: [],
       arrival: {},
       arrivalConfig: [],
-      arrivalAddressConfig: []
+      arrivalAddressConfig: [],
+      addSubmitLoading: false, // 提交加载状态
     }
   }
 
@@ -61,7 +62,8 @@ class AddForm extends React.Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err && !values.items.some(v => isNaN(v.planOutQty))) {
-        this.props.onSubmit(type, { ...values, ...arrival })
+        this.setState({ addSubmitLoading: true })
+        this.props.onSubmit(type, { ...values, ...arrival }).then(res => this.setState({ addSubmitLoading: false }))
       }
     })
   }
@@ -240,7 +242,7 @@ class AddForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    let { items, visible, arrivalConfig, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding } = this.state
+    let { items, visible, arrivalConfig, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding, addSubmitLoading } = this.state
     let { record } = this.props
     const formItemLayout_left = {
       labelCol: {
@@ -455,6 +457,7 @@ class AddForm extends React.Component {
             <Button
               type="primary"
               onClick={this.handleSubmit.bind(this, 'submit')}
+              loading={addSubmitLoading}
               htmlType="submit">
               提交
                   </Button>

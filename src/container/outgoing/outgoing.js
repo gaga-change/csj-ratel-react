@@ -11,6 +11,7 @@ import { indexTableColumns_ChildConfig, map_Config, warehousingDetail_Config, Ba
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
 import BaseTitle from '@component/baseTitle/baseTitle'
+import { saveOutBill } from 'api'
 import './outgoing.scss'
 
 const confirm = Modal.confirm;
@@ -67,23 +68,16 @@ export default class Outgoing extends React.Component {
           return v
         })
       }
-      request({
-        url: '/webApi/out/bill/saveOutBill',
-        method: 'post',
-        data: value
-      }).then(res => {
+      return saveOutBill(value).then(res => {
+        if (!res) return
         message.success('操作成功')
         this.setState({ visible: false })
-        this.fetch()
         if (this.child) {
           this.child.handleRest()
         }
         this.fetch()
-      }).catch(err => {
       })
-
     }
-
   }
 
   handleTableChange = (pagination, filters, sorter) => {
