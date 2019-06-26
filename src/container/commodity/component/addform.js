@@ -1,10 +1,12 @@
-import React from 'react';
-import { Form, Input, Cascader } from 'antd';
+import React from 'react'
+import { Form, Input, Cascader, Select } from 'antd'
 import { depthForEachCascader } from '@lib/lib'
 import request from '@lib/request'
+import { saleTypeEnum } from 'lib/enum'
 import './addform.scss'
 
-const { TextArea } = Input;
+const { Option } = Select
+const { TextArea } = Input
 
 class AddForm extends React.Component {
 
@@ -14,17 +16,17 @@ class AddForm extends React.Component {
   }
 
   handleSubmit = (e) => {
-    let { activeCascader } = this.state;
-    e.preventDefault();
+    let { activeCascader } = this.state
+    e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.onSubmit({ ...values, ...activeCascader })
       }
-    });
+    })
   }
 
   handleRest = () => {
-    this.props.form.resetFields();
+    this.props.form.resetFields()
     this.setState({ activeCascader: {} })
   }
 
@@ -46,8 +48,8 @@ class AddForm extends React.Component {
   }
 
   onChange = (value, selectedOptions) => {
-    let { activeCascader } = this.state;
-    activeCascader = selectedOptions[selectedOptions.length - 1];
+    let { activeCascader } = this.state
+    activeCascader = selectedOptions[selectedOptions.length - 1]
     this.setState({
       activeCascader: {
         categoryCode: activeCascader.value,
@@ -57,8 +59,8 @@ class AddForm extends React.Component {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    let { categoryTrees } = this.state;
+    const { getFieldDecorator } = this.props.form
+    let { categoryTrees } = this.state
     categoryTrees = depthForEachCascader(categoryTrees)
     const formItemLayout_left = {
       labelCol: {
@@ -71,7 +73,7 @@ class AddForm extends React.Component {
         width: 300,
         height: 60
       }
-    };
+    }
 
     const formItemLayout_right = {
       labelCol: {
@@ -83,7 +85,7 @@ class AddForm extends React.Component {
       style: {
         width: 400,
       }
-    };
+    }
 
     return (
       <div className="AddForm">
@@ -121,7 +123,6 @@ class AddForm extends React.Component {
               <Input autoComplete='off' placeholder="请输入品牌" />
             )}
           </Form.Item>
-
           <Form.Item label="单位" {...formItemLayout_left}>
             {getFieldDecorator('skuUnitName', {
               initialValue: '',
@@ -146,7 +147,16 @@ class AddForm extends React.Component {
               <Input autoComplete='off' placeholder="请输入型号" />
             )}
           </Form.Item>
-          <Form.Item label="商品描述" {...formItemLayout_right}>
+          <Form.Item label="销售区分" {...formItemLayout_right}>
+            {getFieldDecorator('saleType', {
+              initialValue: 1
+            })(
+              <Select>
+                {saleTypeEnum.map(v => <Option value={v.value}>{v.name}</Option>)}
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item label="商品描述" {...formItemLayout_left} style={{ height: 100, width: 300 }}>
             {getFieldDecorator('remarkInfo', {
               initialValue: '',
               rules: [{ required: false }],
@@ -155,8 +165,8 @@ class AddForm extends React.Component {
             )}
           </Form.Item>
         </Form>
-      </div>);
+      </div>)
   }
 }
 
-export default Form.create({ name: 'AddForm' })(AddForm);
+export default Form.create({ name: 'AddForm' })(AddForm)

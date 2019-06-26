@@ -69,3 +69,15 @@ export const outgoing_planStateEnum = [
     key: 7
   },
 ]
+
+/** 销售区分 */
+export const saleTypeEnum = [
+  {
+    name: '常备',
+    value: 1
+  },
+  {
+    name: '非常备',
+    value: 2
+  }
+]
