@@ -54,11 +54,6 @@ export const formTable_config = [
     dataIndex: 'skuUnitName',
   },
   {
-    title: '单价',
-    dataIndex: 'sellPrice',
-    width: 100
-  },
-  {
     title: '仓库',
     dataIndex: 'warehouseName',
     width: 80
