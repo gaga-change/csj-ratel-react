@@ -24,6 +24,7 @@ export default class Commodity extends React.Component {
         </Popconfirm> */}
         <span onClick={this.modifySupplyPrice.bind(this, record)}>供货价</span>
         <span onClick={this.modifyCustomerPrice.bind(this, record)}>销售价</span>
+        <span onClick={this.modifySku.bind(this, record)}>销售价</span>
       </span>
     }
     columns.push(controlRow)
@@ -35,6 +36,7 @@ export default class Commodity extends React.Component {
       submitLoding: false,
       loading: false,
       visible: false,
+      nowRow: null,
       modifySupplyPriceVisible: false, // 需改供货价表单是否显示
       controlSupplyRecord: null, // 当前操作的行数据
       skuInfoAddSkuProLoading: false,
@@ -129,9 +131,12 @@ export default class Commodity extends React.Component {
 
   /** 显示sku表单 */
   handleShowSkuForm = () => {
-    this.setState({ visible: true })
+    this.setState({ nowRow: null, visible: true })
   }
 
+  modifySku = (row) => {
+    this.setState({ nowRow: row, visible: true })
+  }
 
   /** 取消显示表单 */
   handleCancel = () => {
@@ -243,7 +248,7 @@ export default class Commodity extends React.Component {
           pagination={pagination}
           onChange={this.handleTableChange} />
         <Modal
-          title="创建商品"
+          title={this.state.nowRow ? '修改商品' : '创建商品'}
           okText="保存"
           width={800}
           centered={true}
@@ -254,6 +259,8 @@ export default class Commodity extends React.Component {
           onOk={this.handleOk}>
           <AddForm
             onRef={this.ref}
+            row={this.state.nowRow}
+            visible={visible}
             onSubmit={this.handleCreateSku} />
         </Modal>
         <Modal

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Input, Cascader, Select } from 'antd'
 import { depthForEachCascader } from '@lib/lib'
+import { findLeaf } from '@lib'
 import request from '@lib/request'
 import { saleTypeEnum } from 'lib/enum'
 import './addform.scss'
@@ -13,6 +14,50 @@ class AddForm extends React.Component {
   state = {
     categoryTrees: [],
     activeCascader: {}
+  }
+
+  componentDidMount() {
+    this.props.onRef(this)
+    this.fetch().then(() => {
+      if (this.props.visible) {
+        this.initData(this.props.row)
+      }
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.visible && nextProps.visible) {
+      this.initData(nextProps.row)
+    }
+  }
+
+
+  /** 初始化表单 */
+  initData(row) {
+    if (!row) {
+      let keys = ['skuName', 'ownerSkuCode', 'categoryCode', 'brandName', 'skuUnitName', 'skuFormat', 'skuModel', 'saleType', 'remarkInfo']
+      let obj = {}
+      keys.forEach(key => {
+        obj[key] = undefined
+      })
+      this.props.form.setFieldsValue(obj)
+      return
+    }
+    let keys = ['skuName', 'ownerSkuCode', 'brandName', 'skuUnitName', 'skuFormat', 'skuModel', 'saleType', 'remarkInfo']
+    let obj = {}
+    keys.forEach(key => {
+      obj[key] = row[key]
+    })
+    this.props.form.setFieldsValue(obj)
+    // 查找分类...  初始化分类
+    let path = findLeaf(this.categoryTreesRoot, 'children', obj => obj.currentCode === row.categoryCode)
+    if (path && path.length) {
+      path.shift()
+      let temp = path.map(v => v.currentCode)
+      this.props.form.setFieldsValue({ categoryCode: temp })
+    } else {
+      this.props.form.setFieldsValue({ categoryCode: [] })
+    }
   }
 
   handleSubmit = (e) => {
@@ -30,16 +75,13 @@ class AddForm extends React.Component {
     this.setState({ activeCascader: {} })
   }
 
-  componentDidMount() {
-    this.props.onRef(this)
-    this.fetch()
-  }
-
   fetch = () => {
-    request({
+    return request({
       url: '/api/sku/category/trees',
       method: 'get',
     }).then(res => {
+      if (!res) return
+      this.categoryTreesRoot = res || {}
       this.setState({
         categoryTrees: (res && res.children) || []
       })
@@ -152,7 +194,7 @@ class AddForm extends React.Component {
               initialValue: 1
             })(
               <Select>
-                {saleTypeEnum.map(v => <Option value={v.value}>{v.name}</Option>)}
+                {saleTypeEnum.map((v, index) => <Option value={v.value} key={index}>{v.name}</Option>)}
               </Select>
             )}
           </Form.Item>
