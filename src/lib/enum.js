@@ -79,5 +79,9 @@ export const saleTypeEnum = [
   {
     name: '非常备',
     value: 2
+  },
+  {
+    name: '不区分',
+    value: 3
   }
 ]
