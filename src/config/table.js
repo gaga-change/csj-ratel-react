@@ -6,7 +6,8 @@ export const commondityColumns = [
   },
   {
     title: '商品名称',
-    dataIndex: 'skuName'
+    dataIndex: 'skuName',
+    width: 200
   },
   {
     title: '品牌',
@@ -46,7 +47,7 @@ export const commondityColumns = [
     title: '操作',
     dataIndex: '',
     render: '',
-    width: 120
+    width: 160
   },
 ]
 

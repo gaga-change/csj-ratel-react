@@ -24,7 +24,7 @@ export default class Commodity extends React.Component {
         </Popconfirm> */}
         <span onClick={this.modifySupplyPrice.bind(this, record)}>供货价</span>
         <span onClick={this.modifyCustomerPrice.bind(this, record)}>销售价</span>
-        <span onClick={this.modifySku.bind(this, record)}>销售价</span>
+        <span onClick={this.modifySku.bind(this, record)}>编辑</span>
       </span>
     }
     columns.push(controlRow)
