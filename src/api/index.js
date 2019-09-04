@@ -16,6 +16,9 @@ axios.interceptors.response.use(function (response) {
   }
   return data
 }, function (error) {
+  let message = error.message || ''
+  if (message === 'timeout of 1500ms exceeded') message = '请求超时，请稍后再试！'
+  message.error(message)
   return Promise.reject(error)
 })
 
@@ -87,6 +90,6 @@ export const selectSkuByCustomerCode = params => http.post(`${base}/sku/info/sel
 /** 创建入库业务单 */
 export const saveOutBill = params => http.post(`${base}/out/bill/saveOutBill`, params)
 /** 删除商品 */
-export const skuInfoDel = skuId => http.delete(`${base}/sku/info/delete/${skuId}`)
+export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)
 
 
