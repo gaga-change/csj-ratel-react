@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import MyContent from './Content'
 import imgSouce from 'imgSouce/imgSouce'
 import { loginOut, userInfo } from 'api'
-import { deep } from 'lib'
+import { deep, sortMenu } from 'lib'
 import './Sys.scss'
 
 const { Header, Sider, Content } = Layout
@@ -23,6 +23,9 @@ class App extends Component {
 
   componentDidMount() {
     userInfo().then(res => {
+      if (!res) return
+      let user = res.data
+      sortMenu(user.menus)
       res && this.props.dispatch(setUser(res.data))
     })
   }

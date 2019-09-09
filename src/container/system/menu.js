@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button, Popconfirm, message, Breadcrumb } from 'antd';
 import _ from 'lodash';
-import request from '@lib/request'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import { menuConfig_config } from './components/config'
 import MenuAddModal from './components/menuAddModal'
+import { selectAllMenu, menuDelete } from 'api'
+import { sortMenu } from 'lib'
 import './style/menu.scss'
 
 export default class Menu extends React.Component {
@@ -30,29 +31,18 @@ export default class Menu extends React.Component {
    */
   fetch = (json = {}) => {
     this.setState({ loading: true })
-    let { dataSource } = this.state;
-    let data = {
+    selectAllMenu({
       menuName: '',
       ...json,
       ...this.seachVal,
-    }
-    request({
-      url: '/webApi/base/menu/selectAllMenu',
-      method: 'get',
-      data: data
     }).then(res => {
-      this.setState({ menus: res })
-      res = res.children
+      this.setState({ loading: false })
+      if (!res) return
+      sortMenu(res.data)
+      this.setState({ menus: res.data })
+      res = res.data.children
       this._filterMenu(res) // 过滤空 children
-      dataSource = res
-      this.setState({
-        dataSource,
-        loading: false,
-      })
-    }).catch(err => {
-      this.setState({
-        loading: false,
-      })
+      this.setState({ dataSource: res })
     })
   }
 
@@ -98,25 +88,16 @@ export default class Menu extends React.Component {
    */
   handleDelete = (obj) => {
     let { dataSource, menus } = this.state;
-
-    request({
-      url: '/webApi/base/menu/delete',
-      method: 'get',
-      data: {
-        menuId: obj.id
-      }
-    }).then(res => {
+    menuDelete({ menuId: obj.id }).then(res => {
+      if (!res) return
       message.success('操作成功')
       obj._faArr.splice(obj._index, 1)
       this.setState({ dataSource })
       this.setState({ dataSource, menus })
-    }).catch(err => {
-
     })
   }
 
   onMenuAddModalRef = (child) => this.menuAddModal = child
-
   componentWillUnmount() {
     this.setState = (state, callback) => {
       return

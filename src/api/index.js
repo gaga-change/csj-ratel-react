@@ -36,7 +36,11 @@ export const skuCategoryTrees = params => http.get(`/api/sku/category/trees`, { 
 /** 客户地址列表 */
 export const customerAddrList = params => http.get(`${base}/customer/addr/list`, { params })
 /** 客户地址 设置默认 */
-export const customerAddrDefault = params => http.get(`${base}customer/addr/default`, { params })
+export const customerAddrDefault = params => http.get(`${base}/customer/addr/default`, { params })
+/** 菜单 列表 */
+export const selectAllMenu = params => http.get(`${base}/base/menu/selectAllMenu`, { params })
+/** 菜单 删除 */
+export const menuDelete = params => http.get(`${base}/base/menu/delete`, { params })
 
 /** 添加商品 */
 export const skuInfoAdd = params => http.post(`${base}/sku/info/add`, params)

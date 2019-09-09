@@ -40,3 +40,18 @@ export const findLeaf = (obj, key, cb) => {
   }
   return _(obj, [])
 }
+
+
+/**
+ * 对菜单进行排序
+ * @param {*} root 
+ */
+export function sortMenu(root) {
+  let _ = menu => {
+    if (menu.children && menu.children.length) {
+      menu.children.sort((a, b) => a.orderNum - b.orderNum)
+      menu.children.forEach(a => _(a))
+    }
+  }
+  _(root)
+}
