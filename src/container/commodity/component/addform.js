@@ -2,8 +2,8 @@ import React from 'react'
 import { Form, Input, Cascader, Select } from 'antd'
 import { depthForEachCascader } from '@lib/lib'
 import { findLeaf } from '@lib'
-import request from '@lib/request'
 import { saleTypeEnum } from 'lib/enum'
+import { skuCategoryTrees } from 'api'
 import './addform.scss'
 
 const { Option } = Select
@@ -77,16 +77,12 @@ class AddForm extends React.Component {
   }
 
   fetch = () => {
-    return request({
-      url: '/api/sku/category/trees',
-      method: 'get',
-    }).then(res => {
+    skuCategoryTrees().then(res => {
       if (!res) return
-      this.categoryTreesRoot = res || {}
+      this.categoryTreesRoot = res.data || {}
       this.setState({
         categoryTrees: (res && res.children) || []
       })
-    }).catch(err => {
     })
   }
 

@@ -7,8 +7,7 @@ import AddressForm from './component/address'
 import FetchTable from '@component/fetchTable/fetchTable'
 import { indexTableColumnsConfig, addressTableColumnsConfig } from './component/config'
 import { Button, Modal, Tag, Spin, Popconfirm, message } from 'antd'
-import fetchData from '@lib/request'
-import { customerDel } from 'api'
+import { customerDel, customerSave, customerAddrSave, customerAddrUpdate, customerList, customerAddrList, customerAddrDefault } from 'api'
 import './customer.scss'
 
 export default class Customer extends React.Component {
@@ -39,17 +38,13 @@ export default class Customer extends React.Component {
   onSubmit = (type, value) => {
     if (type === 'add') {
       this.setState({ customerspinning: true })
-      fetchData({
-        url: '/webApi/customer/save',
-        method: 'post',
-        data: { ...value }
-      }).then(res => {
+      customerSave({ ...value }).then(res => {
+        this.setState({ customerspinning: false })
+        if (!res) return
         message.success('操作成功')
-        this.setState({ customerspinning: false, visible_addCustomer: false })
+        this.setState({ visible_addCustomer: false })
         this.child.handleRest()
         this.fetch()
-      }).catch(err => {
-        this.setState({ customerspinning: false })
       })
     } else if (type === 'search') {
       let { pagination } = this.state;
@@ -65,7 +60,7 @@ export default class Customer extends React.Component {
     } else if (type === 'address') {
       const { area, ...rest } = value
       const { basicCustomerInfo, activeOperation, addressDetail } = this.state;
-      let url = '/webApi/customer/addr/save'
+      let url = customerAddrSave
       let data = {
         ...rest,
         isDefault: value.isDefault ? 1 : 0,
@@ -76,21 +71,17 @@ export default class Customer extends React.Component {
         basicCustomerInfoCode: basicCustomerInfo.customerCode
       }
       if (activeOperation === '修改地址') {
-        url = '/webApi/customer/addr/update'
+        url = customerAddrUpdate
         data.id = addressDetail.id
       }
       this.setState({ visible_operation: true, spinning: true })
-      fetchData({
-        url,
-        method: 'post',
-        data
-      }).then(res => {
+      url(data).then(res => {
+        this.setState({ spinning: false })
+        if (!res) return
         message.success('操作成功')
-        this.setState({ spinning: false, visible_operation: false, addressDetail: {} })
+        this.setState({ visible_operation: false, addressDetail: {} })
         this.showAddress(basicCustomerInfo)
         this.operation_child.handleRest()
-      }).catch(err => {
-        this.setState({ spinning: false })
       })
     }
   }
@@ -138,23 +129,14 @@ export default class Customer extends React.Component {
     data.pageNum = data.current;
     delete data.current;
 
-    fetchData({
-      url: '/webApi/customer/list',
-      method: 'get',
-      data: data
-    }).then(res => {
-      if (res.list && Array.isArray(res.list)) {
-        dataSource = res.list
-        pagination.total = res.total
-      }
+    customerList(data).then(res => {
+      this.setState({ loading: false })
+      if (!res) return
+      dataSource = res.data.list || []
+      pagination.total = res.data.total
       this.setState({
         dataSource,
         pagination,
-        loading: false,
-      })
-    }).catch(err => {
-      this.setState({
-        loading: false,
       })
     })
   }
@@ -167,13 +149,10 @@ export default class Customer extends React.Component {
 
   showAddress = record => {
     this.setState({ visible_address: true, address_loading: true })
-    fetchData({
-      url: '/webApi/customer/addr/list',
-      method: 'get',
-      data: { basicCustomerInfoId: record.id }
-    }).then(res => {
+    customerAddrList({ basicCustomerInfoId: record.id }).then(res => {
       this.setState({ address_loading: false })
-      let address_dataSource = res.map((item, index) => {
+      if (!res) return
+      let address_dataSource = res.data.map((item, index) => {
         item.area = `${item.customerProvince}/${item.customerCity}/${item.customerArea}`
         return item
       })
@@ -181,8 +160,6 @@ export default class Customer extends React.Component {
         address_dataSource,
         basicCustomerInfo: record
       })
-    }).catch(err => {
-      this.setState({ address_loading: false })
     })
   }
 
@@ -209,19 +186,11 @@ export default class Customer extends React.Component {
     let { basicCustomerInfo } = this.state;
     this.setState({ spinning: true })
     if (type === "set") {
-      let url = '/webApi/customer/addr/default';
-      fetchData({
-        url,
-        method: 'get',
-        data: {
-          id: value.id
-        }
-      }).then(res => {
+      customerAddrDefault({ id: value.id }).then(res => {
+        this.setState({ spinning: false })
+        if (!res) return
         message.success('操作成功')
-        this.setState({ spinning: false })
         this.showAddress(basicCustomerInfo)
-      }).catch(err => {
-        this.setState({ spinning: false })
       })
     } else if (type === 'customerDelete') {
       customerDel(value.customerCode).then(res => {

@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Dropdown, Icon, Breadcrumb } from 'antd';
-import request from '../../lib/request'
 import { deepExistMenu, depthForEach } from '../../lib/lib'
 import { routerConfig } from '../../router/config'
 import imgSouce from '../../imgSouce/imgSouce'
 import { connect } from 'react-redux'
 import './sider.scss'
-import { loginOut } from 'api'
+import { loginOut, userInfo } from 'api'
 
 // @connect(
 //   state => state,
@@ -41,16 +40,12 @@ class Sider extends React.Component {
   }
 
   getInfo = () => {
-    request({
-      url: '/webApi/base/user/info',
-      method: 'get',
-    }).then(res => {
-      if (res) {
-        this.props.setInfo(res)
-        this.props.setMenus(deepExistMenu(res.menus.children, routerConfig))
-        this.props.setMap()
-      }
-    }).catch(err => {
+    userInfo().then(res => {
+      if (!res) return
+      let user = res.data
+      this.props.setInfo(user)
+      this.props.setMenus(deepExistMenu(user.menus.children, routerConfig))
+      this.props.setMap()
     })
   }
 
