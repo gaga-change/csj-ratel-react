@@ -240,7 +240,7 @@ class Commodity extends React.Component {
     return (
       <div className="Commodity"  >
         <CommodityForm
-          selectWordsArr={['商品名称', '商品编码']}
+          selectWordsArr={['商品名称', '货主商品编码']}
           onSubmit={this.handleSearch} />
         <div className="alert_Btn">
           <Button type="primary" onClick={this.handleShowSkuForm}>创建商品</Button>
