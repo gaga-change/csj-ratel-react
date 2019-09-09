@@ -136,7 +136,7 @@ export default class Stock extends React.Component {
               </span>
             }
           </div>
-          <a href={`/webApi/stock/export${search}`}>
+          <a data-rule-id="stock-output" href={`/webApi/stock/export${search}`}>
             <Button type="primary">库存导出</Button>
           </a>
         </div>

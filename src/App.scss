@@ -1,5 +1,9 @@
 // 当前项目公共样式。（拷贝到其他项目未必能用）
 
+[data-rule-id] {
+  display: none !important;
+}
+
 // 按钮连接
 .btn-link {
   color: #1890ff;

@@ -25,7 +25,20 @@ class App extends Component {
     userInfo().then(res => {
       if (!res) return
       let user = res.data
-      sortMenu(user.menus)
+      let temp = {}
+      let styleNameArr = []
+      sortMenu(user.menus, item => {
+        if (item.path && item.type === 0) {
+          temp['/sys' + item.path] = { ...item, children: undefined }
+        }
+        if (item.type === 1) {
+          styleNameArr.push(`[data-rule-id='${item.path}']`)
+        }
+      }, v => v.type === 0 || v.type === 2)
+      let ele = document.createElement('style')
+      ele.innerHTML = styleNameArr.join(',') + '{ display: inline-block !important;}'
+      document.body.appendChild(ele)
+      window.MENU_MAP = temp
       res && this.props.dispatch(setUser(res.data))
     })
   }

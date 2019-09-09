@@ -21,11 +21,11 @@ class Commodity extends React.Component {
     controlRow.render = (ext, record, index) => {
       return <span className="Dropdown_Menu_box">
         <Popconfirm title="确定要删除吗?" onConfirm={this.deleteCommodity.bind(this, record)}>
-          <span>删除</span>
+          <span data-rule-id="commodity-delete">删除</span>
         </Popconfirm>
-        <span onClick={this.modifySku.bind(this, record)}>编辑</span>
-        <span onClick={this.modifySupplyPrice.bind(this, record)}>供货价</span>
-        <span onClick={this.modifyCustomerPrice.bind(this, record)}>销售价</span>
+        <span data-rule-id="commodity-modify" onClick={this.modifySku.bind(this, record)}>编辑</span>
+        <span data-rule-id="commodity-supplyPrice" onClick={this.modifySupplyPrice.bind(this, record)}>供货价</span>
+        <span data-rule-id="commodity-customerPrice" onClick={this.modifyCustomerPrice.bind(this, record)}>销售价</span>
       </span>
     }
     columns.push(controlRow)
@@ -243,7 +243,7 @@ class Commodity extends React.Component {
           selectWordsArr={['商品名称', '货主商品编码']}
           onSubmit={this.handleSearch} />
         <div className="alert_Btn">
-          <Button type="primary" onClick={this.handleShowSkuForm}>创建商品</Button>
+          <Button data-rule-id="commodity-create" type="primary" onClick={this.handleShowSkuForm}>创建商品</Button>
         </div>
         <FetchTable
           dataSource={dataSource}

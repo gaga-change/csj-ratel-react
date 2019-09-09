@@ -233,10 +233,10 @@ export default class Outgoing extends React.Component {
       if (v.render === '') {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">
-            <span onClick={this.showDetail.bind(this, record)}>查看</span>
-            <span onClick={this.add.bind(this, 'update', record)}>修改</span>
+            <span data-rule-id="outgoing-show" onClick={this.showDetail.bind(this, record)}>查看</span>
+            <span data-rule-id="outgoing-modify" onClick={this.add.bind(this, 'update', record)}>修改</span>
             <Popconfirm title="确定要删除吗?" onConfirm={this.handleDelete.bind(this, record)}>
-              <span> 删除</span>
+              <span data-rule-id="outgoing-delete"> 删除</span>
             </Popconfirm>
           </span>
         }
@@ -278,7 +278,7 @@ export default class Outgoing extends React.Component {
           onSubmit={this.onSubmit.bind(this, 'select')}
           selectWordsArr={['商品名称', '状态', '创建日期', '纵向查询', '联系人电话', '订单号']} />
         <div className="alert_Btn">
-          <Button type="primary" onClick={this.add}>创建出库业务单</Button>
+          <Button data-rule-id="outgoing-create" type="primary" onClick={this.add}>创建出库业务单</Button>
         </div>
 
         <FetchTable

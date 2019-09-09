@@ -46,12 +46,16 @@ export const findLeaf = (obj, key, cb) => {
  * 对菜单进行排序
  * @param {*} root 
  */
-export function sortMenu(root) {
+export function sortMenu(root, cb, filter) {
   let _ = menu => {
     if (menu.children && menu.children.length) {
       menu.children.sort((a, b) => a.orderNum - b.orderNum)
+      if (filter) {
+        menu.children = menu.children.filter(filter)
+      }
       menu.children.forEach(a => _(a))
     }
+    cb && cb(menu)
   }
   _(root)
 }

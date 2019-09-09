@@ -17,13 +17,13 @@ class SelectMenu extends React.Component {
   }
 
   componentWillReceiveProps(prevProps) {
-    if (Number(prevProps.value)  !== Number(this.props.value)) {
+    if (Number(prevProps.value) !== Number(this.props.value)) {
       this.setState({
         selectedKeys: prevProps.value ? [prevProps.value + ''] : []
       })
     }
   }
-  
+
   onExpand = (expandedKeys) => {
     this.setState({
       expandedKeys,
@@ -134,6 +134,7 @@ class DataForm extends React.Component {
             <RadioGroup>
               <Radio value={0}>菜单</Radio>
               <Radio value={1}>按钮</Radio>
+              <Radio value={2}>外链</Radio>
             </RadioGroup>
           )}
         </Form.Item>
@@ -188,9 +189,9 @@ class DataForm extends React.Component {
           label="显示顺序"
         >
           {getFieldDecorator('orderNum', {
-            initialValue: obj.orderNum || 1
+            initialValue: obj.orderNum || undefined
           })(
-            <InputNumber min={1} max={100000} />,
+            <InputNumber min={-10000} max={100000} />,
           )}
         </Form.Item>
         <Form.Item

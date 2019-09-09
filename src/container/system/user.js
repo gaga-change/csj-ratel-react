@@ -198,12 +198,12 @@ export default class User extends React.Component {
           return (columns.length >= 1
             ? (
               <span className="Dropdown_Menu_box">
-                <span onClick={() => this.handleAdd(record)}>编辑</span>
+                <span data-rule-id="system/user-modify" onClick={() => this.handleAdd(record)}>编辑</span>
                 <Popconfirm title={`确定要${statusName}该账户吗？`} onConfirm={() => this.handleDisableUser(record)}>
-                  <span>{statusName}</span>
+                  <span data-rule-id="system/user-changeStaus">{statusName}</span>
                 </Popconfirm>
                 <Popconfirm title="确定要删除账户吗？" onConfirm={() => this.handleDelete(record)}>
-                  <span>删除</span>
+                  <span data-rule-id="system/user-delete">删除</span>
                 </Popconfirm>
               </span>
             ) : null)
@@ -221,11 +221,11 @@ export default class User extends React.Component {
         <UserSearchForm onSubmit={this.handleFormSubmit} roles={this.state.roles}></UserSearchForm>
         <div>
           <Popconfirm title="你确定要删除这些账户吗?" onConfirm={this.handleDeleteMore} okText="确定" cancelText="取消">
-            <Button className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
+            <Button data-rule-id="system/user-delete" className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
           </Popconfirm>
         </div>
         <div className="alert_Btn">
-          <Button type="primary" onClick={() => this.handleAdd()}>创建用户</Button>
+          <Button data-rule-id="system/user-add" type="primary" onClick={() => this.handleAdd()}>创建用户</Button>
         </div>
         <SelectingTable
           selectedRowKeys={this.state.selectedRowKeys}

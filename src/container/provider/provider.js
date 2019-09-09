@@ -221,10 +221,10 @@ export default class Provider extends React.Component {
         v.render = (ext, record, index) => {
           return (
             <span className="Dropdown_Menu_box">
-              <span onClick={this.showAddProvider.bind(this, record)}>修改</span>
-              <span onClick={this.showAddress.bind(this, record)}>维护地址</span>
+              <span data-rule-id="provider-modify" onClick={this.showAddProvider.bind(this, record)}>修改</span>
+              <span data-rule-id="provider-address" onClick={this.showAddress.bind(this, record)}>维护地址</span>
               <Popconfirm title="确定要删除吗?" onConfirm={this.handlePrivderDelete.bind(this, record)}>
-                <span> 删除</span>
+                <span data-rule-id="provider-delete"> 删除</span>
               </Popconfirm>
             </span>
           )
@@ -240,9 +240,9 @@ export default class Provider extends React.Component {
             <span>
               {v.renderType === 'operation' && (
                 <span className="Dropdown_Menu_box">
-                  <span onClick={this.operationAddress.bind(this, record)}>修改</span>
+                  <span data-rule-id="provider-address-modify" onClick={this.operationAddress.bind(this, record)}>修改</span>
                   <Popconfirm title="确定要删除吗?" onConfirm={this.deleteAndSettings.bind(this, 'delete', record)}>
-                    <span> 删除</span>
+                    <span data-rule-id="provider-address-delete"> 删除</span>
                   </Popconfirm>
                 </span>
               )}
@@ -252,7 +252,7 @@ export default class Provider extends React.Component {
                     {
                       record.isDefault !== 1 &&
                       <Popconfirm title="确定要将此地址设为默认地址吗?" onConfirm={this.deleteAndSettings.bind(this, 'set', record)}>
-                        <span>设为默认</span>
+                        <span data-rule-id="provider-address-setDefault">设为默认</span>
                       </Popconfirm>
                     }
                     {
@@ -275,7 +275,7 @@ export default class Provider extends React.Component {
           selectWordsArr={['供应商名称', '负责人', '手机']}
           onSubmit={this.onSubmit.bind(this, 'search')} />
         <div className="Provider_addBtn">
-          <Button type="primary" onClick={this.showAddProvider.bind(this, null)}>
+          <Button data-rule-id="provider-add" type="primary" onClick={this.showAddProvider.bind(this, null)}>
             新增供应商
           </Button>
         </div>
@@ -313,7 +313,7 @@ export default class Provider extends React.Component {
           onCancel={this.handleCancel}
           visible={visible_address}>
           <div className="alert_Btn">
-            <Button type="primary" onClick={this.showAddAddress}>
+            <Button data-rule-id="provider-address-add" type="primary" onClick={this.showAddAddress}>
               新增地址
             </Button>
           </div>

@@ -155,8 +155,8 @@ export default class Role extends React.Component {
           return (columns.length >= 1
             ? (
               <span className="Dropdown_Menu_box">
-                <span onClick={() => this.openRoleFormMoadl(record)}>编辑</span>
-                <span onClick={() => this.openRoleJurisdictionModal(record)}>菜单权限</span>
+                <span data-rule-id="system/role-modify" onClick={() => this.openRoleFormMoadl(record)}>编辑</span>
+                <span data-rule-id="system/role-menu" onClick={() => this.openRoleJurisdictionModal(record)}>菜单权限</span>
               </span>
             ) : null)
         }
@@ -173,11 +173,11 @@ export default class Role extends React.Component {
         <RoleSearchForm onSubmit={this.handleFormSubmit}></RoleSearchForm>
         <div >
           <Popconfirm title="你确定要删除角色吗?" onConfirm={this.handleDel} okText="确定" cancelText="取消">
-            <Button className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
+            <Button data-rule-id="system/role-delete" className="del-btn" type="primary" loading={this.state.delLoading}>批量删除</Button>
           </Popconfirm>
         </div>
         <div className="alert_Btn">
-          <Button type="primary" onClick={() => this.openRoleFormMoadl()}>创建角色</Button>
+          <Button data-rule-id="system/role-create" type="primary" onClick={() => this.openRoleFormMoadl()}>创建角色</Button>
         </div>
         <SelectingTable
           selectedRowKeys={this.state.selectedRowKeys}

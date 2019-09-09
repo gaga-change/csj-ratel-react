@@ -228,18 +228,16 @@ export default class Warehousing extends React.Component {
       if (v.render === '') {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">
-            <span onClick={this.showDetail.bind(this, record)}>查看</span>
+            <span data-rule-id="warehousing-show" onClick={this.showDetail.bind(this, record)}>查看</span>
             <Divider type="vertical" />
             <Popconfirm title="是否确认删除？" okText="是" cancelText="否" onConfirm={this.handleDelete.bind(this, record)}>
-              <button className="btn-link">删除</button>
+              <button data-rule-id="warehousing-del" className="btn-link">删除</button>
             </Popconfirm>
           </span>
         }
       }
       return v
     })
-
-
 
     const PopoverTable = <div className="PopoverTable" style={{ minWidth: 300 }}>
       <FetchTable
@@ -279,7 +277,7 @@ export default class Warehousing extends React.Component {
           onSubmit={this.onSubmit.bind(this, 'select')}
           selectWordsArr={['商品名称', '状态', '创建日期', '查询重置', '订单号']} />
         <div className="alert_Btn">
-          <Button type="primary" onClick={this.add}>创建入库业务单</Button>
+          <Button data-rule-id="warehousing-create" type="primary" onClick={this.add}>创建入库业务单</Button>
         </div>
 
         <FetchTable
