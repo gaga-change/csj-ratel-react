@@ -49,19 +49,6 @@ class SelestForm extends React.Component {
               </Col>
             }
             {
-              selectWordsArr.includes('商品名称') &&
-              <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
-                <Form.Item label="商品名称">
-                  {getFieldDecorator('skuName', {
-                    initialValue: '',
-                    rules: [{ required: false, message: '' }],
-                  })(
-                    <Input autoComplete='off' placeholder="请输入商品名称" />
-                  )}
-                </Form.Item>
-              </Col>
-            }
-            {
               selectWordsArr.includes('创建日期') &&
               <Col span={8} style={{ marginBottom: '12px', width: '458px' }}>
                 <Form.Item label="创建日期">
