@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Spin, message, Popover } from 'antd';
+import { Button, Modal, Spin, message, Popover, Popconfirm, Divider } from 'antd';
 import moment from "moment"
 import _ from 'lodash';
 import { stringify, parse } from 'qs';
@@ -11,7 +11,7 @@ import { map_Config, indexTableColumns_ChildConfig, warehousingDetail_Config, Ba
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
 import BaseTitle from '@component/baseTitle/baseTitle'
-import { saveInBill } from 'api'
+import { saveInBill, deleteBusiBill } from 'api'
 
 import './warehousing.scss'
 
@@ -186,30 +186,12 @@ export default class Warehousing extends React.Component {
     this.fetch()
   }
 
-  onOperation = (type, record) => {
-    let that = this;
-    let api = '/webApi/in/bill/deleteBusiBill';
-    let tip = `确定要删除单据 ${record.planCode} 吗？`
-    if (type === 'submit') {
-      api = '/webApi/in/bill/commitInBill';
-      tip = `确定要提交单据 ${record.planCode} 吗？`
-    }
-    confirm({
-      title: tip,
-      onOk() {
-        request({
-          url: api,
-          method: 'get',
-          data: {
-            planCode: record.planCode
-          }
-        }).then(res => {
-          message.success('操作成功')
-          that.fetch()
-        }).catch(err => {
-        })
-      },
-    });
+  handleDelete = (record) => {
+    deleteBusiBill(record.billNo).then(res => {
+      if (!res) return
+      message.success('操作成功')
+      this.fetch()
+    })
   }
 
   componentWillUnmount() {
@@ -249,34 +231,10 @@ export default class Warehousing extends React.Component {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">
             <span onClick={this.showDetail.bind(this, record)}>查看</span>
-            {/* {
-              [0, 2].includes(Number(record.issuedState)) &&
-              <Dropdown overlay={
-                <Menu className="Dropdown_Menu_child" >
-                  {
-                    [0, 2].includes(Number(record.issuedState)) &&
-                    <Menu.Item onClick={this.add.bind(this, 'update', record)}>
-                      <span>修改</span>
-                    </Menu.Item>
-                  }
-
-                  {
-                    [0, 2].includes(Number(record.issuedState)) &&
-                    <Menu.Item onClick={this.onOperation.bind(this, 'delete', record)}>
-                      <span>删除</span>
-                    </Menu.Item>
-                  }
-
-                  {
-                    [0].includes(Number(record.planState)) &&
-                    <Menu.Item onClick={this.onOperation.bind(this, 'submit', record)}>
-                      <span>提交</span>
-                    </Menu.Item>
-                  }
-                </Menu>}>
-                <span>更多操作<Icon type="down" /></span>
-              </Dropdown>
-            } */}
+            <Divider type="vertical" />
+            <Popconfirm title="是否确认删除？" okText="是" cancelText="否" onConfirm={this.handleDelete.bind(this, record)}>
+              <button className="btn-link">删除</button>
+            </Popconfirm>
           </span>
         }
       }

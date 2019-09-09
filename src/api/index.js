@@ -93,5 +93,5 @@ export const saveOutBill = params => http.post(`${base}/out/bill/saveOutBill`, p
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)
 /** 删除客户 */
 export const customerDel = (customerCode) => http.delete(`${base}/customer/del/${customerCode}`)
-
-
+/** 删除入库业务单 */
+export const deleteBusiBill = (billNo) => http.delete(`${base}/in/bill/deleteBusiBill/${billNo}`)
