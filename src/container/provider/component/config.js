@@ -17,7 +17,7 @@ export const indexTableColumnsConfig = [
     title: '操作',
     dataIndex: '',
     render: '',
-    width: 150
+    width: 160
   },
 ]
 

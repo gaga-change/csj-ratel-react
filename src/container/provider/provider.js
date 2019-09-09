@@ -7,7 +7,7 @@ import AddressForm from './component/address'
 import FetchTable from '@component/fetchTable/fetchTable'
 import { indexTableColumnsConfig, addressTableColumnsConfig } from './component/config'
 import { Button, Modal, Tag, Spin, Popconfirm, message } from 'antd'
-import { providerList, providerAdd, providerUpdate, providerAddrList, providerAddrSave, providerAddrUpdate, providerAddrDefault, providerAddrDel } from 'api'
+import { providerList, providerAdd, providerUpdate, providerAddrList, providerAddrSave, providerAddrUpdate, providerAddrDefault, providerAddrDel, providerDel } from 'api'
 import './provider.scss'
 
 export default class Provider extends React.Component {
@@ -149,6 +149,15 @@ export default class Provider extends React.Component {
     })
   }
 
+  /** 删除供应商 */
+  handlePrivderDelete = (record) => {
+    providerDel(record.providerCode).then(res => {
+      if (!res) return
+      message.success('操作成功！')
+      this.fetch()
+    })
+  }
+
   /** 修改\添加供应商 表单显示 */
   showAddProvider = (item) => {
     this.setState({ visible_addProvider: true, controlProvider: item })
@@ -214,6 +223,9 @@ export default class Provider extends React.Component {
             <span className="Dropdown_Menu_box">
               <span onClick={this.showAddProvider.bind(this, record)}>修改</span>
               <span onClick={this.showAddress.bind(this, record)}>维护地址</span>
+              <Popconfirm title="确定要删除吗?" onConfirm={this.handlePrivderDelete.bind(this, record)}>
+                <span> 删除</span>
+              </Popconfirm>
             </span>
           )
         }

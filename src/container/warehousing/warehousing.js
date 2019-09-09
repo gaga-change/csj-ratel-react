@@ -15,8 +15,6 @@ import { saveInBill, deleteBusiBill } from 'api'
 
 import './warehousing.scss'
 
-const confirm = Modal.confirm;
-
 export default class Warehousing extends React.Component {
   constructor(props) {
     super(props);
