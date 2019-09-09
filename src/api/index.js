@@ -91,5 +91,7 @@ export const selectSkuByCustomerCode = params => http.post(`${base}/sku/info/sel
 export const saveOutBill = params => http.post(`${base}/out/bill/saveOutBill`, params)
 /** 删除商品 */
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)
+/** 删除客户 */
+export const customerDel = (customerCode) => http.delete(`${base}/customer/del/${customerCode}`)
 
 

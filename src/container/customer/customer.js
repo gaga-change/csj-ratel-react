@@ -8,6 +8,7 @@ import FetchTable from '@component/fetchTable/fetchTable'
 import { indexTableColumnsConfig, addressTableColumnsConfig } from './component/config'
 import { Button, Modal, Tag, Spin, Popconfirm, message } from 'antd'
 import fetchData from '@lib/request'
+import { customerDel } from 'api'
 import './customer.scss'
 
 export default class Customer extends React.Component {
@@ -207,29 +208,29 @@ export default class Customer extends React.Component {
   deleteAndSettings = (type, value) => {
     let { basicCustomerInfo } = this.state;
     this.setState({ spinning: true })
-    let url = '/webApi/customer/addr/del';
     if (type === "set") {
-      url = '/webApi/customer/addr/default';
-    } else if (type === 'customerDelete') {
-      url = '/webApi/customer/del';
-    }
-    fetchData({
-      url,
-      method: 'get',
-      data: {
-        id: value.id
-      }
-    }).then(res => {
-      message.success('操作成功')
-      this.setState({ spinning: false })
-      if (type !== 'customerDelete') {
+      let url = '/webApi/customer/addr/default';
+      fetchData({
+        url,
+        method: 'get',
+        data: {
+          id: value.id
+        }
+      }).then(res => {
+        message.success('操作成功')
+        this.setState({ spinning: false })
         this.showAddress(basicCustomerInfo)
-      } else {
+      }).catch(err => {
+        this.setState({ spinning: false })
+      })
+    } else if (type === 'customerDelete') {
+      customerDel(value.customerCode).then(res => {
+        this.setState({ spinning: false })
+        if (!res) return
+        message.success('操作成功')
         this.fetch()
-      }
-    }).catch(err => {
-      this.setState({ spinning: false })
-    })
+      })
+    }
   }
 
 
