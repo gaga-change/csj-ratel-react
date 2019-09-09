@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Spin, message, Popover } from 'antd';
+import { Button, Modal, Spin, message, Popover, Popconfirm } from 'antd';
 import _ from 'lodash';
 import moment from "moment"
 import { stringify, parse } from 'qs';
@@ -11,10 +11,8 @@ import { indexTableColumns_ChildConfig, map_Config, warehousingDetail_Config, Ba
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
 import BaseTitle from '@component/baseTitle/baseTitle'
-import { saveOutBill } from 'api'
+import { saveOutBill, outBillDel } from 'api'
 import './outgoing.scss'
-
-const confirm = Modal.confirm;
 export default class Outgoing extends React.Component {
   constructor(props) {
     super(props);
@@ -187,33 +185,6 @@ export default class Outgoing extends React.Component {
     this.fetch()
   }
 
-
-  onOperation = (type, record) => {
-    let that = this;
-    let api = '/webApi/out/bill/deleteBusiBill';
-    let tip = `确定要删除单据 ${record.planCode} 吗？`
-    if (type === 'submit') {
-      api = '/webApi/out/bill/commitOutBill';
-      tip = `确定要提交单据 ${record.planCode} 吗？`
-    }
-    confirm({
-      title: tip,
-      onOk() {
-        request({
-          url: api,
-          method: 'get',
-          data: {
-            planCode: record.planCode
-          }
-        }).then(res => {
-          message.success('操作成功')
-          that.fetch()
-        }).catch(err => {
-        })
-      },
-    });
-  }
-
   componentWillUnmount() {
     this.setState = (state, callback) => {
       return
@@ -243,6 +214,14 @@ export default class Outgoing extends React.Component {
     })
   }
 
+  /** 删除出库业务单 */
+  handleDelete = (record) => {
+    outBillDel(record.billNo).then(res => {
+      if (!res) return
+      message.success('操作成功！')
+      this.fetch()
+    })
+  }
 
   render() {
     const { PopoverTable_loading, PopoverTable_dataSource, dataSource, ModalTitle, spinning, record, visible, detailVisible, warehousingDetail_dataSource, BaseCard_dataSource } = this.state;
@@ -251,34 +230,9 @@ export default class Outgoing extends React.Component {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">
             <span onClick={this.showDetail.bind(this, record)}>查看</span>
-            {/* {
-              [0, 2, 7].includes(Number(record.issuedState)) &&
-              <Dropdown overlay={
-                <Menu className="Dropdown_Menu_child" >
-                  {
-                    [0, 2].includes(Number(record.issuedState)) &&
-                    <Menu.Item onClick={this.add.bind(this, 'update', record)}>
-                      <span>修改</span>
-                    </Menu.Item>
-                  }
-
-                  {
-                    [0, 2, 7].includes(Number(record.issuedState)) &&
-                    <Menu.Item onClick={this.onOperation.bind(this, 'delete', record)}>
-                      <span>删除</span>
-                    </Menu.Item>
-                  }
-
-                  {
-                    [0].includes(Number(record.planState)) &&
-                    <Menu.Item onClick={this.onOperation.bind(this, 'submit', record)}>
-                      <span>提交</span>
-                    </Menu.Item>
-                  }
-                </Menu>}>
-                <span>更多操作<Icon type="down" /></span>
-              </Dropdown>
-            } */}
+            <Popconfirm title="确定要删除吗?" onConfirm={this.handleDelete.bind(this, record)}>
+              <span> 删除</span>
+            </Popconfirm>
           </span>
         }
       }

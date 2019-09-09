@@ -95,5 +95,7 @@ export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/
 export const customerDel = (customerCode) => http.delete(`${base}/customer/del/${customerCode}`)
 /** 删除入库业务单 */
 export const deleteBusiBill = (billNo) => http.delete(`${base}/in/bill/deleteBusiBill/${billNo}`)
-/** 删除入库业务单 */
+/** s删除供应商 */
 export const providerDel = (providerCode) => http.delete(`${base}/provider/del/${providerCode}`)
+/** 删除出库业务单 */
+export const outBillDel = (billNo) => http.delete(`${base}/out/bill/deleteBusiBill/${billNo}`)
