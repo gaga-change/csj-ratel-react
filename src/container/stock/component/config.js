@@ -1,36 +1,40 @@
 
-export  const indexTableColumnsConfig=[
+export const indexTableColumnsConfig = [
   {
     title: '商品编码',
-    dataIndex:'skuCode'
+    dataIndex: 'skuCode'
   },
   {
-    title:'商品名称',
-    dataIndex:'skuName'
+    title: '货主商品编码',
+    dataIndex: 'ownerSkuCode'
   },
   {
-    title:'品牌',
-    dataIndex:'brandName'
+    title: '商品名称',
+    dataIndex: 'skuName'
   },
   {
-    title:'规格型号',
-    dataIndex:'skuFormat'
+    title: '品牌',
+    dataIndex: 'brandName'
   },
   {
-    title:'单位',
-    dataIndex:'skuUnitName'
+    title: '规格型号',
+    dataIndex: 'skuFormat'
   },
   {
-    title:'所属仓库',
-    dataIndex:'warehouseName'
+    title: '单位',
+    dataIndex: 'skuUnitName'
   },
   {
-    title:'可用库存',
-    dataIndex:'skuQty',
-    render:(v,record)=>record.skuQty-record.lockQty
+    title: '所属仓库',
+    dataIndex: 'warehouseName'
   },
   {
-    title:'锁定库存',
-    dataIndex:'lockQty'
+    title: '可用库存',
+    dataIndex: 'skuQty',
+    render: (v, record) => record.skuQty - record.lockQty
+  },
+  {
+    title: '锁定库存',
+    dataIndex: 'lockQty'
   }
 ]

@@ -82,13 +82,13 @@ class CommodityForm extends React.Component {
               </Form.Item>
             </Col>
 
-            <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
-              <Form.Item label="商品编码">
-                {getFieldDecorator('skuCode', {
+            <Col span={6} style={{ width: '400px', marginBottom: '12px' }}>
+              <Form.Item label="货主商品编码">
+                {getFieldDecorator('ownerSkuCode', {
                   initialValue: '',
                   rules: [{ required: false, message: '' }],
                 })(
-                  <Input autoComplete='off' placeholder="请输入商品编码" />
+                  <Input autoComplete='off' placeholder="请输入货主商品编码" />
                 )}
               </Form.Item>
             </Col>
