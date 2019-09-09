@@ -99,3 +99,7 @@ export const deleteBusiBill = (billNo) => http.delete(`${base}/in/bill/deleteBus
 export const providerDel = (providerCode) => http.delete(`${base}/provider/del/${providerCode}`)
 /** 删除出库业务单 */
 export const outBillDel = (billNo) => http.delete(`${base}/out/bill/deleteBusiBill/${billNo}`)
+/** 客户地址列表 */
+export const custAddrList = params => http.post(`${base}/base/custAddr/list`, params)
+/** 客户列表 */
+export const custList = params => http.get(`${base}/base/cust/list`, { params })

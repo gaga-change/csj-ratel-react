@@ -2,13 +2,11 @@ import React from 'react'
 import { Form, Input, Button, DatePicker, Select, Modal, message } from 'antd'
 import moment from 'moment'
 import _ from 'lodash'
-import request from '@lib/request'
 import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
-import { custList } from '@publickApi/publickApi'
 import { formTable_config, goodsInStorage_config, map_Config } from './config'
 import SelestForm from './form'
-import { stockList } from 'api'
+import { stockList, custAddrList, custList } from 'api'
 import './addform.scss'
 
 const { TextArea } = Input
@@ -117,6 +115,7 @@ class AddForm extends React.Component {
     this.fetchArriva()
     if (record.arrivalCode) {
       arrival.arrivalName = record.arrivalName
+      arrival.arrivalCode = record.arrivalCode
       if (Array.isArray(record.planDetails)) {
         items = _.cloneDeep(record.planDetails).map(v => {
           for (let i in map_Config) {
@@ -132,22 +131,23 @@ class AddForm extends React.Component {
       selectedRowKeys = items.map(v => v.id)
       this.setState({ arrival, items, selectedRowKeys })
       this.props.form.setFieldsValue({ items })
+      this.custAddrListApi(arrival.arrivalCode, record.arrivalAddress)
     }
   }
 
-
+  /** 获取客户列表 */
   fetchArriva = () => {
     let { arrivalConfig } = this.state
     if (arrivalConfig.length > 0) {
       return
     }
     custList().then(res => {
-      this.setState({ arrivalConfig: res })
-    }).catch(err => {
+      if (!res) return
+      this.setState({ arrivalConfig: res.data || [] })
     })
   }
 
-  /** 客户下拉选择 事件 */
+  /** 客户切换事件 */
   onSelectOptionChange = (value, option) => {
     let { arrival } = this.state
     let options = option.props
@@ -158,41 +158,44 @@ class AddForm extends React.Component {
     this.setState({ items: [], goodsInStorage_dataSource: [], selectedRowKeys: [] })
   }
 
-  arrivalAddressChange = (value, option) => {
+  /** 地址切换事件 */
+  arrivalAddressChange = (value) => {
     let { arrivalAddressConfig } = this.state
-    let index = arrivalAddressConfig.findIndex(v => v.id === value)
-    if (index >= 0) {
+    let temp = arrivalAddressConfig.find(v => v.id === value)
+    if (temp) {
       this.props.form.setFieldsValue({
-        arrivalAddress: arrivalAddressConfig[index]['arrivalAddress'],
-        arrivalLinkName: arrivalAddressConfig[index]['receiverName'],
-        arrivalLinkTel: arrivalAddressConfig[index]['receiverTel']
+        arrivalAddress: temp.arrivalAddress,
+        arrivalLinkName: temp.receiverName,
+        arrivalLinkTel: temp.receiverTel
       })
     }
   }
 
-
-  custAddrListApi = (basicCustomerInfoCode) => {
-    let { arrival } = this.state
-    if (this.props.form.getFieldValue('arrivalCode') === arrival['arrivalCode']) {
-      return
-    }
-    request({
-      url: '/webApi/base/custAddr/list',
-      method: 'post',
-      data: { basicCustomerInfoCode }
-    }).then(res => {
-      let arrivalAddressConfig = res.map(v => {
+  /** 获取客户地址列表 */
+  custAddrListApi = (basicCustomerInfoCode, address) => {
+    let check = null
+    custAddrList({ basicCustomerInfoCode }).then(res => {
+      if (!res) return
+      let arrivalAddressConfig = res.data.map(v => {
         v.arrivalAddress = `${v.customerCity}/${v.customerProvince}/${v.customerArea} ( 详细地址: ${v.customerAddress} )`
+        if (address === v.arrivalAddress) {
+          check = v
+        }
         return v
       })
       this.setState({ arrivalAddressConfig })
-      let index = res.findIndex(v => v.isDefault === 1)
-      if (index >= 0) {
+      let temp = null
+      if (check) {
+        temp = check
+      } else {
+        temp = arrivalAddressConfig.find(v => v.isDefault === 1)
+      }
+      if (temp) {
         this.props.form.setFieldsValue({
-          arrivalAddressId: arrivalAddressConfig[index]['id'],
-          arrivalAddress: arrivalAddressConfig[index]['arrivalAddress'],
-          arrivalLinkName: arrivalAddressConfig[index]['receiverName'],
-          arrivalLinkTel: arrivalAddressConfig[index]['receiverTel']
+          arrivalAddressId: temp.id,
+          arrivalAddress: temp.arrivalAddress,
+          arrivalLinkName: temp.receiverName,
+          arrivalLinkTel: temp.receiverTel
         })
       } else {
         this.props.form.setFieldsValue({
@@ -202,7 +205,6 @@ class AddForm extends React.Component {
           arrivalLinkTel: ''
         })
       }
-    }).catch(err => {
     })
   }
 
@@ -222,14 +224,14 @@ class AddForm extends React.Component {
   }
 
   onFocus = (type) => {
-    this.props.form.validateFields([type], (errors, values) => {
-      if (errors) {
-        message.error('请先选择客户')
-      } else {
-        let { arrival } = this.state
-        this.custAddrListApi(arrival.arrivalCode)
-      }
-    })
+    // this.props.form.validateFields([type], (errors, values) => {
+    //   if (errors) {
+    //     message.error('请先选择客户')
+    //   } else {
+    //     let { arrival } = this.state
+    //     this.custAddrListApi(arrival.arrivalCode)
+    //   }
+    // })
   }
 
   render() {
@@ -376,7 +378,7 @@ class AddForm extends React.Component {
                 validator: checkArrivalAddress
               }],
             })(
-              <Input autoComplete='off' style={{ width: 620 }} placeholder="请输入收货地址" onFocus={this.onFocus.bind(this, 'arrivalAddress')} />
+              <Input autoComplete='off' style={{ width: 620 }} placeholder="请输入收货地址" />
             )}
           </Form.Item>
 
@@ -446,6 +448,14 @@ class AddForm extends React.Component {
 
 
           <Form.Item {...formItemLayout_button} >
+            <Button
+              className="mr20"
+              type="primary"
+              onClick={this.handleSubmit.bind(this, 'save')}
+              loading={addSubmitLoading}
+              htmlType="submit">
+              保存
+                  </Button>
             <Button
               type="primary"
               onClick={this.handleSubmit.bind(this, 'submit')}

@@ -18,6 +18,7 @@ export default class Outgoing extends React.Component {
     super(props);
     this.state = {
       loading: false,
+      initDataLoading: false,
       visible: false,
       detailVisible: false,
       spinning: false,
@@ -52,11 +53,13 @@ export default class Outgoing extends React.Component {
       this.setState({ pagination }, () => {
         this.fetch(value)
       })
-    } else if (type === "submit") {
+    } else if (type === 'submit' || type === 'save') {
       value.planOutTime = moment(value.planOutTime).valueOf();
       value.isCommitFlag = type === 'submit' ? true : false;
+      value.isUpdateFlag = false
       if (ModalTitle === '修改出库业务单') {
         value.planCode = record.planCode
+        value.isUpdateFlag = true
       }
       if (Array.isArray(value.items)) {
         value.items = _.cloneDeep(value.items).map(v => {
@@ -88,6 +91,7 @@ export default class Outgoing extends React.Component {
 
   add = (type, record) => {
     if (type === 'update') {
+      this.setState({ visible: true, initDataLoading: true })
       request({
         url: '/webApi/out/bill/getOutBusiBillDetail',
         method: 'get',
@@ -95,7 +99,7 @@ export default class Outgoing extends React.Component {
           planCode: record.planCode
         }
       }).then(res => {
-        this.setState({ visible: true, record: res, ModalTitle: '修改出库业务单' })
+        this.setState({ initDataLoading: false, record: res, ModalTitle: '修改出库业务单' })
       }).catch(err => {
       })
     } else {
@@ -230,6 +234,7 @@ export default class Outgoing extends React.Component {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">
             <span onClick={this.showDetail.bind(this, record)}>查看</span>
+            <span onClick={this.add.bind(this, 'update', record)}>修改</span>
             <Popconfirm title="确定要删除吗?" onConfirm={this.handleDelete.bind(this, record)}>
               <span> 删除</span>
             </Popconfirm>
@@ -291,10 +296,12 @@ export default class Outgoing extends React.Component {
           visible={visible}
           footer={null}
           onCancel={this.handleCancel}>
-          <AddForm
-            record={record}
-            onRef={this.ref}
-            onSubmit={this.onSubmit} />
+          <Spin spinning={this.state.initDataLoading}>
+            <AddForm
+              record={record}
+              onRef={this.ref}
+              onSubmit={this.onSubmit} />
+          </Spin>
         </Modal>
 
         <Modal
