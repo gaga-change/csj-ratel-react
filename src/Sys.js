@@ -47,7 +47,11 @@ class App extends Component {
 
   /** 菜单点击 */
   handleMenuClick(menu) {
-    this.props.history.replace(`/sys` + menu.path)
+    if (menu.type === 2) { // 外链点击跳转
+      window.open(menu.path)
+    } else {
+      this.props.history.replace(`/sys` + menu.path)
+    }
   }
 
   /** 退出登录 */
@@ -118,10 +122,9 @@ class App extends Component {
                             <span>{menu.text}</span>
                           </Menu.Item>
                         )}
-                        {this.state.DEV && <Menu.Item key={999} onClick={this.handleMenuClick.bind(this, { path: '/system/menu' })}>
-                          {/* <Icon type="user" /> */}
+                        {/* {this.state.DEV && <Menu.Item key={999} onClick={this.handleMenuClick.bind(this, { path: '/system/menu' })}>
                           <span>菜单管理</span>
-                        </Menu.Item>}
+                        </Menu.Item>} */}
                       </SubMenu>
                     ) : (
                         <Menu.Item key={menuFa.id} onClick={this.handleMenuClick.bind(this, menuFa)}>
