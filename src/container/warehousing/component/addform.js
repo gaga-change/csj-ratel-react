@@ -362,6 +362,13 @@ class AddForm extends React.Component {
           <Form.Item {...formItemLayout_button}>
             <Button
               type="primary"
+              onClick={this.handleSubmit.bind(this, 'saveSubmit')}
+              loading={addSubmitLoading}
+              htmlType="submit">
+              保存</Button>
+            <Button
+              className="ml20"
+              type="primary"
               onClick={this.handleSubmit.bind(this, 'addSubmit')}
               loading={addSubmitLoading}
               htmlType="submit">

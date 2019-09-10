@@ -1,9 +1,8 @@
 import React from 'react';
-import { Button, Modal, Spin, message, Popover, Popconfirm, Divider } from 'antd';
+import { Button, Modal, Spin, message, Popover, Popconfirm } from 'antd';
 import moment from "moment"
 import _ from 'lodash';
 import { stringify, parse } from 'qs';
-import request from '@lib/request'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
 import { planInListColumns } from 'config/table'
@@ -11,7 +10,7 @@ import { map_Config, indexTableColumns_ChildConfig, warehousingDetail_Config, Ba
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
 import BaseTitle from '@component/baseTitle/baseTitle'
-import { saveInBill, deleteBusiBill } from 'api'
+import { saveInBill, deleteBusiBill, getInBusiBillDetail, getInBusiBill, getInOrder } from 'api'
 
 import './warehousing.scss'
 
@@ -52,10 +51,12 @@ export default class Warehousing extends React.Component {
       this.setState({ pagination }, () => {
         this.fetch(value)
       })
-    } else if (type === 'addSubmit') {
+    } else if (type === 'addSubmit' || type === 'saveSubmit') {
       value.isCommitFlag = type === 'addSubmit' ? true : false;
+      value.isUpdateFlag = false
       value.planInTime = moment(value.planInTime).valueOf();
       if (ModalTitle === '修改入库业务单') {
+        value.isUpdateFlag = true
         value.planCode = record.planCode
       }
       if (Array.isArray(value.items)) {
@@ -88,15 +89,11 @@ export default class Warehousing extends React.Component {
 
   add = (type, record) => {
     if (type === 'update') {
-      request({
-        url: '/webApi/in/bill/getInBusiBillDetail',
-        method: 'get',
-        data: {
-          planCode: record.planCode
-        }
+      getInBusiBillDetail({
+        planCode: record.planCode
       }).then(res => {
-        this.setState({ visible: true, record: res, ModalTitle: '修改入库业务单' })
-      }).catch(err => {
+        if (!res) return
+        this.setState({ visible: true, record: res.data, ModalTitle: '修改入库业务单' })
       })
     } else {
       this.setState({ visible: true, record: {}, ModalTitle: '创建入库业务单' })
@@ -107,7 +104,7 @@ export default class Warehousing extends React.Component {
     this.setState({ loading: true })
     let { search, pathname } = this.props.history.location
     let { current, pageSize, ...rest } = parse(search.slice(1))
-    let { dataSource, pagination } = this.state;
+    let { pagination } = this.state;
     if (!Object.keys(pagination).length) {
       pagination = {
         current: Number(current) || 1,
@@ -128,23 +125,15 @@ export default class Warehousing extends React.Component {
     data.pageNum = data.current;
     delete data.current;
     delete data.createTime;
-    request({
-      url: '/webApi/in/bill/getInBusiBill',
-      method: 'post',
-      data: data
-    }).then(res => {
-      if (res.list && Array.isArray(res.list)) {
-        dataSource = res.list
-        pagination.total = res.total
-      }
+    getInBusiBill(data).then(res => {
       this.setState({
-        dataSource,
-        pagination,
         loading: false,
       })
-    }).catch(err => {
+      if (!res) return
+      pagination.total = res.data.total
       this.setState({
-        loading: false,
+        dataSource: res.data.list || [],
+        pagination
       })
     })
   }
@@ -152,13 +141,10 @@ export default class Warehousing extends React.Component {
   showDetail = (record) => {
     let { warehousingDetail_dataSource, BaseCard_dataSource } = this.state;
     this.setState({ detailVisible: true, spinning: true })
-    request({
-      url: '/webApi/in/bill/getInBusiBillDetail',
-      method: 'get',
-      data: {
-        planCode: record.planCode
-      }
-    }).then(res => {
+    getInBusiBillDetail({ planCode: record.planCode }).then(res => {
+      this.setState({ spinning: false })
+      if (!res) return
+      res = res.data
       BaseCard_dataSource = res;
       if (Array.isArray(res.planDetails)) {
         warehousingDetail_dataSource = res.planDetails.map(v => {
@@ -166,9 +152,7 @@ export default class Warehousing extends React.Component {
           return v;
         });
       }
-      this.setState({ BaseCard_dataSource, warehousingDetail_dataSource, spinning: false })
-    }).catch(err => {
-      this.setState({ spinning: false })
+      this.setState({ BaseCard_dataSource, warehousingDetail_dataSource })
     })
   }
 
@@ -204,19 +188,12 @@ export default class Warehousing extends React.Component {
       return
     }
     this.setState({ PopoverTable_loading: true })
-    request({
-      url: '/webApi/in/bill/getInOrder',
-      method: 'post',
-      data: row
-    }).then(res => {
+    getInOrder(row).then(res => {
+      this.setState({ PopoverTable_loading: false })
+      if (!res) return
       this.setState({
         activePopover_row: row,
-        PopoverTable_dataSource: res,
-        PopoverTable_loading: false
-      })
-    }).catch(err => {
-      this.setState({
-        PopoverTable_loading: false
+        PopoverTable_dataSource: res.data,
       })
     })
   }
@@ -229,9 +206,9 @@ export default class Warehousing extends React.Component {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">
             <span data-rule-id="warehousing-show" onClick={this.showDetail.bind(this, record)}>查看</span>
-            <Divider type="vertical" />
+            <span data-rule-id="warehousing-modify" onClick={this.add.bind(this, 'update', record)}>修改</span>
             <Popconfirm title="是否确认删除？" okText="是" cancelText="否" onConfirm={this.handleDelete.bind(this, record)}>
-              <button data-rule-id="warehousing-del" className="btn-link">删除</button>
+              <span data-rule-id="warehousing-del">删除</span>
             </Popconfirm>
           </span>
         }
