@@ -1,8 +1,8 @@
 import React from 'react';
-import { Checkbox } from 'antd';
-import request from '@lib/request'
-
-const CheckboxGroup = Checkbox.Group;
+import { Tree } from 'antd';
+import { sortMenu } from '@lib'
+import { selectAllMenu } from 'api'
+const { TreeNode } = Tree;
 
 /**
  * props:
@@ -14,7 +14,11 @@ const CheckboxGroup = Checkbox.Group;
 class DataForm extends React.Component {
 
   state = {
-    jurisdictionList: [],
+    expandedKeys: [],
+    autoExpandParent: true,
+    checkedKeys: [],
+    selectedKeys: [],
+    treeData: [],
   }
 
   componentDidMount() {
@@ -34,109 +38,66 @@ class DataForm extends React.Component {
    * 配置默认值
    */
   setDefault = (menus) => {
-    let { jurisdictionList } = this.state
-    let ids = menus.join(',') + ','
-    jurisdictionList.forEach(item => {
-      item.checkedList = []
-      item.indeterminate = false
-      item.checkAll = false
-      if (!ids) return
-      item.options.forEach(son => {
-        if (~ids.indexOf(son.value)) {
-          item.checkedList.push(son.value)
-        }
-      })
-      if (item.checkedList.length) {
-        if (item.checkedList.length === item.options.length) {
-          item.checkAll = true
-        } else {
-          item.indeterminate = true
-        }
-      } else if (~ids.indexOf(item.id)) {
-        item.checkAll = true
-      }
-    })
-    this.setState({ jurisdictionList })
+    this.setState({ checkedKeys: menus.map(v => v + '') })
   }
 
   /**
   * 初始化获取权限列表
   */
   initDicts = () => {
-    request({
-      url: '/webApi/base/menu/selectAllMenu',
-      method: 'get'
-    }).then(res => {
-      let dicts = res.children
-      dicts = dicts.map((item, index) => {
-        let obj = {
-          options: item.children.map(son => {
-            return {
-              label: son.text,
-              value: son.id
-            }
-          }),
-          text: item.text,
-          id: item.id,
-          checkedList: [],
-          indeterminate: false,
-          checkAll: false,
-        }
-        return obj
+    /** 获取权限列表 */
+    selectAllMenu().then(res => {
+      if (!res) return
+      sortMenu(res, item => {
+        item.title = item.text
+        item.key = item.id
       })
-      this.setState({ jurisdictionList: dicts })
-      this.setDefault(this.props.checkedList)
-    }).catch(err => {
-      console.error(err)
+      this.setState({ treeData: res.children })
     })
   }
 
   handleSubmit = () => {
-    return this.props.onSubmited(false, JSON.parse(JSON.stringify(this.state.jurisdictionList)))
+    return this.props.onSubmited(false, JSON.parse(JSON.stringify(this.state.checkedKeys)))
   }
 
-  onChange = (checkedList, index) => {
-    this.setState(state => {
-      let list = state.jurisdictionList
-      let item = list[index]
-      item.checkedList = checkedList
-      item.indeterminate = !!checkedList.length && (checkedList.length < item.options.length)
-      item.checkAll = checkedList.length === item.options.length
-      return {
-        jurisdictionList: list
+  onExpand = expandedKeys => {
+    this.setState({
+      expandedKeys,
+      autoExpandParent: false,
+    });
+  };
+
+  onCheck = checkedKeys => {
+    this.setState({ checkedKeys });
+  };
+
+  renderTreeNodes = data =>
+    data.map(item => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
       }
-    })
-  }
-
-  onCheckAllChange = (e, index) => {
-    let { jurisdictionList } = this.state
-    let item = jurisdictionList[index]
-    item.checkedList = e.target.checked ? item.options.map(v => v.value) : []
-    item.indeterminate = false
-    item.checkAll = e.target.checked
-    this.setState({ jurisdictionList })
-  }
+      return <TreeNode key={item.key} {...item} />;
+    });
 
   render() {
-    let { jurisdictionList } = this.state
+    let { treeData } = this.state
     return (
       <div>
-        {
-          jurisdictionList.map((item, index) => {
-            return (
-              <div className="role-jurisdiction-item" key={index}>
-                <div className="item-title">
-                  <Checkbox
-                    indeterminate={item.indeterminate}
-                    onChange={(e) => this.onCheckAllChange(e, index)}
-                    checked={item.checkAll}
-                  >{item.text}</Checkbox>
-                </div>
-                <br />
-                {!!item.options.length && <CheckboxGroup options={item.options} value={item.checkedList} onChange={(checkedList) => this.onChange(checkedList, index)} />}
-              </div>
-            )
-          })}
+        <Tree
+          checkable
+          onExpand={this.onExpand}
+          expandedKeys={this.state.expandedKeys}
+          autoExpandParent={this.state.autoExpandParent}
+          onCheck={this.onCheck}
+          checkedKeys={this.state.checkedKeys}
+          selectedKeys={this.state.selectedKeys}
+        >
+          {this.renderTreeNodes(treeData)}
+        </Tree>
       </div>
     )
   }

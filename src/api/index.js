@@ -41,6 +41,8 @@ export const customerAddrDefault = params => http.get(`${base}/customer/addr/def
 export const selectAllMenu = params => http.get(`${base}/base/menu/selectAllMenu`, { params })
 /** 菜单 删除 */
 export const menuDelete = params => http.get(`${base}/base/menu/delete`, { params })
+/** 角色 - 菜单 */
+export const roleSelectMenus = params => http.get(`${base}/base/role/selectMenus`, { params })
 
 /** 添加商品 */
 export const skuInfoAdd = params => http.post(`${base}/sku/info/add`, params)
@@ -72,6 +74,8 @@ export const customerSave = params => http.post(`${base}/customer/save`, params)
 export const customerAddrSave = params => http.post(`${base}/customer/addr/save`, params)
 /** 客户地址 修改 */
 export const customerAddrUpdate = params => http.post(`${base}/customer/addr/update`, params)
+/** 角色添加权限 */
+export const roleAddMenu = params => http.post(`${base}/base/role/addMenu`, params)
 
 /** 删除商品 */
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)

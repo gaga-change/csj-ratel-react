@@ -1,8 +1,8 @@
 import React from 'react';
-import { Modal,message } from 'antd';
+import { Modal, message } from 'antd';
 import RoleJurisdictionForm from './roleJurisdictionForm.js'
 import './roleJurisdiction.scss'
-import request from '@lib/request'
+import { roleAddMenu, roleSelectMenus } from 'api'
 
 /**
  * props:
@@ -32,16 +32,9 @@ class RoleJurisdictionModal extends React.Component {
   init = (obj) => {
     this.obj = obj
 
-    request({
-      url: '/webApi/base/role/selectMenus',
-      method: 'get',
-      data: {
-        roleId: this.obj.id,
-      }
-    }).then(res => {
-      this.setState({menus: res})
-    }).catch(err => {
-      console.error(err)
+    roleSelectMenus({ roleId: this.obj.id }).then(res => {
+      if (!res) return
+      this.setState({ menus: res })
     })
 
     let { visible } = this.state
@@ -63,10 +56,7 @@ class RoleJurisdictionModal extends React.Component {
    * 窗口关闭
    */
   close = (type, obj) => {
-    this.setState({menus: []})
-    this.setState({
-      visible: false
-    })
+    this.setState({ menus: [], visible: false })
     this.props.onClose && this.props.onClose(type, obj)
   }
 
@@ -79,31 +69,16 @@ class RoleJurisdictionModal extends React.Component {
     this.setState({
       confirmLoading: true,
     })
-    let menuList = []
-    value.forEach(item => {
-      if (item.checkAll || item.indeterminate) {
-        menuList.push(item.id)
-      }
-      if (item.checkedList.length) {
-        menuList.push( ...item.checkedList)
-      }
-    })
-    request({
-      url: '/webApi/base/role/addMenu',
-      method: 'post',
-      data: {
-        roleId: this.obj.id,
-        menuList
-      }
+    roleAddMenu({
+      roleId: this.obj.id,
+      menuList: value
     }).then(res => {
-      message.success('操作成功')
-      this.close()
-    }).catch(err => {
-      console.error(err)
-    }).then(() => {
       this.setState({
         confirmLoading: false,
       })
+      if (!res) return
+      message.success('操作成功')
+      this.close()
     })
   }
 
