@@ -31,10 +31,12 @@ class App extends Component {
         if (item.path && item.type === 0) {
           temp['/sys' + item.path] = { ...item, children: undefined }
         }
-        if (item.type === 1) {
-          styleNameArr.push(`[data-rule-id='${item.path}']`)
+      }, v => {
+        if (v.type === 1) {
+          styleNameArr.push(`[data-rule-id='${v.path}']`)
         }
-      }, v => v.type === 0 || v.type === 2)
+        return v.type === 0 || v.type === 2
+      })
       let ele = document.createElement('style')
       ele.innerHTML = styleNameArr.join(',') + '{ display: inline-block !important;}'
       document.body.appendChild(ele)

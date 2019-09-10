@@ -1,3 +1,5 @@
+import { ruleTypeEnum } from 'lib/enum'
+
 export const roleConfig_config = [
   {
     title: '角色ID',
@@ -20,16 +22,20 @@ export const roleConfig_config = [
 ]
 export const menuConfig_config = [
   {
-    title: '菜单名称',
+    title: '名称',
     dataIndex: 'text'
-
+  },
+  {
+    title: '类型',
+    dataIndex: 'type',
+    render: val => ruleTypeEnum.find(v => v.value === val).name
   },
   {
     title: '优先级',
     dataIndex: 'orderNum'
   },
   {
-    title: '菜单路径',
+    title: '路径',
     dataIndex: 'path'
   },
   {

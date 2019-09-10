@@ -85,3 +85,19 @@ export const saleTypeEnum = [
     value: 3
   }
 ]
+
+export const ruleTypeEnum = [
+  {
+    name: '菜单',
+    value: 0,
+  },
+  {
+    name: '按钮',
+    value: 1,
+  },
+  {
+    name: '外部连接',
+    value: 2,
+  },
+
+]
