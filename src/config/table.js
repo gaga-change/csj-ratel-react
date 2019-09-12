@@ -139,24 +139,24 @@ export const planInListColumns = [
   },
   {
     title: '计划入库时间',
-    dataIndex: 'planTime',
+    dataIndex: 'planInWarehouseTime',
     type: 'time',
   },
   {
     title: '计划入库仓库',
-    dataIndex: 'planWarehouseName',
+    dataIndex: 'warehouseName',
   },
   {
     title: '计划入库总量',
-    dataIndex: 'inPlanQty',
+    dataIndex: 'planInQty',
   },
   {
     title: '已入库数量',
-    dataIndex: 'inQty',
+    dataIndex: 'realInQty',
   },
   {
     title: '单据状态',
-    dataIndex: 'planState',
+    dataIndex: 'billStatus',
     useLocalEnum: 'warehousing_planStateEnum'
   },
   {
