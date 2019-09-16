@@ -105,7 +105,7 @@ export const warehousingDetail_Config = [
   },
   {
     title: '单位',
-    dataIndex: 'skuUnitCode',
+    dataIndex: 'skuUnitName',
   },
   {
     title: '单价(成本)',
@@ -113,7 +113,7 @@ export const warehousingDetail_Config = [
   },
   {
     title: '计划入库量',
-    dataIndex: 'planInQty',
+    dataIndex: 'skuInQty',
   },
   {
     title: '已入库量',
@@ -126,7 +126,7 @@ export const warehousingDetail_Config = [
 export const BaseCard_Config = [
   {
     title: '业务单编号',
-    dataIndex: 'planCode',
+    dataIndex: 'busiBillNo',
   },
   {
     title: '计划入库日期',

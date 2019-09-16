@@ -148,8 +148,8 @@ export default class Outgoing extends React.Component {
       if (!res) return
       res = res.data
       BaseCard_dataSource = res;
-      if (Array.isArray(res.planDetails)) {
-        warehousingDetail_dataSource = res.planDetails.map(v => {
+      if (Array.isArray(res.busiBillDetails)) {
+        warehousingDetail_dataSource = res.busiBillDetails.map(v => {
           v.billNo = res.billNo;
           return v;
         });;
@@ -243,7 +243,7 @@ export default class Outgoing extends React.Component {
     const childTable = (record) => {
       return <FetchTable
         columns={indexTableColumns_ChildConfig}
-        dataSource={record.planDetails}
+        dataSource={record.busiBillDetails}
         pagination={false} />
     }
 

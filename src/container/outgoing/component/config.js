@@ -147,7 +147,7 @@ export const warehousingDetail_Config = [
   },
   {
     title: '单价(销售价)',
-    dataIndex: 'outPrice',
+    dataIndex: 'outStorePrice',
   },
   {
     title: '计划出库量',
@@ -156,7 +156,6 @@ export const warehousingDetail_Config = [
   {
     title: '已出库量',
     dataIndex: 'realOutQty',
-    render: ''
   }
 ]
 
@@ -164,7 +163,7 @@ export const warehousingDetail_Config = [
 export const BaseCard_Config = [
   {
     title: '业务单编号',
-    dataIndex: 'planCode',
+    dataIndex: 'busiBillNo',
   },
   {
     title: '计划出库日期',
@@ -181,11 +180,11 @@ export const BaseCard_Config = [
   },
   {
     title: '创建人',
-    dataIndex: 'createrName',
+    dataIndex: 'busiBillCreater',
   },
   {
     title: '创建日期',
-    dataIndex: 'gmtCreate',
+    dataIndex: 'busiBillCreateTime',
     type: 'time'
   },
   {

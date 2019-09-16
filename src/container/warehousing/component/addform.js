@@ -36,10 +36,10 @@ class AddForm extends React.Component {
     let { record } = this.props
     let { warehouse, items, selectedRowKeys } = this.state
     this.props.onRef(this)
-    if (record.planWarehouseCode) {
+    if (record.warehouseCode) {
       warehouse.warehouseName = record.warehouseName
-      if (Array.isArray(record.planDetails)) {
-        items = _.cloneDeep(record.planDetails).map(v => {
+      if (Array.isArray(record.items)) {
+        items = _.cloneDeep(record.items).map(v => {
           for (let i in map_Config) {
             if (map_Config[i] !== 'index') {
               v[map_Config[i]] = v[i]
@@ -285,7 +285,7 @@ class AddForm extends React.Component {
           </Form.Item>
           <Form.Item label="计划入库仓库" {...formItemLayout_left}>
             {getFieldDecorator('warehouseCode', {
-              initialValue: record.planWarehouseCode,
+              initialValue: record.warehouseCode,
               rules: [{ required: true, message: '请选择计划入库仓库' }],
             })(
               <Select style={{ width: 180 }} placeholder="请选择计划入库仓库" onChange={this.onSelectOptionChange} loading={warehouseListLoading}>
