@@ -13,7 +13,7 @@ export const indexTableColumns_ChildConfig = [
   },
   {
     title: '计划入库数量',
-    dataIndex: 'planInQty',
+    dataIndex: 'skuInQty',
   },
   {
     title: '已入库总量',

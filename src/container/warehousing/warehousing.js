@@ -146,8 +146,8 @@ export default class Warehousing extends React.Component {
       if (!res) return
       res = res.data
       BaseCard_dataSource = res;
-      if (Array.isArray(res.planDetails)) {
-        warehousingDetail_dataSource = res.planDetails.map(v => {
+      if (Array.isArray(res.items)) {
+        warehousingDetail_dataSource = res.items.map(v => {
           v.planCode = res.planCode;
           return v;
         });
@@ -244,7 +244,7 @@ export default class Warehousing extends React.Component {
       return <FetchTable
         pagination={false}
         columns={indexTableColumns_ChildConfig}
-        dataSource={record.planDetails} />
+        dataSource={record.items} />
     }
 
 
