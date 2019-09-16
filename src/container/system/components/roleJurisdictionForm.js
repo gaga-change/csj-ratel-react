@@ -48,6 +48,7 @@ class DataForm extends React.Component {
     /** 获取权限列表 */
     selectAllMenu().then(res => {
       if (!res) return
+      res = res.data
       sortMenu(res, item => {
         item.title = item.text
         item.key = item.id
@@ -71,17 +72,18 @@ class DataForm extends React.Component {
     this.setState({ checkedKeys });
   };
 
-  renderTreeNodes = data =>
-    data.map(item => {
+  renderTreeNodes = (data = []) => {
+    return data.map(item => {
       if (item.children) {
         return (
           <TreeNode title={item.title} key={item.key} dataRef={item}>
-            {this.renderTreeNodes(item.children)}
+            {this.renderTreeNodes(item.children || [])}
           </TreeNode>
         );
       }
       return <TreeNode key={item.key} {...item} />;
-    });
+    })
+  }
 
   render() {
     let { treeData } = this.state

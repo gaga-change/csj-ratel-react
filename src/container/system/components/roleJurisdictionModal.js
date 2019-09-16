@@ -34,7 +34,7 @@ class RoleJurisdictionModal extends React.Component {
 
     roleSelectMenus({ roleId: this.obj.id }).then(res => {
       if (!res) return
-      this.setState({ menus: res })
+      this.setState({ menus: res.data })
     })
 
     let { visible } = this.state
