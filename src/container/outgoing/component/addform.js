@@ -27,6 +27,7 @@ class AddForm extends React.Component {
       addSubmitLoading: false, // 提交加载状态
       warehouseListLoading: false,
       warehouseList: [],
+      warehouse: {},
     }
   }
 
@@ -51,7 +52,12 @@ class AddForm extends React.Component {
       }
 
       selectedRowKeys = items.map(v => v.id)
-      this.setState({ arrival, items, selectedRowKeys })
+      this.setState({
+        arrival, items, selectedRowKeys, warehouse: {
+          warehouseCode: record.warehouseCode,
+          warehouseName: record.warehouseName
+        }
+      })
       this.props.form.setFieldsValue({ items })
       this.custAddrListApi(arrival.arrivalCode, record.arrivalAddress)
     }
@@ -88,12 +94,12 @@ class AddForm extends React.Component {
   }
 
   handleSubmit = (type, e) => {
-    let { arrival } = this.state
+    let { arrival, warehouse } = this.state
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err && !values.items.some(v => isNaN(v.planOutQty))) {
         this.setState({ addSubmitLoading: true })
-        this.props.onSubmit(type, { ...values, ...arrival }).then(res => this.setState({ addSubmitLoading: false }))
+        this.props.onSubmit(type, { ...values, ...arrival, ...warehouse }).then(res => this.setState({ addSubmitLoading: false }))
       }
     })
   }
@@ -136,9 +142,13 @@ class AddForm extends React.Component {
     if (!arrivalCode) {
       return message.warning('请先选择客户！')
     }
+    let { warehouseCode } = this.props.form.getFieldsValue(['warehouseCode'])
+    if (!warehouseCode) {
+      return message.warning('请先选择计划出库仓库！')
+    }
     this.setState({ visible: true })
     if (!goodsInStorage_dataSource.length) {
-      this.getCommodity({ customerCode: arrivalCode })
+      this.getCommodity({ customerCode: arrivalCode, warehouseCode })
     }
   }
 
@@ -245,6 +255,16 @@ class AddForm extends React.Component {
     //     this.custAddrListApi(arrival.arrivalCode)
     //   }
     // })
+  }
+
+  /** 仓库切换事件 */
+  handleWarehouseCodeChange = (value, option) => {
+    let { warehouse } = this.state
+    let options = option.props
+    warehouse.warehouseCode = options.value
+    warehouse.warehouseName = options.children
+    this.setState({ warehouse })
+    this.setState({ items: [], goodsInStorage_dataSource: [], selectedRowKeys: [] })
   }
 
   render() {
@@ -385,7 +405,7 @@ class AddForm extends React.Component {
               initialValue: record.planWarehouseCode,
               rules: [{ required: true, message: '请选择计划出库仓库' }],
             })(
-              <Select style={{ width: 180 }} placeholder="请选择计划出库仓库" onChange={this.onSelectOptionChange} loading={warehouseListLoading}>
+              <Select style={{ width: 180 }} placeholder="请选择计划出库仓库" onChange={this.handleWarehouseCodeChange} loading={warehouseListLoading}>
                 {warehouseList.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
               </Select>
             )}
