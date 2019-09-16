@@ -401,7 +401,7 @@ class AddForm extends React.Component {
 
           <Form.Item label="计划出库仓库" {...formItemLayout_left} style={{ height: 60, width: 400 }}>
             {getFieldDecorator('warehouseCode', {
-              initialValue: record.planWarehouseCode,
+              initialValue: record.warehouseCode,
               rules: [{ required: true, message: '请选择计划出库仓库' }],
             })(
               <Select style={{ width: 180 }} placeholder="请选择计划出库仓库" onChange={this.handleWarehouseCodeChange} loading={warehouseListLoading}>

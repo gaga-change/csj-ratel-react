@@ -40,8 +40,8 @@ export default class Outgoing extends React.Component {
     let { ModalTitle, record, pagination } = this.state;
     if (type === "select") {
       if (Array.isArray(value.createTime)) {
-        value.createBeginDate = moment(value.createTime[0]).valueOf()
-        value.createEndDate = moment(value.createTime[1]).valueOf()
+        value.createTimeFrom = moment(value.createTime[0]).valueOf()
+        value.createTimeTo = moment(value.createTime[1]).valueOf()
       }
       if (!Object.keys(value).length) {
         pagination = {
