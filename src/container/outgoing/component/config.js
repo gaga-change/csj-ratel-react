@@ -12,11 +12,11 @@ export const indexTableColumns_ChildConfig = [
   },
   {
     title: '单价',
-    dataIndex: 'outPrice',
+    dataIndex: 'outStorePrice',
   },
   {
     title: '计划出库数量',
-    dataIndex: 'planOutQty',
+    dataIndex: 'skuOutQty',
   },
   {
     title: '已出库总量',

@@ -3,7 +3,6 @@ import { Button, Modal, Spin, message, Popover, Popconfirm } from 'antd';
 import _ from 'lodash';
 import moment from "moment"
 import { stringify, parse } from 'qs';
-import request from '@lib/request'
 import FetchTable from '../../component/fetchTable/fetchTable'
 import SelestForm from './component/form'
 import { planOutListColumns } from 'config/table'
@@ -11,7 +10,7 @@ import { indexTableColumns_ChildConfig, map_Config, warehousingDetail_Config, Ba
 import AddForm from './component/addform'
 import BaseCard from '@component/baseCard/baseCard'
 import BaseTitle from '@component/baseTitle/baseTitle'
-import { saveOutBill, outBillDel } from 'api'
+import { saveOutBill, outBillDel, getOutBusiBillDetail, getOutBusiBill, getOutOrder } from 'api'
 import './outgoing.scss'
 export default class Outgoing extends React.Component {
   constructor(props) {
@@ -58,7 +57,7 @@ export default class Outgoing extends React.Component {
       value.isCommitFlag = type === 'submit' ? true : false;
       value.isUpdateFlag = false
       if (ModalTitle === '修改出库业务单') {
-        value.planCode = record.planCode
+        value.billNo = record.billNo
         value.isUpdateFlag = true
       }
       if (Array.isArray(value.items)) {
@@ -92,15 +91,9 @@ export default class Outgoing extends React.Component {
   add = (type, record) => {
     if (type === 'update') {
       this.setState({ visible: true, initDataLoading: true })
-      request({
-        url: '/webApi/out/bill/getOutBusiBillDetail',
-        method: 'get',
-        data: {
-          planCode: record.planCode
-        }
-      }).then(res => {
-        this.setState({ initDataLoading: false, record: res, ModalTitle: '修改出库业务单' })
-      }).catch(err => {
+      getOutBusiBillDetail({ billNo: record.billNo }).then(res => {
+        if (!res) return
+        this.setState({ initDataLoading: false, record: res.data, ModalTitle: '修改出库业务单' })
       })
     } else {
       this.setState({ visible: true, record: {}, ModalTitle: '创建出库业务单' })
@@ -133,23 +126,16 @@ export default class Outgoing extends React.Component {
     data.pageNum = data.current;
     delete data.current;
 
-    request({
-      url: '/webApi/out/bill/getOutBusiBill',
-      method: 'post',
-      data: data
-    }).then(res => {
-      if (res.list && Array.isArray(res.list)) {
-        dataSource = res.list
-        pagination.total = res.total
-      }
+    getOutBusiBill(data).then(res => {
+      this.setState({
+        loading: false,
+      })
+      if (!res) return
+      dataSource = res.data.list || []
+      pagination.total = res.data.total || 0
       this.setState({
         dataSource,
         pagination,
-        loading: false,
-      })
-    }).catch(err => {
-      this.setState({
-        loading: false,
       })
     })
   }
@@ -157,23 +143,18 @@ export default class Outgoing extends React.Component {
   showDetail = (record) => {
     let { warehousingDetail_dataSource, BaseCard_dataSource } = this.state;
     this.setState({ detailVisible: true, spinning: true })
-    request({
-      url: '/webApi/out/bill/getOutBusiBillDetail',
-      method: 'get',
-      data: {
-        planCode: record.planCode
-      }
-    }).then(res => {
+    getOutBusiBillDetail({ billNo: record.billNo }).then(res => {
+      this.setState({ spinning: false })
+      if (!res) return
+      res = res.data
       BaseCard_dataSource = res;
       if (Array.isArray(res.planDetails)) {
         warehousingDetail_dataSource = res.planDetails.map(v => {
-          v.planCode = res.planCode;
+          v.billNo = res.billNo;
           return v;
         });;
       }
-      this.setState({ BaseCard_dataSource, warehousingDetail_dataSource, spinning: false })
-    }).catch(err => {
-      this.setState({ spinning: false })
+      this.setState({ BaseCard_dataSource, warehousingDetail_dataSource })
     })
   }
 
@@ -201,19 +182,14 @@ export default class Outgoing extends React.Component {
       return
     }
     this.setState({ PopoverTable_loading: true })
-    request({
-      url: '/webApi/out/bill/getOutOrder',
-      method: 'post',
-      data: row
-    }).then(res => {
+    getOutOrder({ data: row }).then(res => {
       this.setState({
-        activePopover_row: row,
-        PopoverTable_dataSource: res,
         PopoverTable_loading: false
       })
-    }).catch(err => {
+      if (!res) return
       this.setState({
-        PopoverTable_loading: false
+        activePopover_row: row,
+        PopoverTable_dataSource: res.data,
       })
     })
   }

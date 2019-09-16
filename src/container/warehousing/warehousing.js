@@ -57,7 +57,7 @@ export default class Warehousing extends React.Component {
       value.planInTime = moment(value.planInTime).valueOf();
       if (ModalTitle === '修改入库业务单') {
         value.isUpdateFlag = true
-        value.planCode = record.planCode
+        value.billNo = record.billNo
       }
       if (Array.isArray(value.items)) {
         value.items = _.cloneDeep(value.items).map(v => {
@@ -90,7 +90,7 @@ export default class Warehousing extends React.Component {
   add = (type, record) => {
     if (type === 'update') {
       getInBusiBillDetail({
-        planCode: record.planCode
+        billNo: record.billNo
       }).then(res => {
         if (!res) return
         this.setState({ visible: true, record: res.data, ModalTitle: '修改入库业务单' })
@@ -141,14 +141,14 @@ export default class Warehousing extends React.Component {
   showDetail = (record) => {
     let { warehousingDetail_dataSource, BaseCard_dataSource } = this.state;
     this.setState({ detailVisible: true, spinning: true })
-    getInBusiBillDetail({ planCode: record.planCode }).then(res => {
+    getInBusiBillDetail({ billNo: record.billNo }).then(res => {
       this.setState({ spinning: false })
       if (!res) return
       res = res.data
       BaseCard_dataSource = res;
       if (Array.isArray(res.items)) {
         warehousingDetail_dataSource = res.items.map(v => {
-          v.planCode = res.planCode;
+          v.billNo = res.billNo;
           return v;
         });
       }

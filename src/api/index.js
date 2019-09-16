@@ -45,6 +45,8 @@ export const menuDelete = params => http.get(`${base}/base/menu/delete`, { param
 export const roleSelectMenus = params => http.get(`${base}/base/role/selectMenus`, { params })
 /** 入库详情 */
 export const getInBusiBillDetail = params => http.get(`${base}/in/bill/getInBusiBillDetail`, { params })
+/** 出库详情 */
+export const getOutBusiBillDetail = params => http.get(`${base}/out/bill/getOutBusiBillDetail`, { params })
 
 /** 添加商品 */
 export const skuInfoAdd = params => http.post(`${base}/sku/info/add`, params)
@@ -82,6 +84,10 @@ export const roleAddMenu = params => http.post(`${base}/base/role/addMenu`, para
 export const getInBusiBill = params => http.post(`${base}/in/bill/getInBusiBill`, params)
 /** 入库订单 */
 export const getInOrder = params => http.post(`${base}/in/bill/getInOrder`, params)
+/** 出库订单 */
+export const getOutBusiBill = params => http.post(`${base}/out/bill/getOutBusiBill`, params)
+/** 入库订单信息 */
+export const getOutOrder = params => http.post(`${base}/out/bill/getOutOrder`, params)
 
 /** 删除商品 */
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)
