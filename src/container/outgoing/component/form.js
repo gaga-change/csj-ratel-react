@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Input, Button, Row, Col, Select, DatePicker } from 'antd'
-import { outgoing_planStateEnum } from '@lib/enum'
+import { billStatusEnum } from '@lib/enum'
 import { warehouseList } from 'api'
 import './form.scss'
 
@@ -96,12 +96,12 @@ class SelestForm extends React.Component {
               selectWordsArr.includes('状态') &&
               <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
                 <Form.Item label="状态">
-                  {getFieldDecorator('planState', {
+                  {getFieldDecorator('billStatus', {
                     rules: [{ required: false, message: '' }],
                   })(
                     <Select style={{ width: 180 }} placeholder="请选择状态">
                       {
-                        outgoing_planStateEnum.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)
+                        billStatusEnum.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)
                       }
                     </Select>
                   )}

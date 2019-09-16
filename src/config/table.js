@@ -103,7 +103,7 @@ export const planOutListColumns = [
   },
   {
     title: '计划出库时间',
-    dataIndex: 'planOutTime',
+    dataIndex: 'arrivalPreDate',
     type: 'time',
   },
   {
@@ -112,16 +112,16 @@ export const planOutListColumns = [
   },
   {
     title: '计划出库总量',
-    dataIndex: 'outPlanQty',
+    dataIndex: 'planOutQty',
   },
   {
     title: '已出库数量',
-    dataIndex: 'outQty'
+    dataIndex: 'realOutQty'
   },
   {
     title: '单据状态',
-    dataIndex: 'planState',
-    useLocalEnum: 'outgoing_planStateEnum'
+    dataIndex: 'billStatus',
+    useLocalEnum: 'billStatusEnum'
   },
   {
     title: '操作',
@@ -157,7 +157,7 @@ export const planInListColumns = [
   {
     title: '单据状态',
     dataIndex: 'billStatus',
-    useLocalEnum: 'warehousing_planStateEnum'
+    useLocalEnum: 'billStatusEnum'
   },
   {
     title: '操作',

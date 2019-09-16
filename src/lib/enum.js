@@ -34,6 +34,26 @@ export const warehousing_planStateEnum = [
   },
 ]
 
+//单据状态（新）
+export const billStatusEnum = [
+  {
+    value: '草稿',
+    key: 0
+  },
+  {
+    value: '已审核',
+    key: 1
+  },
+  {
+    value: '驳回',
+    key: 2
+  },
+  {
+    value: '已关闭',
+    key: 3
+  }
+]
+
 //单据状态(出库,)
 export const outgoing_planStateEnum = [
   {
