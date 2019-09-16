@@ -372,8 +372,8 @@ class AddForm extends React.Component {
           </Form.Item>
 
           <Form.Item label="计划出库日期"  {...formItemLayout_right} style={{ width: 400 }}>
-            {getFieldDecorator('planOutTime', {
-              initialValue: (record.planOutTime && !isNaN(record.planOutTime) && moment(Number(record.planOutTime))) || null,
+            {getFieldDecorator('arrivalPreDate', {
+              initialValue: (record.arrivalPreDate && !isNaN(record.arrivalPreDate) && moment(Number(record.arrivalPreDate))) || null,
               rules: [{ required: true, message: '请选择计划出库日期' }],
             })(
               <DatePicker />

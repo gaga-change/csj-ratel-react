@@ -37,7 +37,7 @@ class AddForm extends React.Component {
     let { warehouse, items, selectedRowKeys } = this.state
     this.props.onRef(this)
     if (record.planWarehouseCode) {
-      warehouse.warehouseName = record.planWarehouseName
+      warehouse.warehouseName = record.warehouseName
       if (Array.isArray(record.planDetails)) {
         items = _.cloneDeep(record.planDetails).map(v => {
           for (let i in map_Config) {
@@ -296,7 +296,7 @@ class AddForm extends React.Component {
 
           <Form.Item label="计划入库日期"  {...formItemLayout_right}>
             {getFieldDecorator('planInTime', {
-              initialValue: (record.planTime && !isNaN(record.planTime) && moment(Number(record.planTime))) || null,
+              initialValue: (record.planInWarehouseTime && !isNaN(record.planInWarehouseTime) && moment(Number(record.planInWarehouseTime))) || null,
               rules: [{ required: true, message: '请选择计划入库日期' }],
             })(
               <DatePicker />

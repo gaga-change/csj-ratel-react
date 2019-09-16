@@ -130,16 +130,16 @@ export const BaseCard_Config = [
   },
   {
     title: '计划入库日期',
-    dataIndex: 'planTime',
+    dataIndex: 'planInWarehouseTime',
     type: 'time'
   },
   {
     title: '入库仓库',
-    dataIndex: 'planWarehouseName',
+    dataIndex: 'warehouseName',
   },
   {
     title: '计划入库总量',
-    dataIndex: 'inPlanQty',
+    dataIndex: 'planInQty',
   },
   {
     title: '创建人',
@@ -152,8 +152,8 @@ export const BaseCard_Config = [
   },
   {
     title: '状态',
-    dataIndex: 'planState',
-    useLocalEnum: 'warehousing_planStateEnum'
+    dataIndex: 'billStatus',
+    useLocalEnum: 'billStatusEnum'
   },
 
 ]
@@ -175,7 +175,7 @@ export const PopoverTable_Config = [
   },
   {
     title: '入库数量',
-    dataIndex: 'inQty'
+    dataIndex: 'realInQty'
   },
   {
     title: '入库金额',

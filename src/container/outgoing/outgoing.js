@@ -53,7 +53,7 @@ export default class Outgoing extends React.Component {
         this.fetch(value)
       })
     } else if (type === 'submit' || type === 'save') {
-      value.planOutTime = moment(value.planOutTime).valueOf();
+      value.arrivalPreDate = moment(value.arrivalPreDate).valueOf();
       value.isCommitFlag = type === 'submit' ? true : false;
       value.isUpdateFlag = false
       if (ModalTitle === '修改出库业务单') {

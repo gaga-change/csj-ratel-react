@@ -25,7 +25,7 @@ export default class BaseCard extends React.Component {
                 content = v.render(content)
               } else if (v.type) {
                 switch (v.type) {
-                  case 'time': content = moment(Number(content)).format(v.format || 'YYYY-MM-DD'); break;
+                  case 'time': content = content ? moment(Number(content)).format(v.format || 'YYYY-MM-DD') : ''; break;
                   default: break;
                 }
               } else if (v.useLocalEnum) {
