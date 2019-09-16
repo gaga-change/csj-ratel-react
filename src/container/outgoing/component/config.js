@@ -113,10 +113,6 @@ export const goodsInStorage_config = [
     dataIndex: 'skuUnitName',
   },
   {
-    title: '仓库',
-    dataIndex: 'warehouseName',
-  },
-  {
     title: '可用库存',
     dataIndex: 'skuQty',
     render: (v, record) => record.skuQty - record.lockQty

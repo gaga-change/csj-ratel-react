@@ -6,7 +6,7 @@ import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import { formTable_config, goodsInStorage_config, map_Config } from './config'
 import SelestForm from './form'
-import { stockList, custAddrList, custList } from 'api'
+import { stockList, custAddrList, custList, warehouseList } from 'api'
 import './addform.scss'
 
 const { TextArea } = Input
@@ -25,7 +25,47 @@ class AddForm extends React.Component {
       arrivalConfig: [],
       arrivalAddressConfig: [],
       addSubmitLoading: false, // 提交加载状态
+      warehouseListLoading: false,
+      warehouseList: [],
     }
+  }
+
+  componentDidMount() {
+    let { record } = this.props
+    let { arrival, items, selectedRowKeys } = this.state
+    this.props.onRef(this)
+    this.fetchArriva()
+    if (record.arrivalCode) {
+      arrival.arrivalName = record.arrivalName
+      arrival.arrivalCode = record.arrivalCode
+      if (Array.isArray(record.planDetails)) {
+        items = _.cloneDeep(record.planDetails).map(v => {
+          for (let i in map_Config) {
+            if (map_Config[i] !== 'index') {
+              v[map_Config[i]] = v[i]
+            }
+          }
+          v.id = `${v.warehouseCode}_${v.skuCode}`
+          return v
+        })
+      }
+
+      selectedRowKeys = items.map(v => v.id)
+      this.setState({ arrival, items, selectedRowKeys })
+      this.props.form.setFieldsValue({ items })
+      this.custAddrListApi(arrival.arrivalCode, record.arrivalAddress)
+    }
+    this.initData()
+  }
+
+  /** 相关数据初始化 */
+  initData() {
+    // 获取仓库列表
+    warehouseList().then(res => {
+      this.setState({ warehouseListLoading: false })
+      if (!res) return
+      this.setState({ warehouseList: res.data })
+    })
   }
 
   onSelectChange = (selectedRowKeys) => {
@@ -106,33 +146,6 @@ class AddForm extends React.Component {
     let { arrivalCode } = this.props.form.getFieldsValue(['arrivalCode'])
     this.getCommodity({ ...value, customerCode: arrivalCode })
     this.setState({ selectedRowKeys: [] })
-  }
-
-  componentDidMount() {
-    let { record } = this.props
-    let { arrival, items, selectedRowKeys } = this.state
-    this.props.onRef(this)
-    this.fetchArriva()
-    if (record.arrivalCode) {
-      arrival.arrivalName = record.arrivalName
-      arrival.arrivalCode = record.arrivalCode
-      if (Array.isArray(record.planDetails)) {
-        items = _.cloneDeep(record.planDetails).map(v => {
-          for (let i in map_Config) {
-            if (map_Config[i] !== 'index') {
-              v[map_Config[i]] = v[i]
-            }
-          }
-          v.id = `${v.warehouseCode}_${v.skuCode}`
-          return v
-        })
-      }
-
-      selectedRowKeys = items.map(v => v.id)
-      this.setState({ arrival, items, selectedRowKeys })
-      this.props.form.setFieldsValue({ items })
-      this.custAddrListApi(arrival.arrivalCode, record.arrivalAddress)
-    }
   }
 
   /** 获取客户列表 */
@@ -236,7 +249,7 @@ class AddForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    let { items, visible, arrivalConfig, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding, addSubmitLoading } = this.state
+    let { warehouseListLoading, warehouseList, items, visible, arrivalConfig, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding, addSubmitLoading } = this.state
     let { record } = this.props
     const formItemLayout_left = {
       labelCol: {
@@ -367,8 +380,18 @@ class AddForm extends React.Component {
             )}
           </Form.Item>
 
-          {/* 该组件为隐藏组件和下面显示的下拉框配合使用 */}
+          <Form.Item label="计划出库仓库" {...formItemLayout_left} style={{ height: 60, width: 400 }}>
+            {getFieldDecorator('warehouseCode', {
+              initialValue: record.planWarehouseCode,
+              rules: [{ required: true, message: '请选择计划出库仓库' }],
+            })(
+              <Select style={{ width: 180 }} placeholder="请选择计划出库仓库" onChange={this.onSelectOptionChange} loading={warehouseListLoading}>
+                {warehouseList.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+              </Select>
+            )}
+          </Form.Item>
 
+          {/* 该组件为隐藏组件和下面显示的下拉框配合使用 */}
           <Form.Item label="收货地址" {...formItemLayout_arrivalAddress} style={{ height: 60, display: 'none' }}>
             {getFieldDecorator('arrivalAddress', {
               initialValue: record.arrivalAddress,
@@ -478,7 +501,7 @@ class AddForm extends React.Component {
             <SelestForm
               className='CommodityFormArert'
               onSubmit={this.onSelect}
-              selectWordsArr={['商品名称', '仓库', '横向查询']} />
+              selectWordsArr={['商品名称', '横向查询']} />
             <SelectionTable
               rowKey="id"
               pagination={{ pageSize: 10 }}
