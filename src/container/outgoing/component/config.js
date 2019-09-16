@@ -54,13 +54,8 @@ export const formTable_config = [
     dataIndex: 'skuUnitName',
   },
   {
-    title: '仓库',
-    dataIndex: 'warehouseName',
-    width: 80
-  },
-  {
     title: '出库数量',
-    dataIndex: 'planOutQty',
+    dataIndex: 'skuOutQty',
     editable: true,
     editing: 'true',
     rules: [
@@ -151,7 +146,7 @@ export const warehousingDetail_Config = [
   },
   {
     title: '计划出库量',
-    dataIndex: 'planOutQty',
+    dataIndex: 'skuOutQty',
   },
   {
     title: '已出库量',

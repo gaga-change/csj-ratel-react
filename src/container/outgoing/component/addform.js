@@ -17,7 +17,7 @@ class AddForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      items: [],
+      busiBillDetails: [],
       visible: false,
       goodsInStorage_dataSource: [],
       selectedRowKeys: [],
@@ -33,14 +33,14 @@ class AddForm extends React.Component {
 
   componentDidMount() {
     let { record } = this.props
-    let { arrival, items, selectedRowKeys } = this.state
+    let { arrival, busiBillDetails, selectedRowKeys } = this.state
     this.props.onRef(this)
     this.fetchArriva()
     if (record.arrivalCode) {
       arrival.arrivalName = record.arrivalName
       arrival.arrivalCode = record.arrivalCode
-      if (Array.isArray(record.planDetails)) {
-        items = _.cloneDeep(record.planDetails).map(v => {
+      if (Array.isArray(record.busiBillDetails)) {
+        busiBillDetails = _.cloneDeep(record.busiBillDetails).map(v => {
           for (let i in map_Config) {
             if (map_Config[i] !== 'index') {
               v[map_Config[i]] = v[i]
@@ -50,15 +50,14 @@ class AddForm extends React.Component {
           return v
         })
       }
-
-      selectedRowKeys = items.map(v => v.id)
+      selectedRowKeys = busiBillDetails.map(v => v.id)
       this.setState({
-        arrival, items, selectedRowKeys, warehouse: {
+        arrival, busiBillDetails, selectedRowKeys, warehouse: {
           warehouseCode: record.warehouseCode,
           warehouseName: record.warehouseName
         }
       })
-      this.props.form.setFieldsValue({ items })
+      this.props.form.setFieldsValue({ busiBillDetails })
       this.custAddrListApi(arrival.arrivalCode, record.arrivalAddress)
     }
     this.initData()
@@ -80,24 +79,24 @@ class AddForm extends React.Component {
 
   handleDelete = (record) => {
     let { selectedRowKeys } = this.state
-    let items = this.props.form.getFieldValue('items')
+    let busiBillDetails = this.props.form.getFieldValue('busiBillDetails')
     let selectedRowKeys_index = selectedRowKeys.findIndex(v => v === record.id)
-    let items_index = items.findIndex(v => v.id === record.id)
+    let items_index = busiBillDetails.findIndex(v => v.id === record.id)
     if (selectedRowKeys_index >= 0) {
       selectedRowKeys.splice(selectedRowKeys_index, 1)
     }
     if (items_index >= 0) {
-      items.splice(items_index, 1)
+      busiBillDetails.splice(items_index, 1)
     }
-    this.setState({ selectedRowKeys, items })
-    this.props.form.setFieldsValue({ items })
+    this.setState({ selectedRowKeys, busiBillDetails })
+    this.props.form.setFieldsValue({ busiBillDetails })
   }
 
   handleSubmit = (type, e) => {
     let { arrival, warehouse } = this.state
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      if (!err && !values.items.some(v => isNaN(v.planOutQty))) {
+      if (!err && !values.busiBillDetails.some(v => isNaN(v.skuOutQty))) {
         this.setState({ addSubmitLoading: true })
         this.props.onSubmit(type, { ...values, ...arrival, ...warehouse }).then(res => this.setState({ addSubmitLoading: false }))
       }
@@ -106,12 +105,12 @@ class AddForm extends React.Component {
 
   handleRest = () => {
     this.props.form.resetFields()
-    this.setState({ items: [], arrivalConfig: [], arrivalAddressConfig: [] })
+    this.setState({ busiBillDetails: [], arrivalConfig: [], arrivalAddressConfig: [] })
   }
 
   editableTableChange = (data) => {
-    this.setState({ items: data })
-    this.props.form.setFieldsValue({ items: data })
+    this.setState({ busiBillDetails: data })
+    this.props.form.setFieldsValue({ busiBillDetails: data })
   }
 
   handleCancel = () => {
@@ -120,7 +119,7 @@ class AddForm extends React.Component {
 
   handleOk = () => {
     let { selectedRowKeys, goodsInStorage_dataSource } = this.state
-    let selectedItems = this.props.form.getFieldValue('items')
+    let selectedItems = this.props.form.getFieldValue('busiBillDetails')
     let newItems = []
     goodsInStorage_dataSource.forEach(item => {
       if (selectedRowKeys.includes(item.id)) {
@@ -132,8 +131,8 @@ class AddForm extends React.Component {
         }
       }
     })
-    this.setState({ visible: false, items: newItems })
-    this.props.form.setFieldsValue({ items: newItems })
+    this.setState({ visible: false, busiBillDetails: newItems })
+    this.props.form.setFieldsValue({ busiBillDetails: newItems })
   }
 
   selectCommoddity = () => {
@@ -178,7 +177,7 @@ class AddForm extends React.Component {
     arrival.arrivalName = options.children
     this.setState({ arrival })
     this.custAddrListApi(arrival.arrivalCode)
-    this.setState({ items: [], goodsInStorage_dataSource: [], selectedRowKeys: [] })
+    this.setState({ busiBillDetails: [], goodsInStorage_dataSource: [], selectedRowKeys: [] })
   }
 
   /** 地址切换事件 */
@@ -264,12 +263,12 @@ class AddForm extends React.Component {
     warehouse.warehouseCode = options.value
     warehouse.warehouseName = options.children
     this.setState({ warehouse })
-    this.setState({ items: [], goodsInStorage_dataSource: [], selectedRowKeys: [] })
+    this.setState({ busiBillDetails: [], goodsInStorage_dataSource: [], selectedRowKeys: [] })
   }
 
   render() {
     const { getFieldDecorator } = this.props.form
-    let { warehouseListLoading, warehouseList, items, visible, arrivalConfig, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding, addSubmitLoading } = this.state
+    let { warehouseListLoading, warehouseList, busiBillDetails, visible, arrivalConfig, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding, addSubmitLoading } = this.state
     let { record } = this.props
     const formItemLayout_left = {
       labelCol: {
@@ -470,8 +469,8 @@ class AddForm extends React.Component {
           </Form.Item>
 
           <Form.Item  {...formItemLayout_table}>
-            {getFieldDecorator('items', {
-              initialValue: items,
+            {getFieldDecorator('busiBillDetails', {
+              initialValue: busiBillDetails,
               rules: [{ required: true, message: '该项为必填' }],
             })(
               <div className="form_item_table" style={{ width: '100%' }}>
@@ -484,7 +483,7 @@ class AddForm extends React.Component {
                   onChange={this.editableTableChange}
                   rowClassName={() => 'editable-row'}
                   columns={columns}
-                  dataSource={items} />
+                  dataSource={busiBillDetails} />
               </div>
             )}
           </Form.Item>

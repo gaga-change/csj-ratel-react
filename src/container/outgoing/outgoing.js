@@ -90,10 +90,10 @@ export default class Outgoing extends React.Component {
 
   add = (type, record) => {
     if (type === 'update') {
-      this.setState({ visible: true, initDataLoading: true })
+      this.setState({ initDataLoading: true })
       getOutBusiBillDetail({ billNo: record.billNo }).then(res => {
         if (!res) return
-        this.setState({ initDataLoading: false, record: res.data, ModalTitle: '修改出库业务单' })
+        this.setState({ visible: true, initDataLoading: false, record: res.data, ModalTitle: '修改出库业务单' })
       })
     } else {
       this.setState({ visible: true, record: {}, ModalTitle: '创建出库业务单' })
@@ -152,7 +152,7 @@ export default class Outgoing extends React.Component {
         warehousingDetail_dataSource = res.busiBillDetails.map(v => {
           v.billNo = res.billNo;
           return v;
-        });;
+        });
       }
       this.setState({ BaseCard_dataSource, warehousingDetail_dataSource })
     })

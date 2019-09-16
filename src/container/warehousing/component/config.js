@@ -53,7 +53,7 @@ export const formTable_config = [
   },
   {
     title: '入库数量',
-    dataIndex: 'planInQty',
+    dataIndex: 'skuInQty',
     editable: true,
     editing: 'true',
     rules: [
@@ -182,10 +182,6 @@ export const PopoverTable_Config = [
     dataIndex: 'inAmt'
   }
 ]
-
-
-
-
 
 //入库
 export const map_Config = {
