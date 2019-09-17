@@ -96,6 +96,8 @@ export const getOutOrder = params => http.post(`${base}/out/bill/getOutOrder`, p
 export const outBillDel = billNo => http.post(`${base}/out/bill/deleteBusiBill`, { billNo })
 /** 删除入库业务单 */
 export const deleteBusiBill = billNo => http.post(`${base}/in/bill/deleteBusiBill`, { billNo })
+/** 商品修改 */
+export const skuInfoUpdate = params => http.post(`${base}/sku/info/update`, params)
 
 /** 删除商品 */
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)

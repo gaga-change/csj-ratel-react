@@ -5,7 +5,7 @@ import FetchTable from '../../component/fetchTable/fetchTable'
 import { commondityColumns } from 'config/table'
 import CommodityForm from './component/form'
 import AddForm from './component/addform'
-import { skuInfoList, skuInfoAdd, skuInfoDel, skuInfoAddSkuPro, skuInfoAddSkuCustomer } from 'api'
+import { skuInfoList, skuInfoUpdate, skuInfoAdd, skuInfoDel, skuInfoAddSkuPro, skuInfoAddSkuCustomer } from 'api'
 import SupplyPrice from './component/supplyPrice'
 import CustomerPrice from './component/customerPrice'
 import { connect } from 'react-redux'
@@ -102,8 +102,14 @@ class Commodity extends React.Component {
 
   /** 创建sku */
   handleCreateSku = (value) => {
+    const { nowRow } = this.state
+    let api = nowRow ? skuInfoUpdate : skuInfoAdd
+    if (nowRow) {
+      value.skuCode = nowRow.skuCode
+      value.id = nowRow.id
+    }
     this.setState({ submitLoding: true })
-    skuInfoAdd(value).then(res => {
+    api(value).then(res => {
       this.setState({
         submitLoding: false
       })
