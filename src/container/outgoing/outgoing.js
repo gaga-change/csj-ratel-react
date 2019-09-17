@@ -210,10 +210,10 @@ export default class Outgoing extends React.Component {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">
             <span data-rule-id="outgoing-show" onClick={this.showDetail.bind(this, record)}>查看</span>
-            <span data-rule-id="outgoing-modify" onClick={this.add.bind(this, 'update', record)}>修改</span>
-            <Popconfirm title="确定要删除吗?" onConfirm={this.handleDelete.bind(this, record)}>
+            {(record.billStatus === 0 || record.billStatus === 2) && <span data-rule-id="outgoing-modify" onClick={this.add.bind(this, 'update', record)}>修改</span>}
+            {(record.billStatus === 0 || record.billStatus === 2 || record.billStatus === 3) && <Popconfirm title="确定要删除吗?" onConfirm={this.handleDelete.bind(this, record)}>
               <span data-rule-id="outgoing-delete"> 删除</span>
-            </Popconfirm>
+            </Popconfirm>}
           </span>
         }
       }

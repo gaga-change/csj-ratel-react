@@ -206,10 +206,10 @@ export default class Warehousing extends React.Component {
         v.render = (ext, record, index) => {
           return <span className="Dropdown_Menu_box">
             <span data-rule-id="warehousing-show" onClick={this.showDetail.bind(this, record)}>查看</span>
-            <span data-rule-id="warehousing-modify" onClick={this.add.bind(this, 'update', record)}>修改</span>
-            <Popconfirm title="是否确认删除？" okText="是" cancelText="否" onConfirm={this.handleDelete.bind(this, record)}>
+            {(record.billStatus === 0 || record.billStatus === 2) && <span data-rule-id="warehousing-modify" onClick={this.add.bind(this, 'update', record)}>修改</span>}
+            {(record.billStatus === 0 || record.billStatus === 2 || record.billStatus === 3) && <Popconfirm title="是否确认删除？" okText="是" cancelText="否" onConfirm={this.handleDelete.bind(this, record)}>
               <span data-rule-id="warehousing-del">删除</span>
-            </Popconfirm>
+            </Popconfirm>}
           </span>
         }
       }
