@@ -252,7 +252,7 @@ export default class Outgoing extends React.Component {
 
         <SelestForm
           onSubmit={this.onSubmit.bind(this, 'select')}
-          selectWordsArr={['商品名称', '状态', '创建日期', '纵向查询', '联系人电话', '订单号']} />
+          selectWordsArr={['状态', '创建日期', '纵向查询', '订单号']} />
         <div className="alert_Btn">
           <Button data-rule-id="outgoing-create" type="primary" onClick={this.add}>创建出库业务单</Button>
         </div>
