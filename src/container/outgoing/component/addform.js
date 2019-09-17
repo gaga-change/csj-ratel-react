@@ -193,9 +193,9 @@ class AddForm extends React.Component {
     }
   }
 
-  /** 获取客户地址列表 */
+  /** 获取客户地址列表, 初始化时会带入 address */
   custAddrListApi = (basicCustomerInfoCode, address) => {
-    let check = null
+    let check = null // 修改时，寻找对应的地址
     custAddrList({ basicCustomerInfoCode }).then(res => {
       if (!res) return
       let arrivalAddressConfig = res.data.map(v => {
@@ -216,9 +216,14 @@ class AddForm extends React.Component {
         this.props.form.setFieldsValue({
           arrivalAddressId: temp.id,
           arrivalAddress: temp.arrivalAddress,
-          arrivalLinkName: temp.receiverName,
-          arrivalLinkTel: temp.receiverTel
         })
+        if (!check) {
+          // 不是修改， 则默认将 联系名称&地址 一并自动写入。 编辑时避免覆盖。
+          this.props.form.setFieldsValue({
+            arrivalLinkName: temp.receiverName,
+            arrivalLinkTel: temp.receiverTel
+          })
+        }
       } else {
         this.props.form.setFieldsValue({
           arrivalAddressId: '',
