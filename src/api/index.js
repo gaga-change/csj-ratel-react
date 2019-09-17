@@ -47,6 +47,10 @@ export const roleSelectMenus = params => http.get(`${base}/base/role/selectMenus
 export const getInBusiBillDetail = params => http.get(`${base}/in/bill/getInBusiBillDetail`, { params })
 /** 出库详情 */
 export const getOutBusiBillDetail = params => http.get(`${base}/out/bill/getOutBusiBillDetail`, { params })
+/** 删除客户 */
+export const customerDel = (customerCode) => http.get(`${base}/customer/del`, { params: { customerCode } })
+/** 删除供应商 */
+export const providerDel = (providerCode) => http.get(`${base}/provider/del`, { params: { providerCode } })
 
 /** 添加商品 */
 export const skuInfoAdd = params => http.post(`${base}/sku/info/add`, params)
@@ -95,8 +99,5 @@ export const deleteBusiBill = billNo => http.post(`${base}/in/bill/deleteBusiBil
 
 /** 删除商品 */
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)
-/** 删除客户 */
-export const customerDel = (customerCode) => http.delete(`${base}/customer/del/${customerCode}`)
-/** 删除供应商 */
-export const providerDel = (providerCode) => http.delete(`${base}/provider/del/${providerCode}`)
+
 
