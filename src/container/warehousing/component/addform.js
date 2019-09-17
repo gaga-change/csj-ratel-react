@@ -98,7 +98,7 @@ class AddForm extends React.Component {
     let { warehouse } = this.state
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      if (!err && !values.items.some(v => isNaN(v.planInQty))) {
+      if (!err && !values.items.some(v => isNaN(v.skuInQty))) {
         values = { ...values }
         values.providerName = this.state.providerList.find(v => v.providerCode === values.providerCode).providerName
         this.setState({ addSubmitLoading: true })
