@@ -79,7 +79,8 @@ class AddForm extends React.Component {
   fetch = () => {
     return skuCategoryTrees().then(res => {
       if (!res) return
-      this.categoryTreesRoot = res.data || {}
+      res = res.data
+      this.categoryTreesRoot = res || {}
       this.setState({
         categoryTrees: (res && res.children) || []
       })
