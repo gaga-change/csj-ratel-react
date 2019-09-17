@@ -152,8 +152,8 @@ class AddForm extends React.Component {
   }
 
   onSelect = (value) => {
-    let { arrivalCode } = this.props.form.getFieldsValue(['arrivalCode'])
-    this.getCommodity({ ...value, customerCode: arrivalCode })
+    let { arrivalCode, warehouseCode } = this.props.form.getFieldsValue(['arrivalCode', 'warehouseCode'])
+    this.getCommodity({ ...value, customerCode: arrivalCode, warehouseCode })
     this.setState({ selectedRowKeys: [] })
   }
 
