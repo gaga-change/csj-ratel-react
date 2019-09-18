@@ -187,7 +187,7 @@ class AddForm extends React.Component {
     if (temp) {
       this.props.form.setFieldsValue({
         arrivalAddress: temp.arrivalAddress,
-        arrivalLinkName: temp.receiverName,
+        arrivalLinkUser: temp.receiverName,
         arrivalLinkTel: temp.receiverTel
       })
     }
@@ -195,6 +195,7 @@ class AddForm extends React.Component {
 
   /** 获取客户地址列表, 初始化时会带入 address */
   custAddrListApi = (basicCustomerInfoCode, address) => {
+    const isModify = !!address
     let check = null // 修改时，寻找对应的地址
     custAddrList({ basicCustomerInfoCode }).then(res => {
       if (!res) return
@@ -217,10 +218,10 @@ class AddForm extends React.Component {
           arrivalAddressId: temp.id,
           arrivalAddress: temp.arrivalAddress,
         })
-        if (!check) {
+        if (!isModify) {
           // 不是修改， 则默认将 联系名称&地址 一并自动写入。 编辑时避免覆盖。
           this.props.form.setFieldsValue({
-            arrivalLinkName: temp.receiverName,
+            arrivalLinkUser: temp.receiverName,
             arrivalLinkTel: temp.receiverTel
           })
         }
@@ -228,7 +229,7 @@ class AddForm extends React.Component {
         this.props.form.setFieldsValue({
           arrivalAddressId: '',
           arrivalAddress: '',
-          arrivalLinkName: '',
+          arrivalLinkUser: '',
           arrivalLinkTel: ''
         })
       }
@@ -447,11 +448,11 @@ class AddForm extends React.Component {
           </Form.Item>
 
           <Form.Item label="收货人" {...formItemLayout_left}>
-            {getFieldDecorator('arrivalLinkName', {
-              initialValue: record.arrivalLinkName,
+            {getFieldDecorator('arrivalLinkUser', {
+              initialValue: record.arrivalLinkUser,
               rules: [{ required: false, message: '' }],
             })(
-              <Input autoComplete='off' placeholder="请输入收货人" />
+              <Input autoComplete='off' placeholder="请输入收货人" readOnly />
             )}
           </Form.Item>
 
@@ -460,7 +461,7 @@ class AddForm extends React.Component {
               initialValue: record.arrivalLinkTel,
               rules: [{ required: false, message: '请输入正确格式的手机号', pattern: /^1[34578]\d{9}$/ }],
             })(
-              <Input autoComplete='off' placeholder="请输入手机" />
+              <Input autoComplete='off' placeholder="请输入手机" readOnly />
             )}
           </Form.Item>
 
