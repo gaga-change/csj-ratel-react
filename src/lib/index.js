@@ -32,7 +32,8 @@ export const findLeaf = (obj, key, cb) => {
     if (arr && arr.length) {
       for (let i = 0; i < arr.length; i++) {
         let temp = arr[i]
-        return _(temp, path)
+        let res = _(temp, path)
+        if (res) return res
       }
     } else {
       if (cb(obj)) return path
