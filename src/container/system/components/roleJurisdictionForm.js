@@ -19,10 +19,11 @@ class DataForm extends React.Component {
     checkedKeys: [],
     selectedKeys: [],
     treeData: [],
+    halfCheckedKeys: [],
   }
 
   componentDidMount() {
-    this.initDicts()
+
   }
 
   componentWillReceiveProps(prevProps) {
@@ -30,7 +31,13 @@ class DataForm extends React.Component {
       this.handleSubmit()
     }
     if (this.props.checkedList !== prevProps.checkedList) {
-      this.setDefault(prevProps.checkedList)
+      if (this.menuRoot) {
+        this.setDefault(prevProps.checkedList)
+      } else {
+        this.initDicts().then(() => {
+          this.setDefault(prevProps.checkedList)
+        })
+      }
     }
   }
 
@@ -38,6 +45,25 @@ class DataForm extends React.Component {
    * 配置默认值
    */
   setDefault = (menus) => {
+    // 如果父级未全选，则取消父级选中
+    // 过滤父级
+    let faIds = []
+    const deep = (obj) => {
+      const _ = obj => {
+        let arr = obj.children
+        if (arr && arr.length) {
+          for (let i = 0; i < arr.length; i++) {
+            let temp = arr[i]
+            _(temp)
+          }
+          faIds.push(obj.id)
+        }
+      }
+      _(obj)
+    }
+    deep(this.menuRoot)
+    let faIdsStr = faIds.join(',') + ','
+    menus = menus.map(v => v + '').filter(v => !~faIdsStr.indexOf(v))
     this.setState({ checkedKeys: menus.map(v => v + '') })
   }
 
@@ -46,9 +72,10 @@ class DataForm extends React.Component {
   */
   initDicts = () => {
     /** 获取权限列表 */
-    selectAllMenu().then(res => {
+    return selectAllMenu().then(res => {
       if (!res) return
       res = res.data
+      this.menuRoot = res
       sortMenu(res, item => {
         item.title = item.text
         item.key = item.id
@@ -58,7 +85,8 @@ class DataForm extends React.Component {
   }
 
   handleSubmit = () => {
-    return this.props.onSubmited(false, JSON.parse(JSON.stringify(this.state.checkedKeys)))
+    // 添加 半选的父级
+    return this.props.onSubmited(false, [...this.state.checkedKeys, ...this.state.halfCheckedKeys])
   }
 
   onExpand = expandedKeys => {
@@ -68,8 +96,8 @@ class DataForm extends React.Component {
     });
   };
 
-  onCheck = checkedKeys => {
-    this.setState({ checkedKeys });
+  onCheck = (checkedKeys, e) => {
+    this.setState({ checkedKeys, halfCheckedKeys: e.halfCheckedKeys });
   };
 
   renderTreeNodes = (data = []) => {
@@ -91,6 +119,7 @@ class DataForm extends React.Component {
       <div>
         <Tree
           checkable
+          // checkStrictly
           onExpand={this.onExpand}
           expandedKeys={this.state.expandedKeys}
           autoExpandParent={this.state.autoExpandParent}
