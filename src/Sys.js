@@ -37,7 +37,11 @@ class App extends Component {
         }
         return v.type === 0 || v.type === 2
       })
-      let ele = document.createElement('style')
+      let ele = document.getElementById('USER_RULE')
+      if (!ele) {
+        ele = document.createElement('style')
+        ele.id = 'USER_RULE'
+      }
       ele.innerHTML = styleNameArr.join(',') + '{ display: inline-block !important;}'
       document.body.appendChild(ele)
       window.MENU_MAP = temp
