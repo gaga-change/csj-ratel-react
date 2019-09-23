@@ -56,6 +56,12 @@ class AddForm extends React.Component {
       path.shift()
       let temp = path.map(v => v.currentCode)
       this.props.form.setFieldsValue({ categoryCode: temp })
+      this.setState({
+        activeCascader: {
+          categoryCode: row.categoryCode,
+          categoryName: row.categoryName
+        }
+      })
     } else {
       this.props.form.setFieldsValue({ categoryCode: [] })
     }

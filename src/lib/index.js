@@ -27,16 +27,21 @@ export const deep = (obj, key, cb) => {
  */
 export const findLeaf = (obj, key, cb) => {
   const _ = (obj, path) => {
-    path.push(obj)
     let arr = obj[key]
     if (arr && arr.length) {
       for (let i = 0; i < arr.length; i++) {
         let temp = arr[i]
         let res = _(temp, path)
-        if (res) return res
+        if (res) {
+          path.unshift(obj)
+          return res
+        }
       }
     } else {
-      if (cb(obj)) return path
+      if (cb(obj)) {
+        path.unshift(obj)
+        return path
+      }
     }
   }
   return _(obj, [])
