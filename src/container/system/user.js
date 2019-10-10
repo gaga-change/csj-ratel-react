@@ -195,7 +195,7 @@ export default class User extends React.Component {
       if (v.render === '') {
         v.render = (text, record) => {
           let statusName = record.userStatus === 0 ? '禁用' : '启用'
-          return (columns.length >= 1
+          return (record.isAdmin !== 1
             ? (
               <span className="Dropdown_Menu_box">
                 <span data-rule-id="system/user-modify" onClick={() => this.handleAdd(record)}>编辑</span>
