@@ -27,6 +27,7 @@ class App extends Component {
       let user = res.data
       let temp = {}
       let styleNameArr = []
+      user.menus = user.menus || { children: [] }
       sortMenu(user.menus, item => {
         if (item.path && item.type === 0) {
           temp['/sys' + item.path] = { ...item, children: undefined }

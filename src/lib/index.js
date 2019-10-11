@@ -54,7 +54,7 @@ export const findLeaf = (obj, key, cb) => {
  */
 export function sortMenu(root, cb, filter) {
   let _ = menu => {
-    if (menu.children && menu.children.length) {
+    if (menu && menu.children && menu.children.length) {
       menu.children.sort((a, b) => a.orderNum - b.orderNum)
       if (filter) {
         menu.children = menu.children.filter(filter)
