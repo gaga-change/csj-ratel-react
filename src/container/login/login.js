@@ -40,7 +40,7 @@ class Login extends React.Component {
         <div className="header-logo" style={{ paddingLeft: '24px' }}>
           <img src={imgSouce['logo']} alt="" />
           <div className="logo_text">
-            <h3>川山甲 SAASERP</h3>
+            <h3>川山甲 货主平台</h3>
             <span>协同供应链 .仓配一体化 .仓储租赁</span>
           </div>
         </div>

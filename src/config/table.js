@@ -124,6 +124,12 @@ export const planOutListColumns = [
     useLocalEnum: 'billStatusEnum'
   },
   {
+    title: '创建日期',
+    dataIndex: 'busiBillCreateTime',
+    type: 'time',
+    width: 130
+  },
+  {
     title: '操作',
     dataIndex: '',
     render: '',
@@ -158,6 +164,12 @@ export const planInListColumns = [
     title: '单据状态',
     dataIndex: 'billStatus',
     useLocalEnum: 'billStatusEnum'
+  },
+  {
+    title: '创建日期',
+    dataIndex: 'gmtCreate',
+    type: 'time',
+    width: 130
   },
   {
     title: '操作',
