@@ -68,8 +68,8 @@ class Home extends React.Component {
     const { user } = this.props
     let menus = (user && user.menus) || null
     let menu = []
-    const _deep = (arr) => {
-      arr.forEach(v => {
+    const _deep = arr => {
+      arr && arr.forEach(v => {
         if (v.children && v.children.length) {
           _deep(v.children)
         } else {
