@@ -6,7 +6,9 @@ import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import { formTable_config, goodsInStorage_config, map_Config } from './config'
 import SelestForm from './form'
-import { stockList, custAddrList, custList, warehouseList } from 'api'
+import { stockList, custAddrList, warehouseList } from 'api'
+import SelectCustorm from './selectCustorm'
+
 import './addform.scss'
 
 const { TextArea } = Input
@@ -22,7 +24,6 @@ class AddForm extends React.Component {
       goodsInStorage_dataSource: [],
       selectedRowKeys: [],
       arrival: {},
-      arrivalConfig: [],
       arrivalAddressConfig: [],
       addSubmitLoading: false, // 提交加载状态
       warehouseListLoading: false,
@@ -35,7 +36,6 @@ class AddForm extends React.Component {
     let { record } = this.props
     let { arrival, busiBillDetails, selectedRowKeys } = this.state
     this.props.onRef(this)
-    this.fetchArriva()
     if (record.arrivalCode) {
       arrival.arrivalName = record.arrivalName
       arrival.arrivalCode = record.arrivalCode
@@ -93,8 +93,10 @@ class AddForm extends React.Component {
   }
 
   handleSubmit = (type, e) => {
+    if (e) {
+      e.preventDefault()
+    }
     let { arrival, warehouse } = this.state
-    e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err && !values.busiBillDetails.some(v => isNaN(v.skuOutQty))) {
         this.setState({ addSubmitLoading: true })
@@ -105,7 +107,7 @@ class AddForm extends React.Component {
 
   handleRest = () => {
     this.props.form.resetFields()
-    this.setState({ busiBillDetails: [], arrivalConfig: [], arrivalAddressConfig: [] })
+    this.setState({ busiBillDetails: [], arrivalAddressConfig: [] })
   }
 
   editableTableChange = (data) => {
@@ -157,27 +159,13 @@ class AddForm extends React.Component {
     this.setState({ selectedRowKeys: [] })
   }
 
-  /** 获取客户列表 */
-  fetchArriva = () => {
-    let { arrivalConfig } = this.state
-    if (arrivalConfig.length > 0) {
-      return
-    }
-    custList().then(res => {
-      if (!res) return
-      this.setState({ arrivalConfig: res.data || [] })
-    })
-  }
-
   /** 客户切换事件 */
-  onSelectOptionChange = (value, option) => {
-    let { arrival } = this.state
-    let options = option.props
-    arrival.arrivalCode = options.value
-    arrival.arrivalName = options.children
+  onSelectOptionChange = (value, item) => {
+    const { arrival } = this.state
+    arrival.arrivalCode = item.customerCode
+    arrival.arrivalName = item.customerName
     this.setState({ arrival })
     this.custAddrListApi(arrival.arrivalCode)
-    this.setState({ busiBillDetails: [], goodsInStorage_dataSource: [], selectedRowKeys: [] })
   }
 
   /** 地址切换事件 */
@@ -274,7 +262,7 @@ class AddForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    let { warehouseListLoading, warehouseList, busiBillDetails, visible, arrivalConfig, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding, addSubmitLoading } = this.state
+    let { warehouseListLoading, warehouseList, busiBillDetails, visible, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding, addSubmitLoading } = this.state
     let { record } = this.props
     const formItemLayout_left = {
       labelCol: {
@@ -354,7 +342,6 @@ class AddForm extends React.Component {
       }
     }
 
-    const filterOption = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
     return (
       <div className="AddForm">
         <Form
@@ -377,22 +364,12 @@ class AddForm extends React.Component {
               <Input autoComplete='off' placeholder="请输入合同号" maxLength={40} />
             )}
           </Form.Item>
-          <Form.Item label="客户名称"  {...formItemLayout_left} >
+          <Form.Item label="客户名称"  {...formItemLayout_left}  >
             {getFieldDecorator('arrivalCode', {
               initialValue: record.arrivalCode,
               rules: [{ required: true, message: '请选择客户' }],
             })(
-              <Select
-                showSearch
-                onFocus={this.fetchArriva}
-                style={{ width: 180 }}
-                filterOption={filterOption}
-                placeholder="请选择客户"
-                onChange={this.onSelectOptionChange}>
-                {
-                  arrivalConfig.map(v => <Option key={v.customerCode} value={v.customerCode}>{v.customerName}</Option>)
-                }
-              </Select>
+              <SelectCustorm onChange={this.onSelectOptionChange} />
             )}
           </Form.Item>
 
