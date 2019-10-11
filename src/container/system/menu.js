@@ -22,7 +22,7 @@ export default class Menu extends React.Component {
 
   seachVal = {} // 搜索内容
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetch()
   }
 

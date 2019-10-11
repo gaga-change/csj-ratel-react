@@ -19,7 +19,7 @@ export default class User extends React.Component {
     roles: [], // 角色列表
   }
   seachVal = {} // 搜索内容
-  componentWillMount() {
+  componentDidMount() {
     this.fetch()
     this.initRole()
   }
