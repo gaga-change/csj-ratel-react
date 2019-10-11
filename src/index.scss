@@ -27,8 +27,13 @@ $fontWeightList: 400 500 600 700;
 }
 
 // margin。如: mt20（margin-top:20px;）、ml15(margin-left:15)
-$dirList: 'l''r''t''b';
-$dirMap: ('l': 'left', 'r': 'right', 't': 'top', 'b': 'bottom');
+$dirList: "l" "r" "t" "b";
+$dirMap: (
+  "l": "left",
+  "r": "right",
+  "t": "top",
+  "b": "bottom"
+);
 
 $dirSizeList: 5 10 15 20;
 
@@ -49,4 +54,14 @@ $dirSizeList: 5 10 15 20;
     content: "";
     clear: both;
   }
+}
+
+// 文本溢出显示【...】。
+.text-ellipsis {
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: left;
+  width: 100px;
 }
