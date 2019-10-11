@@ -148,7 +148,7 @@ class App extends Component {
             <Header >
               <div className="header-logo">
                 <img src={imgSouce['logo']} alt="" />
-                <span>川山甲 SAASERP</span>
+                <span>川山甲 货主平台</span>
               </div>
               <div className="header-set">
                 <Dropdown overlay={menu}>
