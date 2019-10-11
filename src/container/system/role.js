@@ -23,7 +23,7 @@ export default class Role extends React.Component {
 
   seachVal = {} // 搜索内容
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetch()
   }
 
