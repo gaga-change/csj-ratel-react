@@ -8,6 +8,9 @@ axios.interceptors.response.use(function (response) {
   if (data.code === 'ratel-512') {
     window.location.href = '/web_login'
   }
+  else if (~['ratel-40620008'].findIndex(v => v === data.code)) {
+    // 白名单
+  }
   // 系统异常提示（返回的数据为 null）
   else if (data.code !== '200') {
     data.errorMsg && message.warning(data.errorMsg)
