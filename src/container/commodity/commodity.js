@@ -11,6 +11,8 @@ import CustomerPrice from './component/customerPrice'
 import { connect } from 'react-redux'
 import './commodity.scss'
 
+const { confirm } = Modal
+
 class Commodity extends React.Component {
 
   constructor(props) {
@@ -109,11 +111,34 @@ class Commodity extends React.Component {
       value.id = nowRow.id
     }
     this.setState({ submitLoding: true })
+    value.isCheck = true
     api(value).then(res => {
       this.setState({
         submitLoding: false
       })
-      if (res) {
+      if (!res) return
+
+      if (res.code === 'ratel-40620008') {
+        confirm({
+          title: `商品名称【${value.skuName}】已存在，是否继续？`,
+          onOk: () => {
+            this.setState({ submitLoding: true })
+            value.isCheck = false
+            api(value).then(res => {
+              this.setState({
+                submitLoding: false
+              })
+              if (!res) return
+              message.success('操作成功')
+              this.fetch()
+              this.child.handleRest()
+              this.setState({ visible: false })
+            })
+          },
+          onCancel() {
+          },
+        })
+      } else {
         message.success('操作成功')
         this.fetch()
         this.child.handleRest()
