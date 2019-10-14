@@ -427,7 +427,6 @@ class AddForm extends React.Component {
           <Form.Item label="收货人" {...formItemLayout_left}>
             {getFieldDecorator('arrivalLinkUser', {
               initialValue: record.arrivalLinkUser,
-              rules: [{ required: false, message: '' }],
             })(
               <Input autoComplete='off' placeholder="请输入收货人" readOnly />
             )}
@@ -436,7 +435,6 @@ class AddForm extends React.Component {
           <Form.Item label="手机" {...formItemLayout_right} >
             {getFieldDecorator('arrivalLinkTel', {
               initialValue: record.arrivalLinkTel,
-              rules: [{ required: false, message: '请输入正确格式的手机号', pattern: /^1[34578]\d{9}$/ }],
             })(
               <Input autoComplete='off' placeholder="请输入手机" readOnly />
             )}
