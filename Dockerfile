@@ -2,7 +2,8 @@ FROM node:8-alpine as build
 # ARG IMAGE_TAG=0.0.0
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm --registry https://registry.npm.taobao.org install
+# RUN npm --registry https://registry.npm.taobao.org install
+RUN npm install
 COPY . .
 RUN npm run build
 FROM nginx:1.15-alpine
