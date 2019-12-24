@@ -40,7 +40,7 @@ class AddForm extends React.Component {
       keys.forEach(key => {
         obj[key] = undefined
       })
-      obj.saleType = 3
+      obj.saleType = 1
       this.props.form.setFieldsValue(obj)
       return
     }
@@ -195,7 +195,7 @@ class AddForm extends React.Component {
           </Form.Item>
           <Form.Item label="在库区分" {...formItemLayout_right}>
             {getFieldDecorator('saleType', {
-              initialValue: 3
+              initialValue: 1
             })(
               <Select>
                 {saleTypeEnum.map((v, index) => <Option value={v.value} key={index}>{v.name}</Option>)}

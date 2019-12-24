@@ -131,7 +131,12 @@ class AddressForm extends React.Component {
                 })(<Checkbox>设为默认</Checkbox>)
               }
           </Form.Item>
-
+          <Form.Item label="备注"{...formItemLayout_left}>
+              { 
+                getFieldDecorator('remarkInfo', {
+                })(<TextArea rows={3} placeholder="请输入备注" />)
+              }
+          </Form.Item>
           <Form.Item {...formItemLayout_button}>
             <Button
               type="primary"

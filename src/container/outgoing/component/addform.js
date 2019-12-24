@@ -29,6 +29,7 @@ class AddForm extends React.Component {
       warehouseListLoading: false,
       warehouseList: [],
       warehouse: {},
+      telData:[]
     }
   }
 
@@ -164,6 +165,9 @@ class AddForm extends React.Component {
     const { arrival } = this.state
     arrival.arrivalCode = item.customerCode
     arrival.arrivalName = item.customerName
+    this.props.form.setFieldsValue({
+      customRemarkInfo: item.remarkInfo
+    })
     this.setState({ arrival })
     this.custAddrListApi(arrival.arrivalCode)
   }
@@ -176,51 +180,68 @@ class AddForm extends React.Component {
       this.props.form.setFieldsValue({
         arrivalAddress: temp.arrivalAddress,
         arrivalLinkUser: temp.receiverName,
-        arrivalLinkTel: temp.receiverTel
+        addressRemarkInfo: temp.remarkInfo
       })
     }
   }
 
-  /** 获取客户地址列表, 初始化时会带入 address */
-  custAddrListApi = (basicCustomerInfoCode, address) => {
-    const isModify = !!address
-    let check = null // 修改时，寻找对应的地址
-    custAddrList({ basicCustomerInfoCode }).then(res => {
+  /** 联系电话切换事件 */
+  arrivalTelChange = (value) => {
+    let { telData } = this.state
+    let temp = telData.find(v => v.id === value)
+    if (temp) {
+      let { arrival } = this.state
+      this.telListApi(arrival.arrivalCode,temp.receiverTel)
+      this.props.form.setFieldsValue({
+        arrivalLinkTel: temp.receiverTel
+      })
+    }
+  }
+  telListApi=(basicCustomerInfoCode, receiverTel) => {
+    custAddrList({ basicCustomerInfoCode,receiverTel }).then(res => {
       if (!res) return
       let arrivalAddressConfig = res.data.map(v => {
         v.arrivalAddress = `${v.customerCity}/${v.customerProvince}/${v.customerArea} ( 详细地址: ${v.customerAddress} )`
-        if (address === v.arrivalAddress) {
-          check = v
-        }
         return v
       })
       this.setState({ arrivalAddressConfig })
       let temp = null
-      if (check) {
-        temp = check
-      } else {
-        temp = arrivalAddressConfig.find(v => v.isDefault === 1)
-      }
+      temp = arrivalAddressConfig.find(v => v.isDefault === 1)
       if (temp) {
         this.props.form.setFieldsValue({
           arrivalAddressId: temp.id,
           arrivalAddress: temp.arrivalAddress,
+          addressRemarkInfo: temp.remarkInfo
         })
-        if (!isModify) {
-          // 不是修改， 则默认将 联系名称&地址 一并自动写入。 编辑时避免覆盖。
-          this.props.form.setFieldsValue({
-            arrivalLinkUser: temp.receiverName,
-            arrivalLinkTel: temp.receiverTel
-          })
-        }
+        this.props.form.setFieldsValue({
+          arrivalLinkUser: temp.receiverName
+        })
       } else {
         this.props.form.setFieldsValue({
           arrivalAddressId: '',
           arrivalAddress: '',
           arrivalLinkUser: '',
-          arrivalLinkTel: ''
+          arrivalLinkTel: '',
+          addressRemarkInfo:''
         })
       }
+    })
+  }
+  /** 获取客户地址列表, 初始化时会带入 address */
+  custAddrListApi = (basicCustomerInfoCode, address) => {
+    custAddrList({ basicCustomerInfoCode }).then(res => {
+      if (!res) return
+        let telData=res.data.map(v => {
+          return v
+        })
+        this.setState({ telData })
+        this.props.form.setFieldsValue({
+          arrivalAddressId: '',
+          arrivalAddress: '',
+          arrivalLinkUser: '',
+          arrivalLinkTel: '',
+          addressRemarkInfo:''
+        })
     })
   }
 
@@ -262,7 +283,7 @@ class AddForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    let { warehouseListLoading, warehouseList, busiBillDetails, visible, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding, addSubmitLoading } = this.state
+    let { warehouseListLoading, warehouseList, busiBillDetails, visible, arrivalAddressConfig, goodsInStorage_dataSource, selectedRowKeys, selectionTableLoding, addSubmitLoading, telData } = this.state
     let { record } = this.props
     const formItemLayout_left = {
       labelCol: {
@@ -373,6 +394,15 @@ class AddForm extends React.Component {
             )}
           </Form.Item>
 
+          <Form.Item label="客户备注" {...formItemLayout_right}>
+            {getFieldDecorator('customRemarkInfo', {
+              initialValue: record.customRemarkInfo,
+              rules: [{ required: false }],
+            })(
+              <TextArea rows={3} placeholder="请输入客户备注" />
+            )}
+          </Form.Item>
+
           <Form.Item label="计划出库日期"  {...formItemLayout_right} style={{ width: 400 }}>
             {getFieldDecorator('arrivalPreDate', {
               initialValue: (record.arrivalPreDate && !isNaN(record.arrivalPreDate) && moment(Number(record.arrivalPreDate))) || null,
@@ -381,7 +411,6 @@ class AddForm extends React.Component {
               <DatePicker />
             )}
           </Form.Item>
-
           <Form.Item label="计划出库仓库" {...formItemLayout_left} style={{ height: 60, width: 400 }}>
             {getFieldDecorator('warehouseCode', {
               initialValue: record.warehouseCode,
@@ -389,6 +418,19 @@ class AddForm extends React.Component {
             })(
               <Select style={{ width: 180 }} placeholder="请选择计划出库仓库" onChange={this.handleWarehouseCodeChange} loading={warehouseListLoading}>
                 {warehouseList.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+              </Select>
+            )}
+          </Form.Item>
+
+          <Form.Item label="手机" {...formItemLayout_right} >
+            {getFieldDecorator('arrivalLinkTel', {
+              initialValue: record.arrivalLinkTel,
+              rules: [{ required: true, message: '请输入手机号' }],
+            })(
+              <Select style={{ width: 180 }} onChange={this.arrivalTelChange } placeholder="请选择联系人手机号">
+                {
+                  telData.map(v => <Option key={v.id} value={v.id}>{v.receiverTel}</Option>)
+                }
               </Select>
             )}
           </Form.Item>
@@ -432,20 +474,21 @@ class AddForm extends React.Component {
             )}
           </Form.Item>
 
-          <Form.Item label="手机" {...formItemLayout_right} >
-            {getFieldDecorator('arrivalLinkTel', {
-              initialValue: record.arrivalLinkTel,
+          <Form.Item label="地址备注" {...formItemLayout_right}>
+            {getFieldDecorator('addressRemarkInfo', {
+              initialValue: record.addressRemarkInfo,
+              rules: [{ required: false }],
             })(
-              <Input autoComplete='off' placeholder="请输入手机" readOnly />
+              <TextArea rows={3} placeholder="请输入地址备注" />
             )}
           </Form.Item>
 
-          <Form.Item label="备注" {...formItemLayout_left} style={{ width: 300, minHeight: 110 }}>
+          <Form.Item label="订单备注" {...formItemLayout_left}>
             {getFieldDecorator('remarkInfo', {
               initialValue: record.remarkInfo,
               rules: [{ required: false }],
             })(
-              <TextArea rows={4} placeholder="请输入备注信息" />
+              <TextArea rows={4} placeholder="请输入订单备注" />
             )}
           </Form.Item>
 

@@ -2,6 +2,7 @@ import React from 'react'
 import { Form, Input } from 'antd'
 import './add.scss'
 
+const { TextArea } = Input
 class AddForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault()
@@ -58,6 +59,12 @@ class AddForm extends React.Component {
                 getFieldDecorator('customerLinkuserTel', {
                   rules: [{ required: false, message:'请输入正确格式的手机号',pattern:/^1[34578]\d{9}$/ }],
                 })(<Input placeholder="请输入手机" />)
+              }
+          </Form.Item>
+          <Form.Item label="备注"{...formItemLayout}>
+              { 
+                getFieldDecorator('remarkInfo', {
+                })(<TextArea rows={3} placeholder="请输入备注" />)
               }
           </Form.Item>
         </Form>
