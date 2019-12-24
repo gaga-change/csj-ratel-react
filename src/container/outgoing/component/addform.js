@@ -399,7 +399,7 @@ class AddForm extends React.Component {
               initialValue: record.customRemarkInfo,
               rules: [{ required: false }],
             })(
-              <TextArea rows={3} placeholder="请输入客户备注" />
+              <TextArea rows={3} placeholder="请输入客户备注" readOnly />
             )}
           </Form.Item>
 
@@ -479,7 +479,7 @@ class AddForm extends React.Component {
               initialValue: record.addressRemarkInfo,
               rules: [{ required: false }],
             })(
-              <TextArea rows={3} placeholder="请输入地址备注" />
+              <TextArea rows={3} placeholder="请输入地址备注" readOnly/>
             )}
           </Form.Item>
 
