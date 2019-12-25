@@ -7,7 +7,7 @@ import AddressForm from './component/address'
 import FetchTable from '@component/fetchTable/fetchTable'
 import { indexTableColumnsConfig, addressTableColumnsConfig } from './component/config'
 import { Button, Modal, Tag, Spin, Popconfirm, message } from 'antd'
-import { customerDel, customerSave, customerAddrSave, customerAddrUpdate, customerList, customerAddrList, customerAddrDefault } from 'api'
+import { customerDel, customerSave, customerAddrSave, customerAddrUpdate, customerList, customerAddrList, customerAddrDefault, customerUpdate } from 'api'
 import './customer.scss'
 
 export default class Customer extends React.Component {
@@ -26,7 +26,8 @@ export default class Customer extends React.Component {
       spinning: false,
       customerspinning: false,
       basicCustomerInfo: {},
-      addressDetail: {}
+      addressDetail: {},
+      customInfo:null
     }
   }
 
@@ -36,9 +37,10 @@ export default class Customer extends React.Component {
   }
 
   onSubmit = (type, value) => {
-    if (type === 'add') {
+    if (type === 'add' || type === 'modify') {
+      let api = type === 'add' ? customerSave : customerUpdate
       this.setState({ customerspinning: true })
-      customerSave({ ...value }).then(res => {
+      api({ ...value }).then(res => {
         this.setState({ customerspinning: false })
         if (!res) return
         message.success('操作成功')
@@ -142,8 +144,8 @@ export default class Customer extends React.Component {
   }
 
 
-  showAddCustomer = () => {
-    this.setState({ visible_addCustomer: true })
+  showAddCustomer = (item) => {
+    this.setState({ visible_addCustomer: true, customInfo:item})
   }
 
 
@@ -214,13 +216,14 @@ export default class Customer extends React.Component {
   }
 
   render() {
-    const { dataSource, visible_addCustomer, loading, pagination, addressDetail, spinning, customerspinning, visible_address, activeOperation, visible_operation, address_dataSource, address_loading } = this.state
+    const { dataSource, visible_addCustomer, loading, pagination, addressDetail, spinning, customerspinning, visible_address, activeOperation, visible_operation, address_dataSource, address_loading, customInfo } = this.state
     const columns = _.cloneDeep(indexTableColumnsConfig).map(v => {
       if (v.render === '') {
         v.render = (ext, record, index) => {
           return (
             <span className="Dropdown_Menu_box">
               <span data-rule-id="customer-address" onClick={this.showAddress.bind(this, record)}>维护地址</span>
+              <span onClick={this.showAddCustomer.bind(this, record)}>修改</span>
               <Popconfirm title="确定要删除吗?" onConfirm={this.deleteAndSettings.bind(this, 'customerDelete', record)}>
                 <span data-rule-id="customer-delete">删除</span>
               </Popconfirm>
@@ -287,7 +290,7 @@ export default class Customer extends React.Component {
           onChange={this.handleTableChange} />
 
         <Modal
-          title="新增客户"
+          title={customInfo?"修改客户":"新增客户"}
           okText="保存"
           centered={true}
           bodyStyle={{ paddingBottom: 0 }}
@@ -297,7 +300,8 @@ export default class Customer extends React.Component {
           <Spin tip="Loading..." spinning={customerspinning}>
             <AddForm
               onRef={this.ref}
-              onSubmit={this.onSubmit.bind(this, 'add')} />
+              customData={customInfo}
+              onSubmit={this.onSubmit.bind(this)} />
           </Spin>
         </Modal>
 
