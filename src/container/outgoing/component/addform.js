@@ -6,7 +6,7 @@ import EditableTable from '@component/editableTable/editableTable'
 import SelectionTable from '@component/selectionTable/selectionTable'
 import { formTable_config, goodsInStorage_config, map_Config } from './config'
 import SelestForm from './form'
-import { stockList, custAddrList, warehouseList } from 'api'
+import { stockList, custAddrList, warehouseList, customerList } from 'api'
 import SelectCustorm from './selectCustorm'
 
 import './addform.scss'
@@ -60,8 +60,9 @@ class AddForm extends React.Component {
       })
       this.props.form.setFieldsValue({ busiBillDetails })
       this.custAddrListApi(arrival.arrivalCode, record.arrivalAddress)
+      this.getcustomList(arrival.arrivalCode)
     }
-    this.initData()
+    this.initData(record.arrivalCode)
   }
 
   /** 相关数据初始化 */
@@ -73,7 +74,15 @@ class AddForm extends React.Component {
       this.setState({ warehouseList: res.data })
     })
   }
-
+  getcustomList(value){
+    customerList({pageNum:1,pageSize:10,customerCode:value}).then(res => {
+      if (!res) return
+      let remarkData=res.data.list.find(v => v.customerCode === value)
+      this.props.form.setFieldsValue({
+        customRemarkInfo: remarkData.remarkInfo
+      })
+    })
+  }
   onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys })
   }
@@ -229,22 +238,53 @@ class AddForm extends React.Component {
   }
   /** 获取客户地址列表, 初始化时会带入 address */
   custAddrListApi = (basicCustomerInfoCode, address) => {
+    const isModify = !!address
+    let check = null // 修改时，寻找对应的地址
+    this.props.form.setFieldsValue({
+      arrivalAddressId: null,
+      arrivalAddress: null,
+      arrivalLinkUser: null,
+      arrivalLinkTel: null,
+      addressRemarkInfo:null
+    })
     custAddrList({ basicCustomerInfoCode }).then(res => {
       if (!res) return
-        let telData=[]
-        res.data.map(v=>{
-          if(telData.findIndex(indexItem => indexItem.receiverTel === v.receiverTel)<0){
-            telData.push({receiverTel:v.receiverTel})
+      let arrivalAddressInfo = res.data.map(v => {
+        v.arrivalAddress = `${v.customerCity}/${v.customerProvince}/${v.customerArea} ( 详细地址: ${v.customerAddress} )`
+        if (address === v.arrivalAddress) {
+          check = v
+        }
+        return v
+      })
+      let telData=[]
+      res.data.forEach(v=>{
+        if(telData.findIndex(indexItem => indexItem.receiverTel === v.receiverTel)<0){
+          telData.push({receiverTel:v.receiverTel})
+        }
+      })
+      this.setState({ telData })
+      let temp = null
+      let arrivalAddressConfig=[]
+      if (check) {
+        temp = check
+      } else {
+        temp = arrivalAddressInfo.find(v => v.isDefault === 1)
+      }
+      if (temp) {
+        res.data.forEach(v=>{
+          if(v.receiverTel===temp.receiverTel){
+            arrivalAddressConfig.push(v)
           }
         })
-        this.setState({ telData })
+        this.setState({ arrivalAddressConfig })
         this.props.form.setFieldsValue({
-          arrivalAddressId: null,
-          arrivalAddress: null,
-          arrivalLinkUser: null,
-          arrivalLinkTel: null,
-          addressRemarkInfo:null
+          arrivalAddressId: temp.id,
+          arrivalAddress: temp.arrivalAddress,
+          arrivalLinkUser: temp.receiverName,
+          arrivalLinkTel:  temp.receiverTel,
+          addressRemarkInfo:temp.remarkInfo
         })
+      }
     })
   }
 
@@ -402,7 +442,7 @@ class AddForm extends React.Component {
               initialValue: record.customRemarkInfo,
               rules: [{ required: false }],
             })(
-              <TextArea rows={3} placeholder="请输入客户备注" readOnly />
+              <TextArea rows={3} disabled/>
             )}
           </Form.Item>
 
@@ -430,7 +470,7 @@ class AddForm extends React.Component {
               initialValue: record.arrivalLinkTel,
               rules: [{ required: true, message: '请输入手机号' }],
             })(
-              <Select style={{ width: 180 }} onChange={this.arrivalTelChange } placeholder="请选择联系人手机号">
+              <Select style={{ width: 180 }} onChange={this.arrivalTelChange } placeholder="请选择联系人手机号" showSearch optionFilterProp="children">
                 {
                   telData.map(v => <Option key={v.receiverTel} value={v.receiverTel}>{v.receiverTel}</Option>)
                 }
@@ -454,7 +494,7 @@ class AddForm extends React.Component {
 
           <Form.Item label="收货地址" {...formItemLayout_arrivalAddress} style={{ height: 60, display: 'block' }}>
             {getFieldDecorator('arrivalAddressId', {
-              initialValue: '',
+              initialValue: record.arrivalAddress,
               rules: [{
                 required: true,
                 message: '请选择收货地址',
@@ -482,7 +522,7 @@ class AddForm extends React.Component {
               initialValue: record.addressRemarkInfo,
               rules: [{ required: false }],
             })(
-              <TextArea rows={3} placeholder="请输入地址备注" readOnly/>
+              <TextArea rows={3} disabled/>
             )}
           </Form.Item>
 

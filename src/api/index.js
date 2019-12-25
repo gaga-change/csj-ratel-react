@@ -78,6 +78,8 @@ export const saveOutBill = params => http.post(`${base}/out/bill/saveOutBill`, p
 export const custAddrList = params => http.post(`${base}/base/custAddr/list`, params)
 /** 客户 保存 */
 export const customerSave = params => http.post(`${base}/customer/save`, params)
+/** 客户 修改 */
+export const customerUpdate = params => http.post(`${base}/customer/update`, params)
 /** 客户地址 保存 */
 export const customerAddrSave = params => http.post(`${base}/customer/addr/save`, params)
 /** 客户地址 修改 */
