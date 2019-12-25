@@ -238,7 +238,6 @@ class AddForm extends React.Component {
   }
   /** 获取客户地址列表, 初始化时会带入 address */
   custAddrListApi = (basicCustomerInfoCode, address) => {
-    const isModify = !!address
     let check = null // 修改时，寻找对应的地址
     this.props.form.setFieldsValue({
       arrivalAddressId: null,
