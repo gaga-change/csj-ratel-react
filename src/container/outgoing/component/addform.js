@@ -178,6 +178,7 @@ class AddForm extends React.Component {
     let temp = arrivalAddressConfig.find(v => v.id === value)
     if (temp) {
       this.props.form.setFieldsValue({
+        arrivalAddressId: temp.arrivalAddressId,
         arrivalAddress: temp.arrivalAddress,
         arrivalLinkUser: temp.receiverName,
         addressRemarkInfo: temp.remarkInfo
@@ -188,7 +189,7 @@ class AddForm extends React.Component {
   /** 联系电话切换事件 */
   arrivalTelChange = (value) => {
     let { telData } = this.state
-    let temp = telData.find(v => v.id === value)
+    let temp = telData.find(v => v.receiverTel === value)
     if (temp) {
       let { arrival } = this.state
       this.telListApi(arrival.arrivalCode,temp.receiverTel)
@@ -218,11 +219,10 @@ class AddForm extends React.Component {
         })
       } else {
         this.props.form.setFieldsValue({
-          arrivalAddressId: '',
-          arrivalAddress: '',
-          arrivalLinkUser: '',
-          arrivalLinkTel: '',
-          addressRemarkInfo:''
+          arrivalAddressId: null,
+          arrivalAddress: null,
+          arrivalLinkUser: null,
+          addressRemarkInfo:null
         })
       }
     })
@@ -231,16 +231,19 @@ class AddForm extends React.Component {
   custAddrListApi = (basicCustomerInfoCode, address) => {
     custAddrList({ basicCustomerInfoCode }).then(res => {
       if (!res) return
-        let telData=res.data.map(v => {
-          return v
+        let telData=[]
+        res.data.map(v=>{
+          if(telData.findIndex(indexItem => indexItem.receiverTel === v.receiverTel)<0){
+            telData.push({receiverTel:v.receiverTel})
+          }
         })
         this.setState({ telData })
         this.props.form.setFieldsValue({
-          arrivalAddressId: '',
-          arrivalAddress: '',
-          arrivalLinkUser: '',
-          arrivalLinkTel: '',
-          addressRemarkInfo:''
+          arrivalAddressId: null,
+          arrivalAddress: null,
+          arrivalLinkUser: null,
+          arrivalLinkTel: null,
+          addressRemarkInfo:null
         })
     })
   }
@@ -429,7 +432,7 @@ class AddForm extends React.Component {
             })(
               <Select style={{ width: 180 }} onChange={this.arrivalTelChange } placeholder="请选择联系人手机号">
                 {
-                  telData.map(v => <Option key={v.id} value={v.id}>{v.receiverTel}</Option>)
+                  telData.map(v => <Option key={v.receiverTel} value={v.receiverTel}>{v.receiverTel}</Option>)
                 }
               </Select>
             )}

@@ -25,7 +25,7 @@ class AddressForm extends React.Component {
 
   render() {
     const { getFieldDecorator} = this.props.form
-    const {customerProvince,customerCity, customerArea,customerAddress,postalCode,receiverName,receiverTel,isDefault} = this.props.addressDetail;
+    const {customerProvince,customerCity, customerArea,customerAddress,postalCode,receiverName,receiverTel,remarkInfo,isDefault} = this.props.addressDetail;
     const formItemLayout_left = {
       labelCol: {
         span:9
@@ -134,6 +134,7 @@ class AddressForm extends React.Component {
           <Form.Item label="备注"{...formItemLayout_left}>
               { 
                 getFieldDecorator('remarkInfo', {
+                  initialValue:remarkInfo,
                 })(<TextArea rows={3} placeholder="请输入备注" />)
               }
           </Form.Item>
