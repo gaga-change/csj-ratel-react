@@ -14,7 +14,7 @@ export const billStatusEnum = [
   },
   {
     value: '已关闭',
-    key: 3
+    key: 4
   }
 ]
 

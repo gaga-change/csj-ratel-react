@@ -65,6 +65,13 @@ class Login extends React.Component {
             </div>
           </main>
         </div>
+        <div className="beian">
+          <a
+            href="http://www.beian.miit.gov.cn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >浙ICP备14018558号-1</a>
+        </div>
       </div>
     )
   }

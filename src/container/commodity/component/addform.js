@@ -40,7 +40,7 @@ class AddForm extends React.Component {
       keys.forEach(key => {
         obj[key] = undefined
       })
-      obj.saleType = 3
+      obj.saleType = 1
       this.props.form.setFieldsValue(obj)
       return
     }
@@ -94,6 +94,9 @@ class AddForm extends React.Component {
   }
 
   onChange = (value, selectedOptions) => {
+    if(value.length<3){
+      return
+    }
     let { activeCascader } = this.state
     activeCascader = selectedOptions[selectedOptions.length - 1]
     this.setState({
@@ -133,6 +136,14 @@ class AddForm extends React.Component {
       }
     }
 
+    const checkLength = (rule, value, callback) => {
+      if (!this.props.form.getFieldValue('categoryCode') || this.props.form.getFieldValue('categoryCode').length<3) {
+        callback('第三级分类必选')
+      } else {
+        callback()
+      }
+    }
+
     return (
       <div className="AddForm">
         <Form
@@ -150,7 +161,7 @@ class AddForm extends React.Component {
           <Form.Item label="商品分类" {...formItemLayout_right}>
             {getFieldDecorator('categoryCode', {
               initialValue: [],
-              rules: [{ required: true, message: '请选择商品分类' }],
+              rules: [{ required: true, validator: checkLength }],
             })(
               <Cascader options={categoryTrees} onChange={this.onChange} placeholder="请选择商品分类" />
             )}
@@ -195,7 +206,7 @@ class AddForm extends React.Component {
           </Form.Item>
           <Form.Item label="在库区分" {...formItemLayout_right}>
             {getFieldDecorator('saleType', {
-              initialValue: 3
+              initialValue: 1
             })(
               <Select>
                 {saleTypeEnum.map((v, index) => <Option value={v.value} key={index}>{v.name}</Option>)}
