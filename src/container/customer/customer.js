@@ -37,8 +37,9 @@ export default class Customer extends React.Component {
   }
 
   onSubmit = (type, value) => {
-    if (type === 'add' || type === 'modify') {
-      let api = type === 'add' ? customerSave : customerUpdate
+    if (type === 'add') {
+      // let api = value.id ? customerUpdate : customerSave
+      let api = customerSave
       this.setState({ customerspinning: true })
       api({ ...value }).then(res => {
         this.setState({ customerspinning: false })
@@ -145,7 +146,9 @@ export default class Customer extends React.Component {
 
 
   showAddCustomer = (item) => {
+    let data=item?item:null
     this.setState({ visible_addCustomer: true, customInfo:item})
+    let { customInfo}=  this.setState
   }
 
 
@@ -223,7 +226,6 @@ export default class Customer extends React.Component {
           return (
             <span className="Dropdown_Menu_box">
               <span data-rule-id="customer-address" onClick={this.showAddress.bind(this, record)}>维护地址</span>
-              <span onClick={this.showAddCustomer.bind(this, record)}>修改</span>
               <Popconfirm title="确定要删除吗?" onConfirm={this.deleteAndSettings.bind(this, 'customerDelete', record)}>
                 <span data-rule-id="customer-delete">删除</span>
               </Popconfirm>
@@ -290,7 +292,7 @@ export default class Customer extends React.Component {
           onChange={this.handleTableChange} />
 
         <Modal
-          title={customInfo?"修改客户":"新增客户"}
+          title={"客户信息"}
           okText="保存"
           centered={true}
           bodyStyle={{ paddingBottom: 0 }}
@@ -301,7 +303,7 @@ export default class Customer extends React.Component {
             <AddForm
               onRef={this.ref}
               customData={customInfo}
-              onSubmit={this.onSubmit.bind(this)} />
+              onSubmit={this.onSubmit.bind(this,'add')} />
           </Spin>
         </Modal>
 
