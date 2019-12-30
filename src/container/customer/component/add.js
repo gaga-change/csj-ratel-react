@@ -11,9 +11,9 @@ class AddForm extends React.Component {
         let params = { ...values }
         if (this.props.customData) {
           params.id = this.props.customData.id
-          this.props.onSubmit('modify', params)
+          // this.props.onSubmit('modify', params)
         } else {
-          this.props.onSubmit('add', params)
+          // this.props.onSubmit('add', params)
         } 
         this.props.onSubmit(values)
       }
