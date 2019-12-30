@@ -37,9 +37,8 @@ export default class Customer extends React.Component {
   }
 
   onSubmit = (type, value) => {
-    if (type === 'add') {
-      // let api = value.id ? customerUpdate : customerSave
-      let api = customerSave
+    if (type === 'add' || type === 'modify') {
+      let api = type === 'add' ? customerSave : customerUpdate
       this.setState({ customerspinning: true })
       api({ ...value }).then(res => {
         this.setState({ customerspinning: false })
@@ -146,9 +145,7 @@ export default class Customer extends React.Component {
 
 
   showAddCustomer = (item) => {
-    let data=item?item:null
     this.setState({ visible_addCustomer: true, customInfo:item})
-    let { customInfo}=  this.setState
   }
 
 
@@ -226,6 +223,7 @@ export default class Customer extends React.Component {
           return (
             <span className="Dropdown_Menu_box">
               <span data-rule-id="customer-address" onClick={this.showAddress.bind(this, record)}>维护地址</span>
+              <span onClick={this.showAddCustomer.bind(this, record)}>修改</span>
               <Popconfirm title="确定要删除吗?" onConfirm={this.deleteAndSettings.bind(this, 'customerDelete', record)}>
                 <span data-rule-id="customer-delete">删除</span>
               </Popconfirm>
@@ -278,7 +276,7 @@ export default class Customer extends React.Component {
           selectWordsArr={['客户名称', '负责人', '手机']}
           onSubmit={this.onSubmit.bind(this, 'search')} />
         <div className="Customer_addBtn">
-          <Button data-rule-id="customer-add" type="primary" onClick={this.showAddCustomer}>
+          <Button data-rule-id="customer-add" type="primary" onClick={this.showAddCustomer.bind(this, null)}>
             新增客户
           </Button>
         </div>
@@ -292,7 +290,7 @@ export default class Customer extends React.Component {
           onChange={this.handleTableChange} />
 
         <Modal
-          title={"客户信息"}
+          title={customInfo?"修改客户":"新增客户"}
           okText="保存"
           centered={true}
           bodyStyle={{ paddingBottom: 0 }}
@@ -303,7 +301,7 @@ export default class Customer extends React.Component {
             <AddForm
               onRef={this.ref}
               customData={customInfo}
-              onSubmit={this.onSubmit.bind(this,'add')} />
+              onSubmit={this.onSubmit.bind(this)} />
           </Spin>
         </Modal>
 
