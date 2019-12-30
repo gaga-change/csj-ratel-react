@@ -84,7 +84,7 @@ class AddressForm extends React.Component {
               getFieldDecorator('customerAddress', {
                 initialValue: customerAddress,
                 rules: [{ required: true, message: '请输入详细地址' }]
-              })(<TextArea rows={3} placeholder="请输入详细地址" />)
+              })(<TextArea rows={3} placeholder="请输入详细地址" maxLength={45} />)
             }
           </Form.Item>
 
