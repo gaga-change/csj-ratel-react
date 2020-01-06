@@ -66,14 +66,14 @@ class App extends Component {
   }
 
   render() {
-    const { pathname } = this.props.location
+    const { pathname, search } = this.props.location
     const { user } = this.props
     const { ownerName, nick } = user || {}
     const menus = (user && user.menus) || {}
     let menusRoot = [...(menus.children || [])]
     const defaultSelectedKeys = []
     deep(menus, 'children', v => {
-      if (('/sys' + v.path) === pathname) {
+      if (('/sys' + v.path) === pathname || ('/sys' + v.path) === pathname + search) {
         defaultSelectedKeys.push(v.id)
       }
     })
