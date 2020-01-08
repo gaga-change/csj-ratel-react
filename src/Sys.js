@@ -22,6 +22,17 @@ class App extends Component {
   }
 
   componentDidMount() {
+    var script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.id = 'otherdatascript'
+    script.src = `http://bi.csjmro.com/WebReport/ReportServer?op=fs_load&cmd=sso&fr_username=${'huozhu@163.com'}&fr_password=${'eabd8ce9404507aa8c22714d3f5eada9'}&validity=-1&callback=fwie`
+    document.body.appendChild(script)
+    window.fwie = function (data) {
+      // 成功后删除script及回调方法
+      const script = document.getElementById('otherdatascript')
+      document.body.removeChild(script)
+      delete window['fwie']
+    }
     userInfo().then(res => {
       if (!res) return
       let user = res.data
