@@ -25,7 +25,7 @@ class ReportList extends React.Component {
       {/* {location.search} */}
       {
         ownerCode && <iframe title="报表"
-          src={`http://bi.csjmro.com/WebReport/ReportServer?reportlet=${u}&ownerCode=${ownerCode}`}
+          src={`http://bi.csjmro.com/WebReport/ReportServer?reportlet=${u}&owner_code=${ownerCode}`}
           style={{ width: '100%', height: '100%', 'backgroundColor': 'rgb(255, 255, 255)', border: 'none' }}
         >
         </iframe>
