@@ -29,7 +29,7 @@ class AddForm extends React.Component {
       warehouseListLoading: false,
       warehouseList: [],
       warehouse: {},
-      telData:[]
+      telData: []
     }
   }
 
@@ -74,10 +74,10 @@ class AddForm extends React.Component {
       this.setState({ warehouseList: res.data })
     })
   }
-  getcustomList(value){
-    customerList({pageNum:1,pageSize:10,customerCode:value}).then(res => {
+  getcustomList(value) {
+    customerList({ pageNum: 1, pageSize: 10, customerCode: value }).then(res => {
       if (!res) return
-      let remarkData=res.data.list.find(v => v.customerCode === value)
+      let remarkData = res.data.list.find(v => v.customerCode === value)
       this.props.form.setFieldsValue({
         customRemarkInfo: remarkData.remarkInfo
       })
@@ -110,7 +110,16 @@ class AddForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err && !values.busiBillDetails.some(v => isNaN(v.skuOutQty))) {
         this.setState({ addSubmitLoading: true })
-        this.props.onSubmit(type, { ...values, ...arrival, ...warehouse }).then(res => this.setState({ addSubmitLoading: false }))
+        const params = { ...values, ...arrival, ...warehouse }
+        {
+          // 地址绑定
+          let item = this.state.arrivalAddressConfig.find(v => v.id === params.arrivalAddressId)
+          // v.arrivalAddress = `${v.customerProvince}/${v.customerCity}/${v.customerArea}    ${v.customerAddress}`
+          params.arrivalProvince = item.customerProvince
+          params.arrivalCity = item.customerCity
+          params.arrivalDistrict = item.customerArea
+        }
+        this.props.onSubmit(type, params).then(res => this.setState({ addSubmitLoading: false }))
       }
     })
   }
@@ -177,7 +186,7 @@ class AddForm extends React.Component {
     this.props.form.setFieldsValue({
       customRemarkInfo: item.remarkInfo
     })
-    this.setState({ arrival })
+    this.setState({ arrival, arrivalAddressConfig: [] })
     this.custAddrListApi(arrival.arrivalCode)
   }
 
@@ -201,17 +210,17 @@ class AddForm extends React.Component {
     let temp = telData.find(v => v.receiverTel === value)
     if (temp) {
       let { arrival } = this.state
-      this.telListApi(arrival.arrivalCode,temp.receiverTel)
+      this.telListApi(arrival.arrivalCode, temp.receiverTel)
       this.props.form.setFieldsValue({
         arrivalLinkTel: temp.receiverTel
       })
     }
   }
-  telListApi=(basicCustomerInfoCode, receiverTel) => {
-    custAddrList({ basicCustomerInfoCode,receiverTel }).then(res => {
+  telListApi = (basicCustomerInfoCode, receiverTel) => {
+    custAddrList({ basicCustomerInfoCode, receiverTel }).then(res => {
       if (!res) return
       let arrivalAddressConfig = res.data.map(v => {
-        v.arrivalAddress = `${v.customerCity}/${v.customerProvince}/${v.customerArea} ( 详细地址: ${v.customerAddress} )`
+        v.arrivalAddress = `${v.customerProvince}/${v.customerCity}/${v.customerArea}    ${v.customerAddress}`
         return v
       })
       this.setState({ arrivalAddressConfig })
@@ -231,7 +240,7 @@ class AddForm extends React.Component {
           arrivalAddressId: null,
           arrivalAddress: null,
           arrivalLinkUser: null,
-          addressRemarkInfo:null
+          addressRemarkInfo: null
         })
       }
     })
@@ -244,34 +253,34 @@ class AddForm extends React.Component {
       arrivalAddress: null,
       arrivalLinkUser: null,
       arrivalLinkTel: null,
-      addressRemarkInfo:null
+      addressRemarkInfo: null
     })
     custAddrList({ basicCustomerInfoCode }).then(res => {
       if (!res) return
       let arrivalAddressInfo = res.data.map(v => {
-        v.arrivalAddress = `${v.customerCity}/${v.customerProvince}/${v.customerArea} ( 详细地址: ${v.customerAddress} )`
+        v.arrivalAddress = `${v.customerProvince}/${v.customerCity}/${v.customerArea}    ${v.customerAddress}`
         if (address === v.arrivalAddress) {
           check = v
         }
         return v
       })
-      let telData=[]
-      res.data.forEach(v=>{
-        if(telData.findIndex(indexItem => indexItem.receiverTel === v.receiverTel)<0){
-          telData.push({receiverTel:v.receiverTel})
+      let telData = []
+      res.data.forEach(v => {
+        if (telData.findIndex(indexItem => indexItem.receiverTel === v.receiverTel) < 0) {
+          telData.push({ receiverTel: v.receiverTel })
         }
       })
       this.setState({ telData })
       let temp = null
-      let arrivalAddressConfig=[]
+      let arrivalAddressConfig = []
       if (check) {
         temp = check
       } else {
         temp = arrivalAddressInfo.find(v => v.isDefault === 1)
       }
       if (temp) {
-        res.data.forEach(v=>{
-          if(v.receiverTel===temp.receiverTel){
+        res.data.forEach(v => {
+          if (v.receiverTel === temp.receiverTel) {
             arrivalAddressConfig.push(v)
           }
         })
@@ -280,8 +289,8 @@ class AddForm extends React.Component {
           arrivalAddressId: temp.id,
           arrivalAddress: temp.arrivalAddress,
           arrivalLinkUser: temp.receiverName,
-          arrivalLinkTel:  temp.receiverTel,
-          addressRemarkInfo:temp.remarkInfo
+          arrivalLinkTel: temp.receiverTel,
+          addressRemarkInfo: temp.remarkInfo
         })
       }
     })
@@ -441,7 +450,7 @@ class AddForm extends React.Component {
               initialValue: record.customRemarkInfo,
               rules: [{ required: false }],
             })(
-              <TextArea rows={3} disabled/>
+              <TextArea rows={3} disabled />
             )}
           </Form.Item>
 
@@ -469,7 +478,7 @@ class AddForm extends React.Component {
               initialValue: record.arrivalLinkTel,
               rules: [{ required: true, message: '请输入手机号' }],
             })(
-              <Select style={{ width: 180 }} onChange={this.arrivalTelChange } placeholder="请选择联系人手机号" showSearch optionFilterProp="children">
+              <Select style={{ width: 180 }} onChange={this.arrivalTelChange} placeholder="请选择联系人手机号" showSearch optionFilterProp="children">
                 {
                   telData.map(v => <Option key={v.receiverTel} value={v.receiverTel}>{v.receiverTel}</Option>)
                 }
@@ -521,7 +530,7 @@ class AddForm extends React.Component {
               initialValue: record.addressRemarkInfo,
               rules: [{ required: false }],
             })(
-              <TextArea rows={3} disabled/>
+              <TextArea rows={3} disabled />
             )}
           </Form.Item>
 
