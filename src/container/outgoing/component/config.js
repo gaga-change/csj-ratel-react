@@ -174,6 +174,18 @@ export const BaseCard_Config = [
     dataIndex: 'planOutQty',
   },
   {
+    title: '客户编码',
+    dataIndex: 'arrivalCode',
+  },
+  {
+    title: '客户名称',
+    dataIndex: 'arrivalName',
+  },
+  {
+    title: '备注',
+    dataIndex: 'remarkInfo',
+  },
+  {
     title: '创建人',
     dataIndex: 'busiBillCreater',
   },
@@ -187,7 +199,6 @@ export const BaseCard_Config = [
     dataIndex: 'billStatus',
     useLocalEnum: 'billStatusEnum'
   },
-
 ]
 
 export const PopoverTable_Config = [
