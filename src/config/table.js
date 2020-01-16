@@ -111,6 +111,10 @@ export const planOutListColumns = [
     dataIndex: 'warehouseName',
   },
   {
+    title: '客户名称',
+    dataIndex: 'arrivalName',
+  },
+  {
     title: '计划出库总量',
     dataIndex: 'planOutQty',
   },
