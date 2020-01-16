@@ -7,9 +7,7 @@ import MyContent from './Content'
 import imgSouce from 'imgSouce/imgSouce'
 import { loginOut, userInfo } from 'api'
 import { connectSocket } from 'api/socket'
-
 import { deep, sortMenu } from 'lib'
-
 import './Sys.scss'
 
 const { Header, Sider, Content } = Layout
