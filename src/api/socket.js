@@ -2,13 +2,14 @@ import io from 'socket.io-client'
 import { notification } from 'antd'
 
 export function connectSocket(user) {
+  if (window.socket) window.socket.disconnect();
   /** 发布环境 - 监听版本更新 */
   const userId = user.id + '#' + user.ownerName
   const username = user.nick
   if (process.env.NODE_ENV !== "development") {
     let nowVersion = process.env.IMAGE_TAG
     const roomName = window.location.hostname
-    // const roomName = 'tiger.csjmro.com'
+    // const roomName = 'testratel.csjmro.com'
     const socket = io('http://csj-center-egg-v2.shop.csj361.com/user', {
       // 实际使用中可以在这里传递参数
       query: {
@@ -18,6 +19,7 @@ export function connectSocket(user) {
         version: process.env.IMAGE_TAG
       }
     })
+    window.socket = socket
     /** 监听版本通知 */
     socket.on('exchange', msg => {
       const { data } = msg
@@ -48,8 +50,11 @@ export function connectSocket(user) {
     }
     function update(v) {
       notification.info({
+        key: "update_version",
         message: '提示',
         description: `当前系统版本更新，刷新页面获取最新内容！当前版本：${process.env.IMAGE_TAG}，最新版本：${v}`,
+        duration: 0,
+        placement: "bottomRight"
       });
     }
   }

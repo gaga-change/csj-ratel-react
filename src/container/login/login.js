@@ -13,6 +13,7 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
+    if (window.socket) window.socket.disconnect()
     document.querySelector('body').style.overflow = 'hidden'
   }
 
