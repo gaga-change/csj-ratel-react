@@ -5,7 +5,7 @@ COPY ["package.json", ".npmrc", "package-lock.json*", "npm-shrinkwrap.json*", ".
 RUN npm install
 COPY . .
 ARG IMAGE_TAG=0.0.0
-RUN npm run build && echo "$IMAGE_TAG" > ./dist/version.txt
+RUN npm run build && echo "$IMAGE_TAG" > ./build/version.txt
 FROM nginx:1.15-alpine
 COPY --from=ratel-vue-build /usr/src/app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
