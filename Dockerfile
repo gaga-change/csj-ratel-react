@@ -1,13 +1,13 @@
-FROM node:8-alpine as build
-# ARG IMAGE_TAG=0.0.0
+FROM node:10-alpine as ratel-vue-build
 WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
+COPY ["package.json", ".npmrc", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 # RUN npm --registry https://registry.npm.taobao.org install
 RUN npm install
 COPY . .
-RUN npm run build
+ARG IMAGE_TAG=0.0.0
+RUN npm run build && echo "$IMAGE_TAG" > ./dist/version.txt
 FROM nginx:1.15-alpine
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
+COPY --from=ratel-vue-build /usr/src/app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 CMD ["nginx","-g","daemon off;"]
