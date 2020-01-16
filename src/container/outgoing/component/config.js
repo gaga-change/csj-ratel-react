@@ -199,6 +199,10 @@ export const BaseCard_Config = [
     dataIndex: 'billStatus',
     useLocalEnum: 'billStatusEnum'
   },
+  {
+    title: '详细地址',
+    dataIndex: 'arrivalAddress',
+  },
 ]
 
 export const PopoverTable_Config = [
