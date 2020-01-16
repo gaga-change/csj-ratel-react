@@ -22,6 +22,7 @@ class AddForm extends React.Component {
       busiBillDetails: [],
       visible: false,
       goodsInStorage_dataSource: [],
+      goodsInStorage_dataSourceTotal: [],
       selectedRowKeys: [],
       arrival: {},
       arrivalAddressConfig: [],
@@ -139,10 +140,10 @@ class AddForm extends React.Component {
   }
 
   handleOk = () => {
-    let { selectedRowKeys, goodsInStorage_dataSource } = this.state
+    let { selectedRowKeys, goodsInStorage_dataSourceTotal } = this.state
     let selectedItems = this.props.form.getFieldValue('busiBillDetails')
     let newItems = []
-    goodsInStorage_dataSource.forEach(item => {
+    goodsInStorage_dataSourceTotal.forEach(item => {
       if (selectedRowKeys.includes(item.id)) {
         let index = selectedItems.findIndex(v => v.id === item.id)
         if (index >= 0) {
@@ -175,7 +176,7 @@ class AddForm extends React.Component {
   onSelect = (value) => {
     let { arrivalCode, warehouseCode } = this.props.form.getFieldsValue(['arrivalCode', 'warehouseCode'])
     this.getCommodity({ ...value, customerCode: arrivalCode, warehouseCode })
-    this.setState({ selectedRowKeys: [] })
+    // this.setState({ selectedRowKeys: [] })
   }
 
   /** 客户切换事件 */
@@ -307,6 +308,9 @@ class AddForm extends React.Component {
         v.id = `${v.warehouseCode}_${v.skuCode}`
         return v
       })
+      if (this.state.goodsInStorage_dataSourceTotal.length === 0) {
+        this.setState({ goodsInStorage_dataSourceTotal: goodsInStorage_dataSource })
+      }
       this.setState({ goodsInStorage_dataSource })
     })
   }

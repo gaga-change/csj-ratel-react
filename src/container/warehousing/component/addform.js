@@ -21,6 +21,7 @@ class AddForm extends React.Component {
       items: [],
       visible: false,
       goodsInStorage_dataSource: [],
+      goodsInStorage_dataSourceTotal: [],
       selectedRowKeys: [],
       selectionTableLoding: false,
       warehouse: {},
@@ -124,10 +125,10 @@ class AddForm extends React.Component {
   }
 
   handleOk = () => {
-    let { selectedRowKeys, goodsInStorage_dataSource } = this.state
+    let { selectedRowKeys, goodsInStorage_dataSourceTotal } = this.state
     let selectedItems = this.props.form.getFieldValue('items')
     let newItems = []
-    goodsInStorage_dataSource.forEach(item => {
+    goodsInStorage_dataSourceTotal.forEach(item => {
       if (selectedRowKeys.includes(item.id)) {
         let index = selectedItems.findIndex(v => v.id === item.id)
         if (index >= 0) {
@@ -157,7 +158,7 @@ class AddForm extends React.Component {
   onSelect = (value) => {
     let { providerCode } = this.props.form.getFieldsValue(['providerCode'])
     this.getCommodity({ ...value, providerCode })
-    this.setState({ selectedRowKeys: [] })
+    // this.setState({ selectedRowKeys: [] })
   }
 
   /** 获取（刷新）商品列表 */
@@ -172,6 +173,9 @@ class AddForm extends React.Component {
         v.id = v.skuCode
         return v
       })
+      if (this.state.goodsInStorage_dataSourceTotal.length === 0) {
+        this.setState({ goodsInStorage_dataSourceTotal: goodsInStorage_dataSource })
+      }
       this.setState({ goodsInStorage_dataSource })
     })
   }
