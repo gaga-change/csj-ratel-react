@@ -47,7 +47,7 @@ class AddForm extends React.Component {
               v[map_Config[i]] = v[i]
             }
           }
-          v.id = `${v.warehouseCode}_${v.skuCode}`
+          v.id = `${record.warehouseCode}_${v.skuCode}`
           return v
         })
       }
