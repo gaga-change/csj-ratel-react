@@ -541,7 +541,7 @@ class AddForm extends React.Component {
           <Form.Item label="订单备注" {...formItemLayout_left}>
             {getFieldDecorator('remarkInfo', {
               initialValue: record.remarkInfo,
-              rules: [{ required: false }],
+              rules: [{ required: false }, { max: 50, message: '备注请控制在50个汉字范围内' }],
             })(
               <TextArea rows={4} placeholder="请输入订单备注" />
             )}
