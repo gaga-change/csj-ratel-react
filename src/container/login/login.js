@@ -10,11 +10,14 @@ class Login extends React.Component {
 
   state = {
     loginLoding: false,
+    version: ''
   }
 
   componentDidMount() {
     if (window.socket) window.socket.disconnect()
     document.querySelector('body').style.overflow = 'hidden'
+
+    this.setState({ version: process.env.IMAGE_TAG })
   }
 
   componentWillUnmount() {
@@ -35,7 +38,7 @@ class Login extends React.Component {
   }
 
   render() {
-    const { loginLoding } = this.state
+    const { loginLoding, version } = this.state
     return (
       <div className="Login">
         <div className="header-logo" style={{ paddingLeft: '24px' }}>
@@ -71,7 +74,8 @@ class Login extends React.Component {
             href="http://www.beian.miit.gov.cn"
             target="_blank"
             rel="noopener noreferrer"
-          >浙ICP备14018558号-1</a>
+          >浙ICP备14018558号-1 </a>
+          <span style={{ color: '#000' }}>| 系统版本： {version}</span>
         </div>
       </div>
     )
