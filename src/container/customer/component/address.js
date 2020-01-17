@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Cascader, Button, Checkbox } from 'antd'
+import { Form, Input, Cascader, Button, Checkbox, message } from 'antd'
 import { Area } from '@lib/area'
 import './add.scss'
 
@@ -13,6 +13,39 @@ class AddressForm extends React.Component {
         this.props.onSubmit(values)
       }
     })
+  }
+
+  handleReadAddress = () => {
+    let address = this.props.form.getFieldValue("customerAddress") || ""
+    let res = []
+    for (let i = 0; i < Area.length; i++) {
+      let province = Area[i]
+      if (~address.indexOf(province.value)) {
+        res.push(province)
+        for (let j = 0; j < province.children.length; j++) {
+          let city = province.children[j]
+          if (~address.indexOf(city.value)) {
+            res.push(city)
+            for (let j = 0; j < city.children.length; j++) {
+              let area = city.children[j]
+              if (~address.indexOf(area.value)) {
+                res.push(area)
+              }
+            }
+          }
+        }
+        break
+      }
+    }
+    if (res.length === 0) {
+      message.warning("请核查输入地址是否准确，如有错误，请及时修改");
+    } else {
+      this.props.form.setFieldsValue({ area: res.map(v => v.value) })
+    }
+  }
+
+  handleClearAddress = () => {
+    this.props.form.setFieldsValue({ customerAddress: "" })
   }
 
   handleRest = () => {
@@ -87,6 +120,10 @@ class AddressForm extends React.Component {
               })(<TextArea rows={3} placeholder="请输入详细地址" maxLength={45} />)
             }
           </Form.Item>
+          <span style={{ display: "inline-block", height: '73px', paddingTop: '53px' }}>
+            <span className="btn-link ml10" onClick={this.handleReadAddress}>识别</span>
+            <span className="btn-link ml10" onClick={this.handleClearAddress}>清空</span>
+          </span>
 
           <Form.Item label="邮政编码" {...formItemLayout_left}>
             {getFieldDecorator('postalCode', {
