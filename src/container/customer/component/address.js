@@ -172,7 +172,7 @@ class AddressForm extends React.Component {
             {
               getFieldDecorator('remarkInfo', {
                 initialValue: remarkInfo,
-                rules: [{ required: false }, { max: 50, message: '备注请控制在50个汉字范围内' }],
+                rules: [{ required: false }, { max: 80, message: '备注请控制在80个汉字范围内' }],
               })(<TextArea rows={3} placeholder="请输入备注" />)
             }
           </Form.Item>
