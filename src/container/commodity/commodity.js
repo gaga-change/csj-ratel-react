@@ -25,7 +25,7 @@ class Commodity extends React.Component {
         <Popconfirm title="确定要删除吗?" onConfirm={this.deleteCommodity.bind(this, record)}>
           <span data-rule-id="commodity-delete">删除</span>
         </Popconfirm>
-        <span data-rule-id="commodity-modify" onClick={this.modifySku.bind(this, record)}>编辑</span>
+        {/* <span data-rule-id="commodity-modify" onClick={this.modifySku.bind(this, record)}>编辑</span> */}
         <span data-rule-id="commodity-supplyPrice" onClick={this.modifySupplyPrice.bind(this, record)}>供货价</span>
         <span data-rule-id="commodity-customerPrice" onClick={this.modifyCustomerPrice.bind(this, record)}>销售价</span>
       </span>
