@@ -114,7 +114,7 @@ class SelestForm extends React.Component {
               <Col span={6} style={{ width: '306px', marginBottom: '12px' }}>
                 <Form.Item label="联系人电话">
                   {getFieldDecorator('arrivalLinkTel', {
-                    rules: [{ required: false, message: '请输入正确格式的手机号', pattern: /^1[34578]\d{9}$/ }],
+                    rules: [{ required: false, message: '请输入正确格式的手机号', pattern: /^1[3456789]\d{9}$/ }],
                   })(
                     <Input autoComplete='off' placeholder="请输入联系人电话" />
                   )}

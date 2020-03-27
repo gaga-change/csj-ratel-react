@@ -65,7 +65,7 @@ class AddForm extends React.Component {
             {
               getFieldDecorator('customerLinkuserTel', {
                 initialValue: customData.customerLinkuserTel,
-                rules: [{ required: false, message: '请输入正确格式的手机号', pattern: /^1[34578]\d{9}$/ }],
+                rules: [{ required: false, message: '请输入正确格式的手机号', pattern: /^1[3456789]\d{9}$/ }],
               })(<Input placeholder="请输入手机" />)
             }
           </Form.Item>

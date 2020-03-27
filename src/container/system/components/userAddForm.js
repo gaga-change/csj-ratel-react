@@ -58,14 +58,14 @@ class DataForm extends React.Component {
             rules: [{
               required: true, message: '请选择用户角色！',
             }],
-            initialValue: obj.roleName&&obj.roleId ?  obj.roleId : undefined
+            initialValue: obj.roleName && obj.roleId ? obj.roleId : undefined
           })(
             <Select
               placeholder="请选择用户角色"
             >
               {
                 this.props.roles.map(role => {
-                  return (<Option  value={role.id} key={role.id}>{role.roleName}</Option>)
+                  return (<Option value={role.id} key={role.id}>{role.roleName}</Option>)
                 })
               }
             </Select>
@@ -83,7 +83,7 @@ class DataForm extends React.Component {
             }],
             initialValue: obj.userName
           })(
-            <Input autoComplete='off'  placeholder="6~20位字符，字母区分大小写" />
+            <Input autoComplete='off' placeholder="6~20位字符，字母区分大小写" />
           )}
         </Form.Item>
         <Form.Item
@@ -95,7 +95,7 @@ class DataForm extends React.Component {
               required: true, message: '请输入手机号！',
             },
             {
-              message: '不是正确的手机号码', pattern: /^1[34578]\d{9}$/,
+              message: '不是正确的手机号码', pattern: /^1[3456789]\d{9}$/,
             }],
             initialValue: obj.linkTel
           })(
@@ -125,7 +125,7 @@ class DataForm extends React.Component {
               message: '密码只能为数字和字母', pattern: /^[A-Za-z0-9]+$/
             }],
           })(
-            <Input autoComplete='off'  placeholder="6-20位，字母与数字结合，字母区分大小写"  />
+            <Input autoComplete='off' placeholder="6-20位，字母与数字结合，字母区分大小写" />
           )}
         </Form.Item>
         <Form.Item

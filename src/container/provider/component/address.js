@@ -117,7 +117,7 @@ class AddressForm extends React.Component {
                   {
                     required: true,
                     message: '手机号必填且格式要正确',
-                    pattern: /^1[34578]\d{9}$/
+                    pattern: /^1[3456789]\d{9}$/
                   }
                 ]
               })(<Input placeholder="请输入手机" />)}
