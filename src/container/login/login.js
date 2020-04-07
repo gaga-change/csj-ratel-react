@@ -50,9 +50,9 @@ class Login extends React.Component {
           <div>
             <img src={imgSouce['logo2']} alt="" />
             <div className="logo_text">
-              <h3>川山甲货主平台</h3>
+              <h3>川山甲供应链协同平台</h3>
             </div>
-            <p>您好，欢迎来到川山甲货主平台！今天是{date.getFullYear()}年{date.getMonth() + 1}月{date.getDate()}日 星期{week[date.getDay() - 1]}</p>
+            <p>您好，欢迎来到川山甲供应链协同平台！今天是{date.getFullYear()}年{date.getMonth() + 1}月{date.getDate()}日 星期{week[date.getDay() - 1]}</p>
           </div>
         </div>
         <div className="LoginContaner">
