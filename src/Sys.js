@@ -164,6 +164,7 @@ class App extends Component {
                 <img src={imgSouce['logo']} alt="" />
                 <span>川山甲 货主平台</span>
               </div>
+              <a href="http://help.csjscm.com/#/newsWeb/list?systemId=fe6b09cd31cb47ed837a6ab26c910fa4" className="f12 mr20" target="_blank" rel="noopener noreferrer">在线帮助文档</a>
               <div className="header-set">
                 <Dropdown overlay={menu}>
                   <span className="ant-dropdown-link header_set_content" >
