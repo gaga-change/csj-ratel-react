@@ -30,11 +30,13 @@ import logo2 from './souce/csj-logo2.png';
 import loginBg from './souce/login_bg.png';
 import qrcode from './souce/qrcode.jpg';
 import tools from './souce/tools.png';
+import contract from './souce/contract.png';
 
 const imgSouce = {};
 //挂载资源
 imgSouce['logo'] = logo;
 imgSouce['tools_click'] = tools;
+imgSouce['contract_click'] = contract;
 imgSouce['logo2'] = logo2;
 imgSouce['banner'] = banner;
 imgSouce['loginBg'] = loginBg;
