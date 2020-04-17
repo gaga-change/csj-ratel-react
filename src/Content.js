@@ -10,6 +10,7 @@ import Provider from 'container/provider/provider'
 import Role from 'container/system/role'
 import Menu from 'container/system/menu'
 import User from 'container/system/user'
+import OnlinePrice from 'container/tools/onlinePrice'
 import SetPass from 'container/system/setPass'
 import reportList from 'container/report/reportList'
 import { withRouter } from "react-router"
@@ -29,6 +30,7 @@ class Content extends React.Component {
         <Route exact path={`${match.path}/system/user`} component={User} />
         <Route exact path={`${match.path}/system/setPass`} component={SetPass} />
         <Route exact path={`${match.path}/system/menu`} component={Menu} />
+        <Route exact path={`${match.path}/tools/onlinePrice`} component={OnlinePrice} />
         <Route exact path={`${match.path}/provider`} component={Provider} />
         <Route exact path={`${match.path}/reportList`} component={reportList} />
         <Redirect to={`${match.path}/home`} />
