@@ -1,3 +1,3 @@
 import React from 'react'
 
-export default () => (<div>123</div>)
+export default () => (<div>列表</div>)
