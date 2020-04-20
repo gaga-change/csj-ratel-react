@@ -1,5 +1,4 @@
 .Sys {
-
   .ant-menu-inline,
   .ant-menu-vertical,
   .ant-menu-vertical-left {
@@ -15,17 +14,17 @@
     }
   }
 
-  .ant-menu-inline-collapsed>.ant-menu-submenu>.ant-menu-submenu-title,
-  .ant-menu-inline-collapsed>.ant-menu-item {
+  .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title,
+  .ant-menu-inline-collapsed > .ant-menu-item {
     padding: 0 0 !important;
     width: 100%;
     height: 60px;
     margin: 0 !important;
-    color: rgba(255, 255, 255, .65);
+    color: rgba(255, 255, 255, 0.65);
   }
 
   .menu-item {
-    opacity: .8;
+    opacity: 0.8;
     display: block;
     width: inherit;
     height: inherit;
@@ -47,7 +46,6 @@
     }
   }
 
-
   .Sider,
   .ant-menu {
     background: #202852;
@@ -57,9 +55,8 @@
   }
 
   .Sider {
-
     padding-top: 30px;
-    height: 100vh;
+    min-height: 100vh;
   }
 
   .ant-layout-content {
@@ -73,7 +70,7 @@
     padding-left: 10px;
     height: 50px;
     line-height: 50px;
-    box-shadow: 0 1px 10px 0 rgba(88, 104, 217, .21);
+    box-shadow: 0 1px 10px 0 rgba(88, 104, 217, 0.21);
   }
 
   .header-logo {
@@ -121,12 +118,13 @@
         }
       }
     }
-
   }
-
-
 }
 
 .ant-menu-inline-collapsed-tooltip {
   display: none !important;
+}
+
+.ant-table-tbody > tr .FetchTable > .ant-table-wrapper:only-child .ant-table {
+  margin: 0;
 }

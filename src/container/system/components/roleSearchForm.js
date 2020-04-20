@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Input, Button, Row, Col } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Button, Row, Col } from 'antd';
 class RoleForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault()

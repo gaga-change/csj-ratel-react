@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/compatible": "^1.0.2",
     "@ant-design/icons": "^4.0.6",
     "@babel/core": "7.1.6",
     "@svgr/webpack": "2.4.1",
-    "antd": "^3.26.15",
+    "antd": "^4.1.4",
     "axios": "^0.18.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
