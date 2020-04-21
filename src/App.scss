@@ -35,7 +35,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: transparent;
   position: relative;
-  background: #f0f3f7 !important;
+  // background: #f0f3f7 !important;
+}
+
+.ant-layout {
+  background-color: #fff !important;
 }
 
 code {
@@ -153,7 +157,7 @@ $dirMap: (
   "l": "left",
   "r": "right",
   "t": "top",
-  "b": "bottom"
+  "b": "bottom",
 );
 
 $dirSizeList: 5 10 15 20 25;
