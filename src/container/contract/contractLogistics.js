@@ -3,11 +3,14 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import "./contractLogistics.scss"
 import { Form, Input, Button, Cascader, Select, Checkbox, DatePicker, message } from 'antd';
-import { Area } from '@lib/area'
+import { Area } from '@lib/area2'
 import ContractLogisticsRule from './contractLogisticsRule/contractLogisticsRule'
 const { Option } = Select
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
+
+const cityList = Area.map(v => ({ label: v.label, value: v.value, children: v.children.map(v => ({ ...v, children: undefined })) }))
+
 const layout = {
   layout: 'inline',
   labelCol: {
@@ -42,7 +45,7 @@ const ContractLogistics = (props) => {
       contractStartDate: values.contractDate[0].toDate(),
       contractStatus: values.contractStatus ? 1 : 2,
       contractTemplateItemReqList: values.contractTemplateItemReqList,
-      startPlace: values.startPlace.join('-'),
+      startPlace: values.startPlace.join('_'),
       remarkInfo: values.remarkInfo,
       templateType: values.templateType,
     }
@@ -137,7 +140,7 @@ const ContractLogistics = (props) => {
           },
         ]}
       >
-        <Cascader placeholder="请选择地区" options={Area} />
+        <Cascader placeholder="请选择地区" options={cityList} />
       </Form.Item>
 
       <Form.Item

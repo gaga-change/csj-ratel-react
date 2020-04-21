@@ -3,8 +3,11 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import "./contractExpress.scss"
 import { Form, Input, Button, Cascader, Select, Checkbox, DatePicker, message } from 'antd';
-import { Area } from '@lib/area'
+import { Area } from '@lib/area2'
 import ContractExpressRule from './contractExpressRule/contractExpressRule'
+
+const proviceList = Area.map(v => ({ label: v.label, value: v.value }))
+
 const { Option } = Select
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -42,7 +45,7 @@ const ContractExpress = (props) => {
       contractStartDate: values.contractDate[0].toDate(),
       contractStatus: values.contractStatus ? 1 : 2,
       contractTemplateItemReqList: values.contractTemplateItemReqList,
-      startPlace: values.startPlace.join('-'),
+      startPlace: values.startPlace[0],
       remarkInfo: values.remarkInfo,
       templateType: values.templateType,
     }
@@ -137,7 +140,7 @@ const ContractExpress = (props) => {
           },
         ]}
       >
-        <Cascader placeholder="请选择地区" options={Area} />
+        <Cascader placeholder="请选择地区" options={proviceList} />
       </Form.Item>
 
       <Form.Item
