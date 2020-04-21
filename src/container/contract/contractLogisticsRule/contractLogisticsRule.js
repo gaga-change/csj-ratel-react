@@ -8,9 +8,8 @@ import { getCityByCode } from '@lib/area2'
 
 const contractLogisticsRule = props => {
 
-  const createDataItem = () => ({ endPlaceList: [], weightRule: { config: [], price: undefined }, throwRule: { config: [], price: undefined }, key: Date.now() })
 
-  let temp = (props.value || []).map((v, i) => ({
+  const [data, setData] = useState(() => (props.value || []).map((v, i) => ({
     endPlaceList: v.endPlaceList,
     weightRule: {
       config: v.heavyRuleDetailReqList,
@@ -22,19 +21,12 @@ const contractLogisticsRule = props => {
       price: v.lowPrice,
     },
     key: i + '_' + Math.random()
-  }))
+  })))
 
-  // if (temp.length === 0) {
-  //   temp.push(createDataItem())
-  // }
-
-  const [data, setData] = useState([...temp])
   const [addressVisible, setAddressVisible] = useState(false)
   const [weightRuleVisible, setWeightRuleVisible] = useState(false)
   const [throwRuleVisible, setThrowRuleVisible] = useState(false)
   const [row, setRow] = useState({})
-
-
 
   useEffect(() => {
     props.onChange && props.onChange(data.map(v => ({
@@ -45,6 +37,8 @@ const contractLogisticsRule = props => {
       // lowPrice: v.throwRule.lowPrice,
     })))
   }, [data])
+
+  const createDataItem = () => ({ endPlaceList: [], weightRule: { config: [], price: undefined }, throwRule: { config: [], price: undefined }, key: Date.now() })
 
   /** 编辑出发地 按钮点击 */
   const handleModifyAddress = (list, record) => {

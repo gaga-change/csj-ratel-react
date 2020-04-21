@@ -7,7 +7,6 @@ const selectAddress = (props) => {
   const [checkedValues, setCheckedValues] = useState([...value])
 
   const handleOk = () => {
-    console.log('checkedValues ', checkedValues)
     onSubmit && onSubmit(checkedValues)
     onClose && onClose()
   }

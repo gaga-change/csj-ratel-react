@@ -8,17 +8,15 @@ const setWeightRule = (props) => {
     price: undefined
   }, onSubmit } = props
 
-
-  const temp = value.config.map((v, i) => ({
+  const [config, setConfig] = useState(() => value.config.map((v, i) => ({
     checkRange: v.endWeight ? 1 : 2,
     checkPrice: v.onePrice ? 1 : 2,
     endWeight: v.endWeight,
     unitPrice: v.unitPrice, // 单价 
     onePrice: v.onePrice, // 一口价
     key: i + '_' + Math.random(),
-  }))
+  })))
 
-  const [config, setConfig] = useState([...temp])
   const [price, setPrice] = useState(value.price)
 
 

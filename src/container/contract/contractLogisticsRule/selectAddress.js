@@ -11,10 +11,8 @@ const ShengCheckBoxArea = props => {
   const { value = [], options, onChange } = props
 
   const [checkedList, setCheckedList] = useState([...value])
-  // const textRef = useRef();
   const [indeterminate, setIndeterminate] = useState(false)
   const [checkAll, setCheckAll] = useState(false)
-
 
   const handleChange = checkedList => {
     setCheckedList(checkedList)
