@@ -37,7 +37,7 @@ class AddressForm extends React.Component {
       },
       style: {
         width: 400,
-        'min-height': 60
+        'minHeight': 60
       }
     };
 

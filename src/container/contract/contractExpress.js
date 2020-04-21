@@ -125,7 +125,7 @@ const ContractExpress = (props) => {
           },
         ]}
       >
-        <Checkbox disabled />
+        <Checkbox />
       </Form.Item>
       <Form.Item
         label="出发地"

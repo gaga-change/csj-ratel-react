@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react'
 import { Table } from 'antd';
 import SelectAddress from './selectAddress'
 import SetWeightRule from './setWeightRule'
-import { getProvinceByCode } from '@lib/area2'
+import { getCityByCode } from '@lib/area2'
 
 
-const contractExpressRule = props => {
+const contractLogisticsRule = props => {
 
   const createDataItem = () => ({ endPlaceList: [], weightRule: { config: [], price: undefined }, throwRule: { config: [], price: undefined }, key: Date.now() })
 
@@ -106,7 +106,9 @@ const contractExpressRule = props => {
       render: (list, record) => {
         return (
           <span>
-            <span className="mr10">{list.map(v => getProvinceByCode(v)).join(',')}</span>
+            <span className="mr10">{list.map(v => {
+              return getCityByCode(v.split('_')[1])
+            }).join(',')}</span>
             <button className="btn-link" onClick={() => handleModifyAddress(list, record)} type="button">编辑</button>
           </span>
         )
@@ -190,4 +192,4 @@ const contractExpressRule = props => {
   )
 }
 
-export default contractExpressRule
+export default contractLogisticsRule
