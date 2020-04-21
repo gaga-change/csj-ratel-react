@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, Button, Checkbox } from 'antd';
+import { Modal, Checkbox } from 'antd';
 import { Area } from '@lib/area'
 const options = Area
 const selectAddress = (props) => {

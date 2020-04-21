@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, Button, Checkbox, InputNumber, Switch, Radio, Divider, message } from 'antd';
+import { Modal, InputNumber, Radio, Divider, message } from 'antd';
 import "./setWeightRule.scss"
 const setWeightRule = (props) => {
 
