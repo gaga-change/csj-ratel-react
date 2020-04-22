@@ -15,7 +15,6 @@ import SetPass from 'container/system/setPass'
 import reportList from 'container/report/reportList'
 import ContractList from 'container/contract/contractList'
 import ContractExpress from 'container/contract/contractExpress'
-import ContractAddedValue from 'container/contract/contractAddedValue'
 import ContractLogistics from 'container/contract/contractLogistics'
 import ContractStore from 'container/contract/contractStore'
 import ContractSorting from 'container/contract/contractSorting'
@@ -39,7 +38,6 @@ class Content extends React.Component {
         <Route exact path={`${match.path}/tools/onlinePrice`} component={OnlinePrice} />
         <Route exact path={`${match.path}/contract/contractList`} component={ContractList} />
         <Route exact path={`${match.path}/contract/contractExpress`} component={ContractExpress} />
-        <Route exact path={`${match.path}/contract/contractAddedValue`} component={ContractAddedValue} />
         <Route exact path={`${match.path}/contract/contractLogistics`} component={ContractLogistics} />
         <Route exact path={`${match.path}/contract/contractStore`} component={ContractStore} />
         <Route exact path={`${match.path}/contract/contractSorting`} component={ContractSorting} />
