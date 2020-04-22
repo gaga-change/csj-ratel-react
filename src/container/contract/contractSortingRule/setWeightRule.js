@@ -125,10 +125,10 @@ const setWeightRule = (props, ref) => {
                     value={item.checkRange}>
                     <Radio style={radioStyle} value={1}>
                       <span>（{i === 0 ? 0 : config[i - 1].endWeight},
-                        <InputNumber disabled={i < config.length - 1} min={i === 0 ? 1 : (config[i - 1].endWeight + 1)} max={99999999} step={1} onChange={val => changeEndWeight(val, item, config)} value={item.endWeight} />】范围内</span>
+                        <InputNumber disabled={i < config.length - 1} min={i === 0 ? 1 : (config[i - 1].endWeight + 1)} max={99999999} step={1} onChange={val => changeEndWeight(val, item, config)} value={item.endWeight} />】公斤范围内</span>
                     </Radio>
                     <Radio style={radioStyle} value={2} className="mt5">
-                      <span>（{i === 0 ? 0 : config[i - 1].endWeight}，∞）范围内</span>
+                      <span>（{i === 0 ? 0 : config[i - 1].endWeight}，∞）公斤范围内</span>
                     </Radio>
                   </Radio.Group>
                 </div>
