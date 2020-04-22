@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import "./contractSorting.scss"
+import SetWeightRule from './contractSortingRule/setWeightRule'
 import { Form, Input, Button, Divider, InputNumber, Select, Checkbox, DatePicker } from 'antd';
 const { Option } = Select
 const { RangePicker } = DatePicker;
@@ -24,8 +25,13 @@ const tailLayout = {
 };
 
 const ContractSorting = (props) => {
+  const test = new useRef()
   const { ownerName, nick } = props.user || {}
   const onFinish = values => {
+    let res = test.current.submit()
+    if (!res) {
+      return
+    }
     // 校验规则是否填写完整
     const params = {
       contractNo: values.contractNo,
@@ -34,10 +40,8 @@ const ContractSorting = (props) => {
       contractStatus: values.contractStatus ? 1 : 2,
       remarkInfo: values.remarkInfo,
       templateType: values.templateType,
-      contractWarehouseTemplateReq: {
-        ruleType: values.ruleType,
-        unitPrice: values.unitPrice,
-      }
+      cappedPrice: values.cappedPrice,
+      contractSortingReqList: res,
     }
     console.log(params)
   };
@@ -53,10 +57,10 @@ const ContractSorting = (props) => {
       name="basic"
       className="ContractSorting"
       initialValues={{
-        templateType: 2,
+        templateType: 3,
         ownerName,
         nick,
-        unitPrice: undefined,
+        cappedPrice: undefined,
         ruleType: 0,
         contractStatus: true,
         contractDate: undefined,
@@ -134,6 +138,21 @@ const ContractSorting = (props) => {
         <RangePicker />
       </Form.Item>
       <Form.Item
+        label="封顶价"
+        name="cappedPrice"
+        rules={[
+          {
+            required: true,
+            message: '请输入!',
+          },
+        ]}
+      >
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <InputNumber min={0} max={99999999} step={1} precision={2} style={{ flex: 1 }} />
+          <span className="ml10">元</span>
+        </div>
+      </Form.Item>
+      <Form.Item
         label="登记人"
         name="nick"
         rules={[
@@ -157,24 +176,10 @@ const ContractSorting = (props) => {
       >
         <DatePicker disabled />
       </Form.Item>
-      <Form.Item
-        label="计费单价"
-        name="unitPrice"
-        rules={[
-          {
-            required: true,
-            message: '请输入!',
-          },
-        ]}
-      >
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <InputNumber min={0} max={99999999} step={1} precision={2} style={{ flex: 1 }} />
-          <span className="ml10">元</span>
-        </div>
-      </Form.Item>
+
       <Divider />
 
-      {/* <Form.Item
+      <Form.Item
         style={{ width: '100%' }}
         wrapperCol={
           {
@@ -182,10 +187,10 @@ const ContractSorting = (props) => {
             span: 24,
           }
         }
-        name="contractTemplateItemReqList"
+        name="contractSortingReqList"
       >
-        <ContractSortingRule />
-      </Form.Item> */}
+        <SetWeightRule ref={test} />
+      </Form.Item>
       {/* <Form.Item
         label="备注"
         name="remarkInfo"
