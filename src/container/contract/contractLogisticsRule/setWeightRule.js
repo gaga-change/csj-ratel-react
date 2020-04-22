@@ -150,12 +150,12 @@ const setWeightRule = (props) => {
                       <Radio style={radioStyle} value={1}>
                         <span>
                           <span className="label">一口价 </span>
-                          <InputNumber disabled={i < config.length - 1} min={0} max={99999999} step={0.01} onChange={val => changeOnePrice(val, item, config)} value={item.onePrice} /> 元</span>
+                          <InputNumber disabled={i < config.length - 1} min={0} max={99999999} step={1} precision={2} onChange={val => changeOnePrice(val, item, config)} value={item.onePrice} /> 元</span>
                       </Radio>
                       <Radio style={radioStyle} value={2} className="mt5">
                         <span>
                           <span className="label">单 价</span>
-                          <InputNumber disabled={i < config.length - 1} min={0} max={99999999} step={0.01} onChange={val => changeUnitPrice(val, item, config)} value={item.unitPrice} /> 元</span>
+                          <InputNumber disabled={i < config.length - 1} min={0} max={99999999} step={1} precision={2} onChange={val => changeUnitPrice(val, item, config)} value={item.unitPrice} /> 元</span>
                       </Radio>
                     </Radio.Group>
                   </div>
@@ -173,7 +173,7 @@ const setWeightRule = (props) => {
 
           <div>
             <span>
-              <span>最低一票</span><InputNumber min={0} max={99999999} step={0.01} onChange={handleChangePrice} value={price} />元
+              <span>最低一票</span><InputNumber min={0} max={99999999} step={1} precision={2} onChange={handleChangePrice} value={price} />元
             </span>
             <span style={{ float: 'right' }}>{
               config[config.length - 1].checkRange === 1 && <button className="btn-link" type="button" onClick={handleAddRule}>继续添加区间</button>

@@ -169,7 +169,7 @@ const ContractStore = (props) => {
         ]}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <InputNumber min={0} max={99999999} step={0.01} style={{ flex: 1 }} />
+          <InputNumber min={0} max={99999999} step={1} precision={2} style={{ flex: 1 }} />
           <span className="ml10">元</span>
         </div>
       </Form.Item>

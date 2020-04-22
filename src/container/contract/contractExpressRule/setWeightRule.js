@@ -150,12 +150,12 @@ const setWeightRule = (props) => {
                       <Radio style={radioStyle} value={1}>
                         <span>
                           <span className="label">一口价 </span>
-                          <InputNumber disabled={i < config.length - 1} min={0} max={99999999} step={0.01} onChange={val => changeOnePrice(val, item, config)} value={item.onePrice} /> 元</span>
+                          <InputNumber disabled={i < config.length - 1} min={0} max={99999999} step={1} precision={2} onChange={val => changeOnePrice(val, item, config)} value={item.onePrice} /> 元</span>
                       </Radio>
                       <Radio style={radioStyle} value={2} className="mt5">
                         <span>
                           <span className="label">单 价</span>
-                          <InputNumber disabled={i < config.length - 1} min={0} max={99999999} step={0.01} onChange={val => changeUnitPrice(val, item, config)} value={item.unitPrice} /> 元</span>
+                          <InputNumber disabled={i < config.length - 1} min={0} max={99999999} step={1} precision={2} onChange={val => changeUnitPrice(val, item, config)} value={item.unitPrice} /> 元</span>
                       </Radio>
                     </Radio.Group>
                   </div>

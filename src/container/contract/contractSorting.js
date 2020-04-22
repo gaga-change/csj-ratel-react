@@ -157,7 +157,6 @@ const ContractSorting = (props) => {
       >
         <DatePicker disabled />
       </Form.Item>
-      <Divider />
       <Form.Item
         label="计费单价"
         name="unitPrice"
@@ -169,31 +168,12 @@ const ContractSorting = (props) => {
         ]}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <InputNumber min={0} max={99999999} step={0.01} style={{ flex: 1 }} />
+          <InputNumber min={0} max={99999999} step={1} precision={2} style={{ flex: 1 }} />
           <span className="ml10">元</span>
         </div>
       </Form.Item>
-      <Form.Item
-        label=""
-        labelCol={
-          {
-            span: 0,
-          }
-        }
-        name="ruleType"
-        rules={[
-          {
-            required: true,
-            message: '请输入!',
-          },
-        ]}
-      >
-        <Select>
-          <Option value={0}>立方米/天(按体积)</Option>
-          <Option value={1}>托盘/天(按托盘)</Option>
-          <Option value={2}>平方米/天(按面积)</Option>
-        </Select>
-      </Form.Item>
+      <Divider />
+
       {/* <Form.Item
         style={{ width: '100%' }}
         wrapperCol={
