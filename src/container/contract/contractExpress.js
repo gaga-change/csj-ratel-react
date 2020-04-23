@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import "./contractExpress.scss"
 import { Form, Input, Button, Cascader, Select, Checkbox, DatePicker, message } from 'antd';
 import { Area } from '@lib/area2'
 import ContractExpressRule from './contractExpressRule/contractExpressRule'
+import { addContractTemplate } from 'api'
 
 const proviceList = Area.map(v => ({ label: v.label, value: v.value }))
 
@@ -29,6 +30,7 @@ const tailLayout = {
 
 const ContractExpress = (props) => {
   const { ownerName, nick } = props.user || {}
+  const [submitLoading, setSubmitLoading] = useState(false)
   const onFinish = values => {
     const rule = values.contractTemplateItemReqList
     if (rule.length === 0) return message.error('请配置计费规则')
@@ -47,8 +49,15 @@ const ContractExpress = (props) => {
       contractTemplateItemReqList: values.contractTemplateItemReqList,
       startPlace: values.startPlace[0],
       remarkInfo: values.remarkInfo,
-      templateType: values.templateType,
+      contractType: values.contractType,
     }
+    setSubmitLoading(true)
+    addContractTemplate(params).then(res => {
+      if (!res) return setSubmitLoading(false)
+      message.success('创建成功！')
+      this.props.history.push('/sys/contract/contractList')
+
+    })
     console.log(params)
   };
 
@@ -63,7 +72,7 @@ const ContractExpress = (props) => {
       name="basic"
       className="ContractExpress"
       initialValues={{
-        templateType: 0,
+        contractType: 0,
         ownerName,
         nick,
         contractStatus: true,
@@ -101,7 +110,7 @@ const ContractExpress = (props) => {
       </Form.Item>
       <Form.Item
         label="合同类型"
-        name="templateType"
+        name="contractType"
         rules={[
           {
             required: true,
@@ -199,7 +208,7 @@ const ContractExpress = (props) => {
       </Form.Item>
       <div style={{ width: '100%' }}></div>
       <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={submitLoading}>
           提交
         </Button>
       </Form.Item>

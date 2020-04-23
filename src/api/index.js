@@ -100,7 +100,8 @@ export const outBillDel = billNo => http.post(`${base}/out/bill/deleteBusiBill`,
 export const deleteBusiBill = billNo => http.post(`${base}/in/bill/deleteBusiBill`, { billNo })
 /** 商品修改 */
 export const skuInfoUpdate = params => http.post(`${base}/sku/info/update`, params)
-
+/** 添加合同模板信息 */
+export const addContractTemplate = params => http.post(`${base}/contract/addContractTemplate`, params)
 /** 删除商品 */
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)
 

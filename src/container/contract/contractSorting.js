@@ -1,9 +1,11 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import "./contractSorting.scss"
 import SetWeightRule from './contractSortingRule/setWeightRule'
-import { Form, Input, Button, Divider, InputNumber, Select, Checkbox, DatePicker } from 'antd';
+import { Form, Input, Button, Divider, InputNumber, Select, Checkbox, DatePicker, message } from 'antd';
+import { addContractTemplate } from 'api'
+
 const { Option } = Select
 const { RangePicker } = DatePicker;
 
@@ -27,6 +29,7 @@ const tailLayout = {
 const ContractSorting = (props) => {
   const test = new useRef()
   const { ownerName, nick } = props.user || {}
+  const [submitLoading, setSubmitLoading] = useState(false)
   const onFinish = values => {
     let res = test.current.submit()
     if (!res) {
@@ -39,10 +42,16 @@ const ContractSorting = (props) => {
       contractStartDate: values.contractDate[0].toDate(),
       contractStatus: values.contractStatus ? 1 : 2,
       remarkInfo: values.remarkInfo,
-      templateType: values.templateType,
+      contractType: values.contractType,
       cappedPrice: values.cappedPrice,
       contractSortingReqList: res,
     }
+    setSubmitLoading(true)
+    addContractTemplate(params).then(res => {
+      if (!res) return setSubmitLoading(false)
+      message.success('创建成功！')
+      props.history.push('/sys/contract/contractList')
+    })
     console.log(params)
   };
 
@@ -57,7 +66,7 @@ const ContractSorting = (props) => {
       name="basic"
       className="ContractSorting"
       initialValues={{
-        templateType: 3,
+        contractType: 3,
         ownerName,
         nick,
         cappedPrice: undefined,
@@ -95,7 +104,7 @@ const ContractSorting = (props) => {
       </Form.Item>
       <Form.Item
         label="合同类型"
-        name="templateType"
+        name="contractType"
         rules={[
           {
             required: true,
@@ -199,7 +208,7 @@ const ContractSorting = (props) => {
       </Form.Item> */}
       <div style={{ width: '100%' }}></div>
       <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={submitLoading}>
           提交
         </Button>
       </Form.Item>
