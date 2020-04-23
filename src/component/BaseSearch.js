@@ -1,8 +1,9 @@
-import React from 'react'
-import { Form } from '@ant-design/compatible';
+import React, { useEffect } from 'react'
 import '@ant-design/compatible/assets/index.css';
-import { Input, Row, Col, Select, Button } from 'antd';
+import { Input, Select, Button, Card, Form, DatePicker } from 'antd';
+import './BaseSearch.scss'
 import * as Enum from '@lib/enum'
+
 
 const { Option } = Select
 
@@ -15,22 +16,17 @@ const { Option } = Select
   { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: 'warehouseAreaNatureEnum' },
 ]
  */
-class BaseSearch extends React.Component {
 
-  state = {
-  }
-
-  componentDidMount() {
-    this.check()
-  }
-
+const BaseSearch = props => {
+  const [form] = Form.useForm();
+  const { config, onSubmit } = props
   /** 校验配置信息是否正确 */
-  check() {
-    const { config } = this.props
+  const check = () => {
+
     config.forEach(item => {
       switch (item.type) {
         case 'enum':
-          if (Enum[item.enum]) console.error(`枚举【${item.enum}】不存在`)
+          if (!Enum[item.enum]) console.error(`枚举【${item.enum}】不存在`)
           break
         default:
           break
@@ -38,100 +34,100 @@ class BaseSearch extends React.Component {
     })
   }
 
-  /** 提交信息 */
-  handleSubmit = (e) => {
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.props.onSubmit(values)
+  useEffect(() => {
+    check()
+  }, [])
+
+  const layout = {
+    layout: 'inline',
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
+  }
+
+  const onFinish = values => {
+    config.forEach(item => {
+      if (item.type === 'time' && values[item.prop]) {
+        values[item.prop] = values[item.prop].format('YYYY-MM-DD')
       }
     })
+    onSubmit && onSubmit(values)
   }
 
-  /** 重置表单 */
-  handleRest = (e) => {
-    this.props.form.resetFields()
-    this.handleSubmit()
+  const onFinishFailed = errorInfo => {
+    console.log('Failed:', errorInfo);
   }
 
-  render() {
-    const { getFieldDecorator } = this.props.form
-    const { className = '', config, vertical = true } = this.props
-    return (
-      <div className={className}>
-        <Form layout="inline">
-          <Row gutter={24}>
-            {
-              config.map((item, index) => {
-                if (item.type === 'enum') {
-                  return <Col key={index} span={6} style={{ width: '292px', marginBottom: '12px' }}>
-                    <Form.Item label={item.label}>
-                      {getFieldDecorator(item.prop, {
-                        rules: [{ required: false, message: '' }],
-                      })(
-                        <Select style={{ width: 180 }} placeholder={`请选择${item.label}`}>
-                          {
-                            (Enum[item.enum] || []).map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)
-                          }
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                } else {
-                  return <Col key={index} span={6} style={{ width: '292px', marginBottom: '12px' }}>
-                    <Form.Item label={item.label}>
-                      {getFieldDecorator(item.prop, {
-                        initialValue: undefined
-                      })(
-                        <Input maxLength={200} autoComplete='off' placeholder={`请输入${item.label}`} />
-                      )}
-                    </Form.Item>
-                  </Col>
-                }
-              })
-            }
-            {
-              !vertical &&
-              <Form.Item>
-                <Button
-                  type="primary"
-                  onClick={this.handleSubmit}
-                  style={{ marginRight: '12px' }}
-                  htmlType="button">
-                  查询
-                  </Button>
-                <Button
-                  type="primary"
-                  onClick={this.handleRest}
-                  htmlType="button">
-                  重置
-                   </Button>
+  const handleSubmit = () => {
+    form.submit()
+  }
+
+  const handleRest = () => {
+    form.resetFields()
+    form.submit()
+  }
+
+  const FormItmes = props => {
+    const { item } = props
+    const { type } = item
+    if (type === 'time') return <DatePicker {...props} placeholder="请选择" onChange={(...args) => {
+      props.onChange(...args)
+      handleSubmit()
+    }} />
+    if (type === 'enum') return <Select  {...props} placeholder="请选择" onChange={(...args) => {
+      props.onChange(...args)
+      handleSubmit()
+    }}>
+      {
+        (Enum[item.enum] || []).map(v => <Option key={v.value} value={v.value}>{v.name}</Option>)
+      }
+    </Select>
+    return <Input {...props} placeholder="请输入" />
+  }
+
+  return (
+    <div className="BaseSearch mb15">
+      <Card>
+        <Form
+          form={form}
+          {...layout}
+          name="basic"
+          className=""
+          initialValues={{
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+          {
+            config.map(item => (
+              <Form.Item
+                label={item.label}
+                name={item.prop}
+                key={item.prop}
+              >
+                <FormItmes item={item} />
               </Form.Item>
-            }
-
-            {
-              vertical &&
-              <Col span={24}>
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    onClick={this.handleSubmit}
-                    style={{ marginRight: '12px' }}
-                    htmlType="button">
-                    查询
-                    </Button>
-                  <Button
-                    type="primary"
-                    onClick={this.handleRest}
-                    htmlType="button">
-                    重置
-                    </Button>
-                </Form.Item>
-              </Col>
-            }
-          </Row>
+            ))
+          }
         </Form>
-      </div>)
-  }
+        <div>
+          <Button
+            type="primary"
+            onClick={handleSubmit}
+            style={{ marginRight: '12px' }}
+            htmlType="button">
+            查询</Button>
+          <Button
+            type="primary"
+            onClick={handleRest}
+            htmlType="button">
+            重置</Button>
+        </div>
+      </Card>
+    </div>
+  )
 }
-
-export default Form.create({ name: 'BaseSearch' })(BaseSearch)
+export default BaseSearch

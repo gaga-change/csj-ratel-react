@@ -15,8 +15,6 @@ export const homeTotalNum = params => http.get(`${base}/home/index`, { params })
 export const providerList = params => http.get(`${base}/provider/list`, { params })
 /** 客户列表查询 */
 export const customerList = params => http.get(`${base}/customer/list`, { params })
-/** 合同列表查询 */
-export const getContractListByPage = params => http.post(`${base}/contract/getContractListByPage`, params)
 /** 供应商地址列表 */
 export const providerAddrList = params => http.get(`${base}/provider/addr/list`, { params })
 /** 供应商默认地址设置 */
@@ -106,5 +104,7 @@ export const skuInfoUpdate = params => http.post(`${base}/sku/info/update`, para
 export const addContractTemplate = params => http.post(`${base}/contract/addContractTemplate`, params)
 /** 删除商品 */
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)
-
-
+/** 合同列表查询 */
+export const getContractListByPage = params => http.post(`${base}/contract/getContractListByPage`, params)
+/** 合同删除 */
+export const deleteContract = contractCode => http.get(`${base}/contract/deleteContract?contractCode=${contractCode}`)
