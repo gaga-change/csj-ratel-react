@@ -15,6 +15,8 @@ export const homeTotalNum = params => http.get(`${base}/home/index`, { params })
 export const providerList = params => http.get(`${base}/provider/list`, { params })
 /** 客户列表查询 */
 export const customerList = params => http.get(`${base}/customer/list`, { params })
+/** 合同列表查询 */
+export const getContractListByPage = params => http.post(`${base}/contract/getContractListByPage`, params)
 /** 供应商地址列表 */
 export const providerAddrList = params => http.get(`${base}/provider/addr/list`, { params })
 /** 供应商默认地址设置 */

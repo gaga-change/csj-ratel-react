@@ -47,5 +47,35 @@ export const ruleTypeEnum = [
     name: '外部连接',
     value: 2,
   },
+]
 
+export const contractTypeEnum = [
+  {
+    name: '运输快递合同',
+    value: 0,
+  },
+  {
+    name: '运输物流合同',
+    value: 1,
+  },
+  {
+    name: '仓储费合同',
+    value: 2,
+  },
+  {
+    name: '分拣处置费',
+    value: 3,
+  },
+]
+
+
+export const contractStatusEnum = [
+  {
+    name: '启用',
+    value: 1,
+  },
+  {
+    name: '禁用',
+    value: 2,
+  },
 ]

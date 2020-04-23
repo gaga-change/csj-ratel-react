@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table } from 'antd'
 import * as Enum from '@lib/enum'
+import moment from 'moment'
 
 /*
   api<Function> 接口
@@ -68,8 +69,10 @@ class BaseTable extends React.Component {
       if (!res) return
       const pagination = { ...this.state.pagination };
       pagination.total = res.data.total;
+      const { pageNum, pageSize } = res.data
+
       this.setState({
-        data: res.data.list || [],
+        data: (res.data.list || []).map((v, i) => ({ ...v, _index: (pageNum - 1) * pageSize + i + 1 })),
         pagination,
       });
     })
@@ -91,6 +94,27 @@ class BaseTable extends React.Component {
     const { config } = this.props
 
     const columns = config.map(v => {
+      if (v.type === 'enum') {
+        return {
+          title: v.label,
+          dataIndex: v.prop,
+          width: v.width,
+          render: (val) => {
+            if (!Enum[v.enum]) return val
+            let temp = Enum[v.enum].find(v => v.value === Number(val))
+            return temp ? temp.name : val
+          }
+        }
+      } else if (v.type === 'time') {
+        return {
+          title: v.label,
+          dataIndex: v.prop,
+          width: v.width,
+          render: (val) => {
+            return moment(val).format(v.format || 'YYYY-MM-DD')
+          }
+        }
+      }
       return {
         title: v.label,
         dataIndex: v.prop,
