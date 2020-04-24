@@ -1,21 +1,22 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react'
+import React, { useState, useImperativeHandle, forwardRef, useEffect } from 'react'
 import { InputNumber, Radio, Divider, message } from 'antd';
 import "./setWeightRule.scss"
 const setWeightRule = (props, ref) => {
+  const { disabled } = props
+  const [config, setConfig] = useState([])
 
-  const { value = {
-    config: [],
-    price: undefined
-  } } = props
-
-  const [config, setConfig] = useState(() => value.config.map((v, i) => ({
-    checkRange: v.endWeight ? 1 : 2,
-    checkPrice: v.onePrice ? 1 : 2,
-    endWeight: v.endWeight,
-    unitPrice: v.unitPrice, // 单价 
-    onePrice: v.onePrice, // 一口价
-    key: i + '_' + Math.random(),
-  })))
+  useEffect(() => {
+    if (props.value) {
+      setConfig(() => props.value.map((v, i) => ({
+        checkRange: v.endWeight ? 1 : 2,
+        checkPrice: v.onePrice ? 1 : 2,
+        endWeight: v.endWeight,
+        unitPrice: v.unitPrice, // 单价 
+        onePrice: v.onePrice, // 一口价
+        key: i + '_' + Math.random(),
+      })))
+    }
+  }, [props.value])
 
   const createItem = () => ({
     key: Date.now(),
@@ -67,7 +68,9 @@ const setWeightRule = (props, ref) => {
       message.error("配置不完整，最后一项区间结束必须为 ∞");
       return
     }
+    const temp = props.value || []
     return config.map((v, i) => ({
+      id: temp[i] && temp[i].id,
       startWeight: i === 0 ? 0 : config[i - 1].endWeight,
       endWeight: v.checkRange === 2 ? undefined : v.endWeight,
       unitPrice: v.checkPrice === 1 ? undefined : v.unitPrice,
@@ -112,11 +115,36 @@ const setWeightRule = (props, ref) => {
     }
   }));
 
+  const ReadOnlyShow = (props) => {
+    const { config = [] } = props
+    return (
+      <span>
+        <span className="mr10">
+          {config.length}
+          {config.map((v, i) => {
+            let msg
+            if (!v.endWeight) {
+              msg = `${v.startWeight}公斤以上${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
+            } else {
+              msg = `${v.endWeight}公斤以内${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
+            }
+            return <div key={i}>
+              {msg}
+            </div>
+          })}</span>
+      </span>
+    )
+  }
+
+  if (disabled) {
+    return <ReadOnlyShow config={config} />
+  }
+
   return (
     <div>
       <div className="SetWeightRuleModal">
         {
-          config.map((item, i) => (
+          (config || []).map((item, i) => (
             <div key={item.key}>
               <div className="line-item">
                 <div className="left">
