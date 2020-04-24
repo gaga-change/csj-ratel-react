@@ -124,13 +124,12 @@ const ContractSorting = (props) => {
   }, [])
 
   return (
-    <div className={`ContractStore ${readOnly ? 'readOnly' : ''}`}>
+    <div className={`ContractSorting ${readOnly ? 'readOnly' : ''}`}>
       <Spin tip="加载中..." spinning={initLoading}>
         <Form
           form={form}
           {...layout}
           name="basic"
-          className="ContractSorting"
           initialValues={{
             contractType: 3,
             ownerName,
@@ -264,11 +263,12 @@ const ContractSorting = (props) => {
             <SetWeightRule ref={setWeightRule} disabled={readOnly} />
           </Form.Item>
           <div style={{ width: '100%' }}></div>
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit" loading={submitLoading}>
-              提交
-        </Button>
-          </Form.Item>
+          {
+            !readOnly && <Form.Item {...tailLayout}>
+              <Button type="primary" htmlType="submit" loading={submitLoading}>
+                提交</Button>
+            </Form.Item>
+          }
         </Form>
       </Spin>
     </div>

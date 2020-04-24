@@ -120,13 +120,12 @@ const setWeightRule = (props, ref) => {
     return (
       <span>
         <span className="mr10">
-          {config.length}
           {config.map((v, i) => {
             let msg
             if (!v.endWeight) {
-              msg = `${v.startWeight}公斤以上${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
+              msg = `${v.startWeight || ''}公斤以上${!v.onePrice ? '，单价' + (v.unitPrice || '') : (v.onePrice || '')}元`
             } else {
-              msg = `${v.endWeight}公斤以内${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
+              msg = `${v.endWeight || ''}公斤以内${!v.onePrice ? '，单价' + (v.unitPrice || '') : (v.onePrice || '')}元`
             }
             return <div key={i}>
               {msg}
