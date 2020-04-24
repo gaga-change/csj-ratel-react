@@ -108,3 +108,7 @@ export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/
 export const getContractListByPage = params => http.post(`${base}/contract/getContractListByPage`, params)
 /** 合同删除 */
 export const deleteContract = contractCode => http.get(`${base}/contract/deleteContract?contractCode=${contractCode}`)
+/** 合同详情 */
+export const getContractDetail = id => http.get(`${base}/contract/getContractDetail?id=${id}`)
+/** 合同编辑 */
+export const updateContract = params => http.post(`${base}/contract/updateContract`, params)
