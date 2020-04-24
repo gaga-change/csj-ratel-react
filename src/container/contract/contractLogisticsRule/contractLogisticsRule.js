@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
 
 import { Table } from 'antd';
 import SelectAddress from './selectAddress'
@@ -6,37 +6,47 @@ import SetWeightRule from './setWeightRule'
 import { getCityByCode } from '@lib/area2'
 
 
-const contractLogisticsRule = props => {
+const contractLogisticsRule = (props, ref) => {
+  const { disabled } = props
 
-
-  const [data, setData] = useState(() => (props.value || []).map((v, i) => ({
-    endPlaceList: v.endPlaceList,
-    weightRule: {
-      config: v.heavyRuleDetailReqList,
-      price: v.lowPrice
-    },
-
-    throwRule: {
-      config: v.lightRuleDetailReqList,
-      price: v.lowPrice,
-    },
-    key: i + '_' + Math.random()
-  })))
-
+  const [data, setData] = useState([])
   const [addressVisible, setAddressVisible] = useState(false)
   const [weightRuleVisible, setWeightRuleVisible] = useState(false)
   const [throwRuleVisible, setThrowRuleVisible] = useState(false)
   const [row, setRow] = useState({})
 
   useEffect(() => {
-    props.onChange && props.onChange(data.map(v => ({
+    setData((props.value || []).map((v, i) => ({
+      endPlaceList: v.endPlaceList,
+      weightRule: {
+        config: v.heavyRuleDetailReqList,
+        price: v.heavyLowPrice
+      },
+      throwRule: {
+        config: v.lightRuleDetailReqList,
+        price: v.lightLowPrice,
+      },
+      key: i + '_' + Math.random()
+    })))
+  }, [props.value])
+
+  const submit = () => {
+    const { value = [] } = props
+    return data.map((v, i) => ({
+      groupId: value[i] && value[i].groupId,
       endPlaceList: v.endPlaceList,
       heavyRuleDetailReqList: v.weightRule.config,
-      lowPrice: v.weightRule.lowPrice,
+      heavyLowPrice: v.weightRule.price,
       lightRuleDetailReqList: v.throwRule.config,
-      // lowPrice: v.throwRule.lowPrice,
-    })))
-  }, [data])
+      lightLowPrice: v.throwRule.price,
+    }))
+  }
+
+  useImperativeHandle(ref, () => ({
+    submit: () => {
+      return submit()
+    }
+  }));
 
   const createDataItem = () => ({ endPlaceList: [], weightRule: { config: [], price: undefined }, throwRule: { config: [], price: undefined }, key: Date.now() })
 
@@ -103,7 +113,7 @@ const contractLogisticsRule = props => {
             <span className="mr10">{list.map(v => {
               return getCityByCode(v.split('_')[1])
             }).join(',')}</span>
-            <button className="btn-link" onClick={() => handleModifyAddress(list, record)} type="button">编辑</button>
+            {!disabled && <button className="btn-link" onClick={() => handleModifyAddress(list, record)} type="button">编辑</button>}
           </span>
         )
       },
@@ -127,7 +137,7 @@ const contractLogisticsRule = props => {
                 {msg}
               </div>
             })}{weightRule.price && <div>最低一票{weightRule.price}元</div>}</span>
-            <button className="btn-link" onClick={() => handleModifyWeightRule(weightRule, record)} type="button">编辑</button>
+            {!disabled && <button className="btn-link" onClick={() => handleModifyWeightRule(weightRule, record)} type="button">编辑</button>}
           </span>
         )
       },
@@ -151,12 +161,15 @@ const contractLogisticsRule = props => {
                 {msg}
               </div>
             })}{throwRule.price && <div>最低一票{throwRule.price}元</div>}</span>
-            <button className="btn-link" onClick={() => handleModifyThrowRule(throwRule, record)} type="button">编辑</button>
+            {!disabled && <button className="btn-link" onClick={() => handleModifyThrowRule(throwRule, record)} type="button">编辑</button>}
           </span>
         )
       },
     },
-    {
+  ]
+
+  if (!disabled) {
+    columns.push({
       title: '操作',
       key: 'action',
       render: (text, record, i) => (
@@ -164,14 +177,14 @@ const contractLogisticsRule = props => {
           <button className="btn-link" onClick={() => handelDelRow(i)} type="button">删除</button>
         </span>
       ),
-    },
-  ]
+    })
+  }
 
   return (
     <div>
       <Table columns={columns} dataSource={data} pagination={false} />,
       <div>
-        <button className="btn-link" onClick={handleAddRule} type="button">增加目的地运费</button>
+        {!disabled && <button className="btn-link" onClick={handleAddRule} type="button">增加目的地运费</button>}
       </div>
       {
         addressVisible && <SelectAddress visible={addressVisible} value={row.endPlaceList} onClose={() => setAddressVisible(false)} onSubmit={handleAddressChange} />
@@ -186,4 +199,4 @@ const contractLogisticsRule = props => {
   )
 }
 
-export default contractLogisticsRule
+export default forwardRef(contractLogisticsRule)

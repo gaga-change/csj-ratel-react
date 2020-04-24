@@ -112,3 +112,5 @@ export const deleteContract = contractCode => http.get(`${base}/contract/deleteC
 export const getContractDetail = id => http.get(`${base}/contract/getContractDetail?id=${id}`)
 /** 合同编辑 */
 export const updateContract = params => http.post(`${base}/contract/updateContract`, params)
+/** 费用估算 */
+export const contractCostEstimate = params => http.post(`${base}/contract/contractCostEstimate`, params)

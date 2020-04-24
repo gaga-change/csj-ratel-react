@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import "./contractExpress.scss"
-import { Form, Input, Button, Cascader, Select, Checkbox, DatePicker, message } from 'antd';
+import { Spin, Form, Input, Button, Cascader, Select, Checkbox, DatePicker, message } from 'antd';
 import { Area } from '@lib/area2'
 import ContractExpressRule from './contractExpressRule/contractExpressRule'
-import { addContractTemplate } from 'api'
+import { addContractTemplate, getContractDetail, updateContract } from 'api'
 
 const proviceList = Area.map(v => ({ label: v.label, value: v.value }))
 
@@ -29,10 +29,67 @@ const tailLayout = {
 };
 
 const ContractExpress = (props) => {
+  const contractExpressRule = useRef()
+  const [form] = Form.useForm();
   const { ownerName, nick } = props.user || {}
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [initLoading, setInitLoading] = useState(false)
+
+  const [id] = useState(() => {
+    let match = /\?id=(\d+)/.exec(props.location.search)
+    let id = match && match[1]
+    return id
+  })
+
+  const [readOnly] = useState(() => {
+    let match = /&readOnly=(\w*)/.exec(props.location.search)
+    console.log(match)
+    // let match = 
+    return !!(match && match[1])
+  })
+
+  /** 初始化 获取详情 */
+  const init = () => {
+    if (id) {
+      setInitLoading(true)
+      getContractDetail(id).then(res => {
+        setInitLoading(false)
+        if (!res) return
+        console.log(res)
+        const { contractMainDO: {
+          contractNo,
+          contractEndDate,
+          contractStartDate,
+          contractStatus,
+          remarkInfo,
+          ownerName,
+          contractType,
+          createrName,
+          cappedPrice,
+          gmtCreate,
+          startPlace,
+        }, contractTemplateRuleReqList } = res.data
+        const initData = {
+          contractNo,
+          contractDate: [moment(new Date(contractStartDate), 'YYYY-MM-DD'), moment(new Date(contractEndDate), 'YYYY-MM-DD'),],
+          contractStatus: !!(contractStatus === 1),
+          remarkInfo,
+          contractType,
+          cappedPrice,
+          ownerName,
+          nick: createrName,
+          startPlace: [startPlace],
+          gmtCreate: moment(new Date(gmtCreate), 'YYYY-MM-DD'),
+          contractTemplateItemReqList: contractTemplateRuleReqList
+        }
+        console.log(initData)
+        form.setFieldsValue(initData)
+      })
+    }
+  }
+
   const onFinish = values => {
-    const rule = values.contractTemplateItemReqList
+    const rule = contractExpressRule.current.submit()
     if (rule.length === 0) return message.error('请配置计费规则')
     for (let i = 0; i < rule.length; i++) {
       let item = rule[i]
@@ -42,20 +99,22 @@ const ContractExpress = (props) => {
     }
     // 校验规则是否填写完整
     const params = {
+      id,
       contractNo: values.contractNo,
       contractEndDate: values.contractDate[1].toDate(),
       contractStartDate: values.contractDate[0].toDate(),
       contractStatus: values.contractStatus ? 1 : 2,
-      contractTemplateItemReqList: values.contractTemplateItemReqList,
+      contractTemplateItemReqList: rule,
       startPlace: values.startPlace[0],
       remarkInfo: values.remarkInfo,
       contractType: values.contractType,
     }
+    const api = id ? updateContract : addContractTemplate
     setSubmitLoading(true)
-    addContractTemplate(params).then(res => {
+    api(params).then(res => {
       if (!res) return setSubmitLoading(false)
       message.success('创建成功！')
-      this.props.history.push('/sys/contract/contractList')
+      props.history.push('/sys/contract/contractList')
 
     })
     console.log(params)
@@ -65,154 +124,164 @@ const ContractExpress = (props) => {
     console.log('Failed:', errorInfo);
   };
 
+  useEffect(() => {
+    init()
+  }, [])
+
+
   return (
-    <Form
+    <div className={`ContractExpress ${readOnly ? 'readOnly' : ''}`}>
+      <Spin tip="加载中..." spinning={initLoading}>
+        <Form
+          form={form}
+          {...layout}
+          name="basic"
+          initialValues={{
+            contractType: 0,
+            ownerName,
+            nick,
+            contractStatus: true,
+            startPlace: undefined,
+            contractDate: undefined,
+            nowDate: moment(new Date(), 'YYYY-MM-DD'),
+            contractTemplateItemReqList: [],
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+          <Form.Item
+            label="模板编号"
+            name="contractNo"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Input placeholder="请输入" disabled={readOnly} />
+          </Form.Item>
+          <Form.Item
+            label="货主"
+            name="ownerName"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Input disabled />
+          </Form.Item>
+          <Form.Item
+            label="合同类型"
+            name="contractType"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Select disabled>
+              <Option value={0}>运输快递合同</Option>
+              <Option value={1}>运输物流合同</Option>
+              <Option value={2}>仓储费合同</Option>
+              <Option value={3}>分拣处置费</Option>
+              <Option value={4}>增值费合同</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="启用"
+            name="contractStatus"
+            valuePropName="checked"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Checkbox disabled={readOnly} />
+          </Form.Item>
+          <Form.Item
+            label="出发地"
+            name="startPlace"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Cascader placeholder="请选择地区" options={proviceList} disabled={readOnly} />
+          </Form.Item>
 
-      {...layout}
-      name="basic"
-      className="ContractExpress"
-      initialValues={{
-        contractType: 0,
-        ownerName,
-        nick,
-        contractStatus: true,
-        startPlace: undefined,
-        contractDate: undefined,
-        nowDate: moment(new Date(), 'YYYY-MM-DD'),
-        contractTemplateItemReqList: [],
-      }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-    >
-      <Form.Item
-        label="模板编号"
-        name="contractNo"
-        rules={[
+          <Form.Item
+            label="合同日期"
+            name="contractDate"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <RangePicker disabled={readOnly} />
+          </Form.Item>
+          <Form.Item
+            label="登记人"
+            name="nick"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Input disabled />
+          </Form.Item>
+          <Form.Item
+            label="登记日期"
+            name="nowDate"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <DatePicker disabled />
+          </Form.Item>
+          <Form.Item
+            style={{ width: '100%' }}
+            wrapperCol={
+              {
+                offset: 0,
+                span: 24,
+              }
+            }
+            name="contractTemplateItemReqList"
+          >
+            <ContractExpressRule ref={contractExpressRule} disabled={readOnly} />
+          </Form.Item>
+          <Form.Item
+            label="备注"
+            name="remarkInfo"
+          >
+            <TextArea />
+          </Form.Item>
+          <div style={{ width: '100%' }}></div>
           {
-            required: true,
-            message: '请输入!',
-          },
-        ]}
-      >
-        <Input placeholder="请输入" />
-      </Form.Item>
-      <Form.Item
-        label="货主"
-        name="ownerName"
-        rules={[
-          {
-            required: true,
-            message: '请输入!',
-          },
-        ]}
-      >
-        <Input disabled />
-      </Form.Item>
-      <Form.Item
-        label="合同类型"
-        name="contractType"
-        rules={[
-          {
-            required: true,
-            message: '请输入!',
-          },
-        ]}
-      >
-        <Select disabled>
-          <Option value={0}>运输快递合同</Option>
-          <Option value={1}>运输物流合同</Option>
-          <Option value={2}>仓储费合同</Option>
-          <Option value={3}>分拣处置费</Option>
-          <Option value={4}>增值费合同</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label="启用"
-        name="contractStatus"
-        valuePropName="checked"
-        rules={[
-          {
-            required: true,
-            message: '请输入!',
-          },
-        ]}
-      >
-        <Checkbox />
-      </Form.Item>
-      <Form.Item
-        label="出发地"
-        name="startPlace"
-        rules={[
-          {
-            required: true,
-            message: '请输入!',
-          },
-        ]}
-      >
-        <Cascader placeholder="请选择地区" options={proviceList} />
-      </Form.Item>
-
-      <Form.Item
-        label="合同日期"
-        name="contractDate"
-        rules={[
-          {
-            required: true,
-            message: '请输入!',
-          },
-        ]}
-      >
-        <RangePicker />
-      </Form.Item>
-      <Form.Item
-        label="登记人"
-        name="nick"
-        rules={[
-          {
-            required: true,
-            message: '请输入!',
-          },
-        ]}
-      >
-        <Input disabled />
-      </Form.Item>
-      <Form.Item
-        label="登记日期"
-        name="nowDate"
-        rules={[
-          {
-            required: true,
-            message: '请输入!',
-          },
-        ]}
-      >
-        <DatePicker disabled />
-      </Form.Item>
-      <Form.Item
-        style={{ width: '100%' }}
-        wrapperCol={
-          {
-            offset: 0,
-            span: 24,
+            !readOnly && <Form.Item {...tailLayout}>
+              <Button type="primary" htmlType="submit" loading={submitLoading}>
+                提交
+            </Button>
+            </Form.Item>
           }
-        }
-        name="contractTemplateItemReqList"
-      >
-        <ContractExpressRule />
-      </Form.Item>
-      <Form.Item
-        label="备注"
-        name="remarkInfo"
-      >
-        <TextArea />
-      </Form.Item>
-      <div style={{ width: '100%' }}></div>
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit" loading={submitLoading}>
-          提交
-        </Button>
-      </Form.Item>
-    </Form>
+        </Form>
+      </Spin>
+    </div>
   );
 };
 
