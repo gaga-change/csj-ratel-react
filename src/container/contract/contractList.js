@@ -44,19 +44,19 @@ const ContractList = props => {
     });
   }
 
-  const handleDetail = row => {
+  const handleDetail = (row, readOnly = '') => {
     switch (row.contractType) {
       case 0:
-        props.history.push(`/sys/contract/contractExpress?id=${row.id}`)
+        props.history.push(`/sys/contract/contractExpress?id=${row.id}&readOnly=${readOnly}`)
         break
       case 1:
-        props.history.push(`/sys/contract/contractLogistics?id=${row.id}`)
+        props.history.push(`/sys/contract/contractLogistics?id=${row.id}&readOnly=${readOnly}`)
         break
       case 2:
-        props.history.push(`/sys/contract/contractStore?id=${row.id}`)
+        props.history.push(`/sys/contract/contractStore?id=${row.id}&readOnly=${readOnly}`)
         break
       case 3:
-        props.history.push(`/sys/contract/contractSorting?id=${row.id}`)
+        props.history.push(`/sys/contract/contractSorting?id=${row.id}&readOnly=${readOnly}`)
         break
       default:
 
@@ -78,7 +78,7 @@ const ContractList = props => {
         return (<span>
           <Button type="link" onClick={() => handleDel(row)}>删除</Button>
           <Button type="link" onClick={() => handleDetail(row)}>修改</Button>
-          <Button type="link" onClick={() => handleDetail(row)}>查看</Button>
+          <Button type="link" onClick={() => handleDetail(row, true)}>查看</Button>
         </span>)
       }
     },

@@ -40,6 +40,13 @@ const ContractStore = (props) => {
     return id
   })
 
+  const [readOnly] = useState(() => {
+    let match = /&readOnly=(\w*)/.exec(props.location.search)
+    console.log(match)
+    // let match = 
+    return !!(match && match[1])
+  })
+
   /** 初始化 获取详情 */
   const init = () => {
     if (id) {
@@ -112,177 +119,159 @@ const ContractStore = (props) => {
   }, [])
 
   return (
-    <Spin tip="加载中..." spinning={initLoading}>
-      <Form
-        form={form}
-        {...layout}
-        name="basic"
-        className="ContractStore"
-        initialValues={{
-          contractType: 2,
-          ownerName,
-          nick,
-          unitPrice: undefined,
-          ruleType: 1,
-          contractStatus: true,
-          contractDate: undefined,
-          gmtCreate: moment(new Date(), 'YYYY-MM-DD'),
-        }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item
-          label="模板编号"
-          name="contractNo"
-          rules={[
-            {
-              required: true,
-              message: '请输入!',
-            },
-          ]}
+    <div className={`ContractStore ${readOnly ? 'readOnly' : ''}`}>
+      <Spin tip="加载中..." spinning={initLoading}>
+        <Form
+          form={form}
+          {...layout}
+          name="basic"
+          initialValues={{
+            contractType: 2,
+            ownerName,
+            nick,
+            unitPrice: undefined,
+            ruleType: 1,
+            contractStatus: true,
+            contractDate: undefined,
+            gmtCreate: moment(new Date(), 'YYYY-MM-DD'),
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
         >
-          <Input placeholder="请输入" />
-        </Form.Item>
-        <Form.Item
-          label="货主"
-          name="ownerName"
-          rules={[
-            {
-              required: true,
-              message: '请输入!',
-            },
-          ]}
-        >
-          <Input disabled />
-        </Form.Item>
-        <Form.Item
-          label="合同类型"
-          name="contractType"
-          rules={[
-            {
-              required: true,
-              message: '请输入!',
-            },
-          ]}
-        >
-          <Select disabled>
-            <Option value={0}>运输快递合同</Option>
-            <Option value={1}>运输物流合同</Option>
-            <Option value={2}>仓储费合同</Option>
-            <Option value={3}>分拣处置费</Option>
-            <Option value={4}>增值费合同</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="启用"
-          name="contractStatus"
-          valuePropName="checked"
-          rules={[
-            {
-              required: true,
-              message: '请输入!',
-            },
-          ]}
-        >
-          <Checkbox />
-        </Form.Item>
+          <Form.Item
+            label="模板编号"
+            name="contractNo"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Input placeholder="请输入" disabled={readOnly} />
+          </Form.Item>
+          <Form.Item
+            label="货主"
+            name="ownerName"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Input disabled />
+          </Form.Item>
+          <Form.Item
+            label="合同类型"
+            name="contractType"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Select disabled>
+              <Option value={0}>运输快递合同</Option>
+              <Option value={1}>运输物流合同</Option>
+              <Option value={2}>仓储费合同</Option>
+              <Option value={3}>分拣处置费</Option>
+              <Option value={4}>增值费合同</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="启用"
+            name="contractStatus"
+            valuePropName="checked"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Checkbox disabled={readOnly} />
+          </Form.Item>
 
-        <Form.Item
-          label="合同日期"
-          name="contractDate"
-          rules={[
-            {
-              required: true,
-              message: '请输入!',
-            },
-          ]}
-        >
-          <RangePicker />
-        </Form.Item>
-        <Form.Item
-          label="登记人"
-          name="nick"
-          rules={[
-            {
-              required: true,
-              message: '请输入!',
-            },
-          ]}
-        >
-          <Input disabled />
-        </Form.Item>
-        <Form.Item
-          label="登记日期"
-          name="gmtCreate"
-          rules={[
-            {
-              required: true,
-              message: '请输入!',
-            },
-          ]}
-        >
-          <DatePicker disabled />
-        </Form.Item>
-        <Divider />
-        <Form.Item
-          label="计费单价"
-          name="unitPrice"
-          rules={[
-            {
-              required: true,
-              message: '请输入!',
-            },
-          ]}
-        >
-          <HashUnitPrice />
-        </Form.Item>
-        <Form.Item
-          label=""
-          labelCol={
-            {
-              span: 0,
+          <Form.Item
+            label="合同日期"
+            name="contractDate"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <RangePicker disabled={readOnly} />
+          </Form.Item>
+          <Form.Item
+            label="登记人"
+            name="nick"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Input disabled />
+          </Form.Item>
+          <Form.Item
+            label="登记日期"
+            name="gmtCreate"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <DatePicker disabled />
+          </Form.Item>
+          <Divider />
+          <Form.Item
+            label="计费单价"
+            name="unitPrice"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <HashUnitPrice disabled={readOnly} />
+          </Form.Item>
+          <Form.Item
+            label=""
+            labelCol={
+              {
+                span: 0,
+              }
             }
-          }
-          name="ruleType"
-          rules={[
-            {
-              required: true,
-              message: '请输入!',
-            },
-          ]}
-        >
-          <Select>
-            <Option value={0}>立方米/天(按体积)</Option>
-            <Option value={1}>托盘/天(按托盘)</Option>
-            <Option value={2}>平方米/天(按面积)</Option>
-          </Select>
-        </Form.Item>
-        {/* <Form.Item
-        style={{ width: '100%' }}
-        wrapperCol={
-          {
-            offset: 0,
-            span: 24,
-          }
-        }
-        name="contractTemplateItemReqList"
-      >
-        <ContractStoreRule />
-      </Form.Item> */}
-        {/* <Form.Item
-        label="备注"
-        name="remarkInfo"
-      >
-        <TextArea />
-      </Form.Item> */}
-        <div style={{ width: '100%' }}></div>
-        <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit" loading={submitLoading}>
-            提交
-        </Button>
-        </Form.Item>
-      </Form>
-    </Spin>
+            name="ruleType"
+            rules={[
+              {
+                required: true,
+                message: '请输入!',
+              },
+            ]}
+          >
+            <Select disabled={readOnly} >
+              <Option value={0}>立方米/天(按体积)</Option>
+              <Option value={1}>托盘/天(按托盘)</Option>
+              <Option value={2}>平方米/天(按面积)</Option>
+            </Select>
+          </Form.Item>
+          <div style={{ width: '100%' }}></div>
+          {!readOnly && <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit" loading={submitLoading}>
+              提交</Button>
+          </Form.Item>}
+        </Form>
+      </Spin>
+    </div>
   );
 };
 
