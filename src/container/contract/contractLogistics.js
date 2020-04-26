@@ -66,7 +66,8 @@ const ContractLogistics = (props) => {
           createrName,
           cappedPrice,
           gmtCreate,
-        }, contractSortingRulesDOList } = res.data
+          startPlace,
+        }, contractTemplateRuleReqList } = res.data
         const initData = {
           contractNo,
           contractDate: [moment(new Date(contractStartDate), 'YYYY-MM-DD'), moment(new Date(contractEndDate), 'YYYY-MM-DD'),],
@@ -76,8 +77,9 @@ const ContractLogistics = (props) => {
           cappedPrice,
           ownerName,
           nick: createrName,
+          startPlace: startPlace.split('_'),
           gmtCreate: moment(new Date(gmtCreate), 'YYYY-MM-DD'),
-          contractSortingReqList: contractSortingRulesDOList
+          contractTemplateItemReqList: contractTemplateRuleReqList
         }
         console.log(initData)
         form.setFieldsValue(initData)
