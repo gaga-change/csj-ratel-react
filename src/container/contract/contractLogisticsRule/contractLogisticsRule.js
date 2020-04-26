@@ -122,6 +122,7 @@ const contractLogisticsRule = (props, ref) => {
       title: '计费规则（重货）',
       dataIndex: 'weightRule',
       key: 'weightRule',
+      width: 200,
       render: (weightRule, record) => {
         return (
           <span>
@@ -146,6 +147,7 @@ const contractLogisticsRule = (props, ref) => {
       title: '计费规则（抛货）',
       dataIndex: 'throwRule',
       key: 'throwRule',
+      width: 200,
       render: (throwRule, record) => {
         return (
           <span>
@@ -172,6 +174,7 @@ const contractLogisticsRule = (props, ref) => {
     columns.push({
       title: '操作',
       key: 'action',
+      width: 100,
       render: (text, record, i) => (
         <span>
           <button className="btn-link" onClick={() => handelDelRow(i)} type="button">删除</button>
