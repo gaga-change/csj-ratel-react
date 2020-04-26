@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import "./contractLogistics.scss"
@@ -30,6 +30,7 @@ const tailLayout = {
 };
 
 const ContractLogistics = (props) => {
+  const contractLogisticsRule = useRef()
   const [form] = Form.useForm();
   const { ownerName, nick } = props.user || {}
   const [submitLoading, setSubmitLoading] = useState(false)
@@ -85,7 +86,8 @@ const ContractLogistics = (props) => {
   }
 
   const onFinish = values => {
-    const rule = values.contractTemplateItemReqList
+    // const rule = values.contractTemplateItemReqList
+    const rule = contractLogisticsRule.current.submit()
     if (rule.length === 0) return message.error('请配置计费规则')
     for (let i = 0; i < rule.length; i++) {
       let item = rule[i]
@@ -100,7 +102,7 @@ const ContractLogistics = (props) => {
       contractEndDate: values.contractDate[1].toDate(),
       contractStartDate: values.contractDate[0].toDate(),
       contractStatus: values.contractStatus ? 1 : 2,
-      contractTemplateItemReqList: values.contractTemplateItemReqList,
+      contractTemplateItemReqList: rule,
       startPlace: values.startPlace.join('_'),
       remarkInfo: values.remarkInfo,
       contractType: values.contractType,
@@ -258,7 +260,7 @@ const ContractLogistics = (props) => {
             }
             name="contractTemplateItemReqList"
           >
-            <ContractLogisticsRule disabled={readOnly} />
+            <ContractLogisticsRule ref={contractLogisticsRule} disabled={readOnly} />
           </Form.Item>
           <Form.Item
             label="备注"
