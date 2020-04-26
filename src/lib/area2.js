@@ -13578,37 +13578,3 @@ export const getProvinceByCode = code => {
   let name = provinceMap.get(code)
   return name || code
 }
-
-
-// console.log(turnAddress('河北省/唐山市/路南区    123321')) => [111, 111, 111]
-export const turnAddress = str => {
-
-  let temp = str.split(/ |\//)
-  let res = []
-  for (let i = 0; i < Area.length; i++) {
-    let item = Area[i]
-    if (item.label === temp[0]) {
-      res.push(item.value)
-      if (item.children && item.children.length && temp[1]) {
-        for (let j = 0; j < item.children.length; j++) {
-          let city = item.children[j]
-          if (city.label === temp[1]) {
-            res.push(city.value)
-            if (city.children && city.children.length && temp[2]) {
-              for (let z = 0; z < city.children.length; z++) {
-                let area = city.children[z]
-                if (area.label === temp[2]) {
-                  res.push(area.value)
-                  break
-                }
-              }
-            }
-            break
-          }
-        }
-      }
-      break
-    }
-  }
-  return res
-}

@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react'
-import debounce from 'lodash/debounce';
 import { connect } from 'react-redux'
 import moment from 'moment'
 import "./onlinePrice.scss"
-import { Area, turnAddress } from '@lib/area2'
+import { Area } from '@lib/area2'
 import ShowPrice from './onlinePriceComponents/showPrice'
 import DisposalDetail from './onlinePriceComponents/disposalDetail'
 import ExpressDetail from './onlinePriceComponents/expressDetail'
-import { Spin, Form, Card, Button, Cascader, Divider, InputNumber, Select, Checkbox, DatePicker } from 'antd';
+import { Spin, Form, Card, Button, Input, Cascader, Divider, InputNumber, Select, Checkbox, DatePicker } from 'antd';
 import { getOutBusiBill, contractCostEstimate, getOutBusiBillDetail } from 'api'
 const { Option } = Select
 
@@ -34,7 +33,7 @@ const OnlinePrice = (props) => {
   const [fetchOrderListLoading, setFetchOrderListLoading] = useState(false)
   const [detailLoading, setDetailLoading] = useState(false)
   const [orderList, setOrderList] = useState([])
-  const [orderDetail, setOrderDetail] = useState(null)
+  const [orderDetail, setOrderDetail] = useState({})
 
   const init = () => {
     // setFetchOrderListLoading(true)
@@ -73,13 +72,14 @@ const OnlinePrice = (props) => {
     getOutBusiBillDetail({ billNo: orderList.find(v => v.busiBillNo === busiBillNo).billNo }).then(res => {
       setDetailLoading(false)
       if (!res) return
-      const { arrivalAddress } = res.data
+      const { arrivalAddress, warehouseAddress, warehouseName } = res.data
+      setOrderDetail(res.data)
       // 处理地址
-      console.log(turnAddress(arrivalAddress))
-
-      // form.setFieldsValue({
-      //   endPlace: []
-      // })
+      form.setFieldsValue({
+        endPlace: autoReadAddress(arrivalAddress),
+        startPlace: autoReadAddress(warehouseAddress),
+        warehouseName,
+      })
     })
   }
 
@@ -99,6 +99,31 @@ const OnlinePrice = (props) => {
     tick.current = fetch(val)
   }
 
+
+  const autoReadAddress = address => {
+    let res = []
+    for (let i = 0; i < Area.length; i++) {
+      let province = Area[i]
+      if (~address.indexOf(province.label.substr(0, 2))) {
+        res.push(province)
+        for (let j = 0; j < province.children.length; j++) {
+          let city = province.children[j]
+          if (~address.indexOf(city.label.substr(0, 2))) {
+            res.push(city)
+            for (let j = 0; j < city.children.length; j++) {
+              let area = city.children[j]
+              if (~address.indexOf(area.label.substr(0, 2))) {
+                res.push(area)
+              }
+            }
+          }
+        }
+        break
+      }
+    }
+    return res.map(v => v.value)
+  }
+
   useEffect(() => {
     init()
   }, [])
@@ -114,6 +139,7 @@ const OnlinePrice = (props) => {
           name="basic"
           initialValues={{
             templateType: 2,
+            palletType: 1,
             ownerName,
             nick,
             unitPrice: undefined,
@@ -142,8 +168,8 @@ const OnlinePrice = (props) => {
               showArrow={false}
               filterOption={false}
               onSearch={handleSearch}
+              placeholder="请输入订单号"
               notFoundContent={fetchOrderListLoading ? <Spin size="small" /> : null}
-
             >
               {
                 (orderList || []).map(v => <Option key={v.billNo} value={v.busiBillNo}>{v.busiBillNo}</Option>)
@@ -152,7 +178,7 @@ const OnlinePrice = (props) => {
           </Form.Item>
           <Form.Item
             label="所在仓库"
-            name="AAAA"
+            name="warehouseName"
             rules={[
               {
                 required: true,
@@ -160,9 +186,7 @@ const OnlinePrice = (props) => {
               },
             ]}
           >
-            <Select >
-              <Option value={0}>BB</Option>
-            </Select>
+            <Input disabled></Input>
           </Form.Item>
           <Form.Item
             label="运输方式"
@@ -192,9 +216,10 @@ const OnlinePrice = (props) => {
             <Select >
               <Option value={1}>不加托</Option>
               <Option value={2}>木托，60元</Option>
-              <Option value={2}>塑料托，80元</Option>
+              <Option value={3}>塑料托，80元</Option>
             </Select>
           </Form.Item>
+          <div style={{ width: '100%' }}></div>
           <Form.Item
             label="原寄地"
             name="startPlace"
@@ -207,6 +232,13 @@ const OnlinePrice = (props) => {
           >
             <Cascader placeholder="请选择地区" options={Area} />
           </Form.Item>
+          {/* <div>{orderDetail.warehouseAddress || ''}</div> */}
+          <Form.Item
+            label=""
+          >
+            {orderDetail.warehouseAddress || ''}
+          </Form.Item>
+          <div style={{ width: '100%' }}></div>
           <Form.Item
             label="目的地"
             name="endPlace"
@@ -219,6 +251,12 @@ const OnlinePrice = (props) => {
           >
             <Cascader placeholder="请选择地区" options={Area} />
           </Form.Item>
+          <Form.Item
+            label=""
+          >
+            {orderDetail.arrivalAddress || ''}
+          </Form.Item>
+          <div style={{ width: '100%' }}></div>
           <Form.Item
             label="重量"
             name="weight"
@@ -278,7 +316,7 @@ const OnlinePrice = (props) => {
           </Card>
           <div className="mt15" style={{ width: '100%' }}> </div>
           <Card style={{ width: '100%' }}>
-            <ShowPrice></ShowPrice>
+            <ShowPrice planOutAmt={orderDetail.planOutAmt}></ShowPrice>
           </Card>
         </Form>
       </Spin></div>
