@@ -5,6 +5,7 @@
   }
   &.readOnly {
     input,
+    textarea,
     .ant-select-selector,
     .ant-picker.ant-picker-disabled {
       background-color: #fff !important;
@@ -18,6 +19,12 @@
     .ant-input-number {
       border: none !important;
       flex: none !important;
+    }
+    .ant-cascader-picker-disabled {
+      color: #333 !important;
+      .ant-cascader-picker-arrow {
+        display: none;
+      }
     }
   }
 }

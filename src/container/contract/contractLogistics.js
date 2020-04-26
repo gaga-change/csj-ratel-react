@@ -213,7 +213,7 @@ const ContractLogistics = (props) => {
               },
             ]}
           >
-            <Cascader placeholder="请选择地区" options={cityList} />
+            <Cascader placeholder="请选择地区" options={cityList} disabled={readOnly} />
           </Form.Item>
 
           <Form.Item
