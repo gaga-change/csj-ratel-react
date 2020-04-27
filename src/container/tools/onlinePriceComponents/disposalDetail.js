@@ -1,40 +1,54 @@
 import React from 'react'
 import { Table } from 'antd'
-
-const dataSource = [
-
-];
-
+import { palletTypeEnum } from '@lib/enum'
 const columns = [
   {
     title: '费用类型',
-    dataIndex: 'aaa',
-    key: 'name',
+    dataIndex: 'palletType',
+    render: (text) => {
+      let temp = palletTypeEnum.find(v => Number(v.value) === text)
+      return temp && temp.name
+    }
   },
   {
     title: '计费方式',
-    dataIndex: 'bbb',
-    key: 'age',
+    dataIndex: 'type',
+    render: (text, row) => {
+      let res = null
+      switch (Number(row.palletType)) {
+        case 2:
+          res = (<span>60元/个</span>)
+          break
+        case 3:
+          res = (<span>80元/个</span>)
+          break
+        default:
+          res = (<span>无</span>)
+      }
+      return res
+    }
   },
   {
     title: '数量',
-    dataIndex: 'ccc',
-    key: 'address',
+    dataIndex: 'number',
   },
   {
     title: '金额',
-    dataIndex: 'ddd',
-    key: 'ddd',
+    dataIndex: 'price',
+    render: text => <span className="red">{text}</span>
   },
 ];
 
 
 const DisposalDetail = props => {
-  const { inited } = props
+  const { result = {} } = props
+  const { contactManagementVoList = [] } = result
+  const dataSource = (contactManagementVoList || []).map((v, i) => ({ ...v, key: i }))
+
   return (
     <div className={props.className}>
       <h4>处置费明细</h4>
-      {inited && <Table dataSource={dataSource} columns={columns} size="small" />}
+      <Table dataSource={dataSource} columns={columns} size="small" />
     </div>
   )
 }

@@ -79,3 +79,18 @@ export const contractStatusEnum = [
     value: 2,
   },
 ]
+
+export const palletTypeEnum = [
+  {
+    name: '不加托',
+    value: 1,
+  },
+  {
+    name: '木托，60元',
+    value: 2,
+  },
+  {
+    name: '塑料托，80元',
+    value: 3,
+  },
+]

@@ -41,8 +41,6 @@ const ContractLogistics = (props) => {
 
   const [readOnly] = useState(() => {
     let match = /&readOnly=(\w*)/.exec(props.location.search)
-    console.log(match)
-    // let match = 
     return !!(match && match[1])
   })
   /** 初始化 获取详情 */
@@ -52,7 +50,6 @@ const ContractLogistics = (props) => {
       getContractDetail(id).then(res => {
         setInitLoading(false)
         if (!res) return
-        console.log(res)
         const { contractMainDO: {
           contractNo,
           contractEndDate,
@@ -79,7 +76,6 @@ const ContractLogistics = (props) => {
           gmtCreate: moment(new Date(gmtCreate), 'YYYY-MM-DD'),
           contractTemplateItemReqList: contractTemplateRuleReqList
         }
-        console.log(initData)
         form.setFieldsValue(initData)
       })
     }
@@ -115,7 +111,6 @@ const ContractLogistics = (props) => {
       message.success('创建成功！')
       props.history.push('/sys/contract/contractList')
     })
-    console.log(params)
   };
 
   const onFinishFailed = errorInfo => {

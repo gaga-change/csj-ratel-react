@@ -41,8 +41,6 @@ const ContractExpress = (props) => {
 
   const [readOnly] = useState(() => {
     let match = /&readOnly=(\w*)/.exec(props.location.search)
-    console.log(match)
-    // let match = 
     return !!(match && match[1])
   })
 
@@ -53,7 +51,6 @@ const ContractExpress = (props) => {
       getContractDetail(id).then(res => {
         setInitLoading(false)
         if (!res) return
-        console.log(res)
         const { contractMainDO: {
           contractNo,
           contractEndDate,
@@ -80,7 +77,6 @@ const ContractExpress = (props) => {
           gmtCreate: moment(new Date(gmtCreate), 'YYYY-MM-DD'),
           contractTemplateItemReqList: contractTemplateRuleReqList
         }
-        console.log(initData)
         form.setFieldsValue(initData)
       })
     }
@@ -115,7 +111,6 @@ const ContractExpress = (props) => {
       props.history.push('/sys/contract/contractList')
 
     })
-    console.log(params)
   };
 
   const onFinishFailed = errorInfo => {

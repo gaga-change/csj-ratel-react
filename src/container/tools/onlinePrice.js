@@ -6,8 +6,9 @@ import { Area } from '@lib/area2'
 import ShowPrice from './onlinePriceComponents/showPrice'
 import DisposalDetail from './onlinePriceComponents/disposalDetail'
 import ExpressDetail from './onlinePriceComponents/expressDetail'
-import { Spin, Form, Card, Button, Input, Cascader, Divider, InputNumber, Select, Checkbox, DatePicker } from 'antd';
+import { Spin, Form, Card, Button, Input, Cascader, Divider, InputNumber, Select, Checkbox, DatePicker, message } from 'antd';
 import { getOutBusiBill, contractCostEstimate, getOutBusiBillDetail } from 'api'
+import { palletTypeEnum } from '@lib/enum'
 const { Option } = Select
 
 const layout = {
@@ -32,8 +33,10 @@ const OnlinePrice = (props) => {
   const { ownerName, nick } = props.user || {}
   const [fetchOrderListLoading, setFetchOrderListLoading] = useState(false)
   const [detailLoading, setDetailLoading] = useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false)
   const [orderList, setOrderList] = useState([])
   const [orderDetail, setOrderDetail] = useState({})
+  const [result, setResult] = useState(null)
 
   const init = () => {
     // setFetchOrderListLoading(true)
@@ -46,28 +49,38 @@ const OnlinePrice = (props) => {
 
   const onFinish = values => {
     // 校验规则是否填写完整
+    const { endPlace, mailDate, startPlace } = values
     const params = {
-      // contractNo: values.contractNo,
-      // contractEndDate: values.contractDate[1].toDate(),
-      // contractStartDate: values.contractDate[0].toDate(),
-      // contractStatus: values.contractStatus ? 1 : 2,
-      // remarkInfo: values.remarkInfo,
-      // templateType: values.templateType,
-      // contractWarehouseTemplateReq: {
-      //   ruleType: values.ruleType,
-      //   unitPrice: values.unitPrice,
-      // }
+      ...values,
+      endPlace: endPlace.join('_'),
+      goodsPrice: orderDetail.planOutAmt,
+      mailDate: mailDate.toDate(),
+      startPlace: startPlace.join('_'),
     }
-    console.log(params)
+    setSubmitLoading(true)
+    contractCostEstimate(params).then(res => {
+      setSubmitLoading(false)
+      if (!res) return
+      if (!res.data) {
+        message.warning('该订单无法估算！')
+      } else {
+        setResult(res.data)
+      }
+    })
   };
 
   const onFinishFailed = errorInfo => {
     console.log('Failed:', errorInfo);
   };
 
+  /** 表单提交 查询 */
+  const handleSubmit = () => {
+    form.submit()
+  }
+
   /**  */
-  const handleBusiBillNoChnage = busiBillNo => {
-    console.log('chnage', busiBillNo)
+  const handleBusiBillNoChange = busiBillNo => {
+    setResult(null)
     setDetailLoading(true)
     getOutBusiBillDetail({ billNo: orderList.find(v => v.busiBillNo === busiBillNo).billNo }).then(res => {
       setDetailLoading(false)
@@ -83,6 +96,7 @@ const OnlinePrice = (props) => {
     })
   }
 
+  /** 查询订单列表 */
   const fetch = val => setTimeout(() => {
     setFetchOrderListLoading(true)
     getOutBusiBill({ pageNum: 1, pageSize: 20, busiBillNo: val }).then(res => {
@@ -92,6 +106,7 @@ const OnlinePrice = (props) => {
     })
   }, 800)
 
+  /** 搜索事件 */
   const handleSearch = val => {
     if (tick.current) {
       clearTimeout(tick.current)
@@ -99,7 +114,7 @@ const OnlinePrice = (props) => {
     tick.current = fetch(val)
   }
 
-
+  /** 地址自动识别 */
   const autoReadAddress = address => {
     let res = []
     for (let i = 0; i < Area.length; i++) {
@@ -108,14 +123,16 @@ const OnlinePrice = (props) => {
         res.push(province)
         for (let j = 0; j < province.children.length; j++) {
           let city = province.children[j]
-          if (~address.indexOf(city.label.substr(0, 2))) {
+          if (~address.indexOf(city.label)) {
             res.push(city)
             for (let j = 0; j < city.children.length; j++) {
               let area = city.children[j]
-              if (~address.indexOf(area.label.substr(0, 2))) {
+              if (~address.indexOf(area.label)) {
                 res.push(area)
+                break
               }
             }
+            break
           }
         }
         break
@@ -125,7 +142,17 @@ const OnlinePrice = (props) => {
   }
 
   useEffect(() => {
+    const match = /busiBillNo=([^&]*)&billNo=([^&]*)/g.exec(props.location.search)
     init()
+    if (match && match[1]) {
+      const busiBillNo = match[1]
+      const billNo = match[2]
+      form.setFieldsValue({ busiBillNo: match[1] })
+      orderList.push({ busiBillNo, billNo })
+      setOrderList([...orderList])
+      handleBusiBillNoChange(match[1])
+    }
+
   }, [])
 
   return (
@@ -140,6 +167,7 @@ const OnlinePrice = (props) => {
           initialValues={{
             templateType: 2,
             palletType: 1,
+            transportType: 1,
             ownerName,
             nick,
             unitPrice: undefined,
@@ -157,11 +185,11 @@ const OnlinePrice = (props) => {
             rules={[
               {
                 required: true,
-                message: '请输入!',
+                message: '请输入',
               },
             ]}
           >
-            <Select onChange={handleBusiBillNoChnage}
+            <Select onChange={handleBusiBillNoChange}
               loading={true}
               showSearch
               defaultActiveFirstOption={false}
@@ -182,7 +210,7 @@ const OnlinePrice = (props) => {
             rules={[
               {
                 required: true,
-                message: '请输入!',
+                message: '请输入',
               },
             ]}
           >
@@ -194,7 +222,7 @@ const OnlinePrice = (props) => {
             rules={[
               {
                 required: true,
-                message: '请输入!',
+                message: '请输入',
               },
             ]}
           >
@@ -209,14 +237,12 @@ const OnlinePrice = (props) => {
             rules={[
               {
                 required: true,
-                message: '请输入!',
+                message: '请输入',
               },
             ]}
           >
             <Select >
-              <Option value={1}>不加托</Option>
-              <Option value={2}>木托，60元</Option>
-              <Option value={3}>塑料托，80元</Option>
+              {palletTypeEnum.map(v => <Option key={v.value} value={v.value}>{v.name}</Option>)}
             </Select>
           </Form.Item>
           <div style={{ width: '100%' }}></div>
@@ -226,7 +252,7 @@ const OnlinePrice = (props) => {
             rules={[
               {
                 required: true,
-                message: '请输入!',
+                message: '请输入',
               },
             ]}
           >
@@ -245,7 +271,7 @@ const OnlinePrice = (props) => {
             rules={[
               {
                 required: true,
-                message: '请输入!',
+                message: '请输入',
               },
             ]}
           >
@@ -263,11 +289,11 @@ const OnlinePrice = (props) => {
             rules={[
               {
                 required: true,
-                message: '请输入!',
+                message: '请输入',
               },
             ]}
           >
-            <InputNumber min={0.001} max={99999999} placeholder="请输入！" style={{ width: '100%' }} precision={3} setp={1} />
+            <InputNumber min={0.001} max={99999999} placeholder="请输入" style={{ width: '100%' }} precision={3} setp={1} />
           </Form.Item>
           <Form.Item
             label="体积"
@@ -275,11 +301,11 @@ const OnlinePrice = (props) => {
             rules={[
               {
                 required: true,
-                message: '请输入!',
+                message: '请输入',
               },
             ]}
           >
-            <InputNumber min={0.001} max={99999999} placeholder="请输入！" style={{ width: '100%' }} precision={3} setp={1} />
+            <InputNumber min={0.001} max={99999999} placeholder="请输入" style={{ width: '100%' }} precision={3} setp={1} />
           </Form.Item>
           <Form.Item
             label="邮寄时间"
@@ -287,37 +313,36 @@ const OnlinePrice = (props) => {
             rules={[
               {
                 required: true,
-                message: '请输入!',
+                message: '请输入',
               },
             ]}
           >
-            <DatePicker showTime />
+            <DatePicker format="YYYY-MM-DD HH:mm" showTime />
           </Form.Item>
           <Form.Item
             label="费用类型"
             name="costType"
-            rules={[
-              {
-                required: true,
-                message: '请输入!',
-              },
-            ]}
           >
             <Checkbox.Group options={typeOptions} />
           </Form.Item>
           <div style={{ width: '100%' }}>
-            <Button className="mr20" style={{ float: 'right' }} type="primary" htmlType="button">费用估算</Button>
+            <Button className="mr20" style={{ float: 'right' }} type="primary" htmlType="button" onClick={handleSubmit} loading={submitLoading}>费用估算</Button>
           </div>
-          <Divider />
-          {/* <div className="mt15" style={{ width: '100%' }} ></div> */}
-          <Card style={{ width: '100%' }}>
-            <DisposalDetail />
-            <ExpressDetail className="mt10" />
-          </Card>
-          <div className="mt15" style={{ width: '100%' }}> </div>
-          <Card style={{ width: '100%' }}>
-            <ShowPrice planOutAmt={orderDetail.planOutAmt}></ShowPrice>
-          </Card>
+          {
+            (!!result) && (<div style={{ width: '100%' }}>
+              <Divider />
+              {/* <div className="mt15" style={{ width: '100%' }} ></div> */}
+              <Card style={{ width: '100%' }}>
+                <ExpressDetail result={result} />
+                <DisposalDetail className="mt10" result={result} />
+              </Card>
+              <div className="mt15" style={{ width: '100%' }}> </div>
+              <Card style={{ width: '100%' }}>
+                <ShowPrice result={result}></ShowPrice>
+              </Card>
+            </div>)
+          }
+
         </Form>
       </Spin></div>
   );

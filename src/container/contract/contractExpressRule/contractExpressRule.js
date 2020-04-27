@@ -148,7 +148,6 @@ const contractExpressRule = (props, ref) => {
         return (
           <span>
             <span className="mr10">{throwRule.config.map((v, i) => {
-              console.log(v)
               let msg
               if (!v.endWeight) {
                 msg = `${v.startWeight}方以上${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
