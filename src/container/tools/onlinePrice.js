@@ -57,7 +57,6 @@ const OnlinePrice = (props) => {
       mailDate: mailDate.toDate(),
       startPlace: startPlace.join('_'),
     }
-    console.log(params)
     setSubmitLoading(true)
     contractCostEstimate(params).then(res => {
       setSubmitLoading(false)
@@ -81,7 +80,6 @@ const OnlinePrice = (props) => {
 
   /**  */
   const handleBusiBillNoChange = busiBillNo => {
-    console.log('chnage', busiBillNo)
     setResult(null)
     setDetailLoading(true)
     getOutBusiBillDetail({ billNo: orderList.find(v => v.busiBillNo === busiBillNo).billNo }).then(res => {
@@ -89,7 +87,6 @@ const OnlinePrice = (props) => {
       if (!res) return
       const { arrivalAddress, warehouseAddress, warehouseName } = res.data
       setOrderDetail(res.data)
-      console.log('???', autoReadAddress(warehouseAddress))
       // 处理地址
       form.setFieldsValue({
         endPlace: autoReadAddress(arrivalAddress),
@@ -145,7 +142,17 @@ const OnlinePrice = (props) => {
   }
 
   useEffect(() => {
+    const match = /busiBillNo=([^&]*)&billNo=([^&]*)/g.exec(props.location.search)
     init()
+    if (match && match[1]) {
+      const busiBillNo = match[1]
+      const billNo = match[2]
+      form.setFieldsValue({ busiBillNo: match[1] })
+      orderList.push({ busiBillNo, billNo })
+      setOrderList([...orderList])
+      handleBusiBillNoChange(match[1])
+    }
+
   }, [])
 
   return (
