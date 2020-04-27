@@ -36,6 +36,7 @@ const OnlinePrice = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [orderList, setOrderList] = useState([])
   const [orderDetail, setOrderDetail] = useState({})
+  const [costType, setCostType] = useState([])
   const [result, setResult] = useState(null)
 
   const init = () => {
@@ -49,7 +50,12 @@ const OnlinePrice = (props) => {
 
   const onFinish = values => {
     // 校验规则是否填写完整
-    const { endPlace, mailDate, startPlace } = values
+    let { endPlace, mailDate, startPlace, transportType } = values
+    if (transportType === 0) {
+      endPlace = [...endPlace].splice(0, 1)
+    } else {
+      endPlace = [...endPlace].splice(0, 2)
+    }
     const params = {
       ...values,
       endPlace: endPlace.join('_'),
@@ -57,6 +63,7 @@ const OnlinePrice = (props) => {
       mailDate: mailDate.toDate(),
       startPlace: startPlace.join('_'),
     }
+    setCostType(values.costType)
     setSubmitLoading(true)
     contractCostEstimate(params).then(res => {
       setSubmitLoading(false)
@@ -117,6 +124,7 @@ const OnlinePrice = (props) => {
   /** 地址自动识别 */
   const autoReadAddress = address => {
     let res = []
+    if (!address) return res
     for (let i = 0; i < Area.length; i++) {
       let province = Area[i]
       if (~address.indexOf(province.label.substr(0, 2))) {
@@ -167,7 +175,7 @@ const OnlinePrice = (props) => {
           initialValues={{
             templateType: 2,
             palletType: 1,
-            transportType: 1,
+            transportType: 0,
             ownerName,
             nick,
             unitPrice: undefined,
@@ -227,8 +235,8 @@ const OnlinePrice = (props) => {
             ]}
           >
             <Select >
-              <Option value={0}>物流运输</Option>
-              <Option value={1}>快递运输</Option>
+              <Option value={0}>快递运输</Option>
+              <Option value={1}>物流运输</Option>
             </Select>
           </Form.Item>
           <Form.Item
@@ -322,6 +330,12 @@ const OnlinePrice = (props) => {
           <Form.Item
             label="费用类型"
             name="costType"
+            rules={[
+              {
+                required: true,
+                message: '请输入',
+              },
+            ]}
           >
             <Checkbox.Group options={typeOptions} />
           </Form.Item>
@@ -331,15 +345,17 @@ const OnlinePrice = (props) => {
           {
             (!!result) && (<div style={{ width: '100%' }}>
               <Divider />
-              {/* <div className="mt15" style={{ width: '100%' }} ></div> */}
-              <Card style={{ width: '100%' }}>
-                <ExpressDetail result={result} />
-                <DisposalDetail className="mt10" result={result} />
-              </Card>
+              {
+                (costType.includes(2) || costType.includes(3)) &&
+                <Card style={{ width: '100%' }}>
+                  {costType.includes(2) && <ExpressDetail result={result} />}
+                  {costType.includes(3) && <DisposalDetail className="mt10" result={result} />}
+                </Card>
+              }
               <div className="mt15" style={{ width: '100%' }}> </div>
-              <Card style={{ width: '100%' }}>
+              {costType.includes(1) && <Card style={{ width: '100%' }}>
                 <ShowPrice result={result}></ShowPrice>
-              </Card>
+              </Card>}
             </div>)
           }
 

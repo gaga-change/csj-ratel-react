@@ -8,11 +8,11 @@ const columns = [
     render: text => {
       let res = null;
       switch (Number(text)) {
+        case 0:
+          res = (<span>快递</span>)
+          break
         case 1:
           res = (<span>物流</span>)
-          break
-        case 2:
-          res = (<span>快递</span>)
           break
         default:
           res = (<span></span>)
@@ -23,21 +23,19 @@ const columns = [
   {
     title: '计价方式',
     dataIndex: 'contractTemplateRuleVoList',
+    width: 300,
     render: list => {
-      return <span>
-        <span className="mr10">{(list || []).map((v, i) => {
-          let msg
-          if (!v.endWeight) {
-            msg = `${v.startWeight}公斤以上${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
-          } else {
-            msg = `${v.endWeight}公斤以内${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
-          }
-          return <div key={i}>
-            {msg}
-          </div>
-        })}
-        </span>
-      </span>
+      return (list || []).map((v, i) => {
+        let msg
+        if (!v.endWeight) {
+          msg = `${v.startWeight}公斤以上${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
+        } else {
+          msg = `${v.endWeight}公斤以内${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
+        }
+        return <div key={i}>
+          {msg}
+        </div>
+      })
     }
   },
   {
