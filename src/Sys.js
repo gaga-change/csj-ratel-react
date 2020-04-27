@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import MyContent from './Content'
 import imgSouce from 'imgSouce/imgSouce'
 import { loginOut, userInfo } from 'api'
+import { connectSocket } from 'api/socket'
 import { deep, sortMenu } from 'lib'
 import './Sys.scss'
 
@@ -22,9 +23,21 @@ class App extends Component {
   }
 
   componentDidMount() {
+    var script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.id = 'otherdatascript'
+    script.src = `http://bi.csjmro.com/WebReport/ReportServer?op=fs_load&cmd=sso&fr_username=${'huozhu@163.com'}&fr_password=${'eabd8ce9404507aa8c22714d3f5eada9'}&validity=-1&callback=fwie`
+    document.body.appendChild(script)
+    window.fwie = function (data) {
+      // 成功后删除script及回调方法
+      const script = document.getElementById('otherdatascript')
+      document.body.removeChild(script)
+      delete window['fwie']
+    }
     userInfo().then(res => {
       if (!res) return
       let user = res.data
+      connectSocket(user)
       let temp = {}
       let styleNameArr = []
       user.menus = user.menus || { children: [] }
@@ -66,14 +79,14 @@ class App extends Component {
   }
 
   render() {
-    const { pathname } = this.props.location
+    const { pathname, search } = this.props.location
     const { user } = this.props
     const { ownerName, nick } = user || {}
     const menus = (user && user.menus) || {}
     let menusRoot = [...(menus.children || [])]
     const defaultSelectedKeys = []
     deep(menus, 'children', v => {
-      if (('/sys' + v.path) === pathname) {
+      if (('/sys' + v.path) === pathname || ('/sys' + v.path) === pathname + search) {
         defaultSelectedKeys.push(v.id)
       }
     })
@@ -151,6 +164,7 @@ class App extends Component {
                 <img src={imgSouce['logo']} alt="" />
                 <span>川山甲 货主平台</span>
               </div>
+              <a href="http://help.csjscm.com/#/newsWeb/list?systemId=fe6b09cd31cb47ed837a6ab26c910fa4" className="f12 mr20" target="_blank" rel="noopener noreferrer">在线帮助文档</a>
               <div className="header-set">
                 <Dropdown overlay={menu}>
                   <span className="ant-dropdown-link header_set_content" >

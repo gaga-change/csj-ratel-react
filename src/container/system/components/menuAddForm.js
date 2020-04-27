@@ -148,7 +148,7 @@ class DataForm extends React.Component {
             }],
             initialValue: obj.menuPath
           })(
-            <Input maxLength={50} />
+            <Input maxLength={200} />
           )}
         </Form.Item>
         <Form.Item

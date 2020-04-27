@@ -142,6 +142,10 @@ export const BaseCard_Config = [
     dataIndex: 'planInQty',
   },
   {
+    title: '备注',
+    dataIndex: 'remarkInfo',
+  },
+  {
     title: '创建人',
     dataIndex: 'createrName',
   },

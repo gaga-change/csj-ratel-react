@@ -11,28 +11,28 @@ import Role from 'container/system/role'
 import Menu from 'container/system/menu'
 import User from 'container/system/user'
 import SetPass from 'container/system/setPass'
+import reportList from 'container/report/reportList'
 import { withRouter } from "react-router"
 
 class Content extends React.Component {
   render() {
     const { match } = this.props
     return (
-      <div>
-        <Switch>
-          <Route exact path={`${match.path}/home`} component={Home} />
-          <Route exact path={`${match.path}/warehousing`} component={Warehousing} />
-          <Route exact path={`${match.path}/outgoing`} component={Outgoing} />
-          <Route exact path={`${match.path}/commodity`} component={Commodity} />
-          <Route exact path={`${match.path}/stock`} component={Stock} />
-          <Route exact path={`${match.path}/customer`} component={Customer} />
-          <Route exact path={`${match.path}/system/role`} component={Role} />
-          <Route exact path={`${match.path}/system/user`} component={User} />
-          <Route exact path={`${match.path}/system/setPass`} component={SetPass} />
-          <Route exact path={`${match.path}/system/menu`} component={Menu} />
-          <Route exact path={`${match.path}/provider`} component={Provider} />
-          <Redirect to={`${match.path}/home`} />
-        </Switch>
-      </div>
+      <Switch>
+        <Route exact path={`${match.path}/home`} component={Home} />
+        <Route exact path={`${match.path}/warehousing`} component={Warehousing} />
+        <Route exact path={`${match.path}/outgoing`} component={Outgoing} />
+        <Route exact path={`${match.path}/commodity`} component={Commodity} />
+        <Route exact path={`${match.path}/stock`} component={Stock} />
+        <Route exact path={`${match.path}/customer`} component={Customer} />
+        <Route exact path={`${match.path}/system/role`} component={Role} />
+        <Route exact path={`${match.path}/system/user`} component={User} />
+        <Route exact path={`${match.path}/system/setPass`} component={SetPass} />
+        <Route exact path={`${match.path}/system/menu`} component={Menu} />
+        <Route exact path={`${match.path}/provider`} component={Provider} />
+        <Route exact path={`${match.path}/reportList`} component={reportList} />
+        <Redirect to={`${match.path}/home`} />
+      </Switch>
     )
   }
 }

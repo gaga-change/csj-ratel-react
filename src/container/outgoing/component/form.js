@@ -110,25 +110,11 @@ class SelestForm extends React.Component {
             }
 
             {
-              selectWordsArr.includes('客户名称') &&
-              <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
-                <Form.Item label="客户名称">
-                  {getFieldDecorator('arrivalName', {
-                    initialValue: '',
-                    rules: [{ required: false, message: '' }],
-                  })(
-                    <Input autoComplete='off' placeholder="请输入客户名称" />
-                  )}
-                </Form.Item>
-              </Col>
-            }
-
-            {
               selectWordsArr.includes('联系人电话') &&
               <Col span={6} style={{ width: '306px', marginBottom: '12px' }}>
                 <Form.Item label="联系人电话">
                   {getFieldDecorator('arrivalLinkTel', {
-                    rules: [{ required: false, message: '请输入正确格式的手机号', pattern: /^1[34578]\d{9}$/ }],
+                    rules: [{ required: false, message: '请输入正确格式的手机号', pattern: /^1[3456789]\d{9}$/ }],
                   })(
                     <Input autoComplete='off' placeholder="请输入联系人电话" />
                   )}
@@ -159,6 +145,20 @@ class SelestForm extends React.Component {
                     rules: [{ type: 'array', required: false }],
                   })(
                     <RangePicker />
+                  )}
+                </Form.Item>
+              </Col>
+            }
+
+            {
+              selectWordsArr.includes('客户名称') &&
+              <Col span={6} style={{ width: '292px', marginBottom: '12px' }}>
+                <Form.Item label="客户名称">
+                  {getFieldDecorator('arrivalName', {
+                    initialValue: '',
+                    rules: [{ required: false, message: '' }],
+                  })(
+                    <Input autoComplete='off' placeholder="请输入客户名称" />
                   )}
                 </Form.Item>
               </Col>
