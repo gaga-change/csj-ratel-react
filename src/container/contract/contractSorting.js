@@ -144,7 +144,7 @@ const ContractSorting = (props) => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            label="模板编号"
+            label="合同编号"
             name="contractNo"
             rules={[
               {
