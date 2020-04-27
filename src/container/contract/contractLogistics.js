@@ -11,8 +11,6 @@ const { Option } = Select
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-const cityList = Area.map(v => ({ label: v.label, value: v.value, children: v.children.map(v => ({ ...v, children: undefined })) }))
-
 const layout = {
   layout: 'inline',
   labelCol: {
@@ -213,7 +211,7 @@ const ContractLogistics = (props) => {
               },
             ]}
           >
-            <Cascader placeholder="请选择地区" options={cityList} disabled={readOnly} />
+            <Cascader placeholder="请选择地区" options={Area} disabled={readOnly} />
           </Form.Item>
 
           <Form.Item

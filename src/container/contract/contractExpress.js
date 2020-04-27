@@ -7,8 +7,6 @@ import { Area } from '@lib/area2'
 import ContractExpressRule from './contractExpressRule/contractExpressRule'
 import { addContractTemplate, getContractDetail, updateContract } from 'api'
 
-const proviceList = Area.map(v => ({ label: v.label, value: v.value }))
-
 const { Option } = Select
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -78,7 +76,7 @@ const ContractExpress = (props) => {
           cappedPrice,
           ownerName,
           nick: createrName,
-          startPlace: [startPlace],
+          startPlace: startPlace.split('_'),
           gmtCreate: moment(new Date(gmtCreate), 'YYYY-MM-DD'),
           contractTemplateItemReqList: contractTemplateRuleReqList
         }
@@ -105,7 +103,7 @@ const ContractExpress = (props) => {
       contractStartDate: values.contractDate[0].toDate(),
       contractStatus: values.contractStatus ? 1 : 2,
       contractTemplateItemReqList: rule,
-      startPlace: values.startPlace[0],
+      startPlace: values.startPlace.join('_'),
       remarkInfo: values.remarkInfo,
       contractType: values.contractType,
     }
@@ -214,7 +212,7 @@ const ContractExpress = (props) => {
               },
             ]}
           >
-            <Cascader placeholder="请选择地区" options={proviceList} disabled={readOnly} />
+            <Cascader placeholder="请选择地区" options={Area} disabled={readOnly} />
           </Form.Item>
 
           <Form.Item
