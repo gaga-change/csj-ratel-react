@@ -9,6 +9,7 @@ import ExpressDetail from './onlinePriceComponents/expressDetail'
 import { Spin, Form, Card, Button, Input, Cascader, Divider, InputNumber, Select, Checkbox, DatePicker, message } from 'antd';
 import { getOutBusiBill, contractCostEstimate, getOutBusiBillDetail } from 'api'
 import { palletTypeEnum } from '@lib/enum'
+import UnitInput from '@component/UnitInput'
 const { Option } = Select
 
 const layout = {
@@ -92,12 +93,13 @@ const OnlinePrice = (props) => {
     getOutBusiBillDetail({ billNo: orderList.find(v => v.busiBillNo === busiBillNo).billNo }).then(res => {
       setDetailLoading(false)
       if (!res) return
-      const { arrivalAddress, warehouseAddress, warehouseName } = res.data
+      const { arrivalAddress, warehouseAddress, warehouseName, arrivalPreDate } = res.data
       setOrderDetail(res.data)
       // 处理地址
       form.setFieldsValue({
         endPlace: autoReadAddress(arrivalAddress),
         startPlace: autoReadAddress(warehouseAddress),
+        mailDate: arrivalPreDate && moment(new Date(arrivalPreDate)),
         warehouseName,
       })
     })
@@ -180,6 +182,7 @@ const OnlinePrice = (props) => {
             nick,
             unitPrice: undefined,
             ruleType: 0,
+            costType: [2],
             contractStatus: true,
             contractDate: undefined,
             nowDate: moment(new Date(), 'YYYY-MM-DD'),
@@ -301,19 +304,17 @@ const OnlinePrice = (props) => {
               },
             ]}
           >
-            <InputNumber min={0.001} max={99999999} placeholder="请输入" style={{ width: '100%' }} precision={3} setp={1} />
+            <UnitInput unit="Kg">
+              <InputNumber min={0.001} max={99999999} placeholder="请输入" style={{ width: '100%' }} precision={3} setp={1} />
+            </UnitInput>
           </Form.Item>
           <Form.Item
             label="体积"
             name="volume"
-            rules={[
-              {
-                required: true,
-                message: '请输入',
-              },
-            ]}
           >
-            <InputNumber min={0.001} max={99999999} placeholder="请输入" style={{ width: '100%' }} precision={3} setp={1} />
+            <UnitInput unit="M3">
+              <InputNumber min={0.001} max={99999999} placeholder="请输入" style={{ width: '100%' }} precision={3} setp={1} />
+            </UnitInput>
           </Form.Item>
           <Form.Item
             label="邮寄时间"
