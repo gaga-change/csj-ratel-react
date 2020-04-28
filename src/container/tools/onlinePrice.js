@@ -93,12 +93,13 @@ const OnlinePrice = (props) => {
     getOutBusiBillDetail({ billNo: orderList.find(v => v.busiBillNo === busiBillNo).billNo }).then(res => {
       setDetailLoading(false)
       if (!res) return
-      const { arrivalAddress, warehouseAddress, warehouseName } = res.data
+      const { arrivalAddress, warehouseAddress, warehouseName, arrivalPreDate } = res.data
       setOrderDetail(res.data)
       // 处理地址
       form.setFieldsValue({
         endPlace: autoReadAddress(arrivalAddress),
         startPlace: autoReadAddress(warehouseAddress),
+        mailDate: arrivalPreDate && moment(new Date(arrivalPreDate)),
         warehouseName,
       })
     })
@@ -181,6 +182,7 @@ const OnlinePrice = (props) => {
             nick,
             unitPrice: undefined,
             ruleType: 0,
+            costType: [2],
             contractStatus: true,
             contractDate: undefined,
             nowDate: moment(new Date(), 'YYYY-MM-DD'),
