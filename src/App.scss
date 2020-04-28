@@ -35,7 +35,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: transparent;
   position: relative;
-  // background: #f0f3f7 !important;
+  background: #f0f3f7 !important;
 }
 
 code {
@@ -117,10 +117,6 @@ code {
   border: 1px solid #e8e8e8;
 }
 
-.red {
-  color: red;
-}
-
 .mb-12 {
   margin-bottom: 12px;
 }
@@ -157,7 +153,7 @@ $dirMap: (
   "l": "left",
   "r": "right",
   "t": "top",
-  "b": "bottom",
+  "b": "bottom"
 );
 
 $dirSizeList: 5 10 15 20 25;

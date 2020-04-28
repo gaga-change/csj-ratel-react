@@ -1,7 +1,5 @@
 import React from 'react';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input, Button, Row, Col, Select } from 'antd';
+import { Form, Input, Button, Row, Col, Select } from 'antd';
 const { Option } = Select;
 
 class UserForm extends React.Component {

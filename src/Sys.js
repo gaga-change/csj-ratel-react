@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { DownOutlined } from '@ant-design/icons';
-import { Layout, Menu, Dropdown } from 'antd';
+import { Layout, Menu, Icon, Dropdown } from 'antd'
 import { connect } from 'react-redux'
 import { setUser } from 'actions'
 import { Link } from 'react-router-dom'
@@ -178,7 +177,7 @@ class App extends Component {
                       <span className="user-name">{nick}</span>
                       <span className="company-name">{ownerName}</span>
                     </p>
-                    <DownOutlined />
+                    <Icon type="down" />
                   </span>
                 </Dropdown>
               </div>
@@ -189,7 +188,7 @@ class App extends Component {
           </Layout>
         </Layout>
       </div>
-    );
+    )
   }
 }
 

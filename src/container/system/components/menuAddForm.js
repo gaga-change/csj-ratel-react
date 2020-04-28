@@ -1,7 +1,5 @@
 import React from 'react'
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input, Switch, Radio, Tree, InputNumber } from 'antd';
+import { Form, Input, Switch, Radio, Tree, InputNumber } from 'antd'
 const { TextArea } = Input
 const RadioGroup = Radio.Group;
 const { TreeNode } = Tree;

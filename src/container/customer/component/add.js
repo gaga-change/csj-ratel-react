@@ -1,7 +1,5 @@
 import React from 'react'
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input } from 'antd';
+import { Form, Input } from 'antd'
 import './add.scss'
 
 const { TextArea } = Input
@@ -81,7 +79,7 @@ class AddForm extends React.Component {
           </Form.Item>
         </Form>
       </div>
-    );
+    )
   }
 }
 

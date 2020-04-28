@@ -1,8 +1,5 @@
 import React from 'react';
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input, Select, Tooltip } from 'antd';
+import { Form, Input, Select, Tooltip, Icon } from 'antd';
 const { Option } = Select;
 const { TextArea } = Input;
 /**
@@ -110,7 +107,7 @@ class DataForm extends React.Component {
           label={(
             <span>密码
               <Tooltip title="6-20位，字母与数字结合，字母区分大小写，初始密码默认为123456">
-                <QuestionCircleOutlined />
+                <Icon type="question-circle-o" />
               </Tooltip>
             </span>
           )}
@@ -145,7 +142,7 @@ class DataForm extends React.Component {
           )}
         </Form.Item>
       </Form>
-    );
+    )
   }
 }
 

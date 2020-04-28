@@ -1,7 +1,5 @@
 import React from 'react'
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input } from 'antd';
+import { Form, Input } from 'antd'
 import './add.scss'
 
 class AddForm extends React.Component {

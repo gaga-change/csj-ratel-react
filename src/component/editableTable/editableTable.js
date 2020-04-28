@@ -2,9 +2,7 @@ import React from 'react';
 import * as Enum from '@lib/enum';
 // import { connect } from 'react-redux';
 import moment from 'moment'
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Table, Input, InputNumber } from 'antd';
+import { Table, Input, Form, InputNumber } from 'antd';
 import './editableTable.scss'
 
 const FormItem = Form.Item;

@@ -1,7 +1,5 @@
 import React from 'react';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input, Button, Row, Col, InputNumber } from 'antd';
+import { Form, Input, Button, Row, Col, InputNumber } from 'antd';
 import './form.scss'
 class CommodityForm extends React.Component {
   state = {

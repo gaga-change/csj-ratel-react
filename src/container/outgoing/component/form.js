@@ -1,7 +1,5 @@
 import React from 'react'
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input, Button, Row, Col, Select, DatePicker } from 'antd';
+import { Form, Input, Button, Row, Col, Select, DatePicker } from 'antd'
 import { billStatusEnum } from '@lib/enum'
 import { warehouseList } from 'api'
 import './form.scss'
@@ -205,8 +203,7 @@ class SelestForm extends React.Component {
             }
           </Row>
         </Form>
-      </div>
-    );
+      </div>)
   }
 }
 

@@ -14,6 +14,7 @@ import rootReducer from './reducers/index'
 const store = createStore(rootReducer)
 
 moment.locale('zh-cn')
+
 ReactDOM.render(<Provider store={store}><ConfigProvider locale={zh_CN}><App /></ConfigProvider ></Provider>, document.getElementById('root'))
 
 serviceWorker.unregister()

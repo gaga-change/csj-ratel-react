@@ -1,7 +1,5 @@
 import React from 'react'
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input, Button } from 'antd';
+import { Form, Input, Button } from 'antd'
 import './setPassForm.scss'
 
 class SetPassForm extends React.Component {

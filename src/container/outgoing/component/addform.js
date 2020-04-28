@@ -1,7 +1,5 @@
 import React from 'react'
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input, Button, DatePicker, Select, Modal, message } from 'antd';
+import { Form, Input, Button, DatePicker, Select, Modal, message } from 'antd'
 import moment from 'moment'
 import _ from 'lodash'
 import EditableTable from '@component/editableTable/editableTable'
@@ -612,8 +610,7 @@ class AddForm extends React.Component {
               columns={goodsInStorage_config} />
           </div>
         </Modal>
-      </div>
-    );
+      </div>)
   }
 }
 
