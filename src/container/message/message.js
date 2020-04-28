@@ -163,7 +163,7 @@ export default class Stock extends React.Component {
     return (
       <div className="Stock"  >
         <div>
-          <Button data-rule-id="warehousing-create" type="primary" onClick={() => this.fetchAll()}>标记全部已读</Button>
+          <Button data-rule-id="warehousing-create" type="primary" onClick={() => this.fetchAll()}>全部已读</Button>
         </div>
         <SelectingTable
           selectedRowKeys={this.state.selectedRowKeys}
