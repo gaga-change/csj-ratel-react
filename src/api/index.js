@@ -102,8 +102,17 @@ export const outBillDel = billNo => http.post(`${base}/out/bill/deleteBusiBill`,
 export const deleteBusiBill = billNo => http.post(`${base}/in/bill/deleteBusiBill`, { billNo })
 /** 商品修改 */
 export const skuInfoUpdate = params => http.post(`${base}/sku/info/update`, params)
-
+/** 添加合同模板信息 */
+export const addContractTemplate = params => http.post(`${base}/contract/addContractTemplate`, params)
 /** 删除商品 */
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)
-
-
+/** 合同列表查询 */
+export const getContractListByPage = params => http.post(`${base}/contract/getContractListByPage`, params)
+/** 合同删除 */
+export const deleteContract = contractCode => http.get(`${base}/contract/deleteContract?contractCode=${contractCode}`)
+/** 合同详情 */
+export const getContractDetail = id => http.get(`${base}/contract/getContractDetail?id=${id}`)
+/** 合同编辑 */
+export const updateContract = params => http.post(`${base}/contract/updateContract`, params)
+/** 费用估算 */
+export const contractCostEstimate = params => http.post(`${base}/contract/contractCostEstimate`, params)

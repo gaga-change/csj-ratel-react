@@ -1,5 +1,7 @@
 import React from 'react'
-import { Form, Input, Button, Row, Col, Select } from 'antd'
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Button, Row, Col, Select } from 'antd';
 import { warehouseList } from 'api'
 import './form.scss'
 

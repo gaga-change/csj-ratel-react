@@ -18,9 +18,11 @@ axios.interceptors.response.use(function (response) {
   }
   return data
 }, function (error) {
-  let message = error.message || ''
-  if (message === 'timeout of 1500ms exceeded') message = '请求超时，请稍后再试！'
-  message.error(message)
+  let data = error.response.data
+  let msg = data.message || error.message || ''
+  if (msg === 'timeout of 1500ms exceeded')
+    msg = '请求超时，请稍后再试！'
+  message.error(msg)
   return Promise.reject(error)
 })
 
