@@ -11,6 +11,8 @@ export const skuInfoList = params => http.get(`${base}/sku/info/list`, { params 
 export const userInfo = params => http.get(`${base}/base/user/info`, { params })
 /** 获取首页统计数值 */
 export const homeTotalNum = params => http.get(`${base}/home/index`, { params })
+export const messageTotalNum = params => http.get(`${base}/messageNotice/selectMsgCount`, { params })
+export const messageRead = params => http.put(`${base}/messageNotice/readMessage`, params)
 /** 供应商列表查询 */
 export const providerList = params => http.get(`${base}/provider/list`, { params })
 /** 客户列表查询 */

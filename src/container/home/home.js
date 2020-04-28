@@ -4,7 +4,7 @@ import imgSouce from 'imgSouce/imgSouce'
 import { priceChange_config } from './components/config'
 import { Row, Col } from 'antd'
 import { connect } from 'react-redux'
-import { homeTotalNum } from 'api'
+import { homeTotalNum, messageTotalNum } from 'api'
 import './home.scss'
 const quickItemText = {
   '/warehousing': {
@@ -49,13 +49,17 @@ class Home extends React.Component {
     super(props)
     this.state = {
       // 头部数据显示
-      Total_dataSource: {}
+      Total_dataSource: {},
+      Total_message:null
     }
   }
 
   componentDidMount() {
     homeTotalNum().then(res => {
       res && this.setState({ Total_dataSource: res.data })
+    })
+    messageTotalNum().then(res => {
+      res && this.setState({ Total_message: res.data })
     })
   }
 
@@ -65,6 +69,7 @@ class Home extends React.Component {
 
   render() {
     const { Total_dataSource } = this.state
+    const { Total_message } = this.state
     const { user } = this.props
     let menus = (user && user.menus) || null
     let menu = []
@@ -87,7 +92,8 @@ class Home extends React.Component {
               <div className="data-item" key={index}>
                 <img className="logo" src={imgSouce[item.icon]} alt={item.name} />
                 <div className="right-area">
-                  <p className="num-area">
+                  { item.orderNumber_dataIndex!=='Total_message'? (
+                    <p className="num-area">
                     {
                       Total_dataSource && Total_dataSource[item.orderNumber_dataIndex] !== undefined ? (
                         <span className="num-item">
@@ -103,9 +109,16 @@ class Home extends React.Component {
                       ) : null
                     }
                   </p>
-                  <p className="hint-area">
-                    {item.name}
-                  </p>
+                    ): (
+                    <p className="num-area">
+                      <span className="num-item">
+                        <Link to={`/sys/message`} replace ><span className="num">{Total_message}</span><span>条</span></Link>
+                       </span>
+                    </p>
+                    ) }
+                    <p className="hint-area">
+                      {item.name}
+                    </p>
                 </div>
               </div>
             ))

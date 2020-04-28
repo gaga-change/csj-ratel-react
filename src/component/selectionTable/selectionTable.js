@@ -42,6 +42,16 @@ export default class SelectionTable extends React.Component {
         v.render = (item) => Enum[v.useLocalEnum].find(eItem => eItem.key === (isNaN(item) ? item : Number(item))) && Enum[v.useLocalEnum].find(eItem => eItem.key === (isNaN(item) ? item : Number(item)))['value']
       } else if (v.useFetchMap) {
         // v.render=(item)=>mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))&&mapSouce[v.useFetchMap].find(eItem=>eItem.key===(isNaN(item)?item:Number(item)))['value']
+      }else if(v.filepath){
+        v.render= (text, record)=>{
+          return ( <div>
+              {
+                record.filePathList.map((item, index) => {
+                  return <div key={index}><a href={item.filePath} target="_blank" rel="noopener noreferrer" >{item.fileName}</a></div>
+                })
+              }
+          </div> )
+        }
       }
       return v;
     })

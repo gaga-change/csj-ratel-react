@@ -19,4 +19,10 @@ export const priceChange_config = [
     orderNumber_Company: '件',
     icon: 'home_repo'
   },
+  {
+    name: '未读消息',
+    orderNumber_dataIndex: 'Total_message',
+    orderNumber_Company: '件',
+    icon: 'home_repo'
+  },
 ]
