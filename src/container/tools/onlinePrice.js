@@ -354,9 +354,9 @@ const OnlinePrice = (props) => {
                 </Card>
               }
               <div className="mt15" style={{ width: '100%' }}> </div>
-              {costType.includes(1) && <Card style={{ width: '100%' }}>
-                <ShowPrice result={result}></ShowPrice>
-              </Card>}
+              <Card style={{ width: '100%' }}>
+                <ShowPrice result={result} costType={costType}></ShowPrice>
+              </Card>
             </div>)
           }
 
