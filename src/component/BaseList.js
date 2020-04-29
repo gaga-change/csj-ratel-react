@@ -17,7 +17,10 @@ const BaseList2 = (props, ref) => {
 
   return (<div>
     <BaseSearch vertical={vertical} config={searchConfig} onSubmit={handleSearch} />
-    <BaseTable ref={baseTable} rowKey={rowKey} api={api} config={tableConfig} rowSelection={rowSelection} />
+    <div style={{ overflow: 'hidden' }}>
+      {props.children}
+    </div>
+    <BaseTable className="mt10" ref={baseTable} rowKey={rowKey} api={api} config={tableConfig} rowSelection={rowSelection} />
   </div>)
 }
 

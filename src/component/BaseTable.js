@@ -19,7 +19,7 @@ import moment from 'moment'
  */
 
 const BaseTable2 = (props, ref) => {
-  const { config, rowKey, rowSelection, api } = props
+  const { config, rowKey, rowSelection, api, className } = props
   const [data, setData] = useState([])
   const [pagination, setPagination] = useState({})
   const [loading, setLoading] = useState(false)
@@ -96,6 +96,7 @@ const BaseTable2 = (props, ref) => {
 
   return (<div>
     <Table
+      className={className}
       bordered={true}
       size='small'
       columns={columns}

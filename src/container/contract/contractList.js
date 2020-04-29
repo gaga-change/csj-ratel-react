@@ -98,7 +98,14 @@ const ContractList = props => {
       api={getContractListByPage}
       tableConfig={tableConfig}
       rowKey="id"
-    />
+    >
+      <div className="fr">
+        <Button type="primary" onClick={() => props.history.push('/sys/contract/contractExpress')}>新建快递</Button>
+        <Button className="ml10" type="primary" onClick={() => props.history.push('/sys/contract/contractStore')}>新建仓储</Button>
+        <Button className="ml10" type="primary" onClick={() => props.history.push('/sys/contract/contractLogistics')}>新建物流</Button>
+        <Button className="ml10" type="primary" onClick={() => props.history.push('/sys/contract/contractSorting')}>新建处置</Button>
+      </div>
+    </BaseList>
 
   </div>)
 }
