@@ -54,7 +54,6 @@ const BaseSearch = (props, ref) => {
         values[item.prop] = values[item.prop].format('YYYY-MM-DD')
       }
     })
-    console.log('???', values, initialValues)
     onSubmit && onSubmit(values)
   }
 

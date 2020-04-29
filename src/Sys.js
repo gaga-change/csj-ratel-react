@@ -135,7 +135,7 @@ class App extends Component {
                           </span>
                         }
                       >
-                        {menuFa.children.map(menu =>
+                        {menuFa.children.filter(v => Number(v.hidden) !== 1).map(menu =>
                           <Menu.Item key={menu.id} onClick={this.handleMenuClick.bind(this, menu)}>
                             {/* <Icon type="user" /> */}
                             <span>{menu.text}</span>
