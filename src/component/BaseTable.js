@@ -89,11 +89,6 @@ const BaseTable2 = (props, ref) => {
     }
   }))
 
-  useEffect(() => {
-    fetch()
-  }, [])
-
-
   return (<div>
     <Table
       className={className}

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import BaseList from '@component/BaseList'
 import { getContractListByPage, deleteContract } from 'api'
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -16,6 +16,16 @@ const searchConfig = [
 
 const ContractList = props => {
   const baseList = useRef()
+  const urlChange = useRef(null)
+  const [initialValues] = useState(() => {
+    const match = /\?contractType=(\d)/g.exec(props.location.search)
+    if (match) {
+      return { contractType: Number(match[1]) }
+    } else {
+      return {}
+    }
+  })
+
   const handleDel = row => {
     confirm({
       title: '是否要删除该合同？',
@@ -90,11 +100,36 @@ const ContractList = props => {
     },
   ]
 
+  useEffect(() => {
+    if (urlChange.current === null) {
+      // console.log('第一次进入')
+    } else if (urlChange.current === props.location.search) {
+      // console.log('路由无变化')
+    } else {
+      // console.log('url改变')
+      const match = /\?contractType=(\d)/g.exec(props.location.search)
+      // console.log(match)
+      if (match) {
+        // 重置表单， 但类型初始有值
+        baseList.current.baseSearch.current.form.resetFields()
+        baseList.current.baseSearch.current.form.setFieldsValue({ contractType: Number(match[1]) })
+        baseList.current.baseSearch.current.form.submit()
+      } else {
+        // 重置表单
+        baseList.current.baseSearch.current.form.resetFields()
+        baseList.current.baseSearch.current.form.setFieldsValue({ contractType: undefined })
+        baseList.current.baseSearch.current.form.submit()
+      }
+    }
+    urlChange.current = props.location.search
+  }, [props.location])
+
   return (<div>
     <BaseList
       ref={baseList}
       vertical={true}
       searchConfig={searchConfig}
+      initialValues={initialValues}
       api={getContractListByPage}
       tableConfig={tableConfig}
       rowKey="id"

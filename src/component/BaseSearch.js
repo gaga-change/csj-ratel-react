@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, forwardRef, useImperativeHandle } from 'react'
 import '@ant-design/compatible/assets/index.css';
 import { Input, Select, Button, Card, Form, DatePicker } from 'antd';
 import './BaseSearch.scss'
@@ -17,9 +17,9 @@ const { Option } = Select
 ]
  */
 
-const BaseSearch = props => {
+const BaseSearch = (props, ref) => {
   const [form] = Form.useForm();
-  const { config, onSubmit } = props
+  const { config, onSubmit, initialValues = {} } = props
   /** 校验配置信息是否正确 */
   const check = () => {
 
@@ -54,6 +54,7 @@ const BaseSearch = props => {
         values[item.prop] = values[item.prop].format('YYYY-MM-DD')
       }
     })
+    console.log('???', values, initialValues)
     onSubmit && onSubmit(values)
   }
 
@@ -88,6 +89,14 @@ const BaseSearch = props => {
     return <Input {...props} placeholder="请输入" />
   }
 
+  useImperativeHandle(ref, () => ({
+    form
+  }))
+
+  useEffect(() => {
+    form.submit()
+  }, [])
+
   return (
     <div className="BaseSearch mb15">
       <Card>
@@ -96,8 +105,7 @@ const BaseSearch = props => {
           {...layout}
           name="basic"
           className=""
-          initialValues={{
-          }}
+          initialValues={initialValues}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
@@ -130,4 +138,4 @@ const BaseSearch = props => {
     </div>
   )
 }
-export default BaseSearch
+export default forwardRef(BaseSearch)

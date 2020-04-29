@@ -4,19 +4,25 @@ import BaseSearch from './BaseSearch'
 import BaseTable from './BaseTable'
 
 const BaseList2 = (props, ref) => {
+  const { initialValues = {} } = props
   const baseTable = useRef()
+  const baseSearch = useRef()
   const { searchConfig = [], tableConfig = [], api, rowKey = 'id', vertical = 'false', rowSelection } = props
   const handleSearch = params => {
     baseTable.current.updateSearchParms(params)
   }
+
   useImperativeHandle(ref, () => ({
-    fetch: () => {
-      return baseTable.current.updateSearchParms()
-    }
+    fetch: (params) => {
+      return baseTable.current.updateSearchParms(params)
+    },
+    baseSearch,
   }))
 
   return (<div>
-    <BaseSearch vertical={vertical} config={searchConfig} onSubmit={handleSearch} />
+    <BaseSearch
+      initialValues={initialValues}
+      ref={baseSearch} vertical={vertical} config={searchConfig} onSubmit={handleSearch} />
     <div style={{ overflow: 'hidden' }}>
       {props.children}
     </div>
