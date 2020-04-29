@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react'
+import React, { useState, useRef, useImperativeHandle, forwardRef } from 'react'
 import { Table } from 'antd'
 import * as Enum from '@lib/enum'
 import moment from 'moment'

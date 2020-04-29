@@ -114,3 +114,5 @@ export const getContractDetail = id => http.get(`${base}/contract/getContractDet
 export const updateContract = params => http.post(`${base}/contract/updateContract`, params)
 /** 费用估算 */
 export const contractCostEstimate = params => http.post(`${base}/contract/contractCostEstimate`, params)
+/** 重量计算 */
+export const countGoodsWeightAndVolume = params => http.post(`${base}/contract/countGoodsWeightAndVolume`, params)

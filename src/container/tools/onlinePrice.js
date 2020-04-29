@@ -7,7 +7,7 @@ import ShowPrice from './onlinePriceComponents/showPrice'
 import DisposalDetail from './onlinePriceComponents/disposalDetail'
 import ExpressDetail from './onlinePriceComponents/expressDetail'
 import { Spin, Form, Card, Button, Input, Cascader, Divider, InputNumber, Select, Checkbox, DatePicker, message } from 'antd';
-import { getOutBusiBill, contractCostEstimate, getOutBusiBillDetail } from 'api'
+import { getOutBusiBill, contractCostEstimate, getOutBusiBillDetail, countGoodsWeightAndVolume } from 'api'
 import { palletTypeEnum } from '@lib/enum'
 import UnitInput from '@component/UnitInput'
 const { Option } = Select
@@ -86,22 +86,45 @@ const OnlinePrice = (props) => {
     form.submit()
   }
 
-  /**  */
+  /** 订单切换 */
   const handleBusiBillNoChange = busiBillNo => {
     setResult(null)
     setDetailLoading(true)
     getOutBusiBillDetail({ billNo: orderList.find(v => v.busiBillNo === busiBillNo).billNo }).then(res => {
-      setDetailLoading(false)
-      if (!res) return
-      const { arrivalAddress, warehouseAddress, warehouseName, arrivalPreDate } = res.data
+      if (!res) {
+        setDetailLoading(false)
+        return
+      }
+      const { arrivalAddress, warehouseAddress, warehouseName, arrivalPreDate, busiBillDetails } = res.data
       setOrderDetail(res.data)
-      // 处理地址
-      form.setFieldsValue({
-        endPlace: autoReadAddress(arrivalAddress),
-        startPlace: autoReadAddress(warehouseAddress),
-        mailDate: arrivalPreDate && moment(new Date(arrivalPreDate)),
-        warehouseName,
-      })
+      // 获取重量
+      if (busiBillDetails && busiBillDetails.length) {
+        countGoodsWeightAndVolume(busiBillDetails.map(v => ({
+          "goodsNo": v.skuCode,
+          "quantity": v.skuOutQty
+        }))).then(res => {
+          setDetailLoading(false)
+          if (!res) return
+          const { totalVolume, totalWeight } = res.data
+          form.setFieldsValue({
+            endPlace: autoReadAddress(arrivalAddress),
+            startPlace: autoReadAddress(warehouseAddress),
+            mailDate: arrivalPreDate && moment(new Date(arrivalPreDate)),
+            warehouseName,
+            weight: totalWeight === 0 ? '' : totalWeight,
+            volume: totalVolume === 0 ? '' : totalVolume,
+          })
+        })
+      } else {
+        setDetailLoading(false)
+        // 处理地址
+        form.setFieldsValue({
+          endPlace: autoReadAddress(arrivalAddress),
+          startPlace: autoReadAddress(warehouseAddress),
+          mailDate: arrivalPreDate && moment(new Date(arrivalPreDate)),
+          warehouseName,
+        })
+      }
     })
   }
 
