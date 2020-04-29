@@ -66,7 +66,13 @@ const ContractList = props => {
   const tableConfig = [
     { label: '序号', prop: '_index' },
     { label: '货主', prop: 'ownerName' },
-    { label: '合同编号', prop: 'contractCode' },
+    {
+      label: '合同编号', prop: 'contractCode', render: (text, row) => {
+        return (
+          <Button type="link" onClick={() => handleDetail(row, true)}>{text}</Button>
+        )
+      }
+    },
     { label: '合同号', prop: 'contractNo' },
     { label: '合同类型', prop: 'contractType', type: 'enum', enum: 'contractTypeEnum' },
     { label: '有效起始日期', prop: 'contractStartDate', type: 'time', format: 'YYYY-MM-DD' },
@@ -78,7 +84,7 @@ const ContractList = props => {
         return (<span>
           <Button type="link" onClick={() => handleDel(row)}>删除</Button>
           <Button type="link" onClick={() => handleDetail(row)}>修改</Button>
-          <Button type="link" onClick={() => handleDetail(row, true)}>查看</Button>
+          {/* <Button type="link" onClick={() => handleDetail(row, true)}>查看</Button> */}
         </span>)
       }
     },
