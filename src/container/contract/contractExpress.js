@@ -108,7 +108,7 @@ const ContractExpress = (props) => {
     api(params).then(res => {
       if (!res) return setSubmitLoading(false)
       message.success('创建成功！')
-      props.history.push('/sys/contract/contractList')
+      props.history.push('/sys/contract/contractList?contractType=0')
 
     })
   };
