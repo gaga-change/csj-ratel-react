@@ -190,7 +190,7 @@ const ContractStore = (props) => {
           </Form.Item>
 
           <Form.Item
-            label="合同日期"
+            label="合同有效期"
             name="contractDate"
             rules={[
               {
