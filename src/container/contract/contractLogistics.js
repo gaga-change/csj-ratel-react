@@ -264,12 +264,14 @@ const ContractLogistics = (props) => {
             <TextArea />
           </Form.Item>
           <div style={{ width: '100%' }}></div>
-          {
-            !readOnly && <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit" loading={submitLoading}>
-                提交</Button>
-            </Form.Item>
-          }
+          <Form.Item {...tailLayout}>
+            {
+              !readOnly && <Button className="mr15" type="primary" htmlType="submit" loading={submitLoading}>
+                提交</Button>}
+            <Button type="primary" htmlType="button" onClick={() => props.history.go(-1)}>
+              返回
+            </Button>
+          </Form.Item>
         </Form>
       </Spin>
     </div>
