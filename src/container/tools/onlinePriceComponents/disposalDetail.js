@@ -1,31 +1,30 @@
 import React from 'react'
 import { Table } from 'antd'
-import { palletTypeEnum } from '@lib/enum'
 const columns = [
   {
     title: '费用类型',
     dataIndex: 'palletType',
-    render: (text) => {
-      let temp = palletTypeEnum.find(v => Number(v.value) === text)
-      return temp && temp.name
+    render: () => {
+      return "订单处理费"
     }
   },
   {
     title: '计费方式',
-    dataIndex: 'type',
-    render: (text, row) => {
-      let res = null
-      switch (Number(row.palletType)) {
-        case 2:
-          res = (<span>60元/个</span>)
-          break
-        case 3:
-          res = (<span>80元/个</span>)
-          break
-        default:
-          res = (<span>无</span>)
-      }
-      return res
+    dataIndex: 'contractSortingRulesDO',
+    width: 300,
+    render: list => {
+      if (!Array.isArray(list)) return ''
+      return (list || []).map((v, i) => {
+        let msg
+        if (!v.endWeight) {
+          msg = `${v.startWeight}公斤以上${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
+        } else {
+          msg = `${v.endWeight}公斤以内${!v.onePrice ? '，单价' + v.unitPrice : v.onePrice}元`
+        }
+        return <div key={i}>
+          {msg}
+        </div>
+      })
     }
   },
   {
@@ -47,7 +46,7 @@ const DisposalDetail = props => {
 
   return (
     <div className={props.className}>
-      <h4>处置费明细</h4>
+      <h4>订单处理费明细</h4>
       <Table dataSource={dataSource} columns={columns} size="small" />
     </div>
   )
