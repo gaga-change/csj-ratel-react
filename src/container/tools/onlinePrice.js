@@ -10,6 +10,7 @@ import { Spin, Form, Card, Button, Input, Cascader, Divider, InputNumber, Select
 import { getOutBusiBill, contractCostEstimate, getOutBusiBillDetail, countGoodsWeightAndVolume } from 'api'
 import { palletTypeEnum } from '@lib/enum'
 import UnitInput from '@component/UnitInput'
+import OrderDetailModal from './onlinePriceComponents/orderDetailModal'
 const { Option } = Select
 
 const layout = {
@@ -35,6 +36,7 @@ const OnlinePrice = (props) => {
   const [fetchOrderListLoading, setFetchOrderListLoading] = useState(false)
   const [detailLoading, setDetailLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [detailVisible, setDetailVisible] = useState(false)
   const [orderList, setOrderList] = useState([])
   const [orderDetail, setOrderDetail] = useState({})
   const [costType, setCostType] = useState([])
@@ -128,6 +130,11 @@ const OnlinePrice = (props) => {
     })
   }
 
+  /** 查看订单详情 */
+  const handleShowDetail = () => {
+    setDetailVisible(true)
+  }
+
   /** 查询订单列表 */
   const fetch = val => setTimeout(() => {
     setFetchOrderListLoading(true)
@@ -215,28 +222,31 @@ const OnlinePrice = (props) => {
         >
           <Form.Item
             label="关联业务订单"
-            name="busiBillNo"
-            rules={[
+          >
+            <Form.Item name="busiBillNo" rules={[
               {
                 required: true,
                 message: '请输入',
               },
             ]}
-          >
-            <Select onChange={handleBusiBillNoChange}
-              loading={true}
-              showSearch
-              defaultActiveFirstOption={false}
-              showArrow={false}
-              filterOption={false}
-              onSearch={handleSearch}
-              placeholder="请输入订单号"
-              notFoundContent={fetchOrderListLoading ? <Spin size="small" /> : null}
+              noStyle
             >
-              {
-                (orderList || []).map(v => <Option key={v.billNo} value={v.busiBillNo}>{v.busiBillNo}</Option>)
-              }
-            </Select>
+              <Select onChange={handleBusiBillNoChange}
+                loading={true}
+                showSearch
+                defaultActiveFirstOption={false}
+                showArrow={false}
+                filterOption={false}
+                onSearch={handleSearch}
+                placeholder="请输入订单号"
+                notFoundContent={fetchOrderListLoading ? <Spin size="small" /> : null}
+              >
+                {
+                  (orderList || []).map(v => <Option key={v.billNo} value={v.busiBillNo}>{v.busiBillNo}</Option>)
+                }
+              </Select>
+            </Form.Item>
+            {(orderDetail && orderDetail.billNo) && <Button type="link" onClick={handleShowDetail}>查看</Button>}
           </Form.Item>
           <Form.Item
             label="所在仓库"
@@ -384,7 +394,9 @@ const OnlinePrice = (props) => {
           }
 
         </Form>
-      </Spin></div>
+      </Spin>
+      {detailVisible && <OrderDetailModal visible={detailVisible} onClose={() => setDetailVisible(false)} detail={orderDetail} />}
+    </div>
   );
 };
 
