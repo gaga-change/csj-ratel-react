@@ -6,7 +6,8 @@ export const indexTableColumnsConfig = [
   },
   {
     title: '备注',
-    dataIndex: 'remarkInfo'
+    dataIndex: 'remarkInfo',
+    type: 'content'
   },
   {
     title: '创建时间',

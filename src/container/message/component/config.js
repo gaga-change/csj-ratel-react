@@ -6,7 +6,8 @@ export const indexTableColumnsConfig = [
   },
   {
     title: '内容',
-    dataIndex: 'messageContent'
+    dataIndex: 'messageContent',
+    type: 'content'
   },
   {
     title: '状态',

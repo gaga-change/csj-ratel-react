@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 // import { connect } from 'react-redux';
 import moment from 'moment'
 import * as Enum from '@lib/enum';
@@ -36,6 +36,17 @@ export default class SelectionTable extends React.Component {
       if (v.type) {
         switch (v.type) {
           case 'time': v.render = (item) => moment(Number(item)).format(v.format || 'YYYY-MM-DD HH:mm:ss'); break;
+          case 'content': v.render = (text, record)=>{
+            let showtext=record[v.dataIndex] && record[v.dataIndex].length>10?record[v.dataIndex].substring(0,10)+'...':record[v.dataIndex]
+            let tiptext=record[v.dataIndex]? record[v.dataIndex]:''
+            if(tiptext && tiptext.length>10){
+              return <Tooltip  title={ tiptext }>
+                  <span>{ showtext }</span>
+                </Tooltip>
+            }else{
+              return <span>{ tiptext }</span>
+            }
+          }; break;
           default: break;
         }
       } else if (v.useLocalEnum) {

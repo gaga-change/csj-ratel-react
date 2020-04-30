@@ -46,6 +46,7 @@ export default class Stock extends React.Component {
     }
 
     delete data.total;
+    delete data.createTime;
     this.props.history.replace(`${pathname}?${stringify(data)}`)
     data.pageNum = data.current;
     delete data.current;
