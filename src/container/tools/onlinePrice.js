@@ -379,17 +379,19 @@ const OnlinePrice = (props) => {
           {
             (!!result) && (<div style={{ width: '100%' }}>
               <Divider />
-              {
-                (costType.includes(2) || costType.includes(3)) &&
-                <Card style={{ width: '100%' }}>
-                  {costType.includes(2) && <ExpressDetail result={result} />}
-                  {costType.includes(3) && <DisposalDetail className="mt10" result={result} />}
-                </Card>
-              }
               <div className="mt15" style={{ width: '100%' }}> </div>
               <Card style={{ width: '100%' }}>
                 <ShowPrice result={result} costType={costType}></ShowPrice>
               </Card>
+              <div className="mt15" style={{ width: '100%' }}> </div>
+              {
+                (costType.includes(2) || costType.includes(3)) &&
+                <Card style={{ width: '100%' }}>
+                  {costType.includes(2) && <ExpressDetail result={result} />}
+                  {costType.includes(2) && costType.includes(3) && <div className="mt25" style={{ width: '100%' }}> </div>}
+                  {costType.includes(3) && <DisposalDetail result={result} />}
+                </Card>
+              }
             </div>)
           }
 

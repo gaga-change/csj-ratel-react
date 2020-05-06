@@ -1,17 +1,21 @@
 import React from 'react'
 import { Table } from 'antd'
+import BaseTitle from '@component/baseTitle/baseTitle'
 const columns = [
   {
+    align: 'center',
     title: '费用类型',
     dataIndex: 'palletType',
+    width: 150,
     render: () => {
       return "订单处理费"
     }
   },
   {
+    align: 'center',
     title: '计费方式',
     dataIndex: 'contractSortingRulesDO',
-    width: 300,
+    width: 400,
     render: list => {
       if (!Array.isArray(list)) return ''
       return (list || []).map((v, i) => {
@@ -28,13 +32,16 @@ const columns = [
     }
   },
   {
+    align: 'center',
     title: '数量',
     dataIndex: 'number',
+    width: 150,
   },
   {
+    align: 'center',
     title: '金额',
     dataIndex: 'price',
-    render: text => <span className="red">{text}</span>
+    render: text => <span className="red">{text || 0}元</span>
   },
 ];
 
@@ -46,8 +53,8 @@ const DisposalDetail = props => {
 
   return (
     <div className={props.className}>
-      <h4>订单处理费明细</h4>
-      <Table dataSource={dataSource} columns={columns} size="small" />
+      <BaseTitle>订单处理费明细</BaseTitle>
+      <Table bordered dataSource={dataSource} columns={columns} size="small" pagination={false} />
     </div>
   )
 }
