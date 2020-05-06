@@ -362,7 +362,7 @@ const OnlinePrice = (props) => {
             <DatePicker format="YYYY-MM-DD HH:mm" showTime />
           </Form.Item>
           <Form.Item
-            label="费用类型"
+            label="统计费用类型"
             name="costType"
             rules={[
               {
