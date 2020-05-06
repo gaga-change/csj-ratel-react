@@ -24,7 +24,7 @@ const columns = [
     title: '计价方式',
     dataIndex: 'contractTemplateRuleVoList',
     width: 300,
-    render: list => {
+    render: (list, row) => {
       return (list || []).map((v, i) => {
         let msg
         if (!v.endWeight) {
@@ -34,6 +34,7 @@ const columns = [
         }
         return <div key={i}>
           {msg}
+          {row.lowPrice && <div>最低一票{row.lowPrice}元</div>}
         </div>
       })
     }
@@ -47,11 +48,12 @@ const columns = [
 
 const ShowPrice = props => {
   const { result = {} } = props
-  const { transportType, contractTemplateRuleVoList = [], logisticsFee } = result
+  const { transportType, contractTemplateRuleVoList = [], logisticsFee, lowPrice } = result
 
   const dataSource = []
   if (contractTemplateRuleVoList && contractTemplateRuleVoList.length) {
     dataSource.push({
+      lowPrice,
       transportType,
       contractTemplateRuleVoList,
       logisticsFee,
