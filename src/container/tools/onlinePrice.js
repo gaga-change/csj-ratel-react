@@ -246,12 +246,6 @@ const OnlinePrice = (props) => {
           <Form.Item
             label="所在仓库"
             name="warehouseName"
-            rules={[
-              {
-                required: true,
-                message: '请输入',
-              },
-            ]}
           >
             <Input disabled></Input>
           </Form.Item>
