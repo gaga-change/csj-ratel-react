@@ -223,12 +223,7 @@ const OnlinePrice = (props) => {
           <Form.Item
             label="关联业务订单"
           >
-            <Form.Item name="busiBillNo" rules={[
-              {
-                required: true,
-                message: '请输入',
-              },
-            ]}
+            <Form.Item name="busiBillNo"
               noStyle
             >
               <Select onChange={handleBusiBillNoChange}
