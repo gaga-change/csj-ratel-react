@@ -68,6 +68,11 @@ export default class Outgoing extends React.Component {
           return v
         })
       }
+
+      value.busiBillDetails.forEach(item => {
+        item.warehouseCode = value.warehouseCode
+        item.warehouseName = value.warehouseName
+      })
       return saveOutBill(value).then(res => {
         if (!res) return
         message.success('操作成功')
