@@ -83,7 +83,7 @@ export default class Stock extends React.Component {
     request({
       url: '/webApi/messageNotice/selectByPageList',
       method: 'post',
-      data: {current:1, pageSize:100000, messageType:0 }
+      data: {current:1, pageSize:1000, messageType:0, messageStatus:0 }
     }).then(res => {
       if (res.list && Array.isArray(res.list)) {
         const ids=[]
@@ -95,7 +95,9 @@ export default class Stock extends React.Component {
       this.setState({
         totalIds
       })
-      this.handleRead(totalIds)
+      if(totalIds && totalIds.length>0){
+        this.handleRead(totalIds)
+      }
     })
   }
 
