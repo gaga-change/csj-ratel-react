@@ -120,7 +120,7 @@ const setWeightRule = (props) => {
   return (
     <div>
       <Modal
-        title="计费规则（重货）"
+        title={`计费规则（${props.typeName}）`}
         visible={visible}
         onOk={handleOk}
         onCancel={handleCancel}

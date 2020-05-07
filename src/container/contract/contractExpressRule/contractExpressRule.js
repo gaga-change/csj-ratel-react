@@ -188,10 +188,10 @@ const contractExpressRule = (props, ref) => {
         addressVisible && <SelectAddress visible={addressVisible} value={row.endPlaceList} onClose={() => setAddressVisible(false)} onSubmit={handleAddressChange} />
       }
       {
-        weightRuleVisible && <SetWeightRule visible={weightRuleVisible} value={row.weightRule} onClose={() => setWeightRuleVisible(false)} onSubmit={handleWeightRuleChange} />
+        weightRuleVisible && <SetWeightRule visible={weightRuleVisible} typeName="重货" value={row.weightRule} onClose={() => setWeightRuleVisible(false)} onSubmit={handleWeightRuleChange} />
       }
       {
-        throwRuleVisible && <SetWeightRule visible={throwRuleVisible} value={row.throwRule} onClose={() => setThrowRuleVisible(false)} onSubmit={handleThrowRuleChange} />
+        throwRuleVisible && <SetWeightRule visible={throwRuleVisible} typeName="抛货" value={row.throwRule} onClose={() => setThrowRuleVisible(false)} onSubmit={handleThrowRuleChange} />
       }
     </div>
   )
