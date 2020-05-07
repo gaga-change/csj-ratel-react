@@ -89,10 +89,10 @@ const OnlinePrice = (props) => {
   }
 
   /** 订单切换 */
-  const handleBusiBillNoChange = busiBillNo => {
+  const handleBusiBillNoChange = billNo => {
     setResult(null)
     setDetailLoading(true)
-    getOutBusiBillDetail({ billNo: orderList.find(v => v.busiBillNo === busiBillNo).billNo }).then(res => {
+    getOutBusiBillDetail({ billNo }).then(res => {
       if (!res) {
         setDetailLoading(false)
         return
@@ -187,10 +187,10 @@ const OnlinePrice = (props) => {
     if (match && match[1]) {
       const busiBillNo = match[1]
       const billNo = match[2]
-      form.setFieldsValue({ busiBillNo: match[1] })
+      form.setFieldsValue({ billNo })
       orderList.push({ busiBillNo, billNo })
       setOrderList([...orderList])
-      handleBusiBillNoChange(match[1])
+      handleBusiBillNoChange(billNo)
     }
 
   }, [])
@@ -215,6 +215,7 @@ const OnlinePrice = (props) => {
             costType: [2],
             contractStatus: true,
             contractDate: undefined,
+            startPlace: ['330000', '330400', '330411'],
             nowDate: moment(new Date(), 'YYYY-MM-DD'),
           }}
           onFinish={onFinish}
@@ -223,7 +224,7 @@ const OnlinePrice = (props) => {
           <Form.Item
             label="关联业务订单"
           >
-            <Form.Item name="busiBillNo"
+            <Form.Item name="billNo"
               noStyle
             >
               <Select onChange={handleBusiBillNoChange}
@@ -237,7 +238,7 @@ const OnlinePrice = (props) => {
                 notFoundContent={fetchOrderListLoading ? <Spin size="small" /> : null}
               >
                 {
-                  (orderList || []).map(v => <Option key={v.billNo} value={v.busiBillNo}>{v.busiBillNo}</Option>)
+                  (orderList || []).map(v => <Option key={v.billNo} value={v.billNo}>{v.busiBillNo}</Option>)
                 }
               </Select>
             </Form.Item>
