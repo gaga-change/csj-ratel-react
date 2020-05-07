@@ -69,7 +69,7 @@ class SelectCustorm extends React.Component {
           {showText || '请选择客户'}
         </button>
         <Modal
-          title="选择出库商品"
+          title="选择客户"
           centered={true}
           destroyOnClose={true}
           width={1000}
