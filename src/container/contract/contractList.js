@@ -92,8 +92,8 @@ const ContractList = props => {
     {
       label: '操作', prop: 'id', render: (id, row) => {
         return (<span>
-          <Button type="link" onClick={() => handleDel(row)}>删除</Button>
-          <Button type="link" onClick={() => handleDetail(row)}>修改</Button>
+          <Button data-rule-id="contract-delete" type="link" onClick={() => handleDel(row)}>删除</Button>
+          <Button data-rule-id="contract-modify" type="link" onClick={() => handleDetail(row)}>修改</Button>
           {/* <Button type="link" onClick={() => handleDetail(row, true)}>查看</Button> */}
         </span>)
       }
@@ -135,10 +135,10 @@ const ContractList = props => {
       rowKey="id"
     >
       <div className="fr">
-        <Button type="primary" onClick={() => props.history.push('/sys/contract/contractExpress')}>新建快递</Button>
-        <Button className="ml10" type="primary" onClick={() => props.history.push('/sys/contract/contractStore')}>新建仓储</Button>
-        <Button className="ml10" type="primary" onClick={() => props.history.push('/sys/contract/contractLogistics')}>新建物流</Button>
-        <Button className="ml10" type="primary" onClick={() => props.history.push('/sys/contract/contractSorting')}>新建处置</Button>
+        <Button data-rule-id="contract-create-contractExpress" type="primary" onClick={() => props.history.push('/sys/contract/contractExpress')}>新建快递</Button>
+        <Button data-rule-id="contract-create-contractStore" className="ml10" type="primary" onClick={() => props.history.push('/sys/contract/contractStore')}>新建仓储</Button>
+        <Button data-rule-id="contract-create-contractLogistics" className="ml10" type="primary" onClick={() => props.history.push('/sys/contract/contractLogistics')}>新建物流</Button>
+        <Button data-rule-id="contract-create-contractSorting" className="ml10" type="primary" onClick={() => props.history.push('/sys/contract/contractSorting')}>新建处置</Button>
       </div>
     </BaseList>
 
