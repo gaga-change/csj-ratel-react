@@ -102,7 +102,12 @@ class App extends Component {
       path: '/home',
       icon: 'home'
     })
-
+    for(let i=0;i<menusRoot.length;i++){
+      if(menusRoot[i].path==='/message'){
+        menusRoot.splice(i,1)
+        break
+      }
+    }
     const menu = (
       <Menu>
         <Menu.Item>
