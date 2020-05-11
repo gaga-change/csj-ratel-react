@@ -1,6 +1,7 @@
 import React, { useEffect, forwardRef, useImperativeHandle } from 'react'
 import '@ant-design/compatible/assets/index.css';
-import { Input, Select, Button, Card, Form, DatePicker } from 'antd';
+import { Form } from '@ant-design/compatible';
+import { Input, Select, Button, Card, DatePicker } from 'antd';
 import './BaseSearch.scss'
 import * as Enum from '@lib/enum'
 

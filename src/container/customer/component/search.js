@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Input,Button,Row,Col } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Button, Row, Col } from 'antd';
 import './search.scss'
 class CommodityForm extends React.Component {
   handleSubmit = (e) => {

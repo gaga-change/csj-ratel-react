@@ -1,5 +1,19 @@
 import React from 'react'
-import { Form, Input, Select, Row, Col, InputNumber, Table, Button, Divider, message, Popconfirm, Modal } from 'antd'
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+  Input,
+  Select,
+  Row,
+  Col,
+  InputNumber,
+  Table,
+  Button,
+  Divider,
+  message,
+  Popconfirm,
+  Modal,
+} from 'antd';
 import { commonditySupplierPriceColums } from 'config/table'
 import { providerList, skuInfoSelectProDetail } from 'api'
 

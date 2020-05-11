@@ -1,5 +1,7 @@
 import React from 'react'
-import { Form, Input, Button, DatePicker, Modal, Select, message } from 'antd'
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Button, DatePicker, Modal, Select, message } from 'antd';
 import _ from 'lodash'
 import moment from 'moment'
 import EditableTable from '@component/editableTable/editableTable'
@@ -401,7 +403,8 @@ class AddForm extends React.Component {
               columns={planInGoodsListColums} />
           </div>
         </Modal>
-      </div>)
+      </div>
+    );
   }
 }
 

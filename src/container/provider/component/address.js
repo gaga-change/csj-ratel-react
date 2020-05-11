@@ -1,5 +1,7 @@
 import React from 'react'
-import { Form, Input, Cascader, Button, Checkbox } from 'antd'
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Cascader, Button, Checkbox } from 'antd';
 import { Area } from '@lib/area'
 import './add.scss'
 
@@ -141,7 +143,7 @@ class AddressForm extends React.Component {
           </Form.Item>
         </Form>
       </div>
-    )
+    );
   }
 }
 

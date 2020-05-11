@@ -3,7 +3,19 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import "./contractStore.scss"
 import { addContractTemplate, getContractDetail, updateContract } from 'api'
-import { Form, Input, Button, Divider, InputNumber, Spin, Select, Checkbox, DatePicker, message } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+  Input,
+  Button,
+  Divider,
+  InputNumber,
+  Spin,
+  Select,
+  Checkbox,
+  DatePicker,
+  message,
+} from 'antd';
 const { Option } = Select
 const { RangePicker } = DatePicker;
 

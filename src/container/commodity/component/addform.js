@@ -1,5 +1,7 @@
 import React from 'react'
-import { Form, Input, Cascader, Select } from 'antd'
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Cascader, Select } from 'antd';
 import { depthForEachCascader } from '@lib/lib'
 import { findLeaf } from '@lib'
 import { saleTypeEnum } from 'lib/enum'
