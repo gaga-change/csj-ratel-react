@@ -117,6 +117,13 @@ code {
   border: 1px solid #e8e8e8;
 }
 
+.fr {
+  float: right;
+}
+.red {
+  color: red;
+}
+
 .mb-12 {
   margin-bottom: 12px;
 }
@@ -153,7 +160,7 @@ $dirMap: (
   "l": "left",
   "r": "right",
   "t": "top",
-  "b": "bottom"
+  "b": "bottom",
 );
 
 $dirSizeList: 5 10 15 20 25;

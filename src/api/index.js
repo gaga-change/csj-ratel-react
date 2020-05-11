@@ -105,5 +105,15 @@ export const skuInfoUpdate = params => http.post(`${base}/sku/info/update`, para
 
 /** 删除商品 */
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)
-
-
+/** 合同列表查询 */
+export const getContractListByPage = params => http.post(`${base}/contract/getContractListByPage`, params)
+/** 合同删除 */
+export const deleteContract = contractCode => http.get(`${base}/contract/deleteContract?contractCode=${contractCode}`)
+/** 合同详情 */
+export const getContractDetail = id => http.get(`${base}/contract/getContractDetail?id=${id}`)
+/** 合同编辑 */
+export const updateContract = params => http.post(`${base}/contract/updateContract`, params)
+/** 费用估算 */
+export const contractCostEstimate = params => http.post(`${base}/contract/contractCostEstimate`, params)
+/** 重量计算 */
+export const countGoodsWeightAndVolume = params => http.post(`${base}/contract/countGoodsWeightAndVolume`, params)

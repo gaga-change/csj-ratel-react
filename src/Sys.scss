@@ -6,6 +6,10 @@
     border: none !important;
   }
 
+  .ant-table-small .ant-table-thead > tr > th {
+    background-color: #cba3a3;
+  }
+
   .ant-menu-item.ant-menu-item-selected,
   .ant-menu-submenu-selected {
     background-color: rgb(20, 24, 47) !important;
