@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import "./contractLogistics.scss"
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Spin, Input, Button, Cascader, Select, Checkbox, DatePicker, message } from 'antd';
+import { Spin, Form, Input, Button, Cascader, Select, Checkbox, DatePicker, message } from 'antd';
 import { Area } from '@lib/area2'
 import ContractLogisticsRule from './contractLogisticsRule/contractLogisticsRule'
 import { addContractTemplate, getContractDetail, updateContract } from 'api'

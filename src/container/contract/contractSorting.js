@@ -3,19 +3,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import "./contractSorting.scss"
 import SetWeightRule from './contractSortingRule/setWeightRule'
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import {
-  Input,
-  Button,
-  Divider,
-  InputNumber,
-  Spin,
-  Select,
-  Checkbox,
-  DatePicker,
-  message,
-} from 'antd';
+import { Form, Input, Button, Divider, InputNumber, Spin, Select, Checkbox, DatePicker, message } from 'antd';
 import { addContractTemplate, getContractDetail, updateContract } from 'api'
 
 const { Option } = Select

@@ -105,6 +105,8 @@ export const skuInfoUpdate = params => http.post(`${base}/sku/info/update`, para
 
 /** 删除商品 */
 export const skuInfoDel = (ownerCode, skuCode) => http.delete(`${base}/sku/info/delete/${ownerCode}/${skuCode}`)
+/** 添加合同模板信息 */
+export const addContractTemplate = params => http.post(`${base}/contract/addContractTemplate`, params)
 /** 合同列表查询 */
 export const getContractListByPage = params => http.post(`${base}/contract/getContractListByPage`, params)
 /** 合同删除 */

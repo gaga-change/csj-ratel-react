@@ -6,21 +6,7 @@ import { Area } from '@lib/area2'
 import ShowPrice from './onlinePriceComponents/showPrice'
 import DisposalDetail from './onlinePriceComponents/disposalDetail'
 import ExpressDetail from './onlinePriceComponents/expressDetail'
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import {
-  Spin,
-  Card,
-  Button,
-  Input,
-  Cascader,
-  Divider,
-  InputNumber,
-  Select,
-  Checkbox,
-  DatePicker,
-  message,
-} from 'antd';
+import { Spin, Form, Card, Button, Input, Cascader, Divider, InputNumber, Select, Checkbox, DatePicker, message } from 'antd';
 import { getOutBusiBill, contractCostEstimate, getOutBusiBillDetail, countGoodsWeightAndVolume } from 'api'
 import { palletTypeEnum } from '@lib/enum'
 import UnitInput from '@component/UnitInput'
