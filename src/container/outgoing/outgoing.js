@@ -68,11 +68,6 @@ export default class Outgoing extends React.Component {
           return v
         })
       }
-
-      value.busiBillDetails.forEach(item => {
-        item.warehouseCode = value.warehouseCode
-        item.warehouseName = value.warehouseName
-      })
       return saveOutBill(value).then(res => {
         if (!res) return
         message.success('操作成功')
@@ -208,6 +203,11 @@ export default class Outgoing extends React.Component {
     })
   }
 
+
+  handleGoOnlinePrice = record => {
+    this.props.history.push(`/sys/tools/onlinePrice?busiBillNo=${record.busiBillNo}&billNo=${record.billNo}`)
+  }
+
   render() {
     const { PopoverTable_loading, PopoverTable_dataSource, dataSource, ModalTitle, spinning, record, visible, detailVisible, warehousingDetail_dataSource, BaseCard_dataSource } = this.state;
     const columns = _.cloneDeep(planOutListColumns).map(v => {
@@ -219,6 +219,8 @@ export default class Outgoing extends React.Component {
             {(record.billStatus === 0 || record.billStatus === 2 || record.billStatus === 3) && <Popconfirm title="确定要删除吗?" onConfirm={this.handleDelete.bind(this, record)}>
               <span data-rule-id="outgoing-delete"> 删除</span>
             </Popconfirm>}
+            {/* {record.billStatus === 0 && <span data-rule-id="outgoing-logistics-price" onClick={this.handleGoOnlinePrice.bind(this, record)}>物流费用</span>} */}
+            <span data-rule-id="outgoing-logistics-price" onClick={this.handleGoOnlinePrice.bind(this, record)}>物流费用</span>
           </span>
         }
       }
