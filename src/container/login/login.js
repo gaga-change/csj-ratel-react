@@ -95,7 +95,7 @@ class Login extends React.Component {
               target="_blank"
               rel="noopener noreferrer"
             >浙ICP备14018558号-1 </a>
-            <span style={{ color: '#000' }}>| 系统版本： {version}</span>
+            {/* <span style={{ color: '#000' }}>| 系统版本： {version}</span> */}
           </div>
         </div>
       </div>

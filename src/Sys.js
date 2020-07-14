@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import MyContent from './Content'
 import imgSouce from 'imgSouce/imgSouce'
 import { loginOut, userInfo } from 'api'
-import { connectSocket } from 'api/socket'
+// import { connectSocket } from 'api/socket'
 import { deep, sortMenu } from 'lib'
 import './Sys.scss'
 
@@ -38,7 +38,7 @@ class App extends Component {
     userInfo().then(res => {
       if (!res) return
       let user = res.data
-      connectSocket(user)
+      // connectSocket(user)
       let temp = {}
       let styleNameArr = []
       user.menus = user.menus || { children: [] }
@@ -103,9 +103,9 @@ class App extends Component {
       path: '/home',
       icon: 'home'
     })
-    for(let i=0;i<menusRoot.length;i++){
-      if(menusRoot[i].path==='/message'){
-        menusRoot.splice(i,1)
+    for (let i = 0; i < menusRoot.length; i++) {
+      if (menusRoot[i].path === '/message') {
+        menusRoot.splice(i, 1)
         break
       }
     }
